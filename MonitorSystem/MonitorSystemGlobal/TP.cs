@@ -13,6 +13,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 {
     public class TP : MonitorControl
     {
+        public override event EventHandler Selected;
         private Image _image = new Image();
 
         private static readonly DependencyProperty SourceProperty =
@@ -49,6 +50,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                 var menu = new ContextMenu();
                 var menuItem = new MenuItem() { Header = "属性" };
                 menuItem.Click += PropertyMenuItem_Click;
+                AdornerLayer.Selected += OnSelected;
                 menu.Items.Add(menuItem);
                 AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
             }
@@ -58,11 +60,21 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             if (IsDesignMode)
             {
+                AdornerLayer.Selected -= OnSelected;
                 AdornerLayer.ClearValue(ContextMenuService.ContextMenuProperty);
                 AdornerLayer.Dispose();
                 AdornerLayer = null;
             }
         }
+
+        private void OnSelected(object sender, EventArgs e)
+        {
+            if (null != Selected)
+            {
+                Selected(this, RoutedEventArgs.Empty);
+            }
+        }
+
         TPSetProperty tpp = new TPSetProperty();
         private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -78,7 +90,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public override object GetRootControl()
         {
-            return _image;
+            return this;
         }
     }
 }

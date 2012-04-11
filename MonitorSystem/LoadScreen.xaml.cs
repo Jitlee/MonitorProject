@@ -164,7 +164,7 @@ namespace MonitorSystem
                 tp.Height = mHeight;
                 tp.Tag = t;
                 //tp.KeyDown += new KeyEventHandler(TP_KeyDown);
-
+                tp.Selected += (o, e) => { PropertyMain.Instance.ControlPropertyGrid.SelectedObject = tp.GetRootControl(); };
 
                 tp.SetValue(Canvas.LeftProperty, mMagrinX);
                 tp.SetValue(Canvas.TopProperty, mMagrinY);

@@ -24,6 +24,8 @@ namespace MonitorSystem
     [TemplatePart(Name = "BottomRightAdorner", Type = typeof(FrameworkElement))]
     public class Adorner : ButtonBase, IDisposable
     {
+        public event EventHandler Selected;
+
         #region Fields
 
         private Canvas _parent;
@@ -189,6 +191,7 @@ namespace MonitorSystem
         private void BackgroundAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _backgroundAdorner.CaptureMouse();
+            _backgroundAdorner.MouseMove -= BackgroundAdorner_MouseMove;
             _backgroundAdorner.MouseMove += BackgroundAdorner_MouseMove;
             _initialPoint = e.GetPosition(_contentAdorner);
         }
@@ -197,6 +200,7 @@ namespace MonitorSystem
         {
             _backgroundAdorner.ReleaseMouseCapture();
             _backgroundAdorner.MouseMove -= BackgroundAdorner_MouseMove;
+            OnSelected();
         }
 
         private void BackgroundAdorner_MouseMove(object sender, MouseEventArgs e)
@@ -217,6 +221,7 @@ namespace MonitorSystem
         private void TopLeftAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _topLeftAdorner.CaptureMouse();
+            _topLeftAdorner.MouseMove -= TopLeftAdorner_MouseMove;
             _topLeftAdorner.MouseMove += TopLeftAdorner_MouseMove;
 
             _initialPoint = e.GetPosition(_parent);
@@ -265,6 +270,7 @@ namespace MonitorSystem
         private void TopCenterAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _topCenterAdorner.CaptureMouse();
+            _topCenterAdorner.MouseMove -= TopCenterAdorner_MouseMove;
             _topCenterAdorner.MouseMove += TopCenterAdorner_MouseMove;
 
             _initialPoint = e.GetPosition(_parent);
@@ -306,6 +312,7 @@ namespace MonitorSystem
         private void TopRightAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _topRightAdorner.CaptureMouse();
+            _topRightAdorner.MouseMove -= TopRightAdorner_MouseMove;
             _topRightAdorner.MouseMove += TopRightAdorner_MouseMove;
 
             _initialPoint = e.GetPosition(_parent);
@@ -349,6 +356,7 @@ namespace MonitorSystem
         private void CenterLeftAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _centerLeftAdorner.CaptureMouse();
+            _centerLeftAdorner.MouseMove -= CenterLeftAdorner_MouseMove;
             _centerLeftAdorner.MouseMove += CenterLeftAdorner_MouseMove;
 
             _initialPoint = e.GetPosition(_parent);
@@ -390,6 +398,7 @@ namespace MonitorSystem
         private void CenterRightAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _centerRightAdorner.CaptureMouse();
+            _centerRightAdorner.MouseMove -= CenterRightAdorner_MouseMove;
             _centerRightAdorner.MouseMove += CenterRightAdorner_MouseMove;
 
             _initialPoint = e.GetPosition(_parent);
@@ -428,6 +437,7 @@ namespace MonitorSystem
         private void BottomLeftAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _bottomLeftAdorner.CaptureMouse();
+            _bottomLeftAdorner.MouseMove -= BottomLeftAdorner_MouseMove;
             _bottomLeftAdorner.MouseMove += BottomLeftAdorner_MouseMove;
 
             _initialPoint = e.GetPosition(_parent);
@@ -472,6 +482,7 @@ namespace MonitorSystem
         private void BottomCenterAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _bottomCenterAdorner.CaptureMouse();
+            _bottomCenterAdorner.MouseMove -= BottomCenterAdorner_MouseMove;
             _bottomCenterAdorner.MouseMove += BottomCenterAdorner_MouseMove;
 
             _initialPoint = e.GetPosition(_parent);
@@ -509,6 +520,7 @@ namespace MonitorSystem
         private void BottomRightAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _bottomRightAdorner.CaptureMouse();
+            _bottomRightAdorner.MouseMove -= BottomRightAdorner_MouseMove;
             _bottomRightAdorner.MouseMove += BottomRightAdorner_MouseMove;
 
             _initialPoint = e.GetPosition(_parent);
@@ -546,12 +558,21 @@ namespace MonitorSystem
 
         #endregion
 
+        private void OnSelected()
+        {
+            if (null != Selected)
+            {
+                Selected(this, EventArgs.Empty);
+            }
+        }
+
         private void SynchroLayout()
         {
             this._associatedElement.SetValue(FrameworkElement.WidthProperty, this._contentAdorner.ActualWidth);
             this._associatedElement.SetValue(FrameworkElement.HeightProperty, this._contentAdorner.ActualHeight);
             this._associatedElement.SetValue(Canvas.LeftProperty, (double)this.GetValue(Canvas.LeftProperty) + _offsetLeft);
             this._associatedElement.SetValue(Canvas.TopProperty, (double)this.GetValue(Canvas.TopProperty) + _offsetTop);
+            OnSelected();
         }
     }
 }

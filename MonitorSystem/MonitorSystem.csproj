@@ -165,10 +165,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PropertyGrid\Themes\Generic.xaml">
+    <Resource Include="PropertyGrid\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
+    </Resource>
     <Page Include="Property\Property.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

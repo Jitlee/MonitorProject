@@ -19,5 +19,6 @@ namespace MonitorSystem.MonitorSystemGlobal
         public abstract void DesignMode();
         public abstract void UnDesignMode();
         public abstract object GetRootControl();
+        public abstract event EventHandler Selected;
     }
 }
