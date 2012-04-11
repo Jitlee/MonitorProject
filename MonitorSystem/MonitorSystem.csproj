@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5CF1D735-70BA-41C6-88DF-A23361DB575D}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MonitorSystem</RootNamespace>
+    <AssemblyName>MonitorSystem</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>zh-Hans</SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>MonitorSystem.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>MonitorSystem.App</SilverlightAppEntry>
+    <TestPageFileName>MonitorSystemTestPage.html</TestPageFileName>
+    <CreateTestPage>true</CreateTestPage>
+    <ValidateXaml>true</ValidateXaml>
+    <EnableOutOfBrowser>false</EnableOutOfBrowser>
+    <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
+    <UsePlatformExtensions>false</UsePlatformExtensions>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <LinkedServerProject>..\MonitorSystem.Web\MonitorSystem.Web.csproj</LinkedServerProject>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FloatableWindow, Version=2.0.5.0, Culture=neutral, PublicKeyToken=dd6e2c92abf74ba1, processorArchitecture=MSIL" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.DomainServices.Client, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.DomainServices.Client.Web, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.Web.Extensions, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Controls, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Windows.Controls.Data.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Windows.Controls.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Input.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Layout.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Navigation, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adorner.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common.cs" />
+    <Compile Include="Converters\ImagePathConverter.cs" />
+    <Compile Include="LoadScreen.xaml.cs">
+      <DependentUpon>LoadScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MonitorSystemGlobal\DelegateCommand.cs" />
+    <Compile Include="MonitorSystemGlobal\MonitorControl.cs" />
+    <Compile Include="MonitorSystemGlobal\TP.cs" />
+    <Compile Include="MonitorSystemGlobal\TPSetProperty.xaml.cs">
+      <DependentUpon>TPSetProperty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyGrid\BooleanValueEditor.cs" />
+    <Compile Include="PropertyGrid\BrowsableAttribute.cs" />
+    <Compile Include="PropertyGrid\BusinessObject.cs" />
+    <Compile Include="PropertyGrid\ComboBoxEditorBase.cs" />
+    <Compile Include="PropertyGrid\Converters\BaseNumberConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\BooleanConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\ByteConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\CharConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\DecimalConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\DoubleConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\EnumHelper.cs" />
+    <Compile Include="PropertyGrid\Converters\EnumTypeConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\EnumValueConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\GuidConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\Int16Converter.cs" />
+    <Compile Include="PropertyGrid\Converters\Int32Converter.cs" />
+    <Compile Include="PropertyGrid\Converters\Int64Converter.cs" />
+    <Compile Include="PropertyGrid\Converters\SByteConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\SingleConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\StringConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\TimeSpanConverter.cs" />
+    <Compile Include="PropertyGrid\Converters\TypeConverterHelper.cs" />
+    <Compile Include="PropertyGrid\Converters\UInt16Converter.cs" />
+    <Compile Include="PropertyGrid\Converters\UInt32Converter.cs" />
+    <Compile Include="PropertyGrid\Converters\UInt64Converter.cs" />
+    <Compile Include="PropertyGrid\DateTimeValueEditor.cs" />
+    <Compile Include="PropertyGrid\DisplayNameAttribute.cs" />
+    <Compile Include="PropertyGrid\EditorAttribute.cs" />
+    <Compile Include="PropertyGrid\EditorService.cs" />
+    <Compile Include="PropertyGrid\EnumValueEditor.cs" />
+    <Compile Include="PropertyGrid\ExceptionEventArgs.cs" />
+    <Compile Include="PropertyGrid\IPropertyValueEditor.cs" />
+    <Compile Include="PropertyGrid\PropertyGrid.cs" />
+    <Compile Include="PropertyGrid\PropertyGridLabel.cs" />
+    <Compile Include="PropertyGrid\PropertyItem.cs" />
+    <Compile Include="PropertyGrid\StringValueEditor.cs" />
+    <Compile Include="PropertyGrid\ValueEditorBase.cs" />
+    <Compile Include="Property\EditBase.cs" />
+    <Compile Include="Property\Property.xaml.cs">
+      <DependentUpon>Property.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Property\ScreenEdit.xaml.cs">
+      <DependentUpon>ScreenEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="test.xaml.cs">
+      <DependentUpon>test.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="LoadScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MonitorSystemGlobal\TPSetProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PropertyGrid\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Property\Property.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Property\ScreenEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="test.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\ControlsImg\A.jpg" />
+    <Resource Include="Images\ControlsImg\AirConditionerMonitor.jpg" />
+    <Resource Include="Images\ControlsImg\Button.jpg" />
+    <Resource Include="Images\ControlsImg\Close.jpg" />
+    <Resource Include="Images\ControlsImg\Close1.jpg" />
+    <Resource Include="Images\ControlsImg\CommonDigital.jpg" />
+    <Resource Include="Images\ControlsImg\company.jpg" />
+    <Resource Include="Images\ControlsImg\Digital.jpg" />
+    <Resource Include="Images\ControlsImg\DLBiaoPan.jpg" />
+    <Resource Include="Images\ControlsImg\DY300BiaoPan.jpg" />
+    <Resource Include="Images\ControlsImg\DY500BiaoPan.jpg" />
+    <Resource Include="Images\ControlsImg\FireControlMonitor.jpg" />
+    <Resource Include="Images\ControlsImg\firewall.jpg" />
+    <Resource Include="Images\ControlsImg\FoldLine.jpg" />
+    <Resource Include="Images\ControlsImg\GateMonitor.jpg" />
+    <Resource Include="Images\Common\add.png" />
+    <Resource Include="Images\Common\edit.png" />
+    <Resource Include="Images\Common\delete.png" />
+    <Content Include="Images\ControlsImg\icongreen.ico" />
+    <Content Include="Images\ControlsImg\iconleft.ico" />
+    <Content Include="Images\ControlsImg\iconmainweb.ico" />
+    <Content Include="Images\ControlsImg\iconred.ico" />
+    <Content Include="Images\ControlsImg\iconrigh.ico" />
+    <Content Include="Images\ControlsImg\image.ico" />
+    <Resource Include="Images\ControlsImg\LeakageMonitor.jpg" />
+    <Resource Include="Images\ControlsImg\Line.jpg" />
+    <Resource Include="Images\ControlsImg\mainpage.jpg" />
+    <Resource Include="Images\ControlsImg\Monitor.jpg" />
+    <Resource Include="Images\ControlsImg\MyButton.JPG" />
+    <Resource Include="Images\ControlsImg\myline.jpg" />
+    <Resource Include="Images\ControlsImg\Near.jpg" />
+    <Resource Include="Images\ControlsImg\Near2.jpg" />
+    <Content Include="Images\ControlsImg\old___image.ico" />
+    <Resource Include="Images\ControlsImg\Open.jpg" />
+    <Resource Include="Images\ControlsImg\Open1.jpg" />
+    <Resource Include="Images\ControlsImg\point.jpg" />
+    <Resource Include="Images\ControlsImg\PowerControl.jpg" />
+    <Resource Include="Images\ControlsImg\PowerMonitor.jpg" />
+    <Resource Include="Images\ControlsImg\qingyuan.jpg" />
+    <Resource Include="Images\ControlsImg\route.jpg" />
+    <Resource Include="Images\ControlsImg\route2.jpg" />
+    <Resource Include="Images\ControlsImg\Server.jpg" />
+    <Resource Include="Images\ControlsImg\Structure.JPG" />
+    <Resource Include="Images\ControlsImg\SubNet.jpg" />
+    <Resource Include="Images\ControlsImg\switch.jpg" />
+    <Resource Include="Images\ControlsImg\TempAndLumMonitor.jpg" />
+    <Resource Include="Images\ControlsImg\Temprary.jpg" />
+    <Resource Include="Images\ControlsImg\Text.jpg" />
+    <Resource Include="Images\ControlsImg\UPS.jpg" />
+    <Resource Include="Images\ControlsImg\UPSMonitor.jpg" />
+    <Resource Include="Images\ControlsImg\VideoMonitor.jpg" />
+    <Resource Include="Images\ControlsImg\WindowVideo.JPG" />
+    <Resource Include="PropertyGrid\Assets\minus.png" />
+    <Resource Include="PropertyGrid\Assets\plus.png" />
+    <Content Include="Ref\FloatableWindow.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

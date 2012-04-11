@@ -1,0 +1,22 @@
+﻿<controls:ChildWindow x:Class="MonitorSystem.Property.ScreenEdit"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+           Width="324" Height="225"  
+           Title="场景" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+    <Grid x:Name="LayoutRoot" Margin="2" Height="193" Width="306">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,8,0,4" Grid.Row="1" />
+        <Button x:Name="OKButton" Content="确定" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,8,79,4" Grid.Row="1" />
+        <sdk:Label Height="19" HorizontalAlignment="Left" Margin="26,20,0,0" Name="label1" VerticalAlignment="Top" Width="63" Content="场景名称：" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="95,16,0,0" Name="txtName" VerticalAlignment="Top" Width="155" />
+        <sdk:Label Content="场景背影图片：" Height="19" HorizontalAlignment="Left" Margin="1,55,0,0" Name="label2" VerticalAlignment="Top" Width="75" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="95,51,0,0" Name="txtImage" VerticalAlignment="Top" Width="155" />
+        <sdk:Label Content="站点名称：" Height="19" HorizontalAlignment="Left" Margin="24,91,0,0" Name="label3" VerticalAlignment="Top" Width="75" />
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="95,87,0,0" Name="cbScreen" VerticalAlignment="Top" Width="155" />
+    </Grid>
+</controls:ChildWindow>

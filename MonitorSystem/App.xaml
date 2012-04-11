@@ -1,0 +1,72 @@
+﻿<Application xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MonitorSystem.App"
+             xmlns:local="clr-namespace:MonitorSystem">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Style x:Key="HandleBorderStyle" TargetType="Rectangle">
+                <Setter Property="StrokeThickness" Value="2"/>
+                <Setter Property="Stroke" Value="White"/>
+                <Setter Property="Fill" Value="Black"/>
+                <Setter Property="Height" Value="10"/>
+                <Setter Property="Width" Value="10"/>
+            </Style>
+            <Style TargetType="local:Adorner">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:Adorner">
+                            <Grid>
+                                <Rectangle x:Name="ContentAdorner"
+    								Stroke="Black"
+    								StrokeDashArray="5,5"
+                                    Margin="4"/>
+                                <Rectangle x:Name="BackgroundAdorner"
+    								Fill="Transparent"/>
+                                <Rectangle x:Name="TopLeftAdorner"
+    								HorizontalAlignment="Left"
+    								VerticalAlignment="Top"
+    								Style="{StaticResource HandleBorderStyle}"
+    								Cursor="SizeNWSE"/>
+                                <Rectangle x:Name="CenterLeftAdorner"
+    								HorizontalAlignment="Left"
+    								VerticalAlignment="Center"
+    								Style="{StaticResource HandleBorderStyle}"
+    								Cursor="SizeWE"/>
+                                <Rectangle x:Name="BottomLeftAdorner"
+    								HorizontalAlignment="Left"
+    								VerticalAlignment="Bottom"
+    								Style="{StaticResource HandleBorderStyle}"
+    								Cursor="SizeNESW"/>
+                                <Rectangle x:Name="TopRightAdorner"
+    								HorizontalAlignment="Right"
+    								VerticalAlignment="Top"
+    								Style="{StaticResource HandleBorderStyle}"
+    								Cursor="SizeNESW"/>
+                                <Rectangle x:Name="CenterRightAdorner"
+    								HorizontalAlignment="Right"
+    								VerticalAlignment="Center"
+    								Style="{StaticResource HandleBorderStyle}"
+    								Cursor="SizeWE"/>
+                                <Rectangle x:Name="BottomRightAdorner"
+    								HorizontalAlignment="Right"
+    								VerticalAlignment="Bottom"
+    								Style="{StaticResource HandleBorderStyle}"
+    								Cursor="SizeNWSE"/>
+                                <Rectangle x:Name="TopCenterAdorner" 
+    								HorizontalAlignment="Center"
+    								VerticalAlignment="Top"
+    								Style="{StaticResource HandleBorderStyle}"
+    								Cursor="SizeNS"/>
+                                <Rectangle x:Name="BottomCenterAdorner"
+    								HorizontalAlignment="Center"
+    								VerticalAlignment="Bottom"
+    								Style="{StaticResource HandleBorderStyle}"
+    								Cursor="SizeNS"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
