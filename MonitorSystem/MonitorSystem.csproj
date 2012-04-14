@@ -99,6 +99,13 @@
     <Compile Include="MonitorSystemGlobal\TPSetProperty.xaml.cs">
       <DependentUpon>TPSetProperty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MonitorSystemGlobal\TP_Button.cs" />
+    <Compile Include="MonitorSystemGlobal\TP_ButtonSetProperty.xaml.cs">
+      <DependentUpon>TP_ButtonSetProperty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MonitorSystemGlobal\TP_ButtonSetPropertyEdit.xaml.cs">
+      <DependentUpon>TP_ButtonSetPropertyEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyGrid\BooleanValueEditor.cs" />
     <Compile Include="PropertyGrid\BrowsableAttribute.cs" />
@@ -169,6 +176,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
+    <Page Include="MonitorSystemGlobal\TP_ButtonSetProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MonitorSystemGlobal\TP_ButtonSetPropertyEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Property\Property.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -241,6 +256,26 @@
     <Resource Include="Images\ControlsImg\WindowVideo.JPG" />
     <Resource Include="PropertyGrid\Assets\minus.png" />
     <Resource Include="PropertyGrid\Assets\plus.png" />
+    <Resource Include="Images\ControlsImg\UPS界面.JPG" />
+    <Resource Include="Images\ControlsImg\停止录像.JPG" />
+    <Resource Include="Images\ControlsImg\停止运动检测.JPG" />
+    <Resource Include="Images\ControlsImg\关于.JPG" />
+    <Resource Include="Images\ControlsImg\图形122.jpg" />
+    <Resource Include="Images\ControlsImg\图形31.jpg" />
+    <Resource Include="Images\ControlsImg\开关量.jpg" />
+    <Resource Include="Images\ControlsImg\开始录像.JPG" />
+    <Resource Include="Images\ControlsImg\开始运动检测.JPG" />
+    <Resource Include="Images\ControlsImg\整流充电器.jpg" />
+    <Resource Include="Images\ControlsImg\旁路.jpg" />
+    <Resource Include="Images\ControlsImg\机房环境集中监控系统主页.jpg" />
+    <Resource Include="Images\ControlsImg\查询.JPG" />
+    <Resource Include="Images\ControlsImg\模块.jpg" />
+    <Resource Include="Images\ControlsImg\清远地图.jpg" />
+    <Resource Include="Images\ControlsImg\温湿度.jpg" />
+    <Resource Include="Images\ControlsImg\监控主机.jpg" />
+    <Resource Include="Images\ControlsImg\空调.jpg" />
+    <Resource Include="Images\ControlsImg\负载.jpg" />
+    <Resource Include="Images\ControlsImg\逆变器.jpg" />
     <Content Include="Ref\FloatableWindow.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

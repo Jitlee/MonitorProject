@@ -14,10 +14,9 @@ using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
-    public class TP : MonitorControl
+    public class TP_Button : MonitorControl
     {
-
-        public TP()
+        public TP_Button()
         {
             Content = _image;
             Stretch = Stretch.Fill;
@@ -53,23 +52,27 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// 将对象的ScreenElement的ChildScreenID解析为场景 
         /// </summary>
         /// <returns></returns>
-        private t_Screen GetChildScreenID()
+        private List<t_Screen> GetChildScreenID()
         {
             string mScreenID = base.ScreenElement.ChildScreenID;
             if (mScreenID == "0")
             {
                 return null;
             }
-            mScreenID = mScreenID.Replace(";", "");
-            string[] attr=mScreenID.Split('#');
-            if (attr.Length == 2)
+            List<t_Screen> listScreen = new List<t_Screen>();
+            string[] attrS = mScreenID.Split(';');
+            foreach (string str in attrS)
             {
-                int Scrennid=Convert.ToInt32(attr[1]);
-                t_Screen t = LoadScreen.listScreen.Single(a => a.ScreenID == Scrennid);
-                //return LoadScreen.listScreen.Where().First();
-                return t;
+                mScreenID = str.Replace(";", "");
+                string[] attr = mScreenID.Split('#');
+                if (attr.Length == 2)
+                {
+                    int Scrennid = Convert.ToInt32(attr[1]);
+                    t_Screen t = LoadScreen.listScreen.Single(a => a.ScreenID == Scrennid);
+                    listScreen.Add(t);
+                }
             }
-            return null;
+            return listScreen;
         }
         #endregion
 
@@ -107,22 +110,11 @@ namespace MonitorSystem.MonitorSystemGlobal
             }
         }
 
-        TPSetProperty tpp = new TPSetProperty();
+        TP_ButtonSetProperty tpp; 
         private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
-            tpp.Screen = GetChildScreenID();
-            tpp.Show();
-        }
-
-        protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (tpp.IsOK)
-            {
-                this.ScreenElement.ChildScreenID = string.Format("{0}#{1};", tpp.Screen.ScreenName, 
-                    tpp.Screen.ScreenID);
-                //MessageBox.Show(tpp.Screen.ScreenName);
-            }
+          tpp=  new TP_ButtonSetProperty(this);           
+          tpp.Show();
         }
 
         public override object GetRootControl()

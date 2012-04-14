@@ -41,7 +41,6 @@ namespace MonitorSystem
         {
             InitializeComponent();
             LoadScrent();
-            LoadControl();
             Instance = this;
         }
 
@@ -93,39 +92,6 @@ namespace MonitorSystem
             ztControls.DataContext = results.Entities.Where(t => t.ControlType == 2);
             ggControls.DataContext = results.Entities.Where(t => t.ControlType == 3);
 
-            ////List<t_Control> listControl = new List<t_Control>();
-            //foreach (t_Control t in results.Entities)
-            //{
-            //    Image img = new Image();
-            //    ImageSource imgSour = new BitmapImage(new Uri(
-            //        string.Format("../Images/ControlsImg/{0}", t.ImageURL), UriKind.Relative));
-            //    img.Source = imgSour;
-            //    img.Height = 16;
-
-            //    Label lbl = new Label();
-            //    lbl.Content = t.ControlCaption;
-
-            //    Canvas can = new Canvas();
-            //    can.Children.Add(img);
-            //    can.Children.Add(lbl);
-            //    can.Height = 28;
-            //    Border b = new Border();
-            //    b.Child = can;
-
-            //    if (t.ControlType.Value == 1)
-            //    {
-            //        tpcontrol.Children.Add(b);
-            //    }
-            //    else if (t.ControlType.Value == 2)
-            //    {
-            //        ztControl.Children.Add(b);
-            //    }
-            //    else if (t.ControlType.Value == 3)
-            //    {
-            //        pubControl.Children.Add(b);
-            //    }
-            //}
-
         }
         #endregion
 
@@ -143,6 +109,10 @@ namespace MonitorSystem
             _DataContext.Load(_DataContext.GetT_ScreenQuery(), DataLoadComplet, null);
         }
         List<t_Screen> listScreen = new List<t_Screen>();
+        /// <summary>
+        /// 加载场景,完成后，加载控件
+        /// </summary>
+        /// <param name="results"></param>
         private void DataLoadComplet(LoadOperation<t_Screen> results)
         {
             if (results.HasError)
@@ -156,6 +126,8 @@ namespace MonitorSystem
                 listScreen.Add(obj);
             }
             BoindTree();
+            //加载控件
+            LoadControl();
         }
 
         private void BoindTree()
@@ -353,6 +325,7 @@ namespace MonitorSystem
         }
         #endregion
         #endregion
+
         #region 属性
 
         #endregion
