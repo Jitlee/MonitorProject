@@ -34,6 +34,15 @@ namespace MonitorSystem.MonitorSystemGlobal
     {
         New, Save
     }
+
+    public static class StringExtent
+    {
+        public static string Clone(this string src)
+        {
+            return string.Copy(src);
+        }
+    }
+
     #region 监组组态的共公数据结构
 
     public class ControlPropertyObj
