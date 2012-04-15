@@ -22,7 +22,6 @@ namespace MonitorSystem.MonitorSystemGlobal
             InitializeComponent();
 
             BaseCtl = _baseCtl;
-
             ListScreenShow=_baseCtl.GetChildScreenObj();
             BindList();
             //gvList.DataContext = ListScreenShow;

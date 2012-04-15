@@ -128,7 +128,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public override void SetPropertyValue()
         {
-            throw new NotImplementedException();
+           
         }
 
         public override object GetRootControl()

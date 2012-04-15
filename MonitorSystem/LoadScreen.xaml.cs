@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using MonitorSystem.MonitorSystemGlobal;
 using MonitorSystem.Web.Servers;
 using System.ServiceModel.DomainServices.Client;
+using System.Collections.ObjectModel;
 
 namespace MonitorSystem
 {
@@ -39,7 +40,7 @@ namespace MonitorSystem
         public LoadScreen()
         {
             InitializeComponent();
-
+           
             //实例化
             Init();
             
@@ -69,7 +70,9 @@ namespace MonitorSystem
             _DataContext.Load(_DataContext.GetT_Element_LibraryQuery(), LoadElement_LibraryCompleted, null);
 
             _DataContext.Load(_DataContext.GetT_ElementProperty_LibraryQuery(), LoadElementProperty_LibraryCompleted, null);
-         
+           //加载控件属性
+            _DataContext.Load(_DataContext.GetT_ControlPropertyQuery(), LoadControlPropertyCompleted, null);
+           
 
             //实例化属性窗口
             fwProperty = new FloatableWindow();
@@ -181,6 +184,23 @@ namespace MonitorSystem
             LoadCommpleteNumber++;
             InitComplete();
         }
+         /// <summary>
+        /// 加载参数完成！
+        /// </summary>
+        /// <param name="result"></param>
+        private void LoadControlPropertyCompleted(LoadOperation<t_ControlProperty> result)
+        {
+            if (result.HasError)
+            {
+                LoadCommpleteNumber++;
+                ErrorMsg += "无法加载控件属性数据！\n";
+                InitComplete();
+                return;
+            }
+            LoadCommpleteNumber++;
+            InitComplete();
+        }
+        
         #endregion
 
        
@@ -189,6 +209,8 @@ namespace MonitorSystem
         /// </summary>
         private void SetDefultScreen()
         {
+            if (listScreen == null)
+                return;
             if (listScreen.Count() == 0)
             {
                 _CurrentScreen = null;
@@ -233,8 +255,9 @@ namespace MonitorSystem
         /// <param name="_Screen"></param>
         private void LoadScreenData(t_Screen _Screen)
         {
-            csScreen.Children.Clear();
+            tbWait.Visibility = Visibility.Visible;
 
+            csScreen.Children.Clear();
             string url = string.Format("{0}/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
             BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Absolute));
             ImageBrush imgB = new ImageBrush();
@@ -248,12 +271,10 @@ namespace MonitorSystem
             RC.Stroke = new SolidColorBrush(Colors.Black);
             csScreen.Children.Add(RC);
 
+            //加载元素
             _DataContext.Load(_DataContext.GetT_ElementQuery().Where(a => a.ScreenID == _Screen.ScreenID),
-                LoadElementCompleted, null);
+                LoadElementCompleted, _Screen.ScreenID);
 
-              
-                
-           
         }
 
         private void LoadElementCompleted(LoadOperation<t_Element> result)
@@ -263,43 +284,67 @@ namespace MonitorSystem
                 MessageBox.Show(result.Error.Message);
                 return;
             }
-            foreach (t_Element el in result.Entities)
+            _DataContext.Load(_DataContext.GetScreenElementPropertyQuery(Convert.ToInt32(result.UserState)),
+                LoadElementPropertiesCompleted, result.UserState);
+           
+        }
+
+        private void LoadElementPropertiesCompleted(LoadOperation<t_ElementProperty> result)
+        {
+            if (result.HasError)
             {
-                ShowElement(el,ElementSate.Save);
+                MessageBox.Show(result.Error.Message);
+                return;
+            }
+            List<t_Element> lsitElement = _DataContext.t_Elements.Where(a => a.ScreenID == Convert.ToInt32(result.UserState)).ToList();
+            foreach (t_Element el in lsitElement)
+            {
+                var list = _DataContext.t_ElementProperties.Where(a => a.ElementID == el.ElementID);
+                ShowElement(el, ElementSate.Save, list.ToList());
             }
             tbWait.Visibility = Visibility.Collapsed;
         }
         #endregion
 
-        private void ShowElement(t_Element obj,ElementSate eleStae)
+        private void ShowElement(t_Element obj, ElementSate eleStae, List<t_ElementProperty> listObj)
         { 
             switch (obj.ElementName)
             {
                 case "MyButton":
                     TP_Button mtpButtom = new TP_Button();
-                    SetEletemt(mtpButtom, obj, eleStae);
+                    SetEletemt(mtpButtom, obj, eleStae, listObj);
                     break;
                 case "MonitorLine":
                     MonitorLine mPubLine = new MonitorLine();
-                    SetEletemt(mPubLine, obj, eleStae);
+                    SetEletemt(mPubLine, obj, eleStae, listObj);
                     break;
                 case "MonitorText":
                     MonitorText mPubText = new MonitorText();
                     mPubText.MyText = obj.TxtInfo;
-                    SetEletemt(mPubText, obj, eleStae);
+                    SetEletemt(mPubText, obj, eleStae, listObj);
                     break;
+                case "MonitorCur":
+                    MonitorCur mPubCur = new MonitorCur();
+                    SetEletemt(mPubCur, obj, eleStae, listObj);
+                    break;
+                case "MonitorRectangle":
+                    MonitorRectangle mPubRec = new MonitorRectangle();
+                    SetEletemt(mPubRec, obj, eleStae, listObj);
+                    break;
+                    
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
                     ImageSource mm = bitmap;
                     TP mtp = new TP();
                     mtp.Source = mm;
-                    SetEletemt(mtp, obj, eleStae);
+                    SetEletemt(mtp, obj, eleStae, listObj);
                     break;
             }
         }
 
-        private void SetEletemt(MonitorControl mControl, t_Element obj, ElementSate eleStae)
+        private void SetEletemt(MonitorControl mControl, t_Element obj, ElementSate eleStae,
+            List<t_ElementProperty> listObj)
         {
             mControl.Width = (double)obj.Width;
             mControl.Height = (double)obj.Height;
@@ -309,12 +354,13 @@ namespace MonitorSystem
             { 
                 PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl.GetRootControl(); 
             };
-
+            
             mControl.SetValue(Canvas.LeftProperty, (double)obj.ScreenX);
             mControl.SetValue(Canvas.TopProperty, (double)obj.ScreenY);
             mControl.ScreenElement = obj;
+            mControl.ListElementProp = listObj;
             mControl.ElementState = eleStae;
-
+            mControl.SetPropertyValue();
             //添加到场景
             csScreen.Children.Add(mControl);
             mControl.DesignMode();
@@ -339,7 +385,22 @@ namespace MonitorSystem
                 mElement.ScreenX = (int)mMagrinX;
                 mElement.ScreenY = (int)mMagrinY;
                 mElement.ScreenID = _CurrentScreen.ScreenID;
-                ShowElement(mElement,ElementSate.New);
+
+                IEnumerable<t_ControlProperty> listObj = _DataContext.t_ControlProperties.
+                    Where(a => a.ControlID == t.ControlID);
+                List<t_ElementProperty> listElementPro=new List<t_ElementProperty>();
+                foreach (t_ControlProperty cp in listObj)
+                {
+                    t_ElementProperty tt = new t_ElementProperty();
+                    tt.Caption = cp.Caption;
+                    tt.ElementID = mElement.ElementID;
+                    tt.PropertyNo = cp.PropertyNo;
+                    tt.PropertyValue = cp.DefaultValue;
+                    tt.PropertyName = cp.PropertyName;
+                    listElementPro.Add(tt);
+                }
+
+                ShowElement(mElement, ElementSate.New, listElementPro);
                 //_DataContext.t_Elements.Add(mElement);
             }
         }
@@ -533,6 +594,7 @@ namespace MonitorSystem
 
         private void SaveElement()
         {
+            int MaxID = 4440;
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var ui = csScreen.Children[i];
@@ -549,8 +611,14 @@ namespace MonitorSystem
 
                     if (el == ElementSate.New)
                     {
+                        meleObj.ElementID = MaxID;
                         _DataContext.t_Elements.Add(meleObj);
                         m.ElementState = ElementSate.Save;
+
+                        
+                        //_DataContext
+                        //_DataContext.Load(_DataContext.
+                       // _DataContext.SubmitChanges(SubmitCompleted, m);
                     }
                     else
                     {
@@ -558,7 +626,34 @@ namespace MonitorSystem
                     }
                 }
             }
+          
             _DataContext.SubmitChanges();
+        }
+
+        private void SubmitCompleted(SubmitOperation result)
+        {
+           EntityChangeSet obj= result.ChangeSet;
+           foreach (var v in obj.AddedEntities)
+           {
+               if (v is t_Element)
+               {
+                   t_Element vobj = (t_Element)v;
+                   MonitorControl m = (MonitorControl)result.UserState;
+
+                   foreach (t_ElementProperty ep in m.ListElementProp)
+                   {
+                       ep.ElementID = vobj.ElementID;
+                       _DataContext.t_ElementProperties.Add(ep);
+                   }
+                   _DataContext.SubmitChanges();
+               }
+           }
+            
+            if (!result.HasError
+                && null != result.UserState)
+            {
+                
+            }
         }
 
 

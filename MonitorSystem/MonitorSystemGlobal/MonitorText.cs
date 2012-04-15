@@ -24,10 +24,38 @@ namespace MonitorSystem.MonitorSystemGlobal
 
             MyText = "";
         }
-
-        #region 属性
         public override event EventHandler Selected;
 
+        #region 属性
+        private static readonly DependencyProperty TransparentProperty =
+          DependencyProperty.Register("Transparent",
+          typeof(int), typeof(MonitorText), new PropertyMetadata(0));
+        private int _Transparent;
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                if (value == 1)
+                {
+                    _mTxt.Background=new SolidColorBrush();
+                    _mTxt.BorderBrush = new SolidColorBrush();
+                }
+                else
+                {
+                    _mTxt.Background = new SolidColorBrush(Colors.White);
+                    
+                }
+                
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+
+        }
+
+
+      
         //MyText
         private static readonly DependencyProperty StretchProperty =
           DependencyProperty.Register("MyText",
@@ -41,8 +69,57 @@ namespace MonitorSystem.MonitorSystemGlobal
                 ScreenElement.TxtInfo = value; 
             }
         }
+
+
+        private static readonly DependencyProperty LinearChangeProperty =
+          DependencyProperty.Register("LinearChange",
+          typeof(bool), typeof(MonitorText), new PropertyMetadata(true));
+        private bool _LinearChange = false;
+         public bool LinearChange
+        {
+            get { return _LinearChange; }
+            set {
+                _LinearChange = value;
+                SetLinearChange(value);
+                SetAttrByName("LinearChange", value);
+            }
+        }
+
+
+
+         private static readonly DependencyProperty FromColorProperty =
+          DependencyProperty.Register("FromColor",
+          typeof(string), typeof(MonitorText), new PropertyMetadata("RGB(177,255,255)"));
+         private string _FromColor;
+         public string FromColor
+         {
+             get { return _FromColor; }
+             set
+             {
+                 _FromColor = value;
+                 SetAttrByName("FromColor", value);
+             }
+         }
+
+         private static readonly DependencyProperty ToColorProperty =
+          DependencyProperty.Register("ToColor",
+          typeof(string), typeof(MonitorText), new PropertyMetadata("RGB(16,200,250)"));
+         private string _ToColor;
+         public string ToColor
+         {
+             get { return _ToColor; }
+             set { _ToColor = value; SetAttrByName("ToColor", value); }
+         }
+        
         #endregion
 
+         public void SetLinearChange(bool IsEnable)
+         {
+             if (IsEnable)
+             {
+
+             }
+         }
 
 
         public override void DesignMode()
@@ -71,9 +148,29 @@ namespace MonitorSystem.MonitorSystemGlobal
                 Selected(this, RoutedEventArgs.Empty);
             }
         }
+        
         public override void SetPropertyValue()
         {
-            throw new NotImplementedException();
+            foreach (t_ElementProperty pro in ListElementProp)
+            {
+                if (pro.PropertyName == "LinearChange")
+                {
+                    _LinearChange = bool.Parse(pro.PropertyValue);
+                }
+                else if (pro.PropertyName == "FromColor")
+                {
+                    _FromColor = pro.PropertyValue;
+                }
+                else if (pro.PropertyName == "ToColor")
+                {
+                    _ToColor = pro.PropertyValue;
+                }
+            }
+        }
+
+        public List<t_ElementProperty> GetProperty()
+        {
+            return ListElementProp;
         }
 
         public override object GetRootControl()

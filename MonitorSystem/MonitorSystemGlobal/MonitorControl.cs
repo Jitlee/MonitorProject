@@ -28,12 +28,28 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// <summary>
         /// 控件自定义属性列表,控件值
         /// </summary>
-        public  ObservableCollection<t_ElementProperty_Library> CollectionControlProp;
+        public List<t_ElementProperty> ListElementProp{ get; set; }
+        /// <summary>
+        /// 设置控件自定义属性值
+        /// </summary>
         public abstract void SetPropertyValue();
         /// <summary>
         /// 控件状态，新添加的，或以保存的
         /// </summary>
         public ElementSate ElementState;
+
+        public void SetAttrByName(string name, object value)
+        {
+            foreach (t_ElementProperty ep in ListElementProp)
+            {
+                if (ep.PropertyName.Trim().ToUpper() == name.Trim().ToUpper())
+                {
+                    ep.PropertyValue = value.ToString();
+                    break;
+                }
+            }
+        }
+
     }
 
     public enum ElementSate

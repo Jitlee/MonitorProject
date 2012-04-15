@@ -49,7 +49,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         private void InitProperty()
         {
             this.cbScreenList.ItemsSource = LoadScreen._DataContext.t_Screens;
-            this.cbScreenList.DisplayMemberPath = "ScreenName";           
+            this.cbScreenList.DisplayMemberPath = "ScreenName";
         }
        
         private void OKButton_Click(object sender, RoutedEventArgs e)

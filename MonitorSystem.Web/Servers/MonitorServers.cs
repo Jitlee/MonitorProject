@@ -22,6 +22,8 @@ namespace MonitorSystem.Web.Servers
     public partial class MonitorServers : LinqToEntitiesDomainService<MS>
     {
 
+       
+
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
@@ -41,6 +43,8 @@ namespace MonitorSystem.Web.Servers
             {
                 this.ObjectContext.t_AlarmAction.AddObject(t_AlarmAction);
             }
+
+            
         }
 
         public void UpdateT_AlarmAction(t_AlarmAction currentt_AlarmAction)

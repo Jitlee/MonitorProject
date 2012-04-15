@@ -9,8 +9,8 @@
     <Grid x:Name="LayoutRoot" Background="Beige">
         <Canvas>
             <Image Source="Images/ControlsImg/FireControlMonitor.jpg" />
-            <sdk:Label  Height="28" Name="label1" Width="120" />
-            <Rectangle Canvas.Left="130" Canvas.Top="95" Height="66" Name="rectangle1" Stroke="Black" StrokeThickness="1" Width="135" />
+            <Rectangle Canvas.Left="102"    Canvas.Top="108" Height="172" 
+                       Name="rectangle1" Stroke="Black" StrokeThickness="1" Width="166" RadiusX="100" RadiusY="100" />
         </Canvas>
     </Grid>
 </UserControl>
