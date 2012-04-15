@@ -92,9 +92,14 @@
     <Compile Include="LoadScreen.xaml.cs">
       <DependentUpon>LoadScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\Logging\ILogger.cs" />
+    <Compile Include="Utilities\Logging\Logger.cs" />
+    <Compile Include="Utilities\Logging\LoggerFactory.cs" />
+    <Compile Include="Utilities\Logging\LoggerLevel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MonitorSystemGlobal\ColorText.cs" />
     <Compile Include="MonitorSystemGlobal\DelegateCommand.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorControl.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorLine.cs" />
