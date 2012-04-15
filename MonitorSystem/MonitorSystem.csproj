@@ -71,12 +71,14 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Controls, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Windows.Controls.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Windows.Controls.Data.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Windows.Controls.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Input.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Layout.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Navigation, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
@@ -95,6 +97,8 @@
     </Compile>
     <Compile Include="MonitorSystemGlobal\DelegateCommand.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorControl.cs" />
+    <Compile Include="MonitorSystemGlobal\MonitorLine.cs" />
+    <Compile Include="MonitorSystemGlobal\MonitorText.cs" />
     <Compile Include="MonitorSystemGlobal\TP.cs" />
     <Compile Include="MonitorSystemGlobal\TPSetProperty.xaml.cs">
       <DependentUpon>TPSetProperty.xaml</DependentUpon>
@@ -144,7 +148,7 @@
     <Compile Include="PropertyGrid\PropertyItem.cs" />
     <Compile Include="PropertyGrid\StringValueEditor.cs" />
     <Compile Include="PropertyGrid\ValueEditorBase.cs" />
-    <Compile Include="Property\EditBase.cs" />
+    <Compile Include="EditBase.cs" />
     <Compile Include="Property\Property.xaml.cs">
       <DependentUpon>Property.xaml</DependentUpon>
     </Compile>

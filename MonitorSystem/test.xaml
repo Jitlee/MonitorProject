@@ -10,7 +10,7 @@
         <Canvas>
             <Image Source="Images/ControlsImg/FireControlMonitor.jpg" />
             <sdk:Label  Height="28" Name="label1" Width="120" />
-            
+            <Rectangle Canvas.Left="131" Canvas.Top="148" Height="66" Name="rectangle1" Stroke="Black" StrokeThickness="1" Width="135" />
         </Canvas>
     </Grid>
 </UserControl>

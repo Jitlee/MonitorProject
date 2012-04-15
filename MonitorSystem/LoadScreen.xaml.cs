@@ -178,7 +178,8 @@ namespace MonitorSystem
         {
             if (_CurrentScreen != null)
             {
-                if (MessageBox.Show("你要保存当前改动吗？", "提示", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                if (MessageBox.Show("确定当前改动吗？", "提示", MessageBoxButton.OKCancel)
+                    == MessageBoxResult.OK)
                 {
                     SaveElement();
                 }
@@ -235,7 +236,13 @@ namespace MonitorSystem
             switch (obj.ElementName)
             {
                 case "MyButton":
-                     mControl = new TP_Button();
+                    mControl = new TP_Button();
+                    break;
+                case "MonitorLine":
+                    mControl = new MonitorLine();
+                    break;
+                case "MonitorText":
+                    mControl = new MonitorText();
                     break;
                 default:
                     mControl = new TP();

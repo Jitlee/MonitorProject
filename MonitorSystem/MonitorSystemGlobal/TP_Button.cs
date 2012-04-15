@@ -11,9 +11,18 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Linq;
 using MonitorSystem.Web.Moldes;
+using System.Collections.ObjectModel;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
+    public class ScreenAddShowName
+    {
+        public string ScreenShowName { get; set; }
+        public string ScreenName { get; set; }
+
+        public t_Screen Screen { get; set; }
+    }
+
     public class TP_Button : MonitorControl
     {
         public TP_Button()
@@ -52,14 +61,14 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// 将对象的ScreenElement的ChildScreenID解析为场景 
         /// </summary>
         /// <returns></returns>
-        private List<t_Screen> GetChildScreenID()
+        public ObservableCollection<ScreenAddShowName> GetChildScreenObj()
         {
             string mScreenID = base.ScreenElement.ChildScreenID;
             if (mScreenID == "0")
             {
                 return null;
             }
-            List<t_Screen> listScreen = new List<t_Screen>();
+            ObservableCollection<ScreenAddShowName> listScreenShow = new ObservableCollection<ScreenAddShowName>();
             string[] attrS = mScreenID.Split(';');
             foreach (string str in attrS)
             {
@@ -69,10 +78,36 @@ namespace MonitorSystem.MonitorSystemGlobal
                 {
                     int Scrennid = Convert.ToInt32(attr[1]);
                     t_Screen t = LoadScreen.listScreen.Single(a => a.ScreenID == Scrennid);
-                    listScreen.Add(t);
+
+                    ScreenAddShowName mShow = new ScreenAddShowName();
+                    mShow.ScreenName = t.ScreenName ;
+                    mShow.Screen = t;
+                    mShow.ScreenShowName = attr[0] ;
+                    listScreenShow.Add(mShow);
                 }
             }
-            return listScreen;
+            return listScreenShow;
+        }
+
+        /// <summary>
+        /// 设置属性
+        /// </summary>
+        /// <param name="litobj"></param>
+        public void SetChildScreen(ObservableCollection<ScreenAddShowName> litobj)
+        {
+            string strScreen = "";
+            if (litobj == null)
+                strScreen = "0";
+            else if (litobj.Count == 0)
+                strScreen = "0";
+            else
+            {
+                foreach (ScreenAddShowName obj in litobj)
+                {
+                    strScreen += string.Format("{0}#{1};", obj.ScreenShowName, obj.Screen.ScreenID);
+                }
+            }
+            ScreenElement.ChildScreenID = strScreen;
         }
         #endregion
 
