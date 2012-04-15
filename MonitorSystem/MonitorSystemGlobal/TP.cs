@@ -31,7 +31,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             DependencyProperty.Register("Source",
             typeof(ImageSource), typeof(TP), new PropertyMetadata(null));
 
-        public override ImageSource Source
+        public  ImageSource Source
         {
             get { return (ImageSource)_image.GetValue(Image.SourceProperty); }
             set { _image.SetValue(Image.SourceProperty, value); }
@@ -79,10 +79,11 @@ namespace MonitorSystem.MonitorSystemGlobal
             if (!IsDesignMode)
             {
                 AdornerLayer = new Adorner(this);
+                AdornerLayer.Selected += OnSelected;
+
                 var menu = new ContextMenu();
                 var menuItem = new MenuItem() { Header = "属性" };
                 menuItem.Click += PropertyMenuItem_Click;
-                AdornerLayer.Selected += OnSelected;
                 menu.Items.Add(menuItem);
                 AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
             }
@@ -123,6 +124,11 @@ namespace MonitorSystem.MonitorSystemGlobal
                     tpp.Screen.ScreenID);
                 //MessageBox.Show(tpp.Screen.ScreenName);
             }
+        }
+
+        public override void SetPropertyValue()
+        {
+            throw new NotImplementedException();
         }
 
         public override object GetRootControl()

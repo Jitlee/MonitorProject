@@ -35,18 +35,13 @@ namespace MonitorSystem.MonitorSystemGlobal
             throw new NotImplementedException();
         }
 
+        public override void SetPropertyValue()
+        {
+            throw new NotImplementedException();
+        }
+
         public override event EventHandler Selected;
 
-        public override ImageSource Source
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+       
     }
 }

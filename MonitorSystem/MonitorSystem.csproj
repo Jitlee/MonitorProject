@@ -92,6 +92,10 @@
     <Compile Include="LoadScreen.xaml.cs">
       <DependentUpon>LoadScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MonitorSystemGlobal\MonitorFoldLine.cs" />
+    <Compile Include="MonitorSystemGlobal\MonitorCur.cs" />
+    <Compile Include="MonitorSystemGlobal\MonitorGrid.cs" />
+    <Compile Include="MonitorSystemGlobal\MonitorRectangle.cs" />
     <Compile Include="Utilities\Logging\ILogger.cs" />
     <Compile Include="Utilities\Logging\Logger.cs" />
     <Compile Include="Utilities\Logging\LoggerFactory.cs" />

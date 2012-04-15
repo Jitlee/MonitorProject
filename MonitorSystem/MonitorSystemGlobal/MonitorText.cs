@@ -21,39 +21,38 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             Content = _mTxt;
             //Stretch = Stretch.Fill;
-            
+
+            MyText = "";
         }
 
         #region 属性
         public override event EventHandler Selected;
 
-
-        private static readonly DependencyProperty SourceProperty =
-            DependencyProperty.Register("Source",
-            typeof(ImageSource), typeof(TP), new PropertyMetadata(null));
-
-        public override ImageSource Source
-        {
-            get
-            {
-                return null;
-            }
-            set { }
-        }
-
+        //MyText
         private static readonly DependencyProperty StretchProperty =
-            DependencyProperty.Register("Stretch",
-            typeof(Stretch), typeof(TP), new PropertyMetadata(Stretch.Fill));
+          DependencyProperty.Register("MyText",
+          typeof(string), typeof(MonitorText), new PropertyMetadata(""));
 
-        public Stretch Stretch
+        public string MyText
         {
-            get;
-            set;
+            get { return _mTxt.Text; }
+            set { _mTxt.Text = value;
+            if (ScreenElement != null)
+                ScreenElement.TxtInfo = value; 
+            }
         }
         #endregion
 
 
 
+        public override void DesignMode()
+        {
+            if (!IsDesignMode)
+            {
+                AdornerLayer = new Adorner(this);
+                AdornerLayer.Selected += OnSelected;
+            }
+        }
         public override void UnDesignMode()
         {
             if (IsDesignMode)
@@ -72,13 +71,9 @@ namespace MonitorSystem.MonitorSystemGlobal
                 Selected(this, RoutedEventArgs.Empty);
             }
         }
-
-        public override void DesignMode()
+        public override void SetPropertyValue()
         {
-            if (!IsDesignMode)
-            {
-                AdornerLayer = new Adorner(this);
-            }
+            throw new NotImplementedException();
         }
 
         public override object GetRootControl()

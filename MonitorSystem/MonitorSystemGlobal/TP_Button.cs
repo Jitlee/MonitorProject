@@ -35,16 +35,6 @@ namespace MonitorSystem.MonitorSystemGlobal
         public override event EventHandler Selected;
         private Image _image = new Image();
 
-        private static readonly DependencyProperty SourceProperty =
-            DependencyProperty.Register("Source",
-            typeof(ImageSource), typeof(TP), new PropertyMetadata(null));
-
-        public override ImageSource Source
-        {
-            get { return (ImageSource)_image.GetValue(Image.SourceProperty); }
-            set { _image.SetValue(Image.SourceProperty, value); }
-        }
-
         private static readonly DependencyProperty StretchProperty =
             DependencyProperty.Register("Stretch",
             typeof(Stretch), typeof(TP), new PropertyMetadata(Stretch.Fill));
@@ -55,6 +45,8 @@ namespace MonitorSystem.MonitorSystemGlobal
             set { _image.SetValue(Image.StretchProperty, value); }
         }
         #endregion
+
+
 
         #region 场景,TP属性
         /// <summary>
@@ -152,6 +144,10 @@ namespace MonitorSystem.MonitorSystemGlobal
           tpp.Show();
         }
 
+        public override void SetPropertyValue()
+        {
+            throw new NotImplementedException();
+        }
         public override object GetRootControl()
         {
             return this;

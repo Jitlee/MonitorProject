@@ -302,7 +302,16 @@ namespace MonitorSystem
                     args.Screen=m_obj;
                     OnChangeScreen(args);
                     break;
+                case "miSetDeftult":
+                    LoadScreen._DataContext.t_MonitorSystemParams.First().StartScreenID = m_obj.ScreenID;
+                    LoadScreen._DataContext.SubmitChanges();
+                    break;
             }
+        }
+
+        private void SetDefultScreen()
+        {
+           
         }
 
         private void SubmitCompleted(SubmitOperation result)

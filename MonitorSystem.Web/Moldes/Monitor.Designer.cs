@@ -10990,10 +10990,12 @@ namespace MonitorSystem.Web.Moldes
         /// 创建新的 t_MonitorSystemParam 对象。
         /// </summary>
         /// <param name="startScreenID">StartScreenID 属性的初始值。</param>
-        public static t_MonitorSystemParam Createt_MonitorSystemParam(global::System.Int32 startScreenID)
+        /// <param name="id">ID 属性的初始值。</param>
+        public static t_MonitorSystemParam Createt_MonitorSystemParam(global::System.Int32 startScreenID, global::System.Int32 id)
         {
             t_MonitorSystemParam t_MonitorSystemParam = new t_MonitorSystemParam();
             t_MonitorSystemParam.StartScreenID = startScreenID;
+            t_MonitorSystemParam.ID = id;
             return t_MonitorSystemParam;
         }
 
@@ -11027,7 +11029,7 @@ namespace MonitorSystem.Web.Moldes
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 StartScreenID
         {
@@ -11037,14 +11039,11 @@ namespace MonitorSystem.Web.Moldes
             }
             set
             {
-                if (_StartScreenID != value)
-                {
-                    OnStartScreenIDChanging(value);
-                    ReportPropertyChanging("StartScreenID");
-                    _StartScreenID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("StartScreenID");
-                    OnStartScreenIDChanged();
-                }
+                OnStartScreenIDChanging(value);
+                ReportPropertyChanging("StartScreenID");
+                _StartScreenID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StartScreenID");
+                OnStartScreenIDChanged();
             }
         }
         private global::System.Int32 _StartScreenID;
@@ -11194,6 +11193,33 @@ namespace MonitorSystem.Web.Moldes
         private Nullable<global::System.Int32> _HaveDoor;
         partial void OnHaveDoorChanging(Nullable<global::System.Int32> value);
         partial void OnHaveDoorChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                if (_ID != value)
+                {
+                    OnIDChanging(value);
+                    ReportPropertyChanging("ID");
+                    _ID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ID");
+                    OnIDChanged();
+                }
+            }
+        }
+        private global::System.Int32 _ID;
+        partial void OnIDChanging(global::System.Int32 value);
+        partial void OnIDChanged();
 
         #endregion
     

@@ -720,7 +720,7 @@
         </EntityType>
         <EntityType Name="t_MonitorSystemParam">
           <Key>
-            <PropertyRef Name="StartScreenID" />
+            <PropertyRef Name="ID" />
           </Key>
           <Property Name="MonitorRefreshTime" Type="int" />
           <Property Name="StartScreenID" Type="int" Nullable="false" />
@@ -730,6 +730,7 @@
           <Property Name="Door_Sysid" Type="varchar" MaxLength="50" />
           <Property Name="Door_Com" Type="int" />
           <Property Name="HaveDoor" Type="int" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="t_PolicyActionMap">
           <Key>
@@ -1153,21 +1154,6 @@
         </Function>
         <Function Name="t_Copy_TmpValue_To_History" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="t_SaveValue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <!--生成过程中发现错误:
-      警告 6013: 表/视图“MonitorDemo2.dbo.t_RunLog”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
-      
-      <EntityType Name="t_RunLog">
-        <Property Name="UserName" Type="varchar" MaxLength="50" />
-        <Property Name="Operation" Type="varchar" MaxLength="50" />
-        <Property Name="OperationTime" Type="nvarchar" MaxLength="50" />
-      </EntityType>
-      生成过程中发现错误:
-      警告 6013: 表/视图“MonitorDemo2.dbo.t_SysPara”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
-      
-      <EntityType Name="t_SysPara">
-        <Property Name="KeyStr" Type="nvarchar" MaxLength="500" />
-        <Property Name="ValStr" Type="nvarchar" MaxLength="500" />
-      </EntityType>-->
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -1781,7 +1767,7 @@
         </EntityType>
         <EntityType Name="t_MonitorSystemParam">
           <Key>
-            <PropertyRef Name="StartScreenID" />
+            <PropertyRef Name="ID" />
           </Key>
           <Property Type="Int32" Name="MonitorRefreshTime" />
           <Property Type="Int32" Name="StartScreenID" Nullable="false" />
@@ -1791,6 +1777,7 @@
           <Property Type="String" Name="Door_Sysid" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="Door_Com" />
           <Property Type="Int32" Name="HaveDoor" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="t_PolicyActionMap">
           <Key>
@@ -2626,6 +2613,7 @@
           <EntitySetMapping Name="t_MonitorSystemParam">
             <EntityTypeMapping TypeName="MonitorDemo2Model.t_MonitorSystemParam">
               <MappingFragment StoreEntitySet="t_MonitorSystemParam">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="HaveDoor" ColumnName="HaveDoor" />
                 <ScalarProperty Name="Door_Com" ColumnName="Door_Com" />
                 <ScalarProperty Name="Door_Sysid" ColumnName="Door_Sysid" />

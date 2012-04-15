@@ -31,7 +31,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             DependencyProperty.Register("Source",
             typeof(ImageSource), typeof(TP), new PropertyMetadata(null));
 
-        public override ImageSource Source
+        public  ImageSource Source
         {
             get{
                 return null;
@@ -79,6 +79,10 @@ namespace MonitorSystem.MonitorSystemGlobal
             }
         }
 
+        public override void SetPropertyValue()
+        {
+            throw new NotImplementedException();
+        }
         public override object GetRootControl()
         {
             return this;

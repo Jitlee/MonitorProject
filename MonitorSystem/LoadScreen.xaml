@@ -17,10 +17,9 @@
                 <CheckBox Canvas.Left="13" Canvas.Top="10" Content="组态" Height="16" Name="checkBox1"  Click="checkBox1_Click" IsEnabled="False" />
                 <Button Canvas.Left="80" Canvas.Top="7" Content="保存" Height="23" Name="btnSave" Width="75" Click="btnSave_Click" />
                 <sdk:Label Canvas.Left="215" Canvas.Top="7" Height="21" Name="lblShowMsg" Width="141" />
-                <Button Canvas.Left="381" Canvas.Top="8" Content="Button" Height="20" Name="button1" Width="88" Click="button1_Click" />
             </Canvas>
             <Canvas Grid.Row="1" x:Name="csScreen" Background="Beige">
-                <Rectangle   Height="57" Name="RC" Stroke="Black" Visibility="Collapsed" StrokeThickness="1"  Width="191" />
+                
             </Canvas>
             <TextBlock x:Name="tbWait" Text="数据加载中，请稍候 ..."  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>

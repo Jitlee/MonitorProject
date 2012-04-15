@@ -9,37 +9,11 @@
              xmlns:vsm="clr-namespace:System.Windows;assembly=System.Windows"
              xmlns:converter="clr-namespace:MonitorSystem.Converters"
              xmlns:sl40="clr-namespace:SL40PropertyGrid">
-
-    <!--<UserControl.Resources>
-        
-        <sdk:HierarchicalDataTemplate x:Key="TreeViewMainEditTemplate" ItemsSource="{Binding Children}">
-            <TextBox Text="{Binding ScreenName,Mode=TwoWay}" >
-            </TextBox>
-        </sdk:HierarchicalDataTemplate>
-        
-        <sdk:HierarchicalDataTemplate x:Key="TreeViewMainReadTemplate"
-ItemsSource="{Binding Children}">
-            <TextBlock Text="{Binding ScreenName,Mode=TwoWay}"
-MouseRightButtonDown="TreeViewMain_MouseRightButtonDown"
-MouseRightButtonUp="TreeViewMain_MouseRightButtonUp"
-MouseLeftButtonDown="TreeViewMain_MouseLeftButtonDown" >
-            </TextBlock>
-        </sdk:HierarchicalDataTemplate>
-    </UserControl.Resources>-->
-
-
-
+    
     <Grid x:Name="LayoutRoot" Background="White">
         <sdk:TabControl   Name="tabControl1" >
             <sdk:TabItem Header="场景" Name="tabItem1">
                 <Grid  Name="canvs1">
-
-                    <!--<sdk:TreeView Name="tvScreen" ItemTemplate="{StaticResource TreeViewMainReadTemplate}"
-MouseRightButtonDown="TreeViewMain_MouseRightButtonDown" MouseRightButtonUp="TreeViewMain_MouseRightButtonUp"
-MouseLeftButtonDown="TreeViewMain_MouseLeftButtonDown">
-                    </sdk:TreeView>-->
-
-
                     <sdk:TreeView    Name="tvScreen">
                     </sdk:TreeView>
                     <my:ContextMenuService.ContextMenu>
@@ -72,11 +46,18 @@ MouseLeftButtonDown="TreeViewMain_MouseLeftButtonDown">
                             <my:MenuItem   x:Name="miOpen" Click="MenuItem_Click">
                                 <my:MenuItem.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="../Images/Common/delete.png" Width="16" Height="16" />
                                         <TextBlock Text="打开" Padding="5"></TextBlock>
                                     </StackPanel>
                                 </my:MenuItem.Header>
                             </my:MenuItem>
+                            <my:MenuItem   x:Name="miSetDeftult" Click="MenuItem_Click">
+                                <my:MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="设为首页" Padding="5"></TextBlock>
+                                    </StackPanel>
+                                </my:MenuItem.Header>
+                            </my:MenuItem>
+                            
                         </my:ContextMenu>
                     </my:ContextMenuService.ContextMenu>
                 </Grid>

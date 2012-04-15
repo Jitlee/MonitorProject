@@ -66,6 +66,11 @@ namespace MonitorSystem
             //加载参数
             _DataContext.Load(_DataContext.GetT_MonitorSystemParamQuery(), LoadParmCompleted, null);
 
+            _DataContext.Load(_DataContext.GetT_Element_LibraryQuery(), LoadElement_LibraryCompleted, null);
+
+            _DataContext.Load(_DataContext.GetT_ElementProperty_LibraryQuery(), LoadElementProperty_LibraryCompleted, null);
+         
+
             //实例化属性窗口
             fwProperty = new FloatableWindow();
             fwProperty.ParentLayoutRoot = LayoutRoot;
@@ -91,7 +96,7 @@ namespace MonitorSystem
         /// </summary>
         private void InitComplete()
         {
-            if (LoadCommpleteNumber != 2)
+            if (LoadCommpleteNumber != 4)
                 return;
             else
             {
@@ -109,6 +114,34 @@ namespace MonitorSystem
         }
 
         #region 加载数据 完成处理
+        private void LoadElement_LibraryCompleted(LoadOperation<t_Element_Library> result)
+        {
+            if (result.HasError)
+            {
+                LoadCommpleteNumber++;
+                ErrorMsg += "无法元素属性Lib数据！\n";
+                InitComplete();
+                return;
+            }
+
+            LoadCommpleteNumber++;
+            InitComplete();
+        }
+
+        private void LoadElementProperty_LibraryCompleted(LoadOperation<t_ElementProperty_Library> result)
+        {
+            if (result.HasError)
+            {
+                LoadCommpleteNumber++;
+                ErrorMsg += "无法加载元素属性数据！\n";
+                InitComplete();
+                return;
+            }
+
+            LoadCommpleteNumber++;
+            InitComplete();
+        }
+
         private void LoadScreenCompleted(LoadOperation<t_Screen> result)
         {
             if (result.HasError)
@@ -123,6 +156,7 @@ namespace MonitorSystem
             LoadCommpleteNumber++;
             InitComplete();
         }
+
         /// <summary>
         /// 加载参数完成！
         /// </summary>
@@ -132,7 +166,7 @@ namespace MonitorSystem
             if (result.HasError)
             {
                 LoadCommpleteNumber++;
-                ErrorMsg += "无法加载场景数据！\n";
+                ErrorMsg += "无法加载系统参数数据！\n";
                 InitComplete();
                 return;
             }
@@ -210,8 +244,15 @@ namespace MonitorSystem
 
             lblShowMsg.Content = _Screen.ScreenName;
 
+            RC.SetValue(Canvas.ZIndexProperty, 1000);
+            RC.Stroke = new SolidColorBrush(Colors.Black);
+            csScreen.Children.Add(RC);
+
             _DataContext.Load(_DataContext.GetT_ElementQuery().Where(a => a.ScreenID == _Screen.ScreenID),
                 LoadElementCompleted, null);
+
+              
+                
            
         }
 
@@ -231,35 +272,43 @@ namespace MonitorSystem
         #endregion
 
         private void ShowElement(t_Element obj,ElementSate eleStae)
-        {
-            MonitorControl mControl;
+        { 
             switch (obj.ElementName)
             {
                 case "MyButton":
-                    mControl = new TP_Button();
+                    TP_Button mtpButtom = new TP_Button();
+                    SetEletemt(mtpButtom, obj, eleStae);
                     break;
                 case "MonitorLine":
-                    mControl = new MonitorLine();
+                    MonitorLine mPubLine = new MonitorLine();
+                    SetEletemt(mPubLine, obj, eleStae);
                     break;
                 case "MonitorText":
-                    mControl = new MonitorText();
+                    MonitorText mPubText = new MonitorText();
+                    mPubText.MyText = obj.TxtInfo;
+                    SetEletemt(mPubText, obj, eleStae);
                     break;
                 default:
-                    mControl = new TP();
+                    string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
+                    BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
+                    ImageSource mm = bitmap;
+                    TP mtp = new TP();
+                    mtp.Source = mm;
+                    SetEletemt(mtp, obj, eleStae);
                     break;
             }
-          
-            
-            string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
-            BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
-            ImageSource mm = bitmap;
-            mControl.Source = mm;
+        }
+
+        private void SetEletemt(MonitorControl mControl, t_Element obj, ElementSate eleStae)
+        {
             mControl.Width = (double)obj.Width;
             mControl.Height = (double)obj.Height;
            // tp.Tag = t;
             //tp.KeyDown += new KeyEventHandler(TP_KeyDown);
             mControl.Selected += (o, e) =>
-            { PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl.GetRootControl(); };
+            { 
+                PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl.GetRootControl(); 
+            };
 
             mControl.SetValue(Canvas.LeftProperty, (double)obj.ScreenX);
             mControl.SetValue(Canvas.TopProperty, (double)obj.ScreenY);
@@ -269,7 +318,6 @@ namespace MonitorSystem
             //添加到场景
             csScreen.Children.Add(mControl);
             mControl.DesignMode();
-           
         }
 
         /// <summary>
@@ -403,7 +451,7 @@ namespace MonitorSystem
 
         Point mStartPoint;
         bool IsDown = false;
-
+        Rectangle RC = new Rectangle();
         private void Content_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
              t_Control t = GetSelectControl();
@@ -411,6 +459,7 @@ namespace MonitorSystem
              {
                  IsDown = true;
                  var point = e.GetPosition(this);
+
                  RC.Visibility = Visibility.Visible;
                  mStartPoint = point;
 
@@ -418,6 +467,7 @@ namespace MonitorSystem
                  RC.Height = 0;
                  RC.Margin = new Thickness(point.X, point.Y - 35, 0, 0);
              }
+           
         }
 
         private void Content_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -474,13 +524,7 @@ namespace MonitorSystem
             RC.Width = mWidth;
             RC.Height = mHeight;
         }
-        #endregion
-
-
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
+        #endregion      
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
