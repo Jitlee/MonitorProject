@@ -155,17 +155,26 @@ namespace MonitorSystem.MonitorSystemGlobal
             {
                 if (pro.PropertyName == "LinearChange")
                 {
-                    _LinearChange = bool.Parse(pro.PropertyValue);
+                    LinearChange = bool.Parse(pro.PropertyValue);
                 }
                 else if (pro.PropertyName == "FromColor")
                 {
-                    _FromColor = pro.PropertyValue;
+                    FromColor = pro.PropertyValue;
                 }
                 else if (pro.PropertyName == "ToColor")
                 {
-                    _ToColor = pro.PropertyValue;
+                    ToColor = pro.PropertyValue;
                 }
             }
+        }
+
+        public override void SetCommonPropertyValue()
+        {
+            this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
+            this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
+            Transparent = ScreenElement.Transparent.Value;
+            this.Width = (double)ScreenElement.Width;
+            this.Height = (double)ScreenElement.Height;
         }
 
         public List<t_ElementProperty> GetProperty()

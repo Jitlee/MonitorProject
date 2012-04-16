@@ -2932,7 +2932,7 @@
         <EntityTypeShape EntityType="MonitorDemo2Model.t_DisarmTime" Width="1.5" PointX="6.75" PointY="12.75" Height="1.6222135416666674" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_Element" Width="1.5" PointX="12.75" PointY="7.75" Height="5.331848958333353" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_Element_Library" Width="1.5" PointX="0.75" PointY="13.75" Height="4.9946093749999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty" Width="1.5" PointX="14.75" PointY="0.75" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty" Width="1.75" PointX="14.75" PointY="0.75" Height="1.790833333333353" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty_Library" Width="1.5" PointX="2.75" PointY="14.75" Height="1.790833333333353" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_EventType" Width="1.5" PointX="14.75" PointY="3.75" Height="2.4653124999999818" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_GenChannelType" Width="1.5" PointX="14.75" PointY="7.75" Height="3.1397916666666674" />

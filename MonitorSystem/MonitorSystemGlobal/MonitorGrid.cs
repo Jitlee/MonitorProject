@@ -168,6 +168,15 @@ namespace MonitorSystem.MonitorSystemGlobal
             }
         }
 
+        public override void SetCommonPropertyValue()
+        {
+            this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
+            this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
+            Transparent = ScreenElement.Transparent.Value;
+            this.Width = (double)ScreenElement.Width;
+            this.Height = (double)ScreenElement.Height;
+        }
+
         public List<t_ElementProperty> GetProperty()
         {
             return ListElementProp;

@@ -18,5 +18,10 @@ namespace MonitorSystem
         {
             InitializeComponent();
         }
+
+        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -7,10 +7,10 @@
     d:DesignHeight="300" d:DesignWidth="400" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
     
     <Grid x:Name="LayoutRoot" Background="Beige">
-        <Canvas>
-            <Image Source="Images/ControlsImg/FireControlMonitor.jpg" />
-            <Rectangle Canvas.Left="102"    Canvas.Top="108" Height="172" 
-                       Name="rectangle1" Stroke="Black" StrokeThickness="1" Width="166" RadiusX="100" RadiusY="100" />
+        <Canvas >
+            <Line  X1="0" Y1="0" X2="150" Y2="0" Width="150" Fill="#FFA02F2F" 
+                   Height="26" Canvas.Left="20" Canvas.Top="34" Stretch="UniformToFill"></Line>
+            <Rectangle Canvas.Left="89" Canvas.Top="168" Height="100" Name="rectangle1" Stroke="Black" StrokeThickness="1" Width="200" />
         </Canvas>
     </Grid>
 </UserControl>

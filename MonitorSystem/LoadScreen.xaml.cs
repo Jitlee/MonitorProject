@@ -346,21 +346,20 @@ namespace MonitorSystem
         private void SetEletemt(MonitorControl mControl, t_Element obj, ElementSate eleStae,
             List<t_ElementProperty> listObj)
         {
-            mControl.Width = (double)obj.Width;
-            mControl.Height = (double)obj.Height;
+          
            // tp.Tag = t;
             //tp.KeyDown += new KeyEventHandler(TP_KeyDown);
             mControl.Selected += (o, e) =>
             { 
                 PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl.GetRootControl(); 
             };
-            
-            mControl.SetValue(Canvas.LeftProperty, (double)obj.ScreenX);
-            mControl.SetValue(Canvas.TopProperty, (double)obj.ScreenY);
+           
             mControl.ScreenElement = obj;
             mControl.ListElementProp = listObj;
             mControl.ElementState = eleStae;
+            
             mControl.SetPropertyValue();
+            mControl.SetCommonPropertyValue();
             //添加到场景
             csScreen.Children.Add(mControl);
             mControl.DesignMode();
@@ -591,10 +590,14 @@ namespace MonitorSystem
         {
             SaveElement();
         }
+        #region 保存场景及元素、属性
 
+        List<MonitorControl> listMonitorAddElement=new List<MonitorControl>();
+        int AddElementNumber = 0;
         private void SaveElement()
         {
-            int MaxID = 4440;
+            
+
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var ui = csScreen.Children[i];
@@ -611,11 +614,12 @@ namespace MonitorSystem
 
                     if (el == ElementSate.New)
                     {
-                        meleObj.ElementID = MaxID;
-                        _DataContext.t_Elements.Add(meleObj);
-                        m.ElementState = ElementSate.Save;
+                        //meleObj.ElementID = MaxID;
+                        //_DataContext.t_Elements.Add(meleObj);
+                        //m.ElementState = ElementSate.Save;
+                        m.ScreenElement = meleObj;
 
-                        
+                        listMonitorAddElement.Add(m);
                         //_DataContext
                         //_DataContext.Load(_DataContext.
                        // _DataContext.SubmitChanges(SubmitCompleted, m);
@@ -623,13 +627,42 @@ namespace MonitorSystem
                     else
                     {
                         CheckElementChange(meleObj);
+
+                        //保存属性
+                        List<t_ElementProperty> listPro = m.ListElementProp;
+                        if (listPro != null && listPro.Count > 0)
+                        {
+                            foreach (t_ElementProperty cp in listPro)
+                            {
+                              var v  =_DataContext.t_ElementProperties.Where(a => a.ElementID == cp.ElementID &&
+                                    a.PropertyNo == cp.PropertyNo);
+                              if (v != null && v.Count() > 0)
+                              {
+                                  v.First().PropertyValue = cp.PropertyValue;
+                              }
+                            }//end foreach
+                        }//end if (listPro
                     }
                 }
             }
-          
-            _DataContext.SubmitChanges();
+            if (listMonitorAddElement.Count > 0)
+            {
+                AddElementNumber = 0;
+
+                t_Element elem = listMonitorAddElement[0].ScreenElement;
+                _DataContext.t_Elements.Add(elem);
+                _DataContext.SubmitChanges(SubmitCompleted, null);
+            }
+            else
+            {
+                _DataContext.SubmitChanges();
+            }
         }
 
+        /// <summary>
+        /// 提交元素完成。
+        /// </summary>
+        /// <param name="result"></param>
         private void SubmitCompleted(SubmitOperation result)
         {
            EntityChangeSet obj= result.ChangeSet;
@@ -638,24 +671,33 @@ namespace MonitorSystem
                if (v is t_Element)
                {
                    t_Element vobj = (t_Element)v;
-                   MonitorControl m = (MonitorControl)result.UserState;
-
-                   foreach (t_ElementProperty ep in m.ListElementProp)
+                   foreach (t_ElementProperty ep in listMonitorAddElement[AddElementNumber].ListElementProp)
                    {
                        ep.ElementID = vobj.ElementID;
                        _DataContext.t_ElementProperties.Add(ep);
                    }
-                   _DataContext.SubmitChanges();
+                   _DataContext.SubmitChanges(SubmitPropertyCompleted,null);
                }
            }
-            
-            if (!result.HasError
-                && null != result.UserState)
+        }
+        /// <summary>
+        /// 提交元素完成
+        /// </summary>
+        /// <param name="result"></param>
+        private void SubmitPropertyCompleted(SubmitOperation result)
+        {
+            AddElementNumber++;
+            if (listMonitorAddElement.Count <= AddElementNumber)
             {
-                
+                LoadScreenData(_CurrentScreen);
+                return;
             }
+            t_Element elem = listMonitorAddElement[AddElementNumber].ScreenElement;
+            _DataContext.t_Elements.Add(elem);
+            _DataContext.SubmitChanges(SubmitCompleted, null);
         }
 
+        #endregion
 
 
         /// <summary>

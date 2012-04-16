@@ -25,25 +25,82 @@ namespace MonitorSystem.MonitorSystemGlobal
 
     public class TP_Button : MonitorControl
     {
+        TextBox _mRect = new TextBox();
         public TP_Button()
         {
-            Content = _image;
-            Stretch = Stretch.Fill;
+            //_mRect.StrokeThickness = 1;
+            //_mRect.Stroke = new SolidColorBrush(Colors.Black);
+            //_mRect.Fill = new SolidColorBrush(Colors.White);
+
+            Content = _mRect;
         }
 
         #region 属性
         public override event EventHandler Selected;
-        private Image _image = new Image();
 
-        private static readonly DependencyProperty StretchProperty =
-            DependencyProperty.Register("Stretch",
-            typeof(Stretch), typeof(TP), new PropertyMetadata(Stretch.Fill));
-
-        public Stretch Stretch
+        private static readonly DependencyProperty TransparentProperty =
+            DependencyProperty.Register("Transparent",
+            typeof(int), typeof(MonitorText), new PropertyMetadata(0));
+        private int _Transparent;
+        public int Transparent
         {
-            get { return (Stretch)_image.GetValue(Image.StretchProperty); }
-            set { _image.SetValue(Image.StretchProperty, value); }
+            get { return _Transparent; }
+            set
+            {
+                if (value == 1)
+                {
+                    _mRect.Background = new SolidColorBrush();
+                }
+                else
+                {
+                    _mRect.Background = new SolidColorBrush(Colors.White);
+                }
+
+                _Transparent = value;
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+
         }
+
+        private static readonly DependencyProperty HaveEdgeProperty =
+          DependencyProperty.Register("HaveEdge",
+          typeof(bool), typeof(MonitorText), new PropertyMetadata(false));
+        private bool _HaveEdge;
+        public bool HaveEdge
+        {
+            get { return _HaveEdge; }
+            set
+            {
+                if (value)
+                {
+                    _mRect.BorderBrush = new SolidColorBrush(Colors.Black);
+                }
+                else
+                {
+                    _mRect.BorderBrush = new SolidColorBrush();
+                }
+
+                _HaveEdge = value;
+                SetAttrByName("HaveEdge", value);
+            }
+        }
+        
+        private static readonly DependencyProperty TitleProperty =
+          DependencyProperty.Register("Title",
+          typeof(string), typeof(MonitorText), new PropertyMetadata(""));
+         private string _Title;
+         public string Title
+         {
+             get { return _Title; }
+             set
+             {
+                 _mRect.Text = value;
+                 _Title = value;
+                 SetAttrByName("Title", value);
+             }
+         }
+            
         #endregion
 
 
@@ -146,8 +203,28 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public override void SetPropertyValue()
         {
-            //throw new NotImplementedException();
+            foreach (t_ElementProperty pro in ListElementProp)
+            {
+                if (pro.PropertyName == "Title")
+                {
+                    Title = pro.PropertyValue;
+                }
+                else if (pro.PropertyName == "HaveEdge")
+                {
+                    HaveEdge =bool.Parse( pro.PropertyValue);
+                }
+            }
         }
+
+        public override void SetCommonPropertyValue()
+        {
+            this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
+            this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
+            Transparent = ScreenElement.Transparent.Value;
+            this.Width = (double)ScreenElement.Width;
+            this.Height = (double)ScreenElement.Height;
+        }
+
         public override object GetRootControl()
         {
             return this;

@@ -23,6 +23,8 @@ namespace MonitorSystem.MonitorSystemGlobal
 
             BaseCtl = _baseCtl;
             ListScreenShow=_baseCtl.GetChildScreenObj();
+            if (ListScreenShow == null)
+                ListScreenShow = new ObservableCollection<ScreenAddShowName>();
             BindList();
             //gvList.DataContext = ListScreenShow;
         }

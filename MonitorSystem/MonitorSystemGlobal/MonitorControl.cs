@@ -33,6 +33,9 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// 设置控件自定义属性值
         /// </summary>
         public abstract void SetPropertyValue();
+
+        public abstract void SetCommonPropertyValue();
+
         /// <summary>
         /// 控件状态，新添加的，或以保存的
         /// </summary>

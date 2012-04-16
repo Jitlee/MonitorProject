@@ -42,6 +42,9 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public override event EventHandler Selected;
 
-       
+        public override void SetCommonPropertyValue()
+        {
+
+        }
     }
 }
