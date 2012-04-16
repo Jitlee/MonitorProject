@@ -350,7 +350,8 @@ namespace MonitorSystem
            // tp.Tag = t;
             //tp.KeyDown += new KeyEventHandler(TP_KeyDown);
             mControl.Selected += (o, e) =>
-            { 
+            {
+                PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = mControl.BrowsableProperties;
                 PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl.GetRootControl(); 
             };
            

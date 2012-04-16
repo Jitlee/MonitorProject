@@ -8,7 +8,7 @@
      xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
              xmlns:vsm="clr-namespace:System.Windows;assembly=System.Windows"
              xmlns:converter="clr-namespace:MonitorSystem.Converters"
-             xmlns:sl40="clr-namespace:SL40PropertyGrid">
+             xmlns:controls="clr-namespace:MonitorSystem.Controls">
     
     <Grid x:Name="LayoutRoot" Background="White">
         <sdk:TabControl   Name="tabControl1" >
@@ -139,7 +139,7 @@
                 </Grid>
             </sdk:TabItem>
             <sdk:TabItem Header="属性">
-                <sl40:PropertyGrid x:Name="ControlPropertyGrid"/>
+                <controls:PropertyGrid x:Name="ControlPropertyGrid"/>
             </sdk:TabItem>
         </sdk:TabControl>
     </Grid>

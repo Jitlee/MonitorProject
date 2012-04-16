@@ -53,6 +53,37 @@ namespace MonitorSystem.MonitorSystemGlobal
             }
         }
 
+        public string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Translate", "Foreground" };
+
+        public string[] BrowsableProperties
+        {
+            get { return m_BrowsableProperties; }
+            set { m_BrowsableProperties = value; }
+        }
+
+        public double Translate
+        {
+            get { return (double)GetValue(OpacityProperty) * 100d; }
+            set { SetValue(OpacityProperty, value / 100d); }
+        }
+
+        public double Left
+        {
+            get { return (double)GetValue(Canvas.LeftProperty); }
+            set { SetValue(Canvas.LeftProperty, value); AdornerLayer.SetValue(Canvas.LeftProperty, value); }
+        }
+
+        public double Top
+        {
+            get { return (double)GetValue(Canvas.TopProperty); }
+            set { SetValue(Canvas.TopProperty, value); AdornerLayer.SetValue(Canvas.TopProperty, value); }
+        }       
+
+        public MonitorControl()
+        {
+            SetValue(FontFamilyProperty, new FontFamily("宋体"));
+            SetValue(ForegroundProperty, new SolidColorBrush(Colors.Black));
+        }
     }
 
     public enum ElementSate
