@@ -24,6 +24,16 @@ namespace MonitorSystem.MonitorSystemGlobal
         }
 
         #region 属性
+
+        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Translate", "Foreground",
+            "Stretch"};
+
+        public override string[] BrowsableProperties
+        {
+            get { return m_BrowsableProperties; }
+            set { m_BrowsableProperties = value; }
+        }
+
         public override event EventHandler Selected;
        
 

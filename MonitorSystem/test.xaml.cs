@@ -17,6 +17,15 @@ namespace MonitorSystem
         public SilverlightControl1()
         {
             InitializeComponent();
+
+            bod.BorderBrush = new SolidColorBrush(Colors.Red);
+            Thickness thi = new Thickness();
+            thi.Left = 3;
+            thi.Top = 2;
+            thi.Right = 2;
+            thi.Bottom = 0;
+            bod.BorderThickness = thi;
+            
         }
 
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)

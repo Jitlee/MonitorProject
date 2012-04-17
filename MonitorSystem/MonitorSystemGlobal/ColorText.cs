@@ -20,6 +20,15 @@ namespace MonitorSystem.MonitorSystemGlobal
             this.Content = _text;
         }
 
+        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
+            "Translate", "Foreground","Transparent","MyText","LinearChange","FromColor","ToColor" };
+
+        public override string[] BrowsableProperties
+        {
+            get { return m_BrowsableProperties; }
+            set { m_BrowsableProperties = value; }
+        }
+
         public override void DesignMode()
         {
             throw new NotImplementedException();

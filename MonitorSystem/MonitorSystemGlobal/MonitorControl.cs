@@ -53,13 +53,13 @@ namespace MonitorSystem.MonitorSystemGlobal
             }
         }
 
-        public string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Translate", "Foreground" };
+        private  string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Translate", "Foreground" };
 
-        public string[] BrowsableProperties
-        {
-            get { return m_BrowsableProperties; }
-            set { m_BrowsableProperties = value; }
-        }
+        public abstract string[] BrowsableProperties { set; get; }
+        //{
+        //    get { return m_BrowsableProperties; }
+        //    set { m_BrowsableProperties = value; }
+        //}
 
         public double Translate
         {

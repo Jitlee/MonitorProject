@@ -331,6 +331,14 @@ namespace MonitorSystem
                     MonitorRectangle mPubRec = new MonitorRectangle();
                     SetEletemt(mPubRec, obj, eleStae, listObj);
                     break;
+                case "MonitorGrid":
+                    MonitorGrid mPubGrid = new MonitorGrid();
+                    SetEletemt(mPubGrid, obj, eleStae, listObj);
+                    break;
+                case "FoldLine":
+                    MonitorFoldLine mPubFoldLine = new MonitorFoldLine();
+                    SetEletemt(mPubFoldLine, obj, eleStae, listObj);
+                    break;
                     
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);

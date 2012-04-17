@@ -27,6 +27,15 @@ namespace MonitorSystem.MonitorSystemGlobal
         public override event EventHandler Selected;
 
         #region 属性
+        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Translate", "Foreground","Transparent"
+            ,"Radius" };
+
+        public override string[] BrowsableProperties
+        {
+            get { return m_BrowsableProperties; }
+            set { m_BrowsableProperties = value; }
+        }
+
         private static readonly DependencyProperty TransparentProperty =
           DependencyProperty.Register("Transparent",
           typeof(int), typeof(MonitorText), new PropertyMetadata(0));
