@@ -339,7 +339,6 @@ namespace MonitorSystem
                     MonitorFoldLine mPubFoldLine = new MonitorFoldLine();
                     SetEletemt(mPubFoldLine, obj, eleStae, listObj);
                     break;
-                    
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));

@@ -35,7 +35,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty TransparentProperty =
           DependencyProperty.Register("Transparent",
-          typeof(int), typeof(MonitorText), new PropertyMetadata(0));
+          typeof(int), typeof(MonitorGrid), new PropertyMetadata(0));
         private int _Transparent;
         public int Transparent
         {
@@ -56,12 +56,11 @@ namespace MonitorSystem.MonitorSystemGlobal
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
-
         }
 
         private static readonly DependencyProperty RowCountProperty =
           DependencyProperty.Register("RowCount",
-          typeof(int), typeof(MonitorText), new PropertyMetadata(0));
+          typeof(int), typeof(MonitorGrid), new PropertyMetadata(0));
         private int _RowCount = 0;
         public int RowCount
         {
@@ -76,7 +75,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty GridColorProperty =
          DependencyProperty.Register("GridColor",
-         typeof(string), typeof(MonitorText), new PropertyMetadata(""));
+         typeof(string), typeof(MonitorGrid), new PropertyMetadata(""));
         private string _GridColor = "";
         public string GridColor
         {
@@ -90,7 +89,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty ColumnCountProperty =
           DependencyProperty.Register("ColumnCount",
-          typeof(int), typeof(MonitorText), new PropertyMetadata(0));
+          typeof(int), typeof(MonitorGrid), new PropertyMetadata(0));
         private int _ColumnCount = 0;
         public int ColumnCount
         {
@@ -105,7 +104,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty LineWidthProperty =
           DependencyProperty.Register("LineWidth",
-          typeof(int), typeof(MonitorText), new PropertyMetadata(0));
+          typeof(int), typeof(MonitorGrid), new PropertyMetadata(0));
         private int _LineWidth = 0;
         public int LineWidth
         {
@@ -119,14 +118,6 @@ namespace MonitorSystem.MonitorSystemGlobal
         }
         
         #endregion
-
-         //public void SetLinearChange(bool IsEnable)
-         //{
-         //    if (IsEnable)
-         //    {
-
-         //    }
-         //}
 
         /// <summary>
         /// 画Grid
