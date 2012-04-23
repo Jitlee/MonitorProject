@@ -370,7 +370,7 @@ namespace MonitorSystem
             mControl.SetCommonPropertyValue();
             //添加到场景
             csScreen.Children.Add(mControl);
-            mControl.DesignMode();
+            //mControl.DesignMode();
         }
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace MonitorSystem
         private void AddSelectControlElement(double mWidth, double mHeight, double mMagrinX, double mMagrinY)
         {
             t_Control t = GetSelectControl();
-            if (t != null)
+            if (t != null && t.ControlID > 0)
             {
                 t_Element mElement = InitElement(t);
 
@@ -465,49 +465,49 @@ namespace MonitorSystem
 
        
 
-        private void checkBox1_Click(object sender, RoutedEventArgs e)
-        {
-            if (checkBox1.IsChecked.Value)
-            {
-                //加截属性窗口
-                fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
-                prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
-                fwProperty.Show();
+        //private void checkBox1_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (checkBox1.IsChecked.Value)
+        //    {
+        //        //加截属性窗口
+        //        fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
+        //        prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
+        //        fwProperty.Show();
 
-                //注册事件
-                Content.MouseLeftButtonDown +=new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-                Content.MouseLeftButtonUp+=new MouseButtonEventHandler(Content_MouseLeftButtonUp);
+        //        //注册事件
+        //        Content.MouseLeftButtonDown +=new MouseButtonEventHandler(Content_MouseLeftButtonDown);
+        //        Content.MouseLeftButtonUp+=new MouseButtonEventHandler(Content_MouseLeftButtonUp);
                     
-                for (int i = 0; i < csScreen.Children.Count; i++)
-                {
-                    var ui = csScreen.Children[i];
-                    if (ui is MonitorControl)
-                    {
-                        MonitorControl mControl = ui as MonitorControl;
-                        mControl.DesignMode();
-                    }
-                }
-            }
-            else
-            {
-                //取消注册
-                Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-                Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
+        //        for (int i = 0; i < csScreen.Children.Count; i++)
+        //        {
+        //            var ui = csScreen.Children[i];
+        //            if (ui is MonitorControl)
+        //            {
+        //                MonitorControl mControl = ui as MonitorControl;
+        //                mControl.DesignMode();
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //取消注册
+        //        Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
+        //        Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
 
-                for (int i = 0; i < csScreen.Children.Count; i++)
-                {
-                    var ui = csScreen.Children[i];
-                    if (ui is MonitorControl)
-                    {
-                        MonitorControl mControl = ui as MonitorControl;
-                        mControl.UnDesignMode();
-                    }
-                }
-                fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
-                prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
-                fwProperty.Close();
-            }
-        }
+        //        for (int i = 0; i < csScreen.Children.Count; i++)
+        //        {
+        //            var ui = csScreen.Children[i];
+        //            if (ui is MonitorControl)
+        //            {
+        //                MonitorControl mControl = ui as MonitorControl;
+        //                mControl.UnDesignMode();
+        //            }
+        //        }
+        //        fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
+        //        prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
+        //        fwProperty.Close();
+        //    }
+        //}
 
       
 
@@ -523,7 +523,7 @@ namespace MonitorSystem
         private void Content_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
              t_Control t = GetSelectControl();
-             if (t != null)
+             if (t != null && t.ControlID > 0)
              {
                  IsDown = true;
                  var point = e.GetPosition(this);
@@ -562,6 +562,8 @@ namespace MonitorSystem
                 {
                     AddSelectControlElement(mWidth, mHeight, mMagrinX, mMagrinY);
                 }
+
+                PropertyMain.Instance.ResetSelected();
             }
             IsDown = false;
             RC.Visibility = Visibility.Collapsed;
@@ -764,6 +766,48 @@ namespace MonitorSystem
                 saveEle.LevelNo = mobj.LevelNo;
             if (saveEle.ComputeStr != mobj.ComputeStr)
                 saveEle.ComputeStr = mobj.ComputeStr;
+        }
+
+        private void zt_Checked(object sender, RoutedEventArgs e)
+        {
+            //加截属性窗口
+            fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
+            prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
+            fwProperty.Show();
+
+            //注册事件
+            Content.MouseLeftButtonDown += new MouseButtonEventHandler(Content_MouseLeftButtonDown);
+            Content.MouseLeftButtonUp += new MouseButtonEventHandler(Content_MouseLeftButtonUp);
+
+            for (int i = 0; i < csScreen.Children.Count; i++)
+            {
+                var ui = csScreen.Children[i];
+                if (ui is MonitorControl)
+                {
+                    MonitorControl mControl = ui as MonitorControl;
+                    mControl.DesignMode();
+                }
+            }
+        }
+
+        private void zt_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //取消注册
+            Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
+            Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
+
+            for (int i = 0; i < csScreen.Children.Count; i++)
+            {
+                var ui = csScreen.Children[i];
+                if (ui is MonitorControl)
+                {
+                    MonitorControl mControl = ui as MonitorControl;
+                    mControl.UnDesignMode();
+                }
+            }
+            fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
+            prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
+            fwProperty.Close();
         }
 
        

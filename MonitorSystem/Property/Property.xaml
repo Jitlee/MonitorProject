@@ -126,13 +126,13 @@
                     <ScrollViewer>
                         <layoutToolkit:Accordion x:Name="accordion" SelectionMode="ZeroOrOne" VerticalAlignment="Top" HorizontalAlignment="Stretch">
                             <layoutToolkit:AccordionItem Header="拓扑控件" Name="tpControls" HorizontalAlignment="Stretch">
-                                <ListBox ItemsSource="{Binding}" VerticalAlignment="Top" Width="{Binding ElementName=tpControls, Path=ActualWidth}"/>
+                                <ListBox x:Name="tpListBox" ItemsSource="{Binding}" VerticalAlignment="Top" Width="{Binding ElementName=tpControls, Path=ActualWidth}"/>
                             </layoutToolkit:AccordionItem>
                             <layoutToolkit:AccordionItem Header="组态控件" Name="ztControls">
-                                <ListBox ItemsSource="{Binding}" VerticalAlignment="Top" Width="{Binding ElementName=accordion, Path=ActualWidth}"/>
+                                <ListBox x:Name="ztListBox" ItemsSource="{Binding}" VerticalAlignment="Top" Width="{Binding ElementName=accordion, Path=ActualWidth}"/>
                             </layoutToolkit:AccordionItem>
                             <layoutToolkit:AccordionItem  Header="公共控件" Name="ggControls">
-                                <ListBox ItemsSource="{Binding}" VerticalAlignment="Top" Width="{Binding ElementName=accordion, Path=ActualWidth}"/>
+                                <ListBox x:Name="ggListBox" ItemsSource="{Binding}" VerticalAlignment="Top" Width="{Binding ElementName=accordion, Path=ActualWidth}"/>
                             </layoutToolkit:AccordionItem>
                         </layoutToolkit:Accordion>
                     </ScrollViewer>

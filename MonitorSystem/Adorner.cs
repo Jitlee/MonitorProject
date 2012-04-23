@@ -111,10 +111,7 @@ namespace MonitorSystem
 
             _contentAdorner.MouseLeftButtonDown -= BackgroundAdorner_MouseLeftButtonDown;
             _contentAdorner.MouseLeftButtonUp -= BackgroundAdorner_MouseLeftButtonUp;
-
-            //this._popup.LayoutUpdated -= PopupLayoutUpdated;
-            //this._popup.IsOpen = false;
-            //this._popup = null;
+            _parent.Children.Remove(this);
             GC.SuppressFinalize(this);
         }
 

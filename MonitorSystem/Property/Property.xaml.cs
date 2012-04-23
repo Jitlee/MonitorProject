@@ -63,17 +63,26 @@ namespace MonitorSystem
         {
             if (accordion.SelectedIndex == 0)
             {
-                return (tpControls.Content as ListBox).SelectedItem as t_Control;
+                return tpListBox.SelectedItem as t_Control;
             }
             else if (accordion.SelectedIndex == 1)
             {
-                return (ztControls.Content as ListBox).SelectedItem as t_Control;
+                return ztListBox.SelectedItem as t_Control;
             }
             else if (accordion.SelectedIndex == 2)
             {
-                return (ggControls.Content as ListBox).SelectedItem as t_Control;
+                return ggListBox.SelectedItem as t_Control;
             }
             return null;
+        }
+
+        public void ResetSelected()
+        {
+            tpListBox.SelectedIndex = 0;
+
+            ztListBox.SelectedIndex = 0;
+
+            ggListBox.SelectedIndex = 0;
         }
 
         #region  控件
@@ -88,9 +97,20 @@ namespace MonitorSystem
                 MessageBox.Show(results.Error.Message);
                 return;
             }
-            tpControls.DataContext = results.Entities.Where(t => t.ControlType == 1);
-            ztControls.DataContext = results.Entities.Where(t => t.ControlType == 2);
-            ggControls.DataContext = results.Entities.Where(t => t.ControlType == 3);
+            var tp =  results.Entities.Where(t => t.ControlType == 1).ToList();
+            tp.Insert(0, new t_Control() { ControlID = -1, ControlCaption = "指针", ControlName = "指针", ImageURL = "point.jpg" });
+            tpListBox.ItemsSource = tp;
+            tpListBox.SelectedIndex = 0;
+
+            var zt = results.Entities.Where(t => t.ControlType == 2).ToList();
+            zt.Insert(0, new t_Control() { ControlID = -1, ControlCaption = "指针", ControlName = "指针", ImageURL = "point.jpg" });
+            ztListBox.ItemsSource = zt;
+            ztListBox.SelectedIndex = 0;
+
+            var gg = results.Entities.Where(t => t.ControlType == 3).ToList();
+            gg.Insert(0, new t_Control() { ControlID = -1, ControlCaption = "指针", ControlName = "指针", ImageURL = "point.jpg" });
+            ggListBox.ItemsSource = gg;
+            ggListBox.SelectedIndex = 0;
 
         }
         #endregion
@@ -102,6 +122,7 @@ namespace MonitorSystem
             //    tpControls.Width = accordion.Width = Width;//组件宽度
             //}
         }
+
         #region 场景
         #region 加载场景
         private void LoadScrent()
