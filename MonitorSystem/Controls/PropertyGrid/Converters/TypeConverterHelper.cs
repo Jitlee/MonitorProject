@@ -91,6 +91,10 @@ namespace MonitorSystem.Controls.Converters
             {
                 return new ColorConverter();
             }
+            if (type == typeof(Color))
+            {
+                return new ColorConverter();
+            }
 			//if (type == typeof(CultureInfo))
 			//{
 			//    return new CultureInfoConverter();

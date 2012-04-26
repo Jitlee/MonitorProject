@@ -44,11 +44,14 @@ namespace MonitorSystem.Controls
 			if (typeof(String).IsAssignableFrom(propertyType))
 				return new StringValueEditor(label, property);
 
-			if (typeof(ValueType).IsAssignableFrom(propertyType))
-				return new StringValueEditor(label, property);
-
             if (typeof(Brush).IsAssignableFrom(propertyType))
                 return new ColorValueEditor(label, property);
+
+            if (typeof(Color).IsAssignableFrom(propertyType))
+                return new ColorValueEditor(label, property);
+
+            if (typeof(ValueType).IsAssignableFrom(propertyType))
+                return new StringValueEditor(label, property);
 
 			//if (typeof(Object).IsAssignableFrom(propertyType))
 			//    return new PropertyGrid(label, property);

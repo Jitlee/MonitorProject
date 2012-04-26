@@ -20,7 +20,6 @@ namespace MonitorSystem.Controls
             : base(label, property)
         {
         
-            currentValue = property.Value;
             property.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(property_PropertyChanged);
             property.ValueError += new EventHandler<ExceptionEventArgs>(property_ValueError);
 
@@ -29,7 +28,11 @@ namespace MonitorSystem.Controls
 
             if (property.Value is SolidColorBrush)
             {
-                _colorPicker.Color = (property.Value as SolidColorBrush).Color;
+                currentValue = _colorPicker.Color = (property.Value as SolidColorBrush).Color;
+            }
+            if (property.Value is Color)
+            {
+                currentValue =_colorPicker.Color = (Color)property.Value;
             }
         }
 
@@ -41,8 +44,15 @@ namespace MonitorSystem.Controls
         {
             if (e.PropertyName == "Value")
             {
-                currentValue = this.Property.Value;
-                _colorPicker.Color = (this.Property.Value as SolidColorBrush).Color;
+
+                if (this.Property.Value is SolidColorBrush)
+                {
+                    currentValue = _colorPicker.Color = (this.Property.Value as SolidColorBrush).Color;
+                }
+                if (this.Property.Value is Color)
+                {
+                    currentValue = _colorPicker.Color = (Color)this.Property.Value;
+                }
             }
         }
 
@@ -50,7 +60,15 @@ namespace MonitorSystem.Controls
         {
             if (_colorPicker != null)
             {
-                currentValue = this.Property.Value = new SolidColorBrush(_colorPicker.Color);
+                if (this.Property.Value is SolidColorBrush)
+                {
+                    this.Property.Value = new SolidColorBrush(_colorPicker.Color);
+                }
+                if (this.Property.Value is Color)
+                {
+                    this.Property.Value = _colorPicker.Color;
+                }
+                currentValue = _colorPicker.Color;
             }
         }
     }
