@@ -103,6 +103,7 @@
     <Compile Include="MonitorSystemGlobal\MonitorGrid.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorRectangle.cs" />
     <Compile Include="Controls\PropertyGrid\ColorValueEditor.cs" />
+    <Compile Include="MonitorSystemGlobal\Temprary.cs" />
     <Compile Include="Utilities\Logging\ILogger.cs" />
     <Compile Include="Utilities\Logging\Logger.cs" />
     <Compile Include="Utilities\Logging\LoggerFactory.cs" />

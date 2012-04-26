@@ -350,6 +350,10 @@ namespace MonitorSystem
                     SetEletemt(mPubFoldLine, obj, eleStae, listObj);
                     return mPubFoldLine;
                     //break;
+                case "Temprary":
+                    Temprary mTemprary = new Temprary();
+                    SetEletemt(mTemprary, obj, eleStae, listObj);
+                    return mTemprary;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
