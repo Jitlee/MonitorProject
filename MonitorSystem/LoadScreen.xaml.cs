@@ -262,7 +262,11 @@ namespace MonitorSystem
             BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Absolute));
             ImageBrush imgB = new ImageBrush();
             imgB.ImageSource = bitmap;
-            imgB.Stretch = Stretch.Uniform;
+           // imgB.Stretch = Stretch.Uniform;
+            imgB.Stretch = Stretch.None;
+            imgB.AlignmentX = AlignmentX.Left;
+            imgB.AlignmentY = AlignmentY.Top;
+
             csScreen.Background = imgB;
 
             lblShowMsg.Content = _Screen.ScreenName;
