@@ -310,39 +310,46 @@ namespace MonitorSystem
         }
         #endregion
 
-        private void ShowElement(t_Element obj, ElementSate eleStae, List<t_ElementProperty> listObj)
+        private MonitorControl ShowElement(t_Element obj, ElementSate eleStae, List<t_ElementProperty> listObj)
         { 
             switch (obj.ElementName)
             {
                 case "MyButton":
                     TP_Button mtpButtom = new TP_Button();
                     SetEletemt(mtpButtom, obj, eleStae, listObj);
-                    break;
+                    return mtpButtom;
+                    //break;
                 case "MonitorLine":
                     MonitorLine mPubLine = new MonitorLine();
                     SetEletemt(mPubLine, obj, eleStae, listObj);
-                    break;
+                    return mPubLine;
+                    //break;
                 case "MonitorText":
                     MonitorText mPubText = new MonitorText();
                     mPubText.MyText = obj.TxtInfo;
                     SetEletemt(mPubText, obj, eleStae, listObj);
-                    break;
+                    return mPubText;
+                    //break;
                 case "MonitorCur":
                     MonitorCur mPubCur = new MonitorCur();
                     SetEletemt(mPubCur, obj, eleStae, listObj);
-                    break;
+                    return mPubCur;
+                    //break;
                 case "MonitorRectangle":
                     MonitorRectangle mPubRec = new MonitorRectangle();
                     SetEletemt(mPubRec, obj, eleStae, listObj);
-                    break;
+                    return mPubRec;
+                    //break;
                 case "MonitorGrid":
                     MonitorGrid mPubGrid = new MonitorGrid();
                     SetEletemt(mPubGrid, obj, eleStae, listObj);
-                    break;
+                    return mPubGrid;
+                    //break;
                 case "FoldLine":
                     MonitorFoldLine mPubFoldLine = new MonitorFoldLine();
                     SetEletemt(mPubFoldLine, obj, eleStae, listObj);
-                    break;
+                    return mPubFoldLine;
+                    //break;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
@@ -350,7 +357,8 @@ namespace MonitorSystem
                     TP mtp = new TP();
                     mtp.Source = mm;
                     SetEletemt(mtp, obj, eleStae, listObj);
-                    break;
+                    return mtp;
+                    //break;
             }
         }
 
@@ -411,7 +419,7 @@ namespace MonitorSystem
                     listElementPro.Add(tt);
                 }
 
-                ShowElement(mElement, ElementSate.New, listElementPro);
+                ShowElement(mElement, ElementSate.New, listElementPro).DesignMode();
                 //_DataContext.t_Elements.Add(mElement);
             }
         }
