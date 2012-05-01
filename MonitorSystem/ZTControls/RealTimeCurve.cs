@@ -49,6 +49,11 @@ namespace MonitorSystem.ZTControls
              this.SizeChanged +=new SizeChangedEventHandler(RealTimeCurve_SizeChanged);
         }
 
+        protected void timer_Tick(object sender, EventArgs e)
+        {
+            ShowCurve(RealtimeValue);
+        }
+
 
         private void RealTimeCurve_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -86,11 +91,7 @@ namespace MonitorSystem.ZTControls
 
         #endregion
 
-        protected void timer_Tick(object sender, EventArgs e)
-        {
-            ShowCurve(RealtimeValue);
-        }
-
+        
         #region 控件公共属性
         public override event EventHandler Selected;
         public override void DesignMode()
@@ -229,12 +230,7 @@ namespace MonitorSystem.ZTControls
             }
             this.RefBackground();
         }
-        #endregion
-
-      
-
-        public IList<DeviceObj> m_listDevice = new List<DeviceObj>();
-        public IList<ChannelObj> m_listChannel = new List<ChannelObj>();
+        #endregion        
 
         #region 属性
 
@@ -258,11 +254,9 @@ namespace MonitorSystem.ZTControls
                     //_mTxt.Background = new SolidColorBrush(Colors.White);
 
                 }
-
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
-
         }
 
         private static readonly DependencyProperty myScaleProperty =
