@@ -10,8 +10,9 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.Web.Moldes;
 using System.Linq;
+using MonitorSystem.MonitorSystemGlobal;
 
-namespace MonitorSystem.MonitorSystemGlobal
+namespace MonitorSystem.ZTControls
 {
     /// <summary>
     /// 温度计实体类

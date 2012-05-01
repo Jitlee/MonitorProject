@@ -16,6 +16,8 @@ using MonitorSystem.Web.Servers;
 using System.ServiceModel.DomainServices.Client;
 using System.Collections.ObjectModel;
 
+using MonitorSystem.ZTControls;
+
 namespace MonitorSystem
 {
     public partial class LoadScreen : UserControl

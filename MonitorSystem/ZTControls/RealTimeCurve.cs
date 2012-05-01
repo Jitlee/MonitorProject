@@ -13,31 +13,26 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
 using MonitorSystem.Web.Moldes;
+using MonitorSystem.MonitorSystemGlobal;
 
-namespace MonitorSystem.MonitorSystemGlobal
+namespace MonitorSystem.ZTControls
 {
-
+    /// <summary>
+    /// 44	RealTimeCurve	2	Text.jpg		实时曲线
+    /// </summary>
     public class RealTimeCurve :  MonitorControl
     {
         /// <summary>
         /// 主控件，里面放了所有的显示内容
         /// </summary>
         private Canvas picCurveShow;
-        TextBlock labShowTime;
+        TextBlock labShowTime = new TextBlock();
         public RealTimeCurve()
         {
             this.picCurveShow = new Canvas();
             this.Content = picCurveShow;
 
-            this.labShowTime = new TextBlock();
-            //this.labShowTime.Background = new SolidColorBrush(Colors.Black);
-            this.labShowTime.Foreground = new SolidColorBrush(Colors.Red);
-            this.labShowTime.Text = DateTime.Now.ToString("hh:mm:ss");
-            this.labShowTime.SetValue(Canvas.ZIndexProperty, 1000);
-            picCurveShow.Children.Add(labShowTime);
-
             this.noteMessages = new CoordinatesValue[this.maxNote];
-
             picCurveShow.Height = 400;
             picCurveShow.Width = 400;
             
@@ -47,7 +42,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
             //定时更新值
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 3);
+            timer.Interval = new TimeSpan(0, 0, 5);
             timer.Tick += new EventHandler(timer_Tick);
             timer.Start();
 
@@ -611,8 +606,13 @@ namespace MonitorSystem.MonitorSystemGlobal
                 TextBlock txtValue = new TextBlock();
                 txtValue.Text = CurrentValue1.ToString();
                 txtValue.Foreground = new SolidColorBrush(this.gridForeColor);
-                txtValue.SetValue(Canvas.LeftProperty, this.coordinate -20);
+                txtValue.SetValue(Canvas.LeftProperty, this.coordinate);
                 txtValue.SetValue(Canvas.TopProperty, CurrentPx - this.FontSize / 2);
+                txtValue.SetValue(Canvas.ZIndexProperty, 500);
+                if (CurrentValue1 == _YminValue)
+                {
+                    txtValue.SetValue(Canvas.TopProperty, CurrentPx-12);
+                }
                 picCurveShow.Children.Add(txtValue);
                 value++;
             }
@@ -673,9 +673,9 @@ namespace MonitorSystem.MonitorSystemGlobal
                 CurrentValue1 = this._YmaxValue - value * this._GridHeight;
                 
                 TextBlock txtValue = new TextBlock();
-                txtValue.Text = yLowerString + ":" + _Ylower.ToString();
+                txtValue.Text = yLowerString +  _Ylower.ToString();
                 txtValue.Foreground = new SolidColorBrush(Colors.Red);
-                txtValue.SetValue(Canvas.LeftProperty, coordinate -txtValue.Text.Length * this.gridFontSize);
+                txtValue.SetValue(Canvas.LeftProperty, douooo);
                 txtValue.SetValue(Canvas.TopProperty, my - this.gridFontSize / 2);
                 picCurveShow.Children.Add(txtValue);
             }
@@ -691,21 +691,24 @@ namespace MonitorSystem.MonitorSystemGlobal
                 my = picCurveShow.Height - my;
             }
 
-            Line Line0 = new Line();
-            Line0.StrokeThickness = 0.6;
-            Line0.Stroke = new SolidColorBrush(Colors.Blue);
-            Line0.X1 = coordinate;
-            Line0.X2 = this.picCurveShow.Width;
-            Line0.Y1 = my;
-            Line0.Y2 = my;
-            picCurveShow.Children.Add(Line0);
+            if (_YminValue < 0)
+            {
+                Line Line0 = new Line();
+                Line0.StrokeThickness = 0.6;
+                Line0.Stroke = new SolidColorBrush(Colors.Blue);
+                Line0.X1 = coordinate;
+                Line0.X2 = this.picCurveShow.Width;
+                Line0.Y1 = my;
+                Line0.Y2 = my;
+                picCurveShow.Children.Add(Line0);
 
-            TextBlock txt0 = new TextBlock();
-            txt0.Text = "0:";
-            txt0.Foreground = brush;
-            txt0.SetValue(Canvas.LeftProperty, this.coordinate-18);
-            txt0.SetValue(Canvas.TopProperty, my - this.gridFontSize / 2);
-            picCurveShow.Children.Add(txt0);
+                TextBlock txt0 = new TextBlock();
+                txt0.Text = "0:";
+                txt0.Foreground = brush;
+                txt0.SetValue(Canvas.LeftProperty, this.coordinate - 18);
+                txt0.SetValue(Canvas.TopProperty, my - this.gridFontSize / 2);
+                picCurveShow.Children.Add(txt0);
+            }
 
             if (this._Yupper > 0)
             {
@@ -727,7 +730,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                 TextBlock txtupperAndLower11 = new TextBlock();
                 txtupperAndLower11.Text = this.yUpperString + this._Yupper.ToString();
                 txtupperAndLower11.Foreground = new SolidColorBrush(Colors.Red);
-                txtupperAndLower11.SetValue(Canvas.LeftProperty, this.coordinate - txtupperAndLower11.Text.Length * this.gridFontSize);
+                txtupperAndLower11.SetValue(Canvas.LeftProperty, douooo);
                 txtupperAndLower11.SetValue(Canvas.TopProperty, my - this.gridFontSize / 2);
                 picCurveShow.Children.Add(txtupperAndLower11);
             }
@@ -746,7 +749,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             txtMin.Text = this.yMinString;
             txtMin.Foreground = new SolidColorBrush(Colors.Red);
             txtMin.SetValue(Canvas.LeftProperty, douooo);
-            txtMin.SetValue(Canvas.TopProperty, this.picCurveShow.Height - this.gridFontSize);
+            txtMin.SetValue(Canvas.TopProperty, this.picCurveShow.Height - 12);
             picCurveShow.Children.Add(txtMin);
 
 
@@ -762,10 +765,11 @@ namespace MonitorSystem.MonitorSystemGlobal
             //绘制系统时间
             if (this.showTime)
             {
-                brush = new SolidColorBrush(this.showTimeColor);
+                labShowTime.Foreground = new SolidColorBrush(Colors.Red);
                 labShowTime.Text = DateTime.Now.ToString("hh:mm:ss");
-                labShowTime.Foreground = brush;
-                labShowTime.SetValue(Canvas.LeftProperty, picCurveShow.Width - 105);
+                picCurveShow.Children.Add(labShowTime);
+
+                labShowTime.SetValue(Canvas.LeftProperty, picCurveShow.Width - 80);
                 labShowTime.SetValue(Canvas.TopProperty, picCurveShow.Height - 20);
             }
             //return bitmap;

@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Windows.Browser;
 
 namespace MonitorSystem
 {
@@ -17,9 +18,17 @@ namespace MonitorSystem
         public MainPage()
         {
             InitializeComponent();
-            this.Content = new LoadScreen();
-           // this.Content = new SilverlightControl1();
-            
+            string strWhere = string.Empty;
+            if (HtmlPage.Document.QueryString.Count > 0)
+                strWhere = HtmlPage.Document.QueryString["toWhere"];
+            if (strWhere == "RealtimeCurve")
+            {
+                this.Content = new MainRealtimeCurve();
+            }
+            else
+            {
+                this.Content = new LoadScreen();
+            }
         }
     }
 }

@@ -18,5 +18,17 @@ namespace MonitorSystem.Web.Servers
                   where  c.ElementID==f.ElementID && c.ScreenID ==ScreenID select f;
           return v;
         }
+
+        public double SelectNewValue(int SatationID, int DeiceID, int ChancelID)
+        {
+            var v = from f in ObjectContext.t_TmpValue
+                    where f.StationID == SatationID
+                        && f.DeviceID == DeiceID && f.ChannelNO == ChancelID
+                    select f.MonitorValue;
+
+            if (v.Count() > 0)
+                return v.First().Value;
+            return -999;
+        }
     }
 }

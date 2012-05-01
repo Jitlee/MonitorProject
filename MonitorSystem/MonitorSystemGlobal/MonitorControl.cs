@@ -43,6 +43,8 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public void SetAttrByName(string name, object value)
         {
+            if (ListElementProp == null)
+                return;
             foreach (t_ElementProperty ep in ListElementProp)
             {
                 if (ep.PropertyName.Trim().ToUpper() == name.Trim().ToUpper())

@@ -98,14 +98,31 @@
     <Compile Include="LoadScreen.xaml.cs">
       <DependentUpon>LoadScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainRealtimeCurve.xaml.cs">
+      <DependentUpon>MainRealtimeCurve.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MonitorSystemGlobal\MonitorFoldLine.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorCur.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorGrid.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorRectangle.cs" />
     <Compile Include="Controls\PropertyGrid\ColorValueEditor.cs" />
-    <Compile Include="MonitorSystemGlobal\RealTimeCurve.cs" />
+    <Compile Include="ZTControls\BackgroundRect.cs" />
+    <Compile Include="ZTControls\ButtonCtrl.cs" />
+    <Compile Include="ZTControls\ColorText.cs" />
+    <Compile Include="ZTControls\DetailSwitch.cs" />
+    <Compile Include="ZTControls\DigitalBiaoPan.cs" />
+    <Compile Include="ZTControls\DimorphismGraphCtrl.cs" />
+    <Compile Include="ZTControls\DLBiaoPan.cs" />
+    <Compile Include="ZTControls\DrawLine.cs" />
+    <Compile Include="ZTControls\ExtProControl.cs" />
+    <Compile Include="ZTControls\InputTextBox.cs" />
+    <Compile Include="ZTControls\MonitorVedioClient.cs" />
+    <Compile Include="ZTControls\PicBox.cs" />
+    <Compile Include="ZTControls\RealTimeCurve.cs" />
     <Compile Include="MonitorSystemGlobal\temp.cs" />
-    <Compile Include="MonitorSystemGlobal\Temprary.cs" />
+    <Compile Include="ZTControls\SignalSwitch.cs" />
+    <Compile Include="ZTControls\TableCtrl.cs" />
+    <Compile Include="ZTControls\Temprary.cs" />
     <Compile Include="Utilities\Logging\ILogger.cs" />
     <Compile Include="Utilities\Logging\Logger.cs" />
     <Compile Include="Utilities\Logging\LoggerFactory.cs" />
@@ -177,6 +194,9 @@
     <Compile Include="test.xaml.cs">
       <DependentUpon>test.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ZTControls\zedGraphCtrl.cs" />
+    <Compile Include="ZTControls\zedGraphLineCtrl.cs" />
+    <Compile Include="ZTControls\zedGraphPieCtrl.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -192,6 +212,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainRealtimeCurve.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -229,6 +253,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="NoDo.txt" />
     <Resource Include="Images\ControlsImg\A.jpg" />
     <Resource Include="Images\ControlsImg\AirConditionerMonitor.jpg" />
     <Resource Include="Images\ControlsImg\Button.jpg" />

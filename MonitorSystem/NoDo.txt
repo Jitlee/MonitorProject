@@ -1,0 +1,4 @@
+--不需要做的
+ExtPrg.cs，FoldLine.cs，MonitorClientVideo.cs，MonitorCur.cs，MonitorGrid.cs，
+MonitorLine.cs，MonitorRectangle.cs，MonitorText.cs，MonitorVedio.cs，MyButton.cs，
+QueryForm.cs，SetupForm.cs，WindowVideo.cs

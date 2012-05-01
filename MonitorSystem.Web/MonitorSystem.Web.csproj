@@ -82,7 +82,9 @@
     <Compile Include="Servers\MonitorServers.cs" />
     <Compile Include="Servers\MonitorServers.metadata.cs" />
     <Compile Include="Servers\MonitorServers.metadataC.cs" />
-    <Compile Include="Servers\MonitorServersC.cs" />
+    <Compile Include="Servers\MonitorServersC.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
