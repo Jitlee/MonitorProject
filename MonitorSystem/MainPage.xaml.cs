@@ -17,7 +17,9 @@ namespace MonitorSystem
         public MainPage()
         {
             InitializeComponent();
-            this.Content = new LoadScreen();            
+            this.Content = new LoadScreen();
+           // this.Content = new SilverlightControl1();
+            
         }
     }
 }

@@ -4,21 +4,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="400" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" IsHitTestVisible="False">
-    <Canvas>
-        <Canvas Width="100" Height="200" Canvas.Left="45" Canvas.Top="52">
-            <Grid Width="100" Height="200">
-                <Border Margin="0,0,-105,0">
-                    <Line X1="0"  Y1="0" X2="100" Y2="0" Fill="Red" 
-                           Height="4" Width="106" ></Line>
-                </Border>
-                <Border Margin="50,0,-141,0"></Border>
-               
-            </Grid>
-        </Canvas>
-
-        <Border Name="bod"  Background="Beige" Width="99"  BorderThickness="2" Height="60" 
-                    Canvas.Left="151" Canvas.Top="211"></Border>
-        
-    </Canvas>
+    d:DesignHeight="911" d:DesignWidth="588" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" IsHitTestVisible="False" xmlns:my="clr-namespace:MonitorSystem.MonitorSystemGlobal">
+    
 </UserControl>

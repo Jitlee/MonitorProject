@@ -79,7 +79,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             get { return (double)GetValue(Canvas.TopProperty); }
             set { SetValue(Canvas.TopProperty, value); AdornerLayer.SetValue(Canvas.TopProperty, value); }
-        }       
+        }
 
         public MonitorControl()
         {

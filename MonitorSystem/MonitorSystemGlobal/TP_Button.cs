@@ -31,8 +31,9 @@ namespace MonitorSystem.MonitorSystemGlobal
             //_mRect.StrokeThickness = 1;
             //_mRect.Stroke = new SolidColorBrush(Colors.Black);
             //_mRect.Fill = new SolidColorBrush(Colors.White);
-
+            
             Content = _mRect;
+            _mRect.IsReadOnly = true;
         }
 
         #region 属性

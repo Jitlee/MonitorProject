@@ -216,6 +216,11 @@ namespace MonitorSystem
                 _CurrentScreen = null;
                 return;
             }
+            if (SystemParam == null)
+            {
+                MessageBox.Show("加载系统参数出错，无法显示！", "温馨提示:", MessageBoxButton.OK);
+                return;
+            }
             var v = listScreen.Where(a => a.ScreenID == SystemParam.StartScreenID);
             if (v.Count() == 0)
             {
@@ -354,6 +359,10 @@ namespace MonitorSystem
                     Temprary mTemprary = new Temprary();
                     SetEletemt(mTemprary, obj, eleStae, listObj);
                     return mTemprary;
+                case "RealTimeCurve":
+                    RealTimeCurve mRealTime = new RealTimeCurve();
+                    SetEletemt(mRealTime, obj, eleStae, listObj);
+                    return mRealTime;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
