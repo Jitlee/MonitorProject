@@ -53,48 +53,33 @@ namespace MonitorSystem.ZTControls
             }
         }
 
-        TPSetProperty tpp = new TPSetProperty();
+        #region 属性设置
+        SetSingleProperty tpp = new SetSingleProperty();
         private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            tpp = new SetSingleProperty();
+
             tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
-            tpp.Screen = GetChildScreenID();
+            tpp.DeviceID = this.ScreenElement.DeviceID.Value;
+            tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
+            tpp.LevelNo = this.ScreenElement.LevelNo.Value;
+            tpp.ComputeStr = this.ScreenElement.ComputeStr;
+            tpp.Init();
             tpp.Show();
         }
-
-        #region 场景,TP属性
-        /// <summary>
-        /// 将对象的ScreenElement的ChildScreenID解析为场景 
-        /// </summary>
-        /// <returns></returns>
-        private t_Screen GetChildScreenID()
-        {
-            string mScreenID = base.ScreenElement.ChildScreenID;
-            if (mScreenID == "0")
-            {
-                return null;
-            }
-            mScreenID = mScreenID.Replace(";", "");
-            string[] attr = mScreenID.Split('#');
-            if (attr.Length == 2)
-            {
-                int Scrennid = Convert.ToInt32(attr[1]);
-                t_Screen t = LoadScreen.listScreen.Single(a => a.ScreenID == Scrennid);
-                //return LoadScreen.listScreen.Where().First();
-                return t;
-            }
-            return null;
-        }
-        #endregion
 
         protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (tpp.IsOK)
             {
-                this.ScreenElement.ChildScreenID = string.Format("{0}#{1};", tpp.Screen.ScreenName,
-                    tpp.Screen.ScreenID);
-                //MessageBox.Show(tpp.Screen.ScreenName);
+                this.ScreenElement.DeviceID = tpp.DeviceID;
+                this.ScreenElement.ChannelNo = tpp.ChanncelID;
+                this.ScreenElement.LevelNo = tpp.LevelNo;
+                this.ScreenElement.ComputeStr = tpp.ComputeStr;
             }
         }
+
+        #endregion
 
         public override object GetRootControl()
         {

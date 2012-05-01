@@ -120,6 +120,10 @@
     <Compile Include="ZTControls\PicBox.cs" />
     <Compile Include="ZTControls\RealTimeCurve.cs" />
     <Compile Include="MonitorSystemGlobal\temp.cs" />
+    <Compile Include="ZTControls\SetSingleProperty.cs" />
+    <Compile Include="ZTControls\SetSingleProperty.xaml.cs">
+      <DependentUpon>SetSingleProperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ZTControls\SignalSwitch.cs" />
     <Compile Include="ZTControls\TableCtrl.cs" />
     <Compile Include="ZTControls\Temprary.cs" />
@@ -220,6 +224,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MonitorSystemGlobal\TPSetProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ZTControls\SetSingleProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

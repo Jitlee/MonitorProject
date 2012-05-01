@@ -45,8 +45,8 @@ namespace MonitorSystem
            
             //实例化
             Init();
-            
         }
+
         #region 实例化
         /// <summary>
         /// 弹出属性窗口控件
@@ -74,7 +74,6 @@ namespace MonitorSystem
             _DataContext.Load(_DataContext.GetT_ElementProperty_LibraryQuery(), LoadElementProperty_LibraryCompleted, null);
            //加载控件属性
             _DataContext.Load(_DataContext.GetT_ControlPropertyQuery(), LoadControlPropertyCompleted, null);
-           
 
             //实例化属性窗口
             fwProperty = new FloatableWindow();
@@ -96,18 +95,20 @@ namespace MonitorSystem
             checkBox1.IsEnabled = true;
         }
 
+        #region 加载数据 完成处理 当前共五项 t_Element_Library、t_ElementProperty_Library、t_Screen、t_MonitorSystemParam、t_ControlProperty
+
         /// <summary>
         /// 加载数据完成检查
         /// </summary>
         private void InitComplete()
         {
-            if (LoadCommpleteNumber != 4)
+            if (LoadCommpleteNumber != 5)
                 return;
             else
             {
                 if (!string.IsNullOrEmpty(ErrorMsg))
                 {
-                    MessageBox.Show(ErrorMsg.Replace("\"",""));
+                    MessageBox.Show(ErrorMsg.Replace("\"", ""));
                     return;
                 }
             }
@@ -116,9 +117,10 @@ namespace MonitorSystem
             {
                 LoadScreenData(_CurrentScreen);
             }
+            //实例化其它参数
+            InitOther();
         }
 
-        #region 加载数据 完成处理
         private void LoadElement_LibraryCompleted(LoadOperation<t_Element_Library> result)
         {
             if (result.HasError)
@@ -142,21 +144,6 @@ namespace MonitorSystem
                 InitComplete();
                 return;
             }
-
-            LoadCommpleteNumber++;
-            InitComplete();
-        }
-
-        private void LoadScreenCompleted(LoadOperation<t_Screen> result)
-        {
-            if (result.HasError)
-            {
-                LoadCommpleteNumber++;
-                ErrorMsg += "无法加载场景数据！\n";
-                InitComplete();
-                return;
-            }
-            listScreen = result.Entities;
 
             LoadCommpleteNumber++;
             InitComplete();
@@ -202,7 +189,21 @@ namespace MonitorSystem
             LoadCommpleteNumber++;
             InitComplete();
         }
-        
+
+        private void LoadScreenCompleted(LoadOperation<t_Screen> result)
+        {
+            if (result.HasError)
+            {
+                LoadCommpleteNumber++;
+                ErrorMsg += "无法加载场景数据！\n";
+                InitComplete();
+                return;
+            }
+            listScreen = result.Entities;
+
+            LoadCommpleteNumber++;
+            InitComplete();
+        }
         #endregion
 
        
@@ -252,6 +253,23 @@ namespace MonitorSystem
             _CurrentScreen = mobj.Screen;
             LoadScreenData(_CurrentScreen);
         }
+        #endregion
+
+        #region 实例化其它参数
+        private void InitOther()
+        {
+            _DataContext.Load(_DataContext.GetT_DeviceQuery().Where(a => a.StationID == this._CurrentScreen.StationID.Value), LoadDeviceListComplete, null);
+        }
+
+        public void LoadDeviceListComplete(LoadOperation<t_Device> result)
+        {
+            if (result.HasError)
+            {
+                MessageBox.Show(result.Error.Message, "出错啦", MessageBoxButton.OK);
+                return;
+            }
+        }
+
         #endregion
 
         #region 加载场景
@@ -490,58 +508,6 @@ namespace MonitorSystem
             prop.ChangeSize(e.NewSize.Height, e.NewSize.Width);
         }
 
-       
-
-        //private void checkBox1_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (checkBox1.IsChecked.Value)
-        //    {
-        //        //加截属性窗口
-        //        fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
-        //        prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
-        //        fwProperty.Show();
-
-        //        //注册事件
-        //        Content.MouseLeftButtonDown +=new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-        //        Content.MouseLeftButtonUp+=new MouseButtonEventHandler(Content_MouseLeftButtonUp);
-                    
-        //        for (int i = 0; i < csScreen.Children.Count; i++)
-        //        {
-        //            var ui = csScreen.Children[i];
-        //            if (ui is MonitorControl)
-        //            {
-        //                MonitorControl mControl = ui as MonitorControl;
-        //                mControl.DesignMode();
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //取消注册
-        //        Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-        //        Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
-
-        //        for (int i = 0; i < csScreen.Children.Count; i++)
-        //        {
-        //            var ui = csScreen.Children[i];
-        //            if (ui is MonitorControl)
-        //            {
-        //                MonitorControl mControl = ui as MonitorControl;
-        //                mControl.UnDesignMode();
-        //            }
-        //        }
-        //        fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
-        //        prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
-        //        fwProperty.Close();
-        //    }
-        //}
-
-      
-
-        //protected void TP_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    MessageBox.Show(e.PlatformKeyCode.ToString());
-        //}
         #region 添加元素，处理鼠标事件
 
         Point mStartPoint;
@@ -651,15 +617,8 @@ namespace MonitorSystem
 
                     if (el == ElementSate.New)
                     {
-                        //meleObj.ElementID = MaxID;
-                        //_DataContext.t_Elements.Add(meleObj);
-                        //m.ElementState = ElementSate.Save;
                         m.ScreenElement = meleObj;
-
                         listMonitorAddElement.Add(m);
-                        //_DataContext
-                        //_DataContext.Load(_DataContext.
-                       // _DataContext.SubmitChanges(SubmitCompleted, m);
                     }
                     else
                     {
