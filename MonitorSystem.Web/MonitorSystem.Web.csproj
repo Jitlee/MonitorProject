@@ -38,6 +38,7 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.DomainServices.EntityFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.ServiceModel.DomainServices.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.ServiceModel.DomainServices.Server, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -64,6 +65,7 @@
     <Content Include="MonitorSystemTestPage.aspx" />
     <Content Include="MonitorSystemTestPage.html" />
     <Content Include="Silverlight.js" />
+    <Content Include="WCFGetDataBaseData.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -73,6 +75,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IWCFGetDataBaseData.cs" />
     <Compile Include="Moldes\Monitor.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -84,6 +87,9 @@
     <Compile Include="Servers\MonitorServers.metadataC.cs" />
     <Compile Include="Servers\MonitorServersC.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WCFGetDataBaseData.svc.cs">
+      <DependentUpon>WCFGetDataBaseData.svc</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup />

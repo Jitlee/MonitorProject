@@ -134,6 +134,7 @@ namespace MonitorSystem.ZTControls
         }
         #endregion
 
+
         #region 属性
         private static readonly DependencyProperty TransparentProperty =
          DependencyProperty.Register("Transparent",
