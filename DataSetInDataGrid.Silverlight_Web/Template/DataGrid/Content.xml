@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<templatefiles>
+	<templatefile name="DateTimeCellEditingTemplate"/>
+	<templatefile name="DateTimeCellTemplate"/>
+	<templatefile name="HyperlinkCellTemplate"/>
+	<templatefile name="TextCellTemplate"/>
+</templatefiles>

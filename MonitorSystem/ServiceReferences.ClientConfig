@@ -1,0 +1,17 @@
+﻿<configuration>
+    <system.serviceModel>
+        <bindings>
+            <basicHttpBinding>
+                <binding name="BasicHttpBinding_GetData" maxBufferSize="2147483647"
+                    maxReceivedMessageSize="2147483647">
+                    <security mode="None" />
+                </binding>
+            </basicHttpBinding>
+        </bindings>
+        <client>
+            <endpoint address="http://localhost:3762/DataSetInDataGrid.Silverlight_Web/GetData.svc"
+                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_GetData"
+                contract="MyDataService.GetData" name="BasicHttpBinding_GetData" />
+        </client>
+    </system.serviceModel>
+</configuration>

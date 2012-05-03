@@ -1,0 +1,8 @@
+﻿<DataTemplate x:Name="LookupCellEdit" xmlns='http://schemas.microsoft.com/client/2007'
+			  xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
+        xmlns:combo="clr-namespace:SilverlightComboBox;assembly=SilverlightComboBox"
+             >
+  <Grid>
+    <combo:ComboBox HorizontalAlignment="@HorizontalAlignment@" Text="{Binding @Text@, Converter={StaticResource Lookup}, ConverterParameter='@Lookup@'}" FontFamily='Trebuchet MS' FontSize='11' Margin='5,4,5,4'/>
+  </Grid>
+</DataTemplate>

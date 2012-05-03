@@ -81,6 +81,7 @@
     <Reference Include="System.Windows.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
+    <Reference Include="System.Xml.Linq, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adorner.cs" />
@@ -95,6 +96,11 @@
     <Compile Include="Common.cs" />
     <Compile Include="Controls\PropertyGrid\Converters\ColorConverter.cs" />
     <Compile Include="Converters\ImagePathConverter.cs" />
+    <Compile Include="GetData\DataObject.cs" />
+    <Compile Include="GetData\DynamicDataBuilder.cs" />
+    <Compile Include="GetData\GetData.cs" />
+    <Compile Include="GetData\TemplateManager.cs" />
+    <Compile Include="GetData\WCF.cs" />
     <Compile Include="LoadScreen.xaml.cs">
       <DependentUpon>LoadScreen.xaml</DependentUpon>
     </Compile>
@@ -106,6 +112,11 @@
     <Compile Include="MonitorSystemGlobal\MonitorGrid.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorRectangle.cs" />
     <Compile Include="Controls\PropertyGrid\ColorValueEditor.cs" />
+    <Compile Include="Service References\MyDataService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ZTControls\BackgroundRect.cs" />
     <Compile Include="ZTControls\ButtonCtrl.cs" />
     <Compile Include="ZTControls\ColorText.cs" />
@@ -258,12 +269,37 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
+    <None Include="Service References\MyDataService\GetData.wsdl" />
+    <None Include="Service References\MyDataService\GetData.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MyDataService\GetData1.wsdl" />
+    <None Include="Service References\MyDataService\GetData1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MyDataService\GetData2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MyDataService\MonitorSystem.MyDataService.CustomException.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MyDataService\MonitorSystem.MyDataService.DataSetData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NoDo.txt" />
+    <None Include="Service References\MyDataService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\MyDataService\configuration.svcinfo" />
+    <None Include="Service References\MyDataService\configuration91.svcinfo" />
+    <None Include="Service References\MyDataService\GetData.disco" />
     <Resource Include="Images\ControlsImg\A.jpg" />
     <Resource Include="Images\ControlsImg\AirConditionerMonitor.jpg" />
     <Resource Include="Images\ControlsImg\Button.jpg" />
@@ -340,6 +376,9 @@
     <Resource Include="Images\ControlsImg\负载.jpg" />
     <Resource Include="Images\ControlsImg\逆变器.jpg" />
     <Content Include="Ref\FloatableWindow.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\MyDataService\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

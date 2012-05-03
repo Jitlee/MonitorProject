@@ -384,6 +384,10 @@ namespace MonitorSystem
                     RealTimeCurve mRealTime = new RealTimeCurve();
                     SetEletemt(mRealTime, obj, eleStae, listObj);
                     return mRealTime;
+                case "TableCtrl":
+                    TableCtrl mTableCtrl = new TableCtrl();
+                    SetEletemt(mTableCtrl, obj, eleStae, listObj);
+                    return mTableCtrl;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
