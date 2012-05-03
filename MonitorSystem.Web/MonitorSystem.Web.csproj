@@ -65,7 +65,6 @@
     <Content Include="MonitorSystemTestPage.aspx" />
     <Content Include="MonitorSystemTestPage.html" />
     <Content Include="Silverlight.js" />
-    <Content Include="WCFGetDataBaseData.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -75,7 +74,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IWCFGetDataBaseData.cs" />
+    <Compile Include="GetData\CustomException.cs" />
+    <Compile Include="GetData\DataColunmInfo.cs" />
+    <Compile Include="GetData\DataSetData.cs" />
+    <Compile Include="GetData\DataTableInfo.cs" />
+    <Compile Include="GetData\GetData.cs" />
     <Compile Include="Moldes\Monitor.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,11 +91,7 @@
     <Compile Include="Servers\MonitorServersC.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WCFGetDataBaseData.svc.cs">
-      <DependentUpon>WCFGetDataBaseData.svc</DependentUpon>
-    </Compile>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EntityDeploy Include="Moldes\Monitor.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

@@ -337,6 +337,7 @@ namespace MonitorSystem
 
         private MonitorControl ShowElement(t_Element obj, ElementSate eleStae, List<t_ElementProperty> listObj)
         { 
+            
             switch (obj.ElementName)
             {
                 case "MyButton":

@@ -42,6 +42,8 @@ namespace MonitorSystem
             InitializeComponent();
             LoadScrent();
             Instance = this;
+            
+            
         }
 
         #region 事件
