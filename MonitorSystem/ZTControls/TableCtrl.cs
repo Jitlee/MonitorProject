@@ -27,15 +27,23 @@ namespace MonitorSystem.ZTControls
     public class TableCtrl : MonitorControl
     {
         DataGrid theGrid = new DataGrid();
+        ScrollViewer sv = new ScrollViewer();
         public TableCtrl()
         {
-            Grid _dataGrid = new Grid();
-            
-            
-            this.Content = theGrid;
-            LoadData();
-        }
+            sv.Content = theGrid;
+            sv.Width = 300;
+            sv.Height = 200;
 
+            this.Content = sv;
+
+            LoadData();
+            this.SizeChanged += new SizeChangedEventHandler(TableCtrl_SizeChanged);
+        }
+        private void TableCtrl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            sv.Width = e.NewSize.Width;
+            sv.Height = e.NewSize.Height;
+        }
         #region 属性设置
         SetSingleProperty tpp = new SetSingleProperty();
         private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
