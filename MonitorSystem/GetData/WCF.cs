@@ -18,7 +18,7 @@ namespace MonitorSystem.GetData
             System.ServiceModel.BasicHttpBinding binding = new System.ServiceModel.BasicHttpBinding();
             binding.MaxReceivedMessageSize = 2147483647; // int's max size
             binding.MaxBufferSize = 2147483647; // int's max size
-            System.ServiceModel.EndpointAddress address = new System.ServiceModel.EndpointAddress(new Uri(Application.Current.Host.Source, "../GetData.svc"));
+            System.ServiceModel.EndpointAddress address = new System.ServiceModel.EndpointAddress(new Uri(Application.Current.Host.Source, "../GetData/GetData.svc"));
             try
             {
                 return new MyDataService.GetDataClient(binding, address);

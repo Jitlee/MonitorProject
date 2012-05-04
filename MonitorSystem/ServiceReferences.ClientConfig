@@ -9,7 +9,7 @@
             </basicHttpBinding>
         </bindings>
         <client>
-            <endpoint address="http://localhost:3762/DataSetInDataGrid.Silverlight_Web/GetData.svc"
+            <endpoint address="http://localhost:1379/GetData/GetData.svc"
                 binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_GetData"
                 contract="MyDataService.GetData" name="BasicHttpBinding_GetData" />
         </client>

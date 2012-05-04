@@ -20,17 +20,12 @@ namespace MonitorSystem.GetData
         ObservableCollection<MyDataService.DataTableInfo> _tables;
         IEnumerable _lookup;
 
-        private void GetData(string sql, int pagenumber, int pagesize, object userState)
+        public void GetData(string sql, int pagenumber, int pagesize, object userState)
         {
             var ws = WCF.GetService();
             
             ws.GetDataSetDataCompleted += new EventHandler<MyDataService.GetDataSetDataCompletedEventArgs>(ws_GetDataSetDataCompleted);
             ws.GetDataSetDataAsync(sql, pagenumber, pagesize, userState);
-        }
-        private void GetData_Click(object sender, RoutedEventArgs e)
-        {
-            string strSql = string.Empty;
-            GetData(strSql, 1, 10, "Data");
         }
 
         void ws_GetDataSetDataCompleted(object sender, MyDataService.GetDataSetDataCompletedEventArgs e)

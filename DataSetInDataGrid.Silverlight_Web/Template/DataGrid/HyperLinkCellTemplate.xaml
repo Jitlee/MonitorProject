@@ -1,7 +1,0 @@
-﻿<DataTemplate x:Name="HyperlinkCell" xmlns='http://schemas.microsoft.com/client/2007'
-				  xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'>
-	<Grid>
-		<HyperlinkButton NavigateUri="{Binding @NavigateUri@}" Content="{Binding @Content@, Converter={StaticResource StringFormat}, ConverterParameter='@StringFormat@'}" TargetName="@TargetName@" FontFamily='Trebuchet MS' FontSize='11' Margin='5,4,5,4'/>
-	</Grid>
-</DataTemplate>
-

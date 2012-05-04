@@ -11,20 +11,17 @@ using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 using System.Runtime.Serialization;
 using System.Collections.ObjectModel;
-using System.ServiceModel.DomainServices.Hosting;
-namespace MonitorSystem.Web.Servers
+
+/// <summary>
+/// Summary description for DataTableInfo
+/// </summary>
+[DataContract]
+public class DataTableInfo
 {
-    /// <summary>
-    /// Summary description for DataTableInfo
-    /// </summary>
-    [EnableClientAccess()]
-    public class DataTableInfo
-    {
-        [DataMember]
-        public string TableName { get; set; }
+	[DataMember]
+	public string TableName { get; set; }
 
-        [DataMember]
-        public ObservableCollection<DataColumnInfo> Columns { get; set; }
+	[DataMember]
+	public ObservableCollection<DataColumnInfo> Columns { get; set; }
 
-    }
 }

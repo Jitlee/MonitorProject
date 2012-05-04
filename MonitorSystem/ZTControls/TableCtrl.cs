@@ -29,8 +29,11 @@ namespace MonitorSystem.ZTControls
         DataGrid theGrid = new DataGrid();
         public TableCtrl()
         {
+            Grid _dataGrid = new Grid();
+            
+            
             this.Content = theGrid;
-            GetData_Click();
+            LoadData();
         }
 
         #region 属性设置
@@ -133,7 +136,6 @@ namespace MonitorSystem.ZTControls
         }
         #endregion
 
-
         #region 属性
         private static readonly DependencyProperty TransparentProperty =
          DependencyProperty.Register("Transparent",
@@ -161,13 +163,6 @@ namespace MonitorSystem.ZTControls
         }
         #endregion
 
-
-        public void LoadData()
-        {
-             MonitorServers _DataContext = new MonitorServers();
-        }
-
-
         ObservableCollection<MyDataService.DataTableInfo> _tables;
         IEnumerable _lookup;
 
@@ -178,7 +173,12 @@ namespace MonitorSystem.ZTControls
             ws.GetDataSetDataCompleted += new EventHandler<MyDataService.GetDataSetDataCompletedEventArgs>(ws_GetDataSetDataCompleted);
             ws.GetDataSetDataAsync(sql, pagenumber, pagesize, userState);
         }
-        private void GetData_Click()
+
+        #region 从wcf中加载数据
+        /// <summary>
+        /// 加载数据
+        /// </summary>
+        private void LoadData()
         {
             string strSql = "SELECT * from t_Screen";
             GetData(strSql, 1, 50, "Data");
@@ -251,8 +251,6 @@ namespace MonitorSystem.ZTControls
 
                                 col.Header = column.ColumnTitle;
                                 col.SortMemberPath = column.ColumnName;
-
-                                //theGrid.Columns.Add(col);
                             }
                         }
                     }
@@ -261,32 +259,9 @@ namespace MonitorSystem.ZTControls
                     theGrid.HorizontalContentAlignment = HorizontalAlignment.Center;
                 }
             }
-            //this.Progress.Stop();
+            
         }
-
-        void Update_Click(object sender, RoutedEventArgs e)
-        {
-            var ws = WCF.GetService();
-            ws.UpdateCompleted += new EventHandler<MyDataService.UpdateCompletedEventArgs>(ws_UpdateCompleted);
-            //ws.UpdateAsync(DynamicDataBuilder.GetUpdatedDataSet(theGrid.ItemsSource as IEnumerable, _tables));
-            //this.Progress.Start();
-        }
-
-        void ws_UpdateCompleted(object sender, MyDataService.UpdateCompletedEventArgs e)
-        {
-            if (e.Error != null)
-                System.Windows.Browser.HtmlPage.Window.Alert(e.Error.Message);
-            else if (e.ServiceError != null)
-                System.Windows.Browser.HtmlPage.Window.Alert(e.ServiceError.Message);
-            else
-            {
-                System.Windows.Browser.HtmlPage.Window.Alert("Data is Saved");
-            }
-
-        }
-
-
-
+        #endregion
 
     }
 }
