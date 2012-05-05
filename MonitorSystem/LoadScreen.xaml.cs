@@ -380,6 +380,11 @@ namespace MonitorSystem
                     Temprary mTemprary = new Temprary();
                     SetEletemt(mTemprary, obj, eleStae, listObj);
                     return mTemprary;
+                case "DLBiaoPan":
+                    DLBiaoPan mDLBiaoPan = new DLBiaoPan();
+                    obj.Width = 2 * obj.Height.Value;
+                    SetEletemt(mDLBiaoPan, obj, eleStae, listObj);
+                    return mDLBiaoPan;
                 case "RealTimeCurve":
                     RealTimeCurve mRealTime = new RealTimeCurve();
                     SetEletemt(mRealTime, obj, eleStae, listObj);

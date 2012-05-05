@@ -457,10 +457,10 @@ namespace MonitorSystem.ZTControls
             _blankRectangle.SetValue(HeightProperty, (MaxValue - trueValue) * (4d * this.Height / 5 - circle) / (MaxValue - MinValue));
         }
 
-        protected override Size ArrangeOverride(Size finalSize)
+        protected override Size MeasureOverride(Size availableSize)
         {
-            Paint(finalSize);
-            return base.ArrangeOverride(finalSize);
+            Paint(availableSize);
+            return base.MeasureOverride(availableSize);
         }
     }
 }

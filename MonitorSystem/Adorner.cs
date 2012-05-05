@@ -49,6 +49,50 @@ namespace MonitorSystem
         private const double MIN_SIZE = 0d;
         #endregion
 
+        #region Properties
+
+        private static readonly DependencyProperty IsLockScaleProperty =
+            DependencyProperty.Register("IsLockScale",
+            typeof(bool), typeof(Adorner), new PropertyMetadata(default(bool), new PropertyChangedCallback(IsLockScale_Changed)));
+
+        public bool IsLockScale
+        {
+            get { return (bool)this.GetValue(IsLockScaleProperty); }
+            set { this.SetValue(IsLockScaleProperty, value); }
+        }
+
+        private static void IsLockScale_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            Adorner adorner = (Adorner)element;
+            adorner.OnIsLockScaleChanged((bool)e.NewValue, (bool)e.OldValue);
+        }
+
+        public void OnIsLockScaleChanged(bool oldValue, bool newValue)
+        {
+            if (null != _topCenterAdorner
+                && null != _centerLeftAdorner
+                && null != _centerRightAdorner
+                && null != _bottomCenterAdorner)
+            {
+                if (newValue)
+                {
+                    _topCenterAdorner.Visibility = Visibility.Collapsed;
+                    _centerLeftAdorner.Visibility = Visibility.Collapsed;
+                    _centerRightAdorner.Visibility = Visibility.Collapsed;
+                    _bottomCenterAdorner.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    _topCenterAdorner.Visibility = Visibility.Visible;
+                    _centerLeftAdorner.Visibility = Visibility.Visible;
+                    _centerRightAdorner.Visibility = Visibility.Visible;
+                    _bottomCenterAdorner.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         public Adorner(FrameworkElement associatedElement)
@@ -66,6 +110,7 @@ namespace MonitorSystem
             _parent = _associatedElement.Parent as Canvas;
             _parent.Children.Add(this);
             this.LayoutUpdated += PopupLayoutUpdated;
+            //_associatedElement.SizeChanged += _associatedElement_SizeChanged;
             //_popup = new Popup();
             //_popup.Child = this;
             //_popup.IsOpen = true;
@@ -77,13 +122,16 @@ namespace MonitorSystem
             base.OnGotFocus(e);
             _contentAdorner.Opacity = 1;
             _topLeftAdorner.Visibility = Visibility.Visible;
-            _topCenterAdorner.Visibility = Visibility.Visible;
             _topRightAdorner.Visibility = Visibility.Visible;
-            _centerLeftAdorner.Visibility = Visibility.Visible;
-            _centerRightAdorner.Visibility = Visibility.Visible;
             _bottomLeftAdorner.Visibility = Visibility.Visible;
-            _bottomCenterAdorner.Visibility = Visibility.Visible;
             _bottomRightAdorner.Visibility = Visibility.Visible;
+            if (!IsLockScale)
+            {
+                _topCenterAdorner.Visibility = Visibility.Visible;
+                _centerLeftAdorner.Visibility = Visibility.Visible;
+                _centerRightAdorner.Visibility = Visibility.Visible;
+                _bottomCenterAdorner.Visibility = Visibility.Visible;
+            }
         }
 
         protected override void OnLostFocus(RoutedEventArgs e)
@@ -92,13 +140,16 @@ namespace MonitorSystem
 
             _contentAdorner.Opacity = 0;
             _topLeftAdorner.Visibility = Visibility.Collapsed;
-            _topCenterAdorner.Visibility = Visibility.Collapsed;
             _topRightAdorner.Visibility = Visibility.Collapsed;
-            _centerLeftAdorner.Visibility = Visibility.Collapsed;
-            _centerRightAdorner.Visibility = Visibility.Collapsed;
             _bottomLeftAdorner.Visibility = Visibility.Collapsed;
-            _bottomCenterAdorner.Visibility = Visibility.Collapsed;
             _bottomRightAdorner.Visibility = Visibility.Collapsed;
+            if (!IsLockScale)
+            {
+                _topCenterAdorner.Visibility = Visibility.Collapsed;
+                _centerLeftAdorner.Visibility = Visibility.Collapsed;
+                _centerRightAdorner.Visibility = Visibility.Collapsed;
+                _bottomCenterAdorner.Visibility = Visibility.Collapsed;
+            }
         }
 
         public void Dispose()
@@ -111,6 +162,7 @@ namespace MonitorSystem
 
             _contentAdorner.MouseLeftButtonDown -= BackgroundAdorner_MouseLeftButtonDown;
             _contentAdorner.MouseLeftButtonUp -= BackgroundAdorner_MouseLeftButtonUp;
+            //_associatedElement.SizeChanged -= _associatedElement_SizeChanged;
             _parent.Children.Remove(this);
             GC.SuppressFinalize(this);
         }
@@ -167,6 +219,12 @@ namespace MonitorSystem
 
         private void PopupLayoutUpdated(object sender, EventArgs e)
         {
+            Layout();
+            this.LayoutUpdated -= PopupLayoutUpdated;
+        }
+
+        private void Layout()
+        {
             var beginPoint = _associatedElement.TransformToVisual(Application.Current.RootVisual).Transform(new Point(0.0, 0.0));
             var endPoint = _associatedElement.TransformToVisual(Application.Current.RootVisual).Transform(new Point(_associatedElement.ActualWidth, this._associatedElement.ActualHeight));
             this._contentAdorner.SetValue(FrameworkElement.WidthProperty, endPoint.X - beginPoint.X);
@@ -178,7 +236,6 @@ namespace MonitorSystem
             var top = (double)_associatedElement.GetValue(Canvas.TopProperty);
             this.SetValue(Canvas.LeftProperty, left - _offsetLeft);
             this.SetValue(Canvas.TopProperty, top - _offsetTop);
-            this.LayoutUpdated -= PopupLayoutUpdated;
         }
 
         #endregion

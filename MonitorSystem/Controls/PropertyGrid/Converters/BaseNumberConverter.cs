@@ -27,6 +27,13 @@ namespace MonitorSystem.Controls.Converters
 				string str = ((string)value).Trim();
 				try
 				{
+                    if (string.IsNullOrEmpty(str))
+                    {
+                        if(this.TargetType.IsValueType)
+                        {
+                            return Activator.CreateInstance(this.TargetType);
+                        }
+                    }
 					if (this.AllowHex && (str[0] == '#'))
 					{
 						return this.FromString(str.Substring(1), 0x10);
