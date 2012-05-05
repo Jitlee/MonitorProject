@@ -101,7 +101,7 @@ namespace MonitorSystem.ZTControls
             this.Height = (double)ScreenElement.Height;
         }
 
-        private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "MinValue", "MaxValue", "CurrenValue"};
+        private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "MinValue", "MaxValue", "CurrenValue", "Title"};
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -288,6 +288,16 @@ namespace MonitorSystem.ZTControls
         private void SetText()
         {
             _text.Text = string.Format("{0}{1}", CurrenValue, Title);
+
+            var width = DesiredSize.Width;
+            var height = DesiredSize.Height;
+            var widthSpan = 40d;
+            var heightSpan = 20d;
+            var centerX = (width - widthSpan) / 2d + heightSpan;
+            var centerY = height - heightSpan + 10d;
+
+            _text.SetValue(Canvas.LeftProperty, centerX - _text.ActualWidth / 2d);
+            _text.SetValue(Canvas.TopProperty, centerY - (height - heightSpan - _text.ActualHeight) / 2d);
         }
 
         private void PaintBackground()
