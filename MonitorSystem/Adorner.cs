@@ -24,6 +24,7 @@ namespace MonitorSystem
     [TemplatePart(Name = "BottomRightAdorner", Type = typeof(FrameworkElement))]
     public class Adorner : ButtonBase, IDisposable
     {
+        private static Adorner _lastFocusObject = null;
         public event EventHandler Selected;
 
         #region Fields
@@ -120,6 +121,7 @@ namespace MonitorSystem
         protected override void OnGotFocus(RoutedEventArgs e)
         {
             base.OnGotFocus(e);
+
             _contentAdorner.Opacity = 1;
             _topLeftAdorner.Visibility = Visibility.Visible;
             _topRightAdorner.Visibility = Visibility.Visible;
@@ -132,12 +134,21 @@ namespace MonitorSystem
                 _centerRightAdorner.Visibility = Visibility.Visible;
                 _bottomCenterAdorner.Visibility = Visibility.Visible;
             }
+
+            if (null != _lastFocusObject)
+            {
+                _lastFocusObject.UnFocus();
+            }
+            _lastFocusObject = this;
         }
 
-        protected override void OnLostFocus(RoutedEventArgs e)
-        {
-            base.OnLostFocus(e);
+        //protected override void OnLostFocus(RoutedEventArgs e)
+        //{
+        //    base.OnLostFocus(e);
+        //}
 
+        private void UnFocus()
+        {
             _contentAdorner.Opacity = 0;
             _topLeftAdorner.Visibility = Visibility.Collapsed;
             _topRightAdorner.Visibility = Visibility.Collapsed;

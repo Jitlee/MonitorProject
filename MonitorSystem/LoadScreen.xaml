@@ -5,24 +5,25 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"  d:DesignHeight="400" d:DesignWidth="500" 
              xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
-             MouseMove="Content_MouseMove" xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit">
+             MouseMove="Content_MouseMove" xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+             xmlns:menu="clr-namespace:SL4PopupMenu;assembly=SL4PopupMenu">
     <Grid x:Name="LayoutRoot">
-        
         <Grid x:Name="gdContent"  Background="#A0A0A0" ShowGridLines="False" Margin="0">
             <Grid.RowDefinitions >
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="35"  />
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <toolkit:WrapPanel  Height="100"  Background="#e5eff8" Grid.Row="0" Name="wrapPanel1" >
+            <toolkit:WrapPanel  Height="100"  Background="#e5eff8" Grid.Row="1" Name="wrapPanel1" >
                 <CheckBox  Canvas.Left="13" Canvas.Top="10" Content="组态" Height="21" Name="checkBox1" Checked="zt_Checked" Unchecked="zt_Unchecked"  IsEnabled="False" />
                 <Button Padding="5"  Content="保存" Height="23" Name="btnSave" Width="75" Click="btnSave_Click" />
+                <Button x:Name="SenceMenuButton" Content="所有场景"/>
+                <menu:PopupMenu LeftClickElements="SenceMenuButton" x:Name="SencePopupMenu"/>
                 <sdk:Label  Padding="5" Height="35" Name="lblShowMsg" Width="145" />
-
             </toolkit:WrapPanel>
-         
-            <Canvas Grid.Row="1" x:Name="csScreen" Background="Beige">                
+            <Canvas Grid.Row="2" x:Name="csScreen" Background="Beige">                
             </Canvas>
-            <TextBlock x:Name="tbWait" Text="数据加载中，请稍候 ..."  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock x:Name="tbWait" Text="数据加载中，请稍候 ..."  Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
     </Grid>
 </UserControl>

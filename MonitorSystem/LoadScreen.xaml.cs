@@ -17,6 +17,8 @@ using System.ServiceModel.DomainServices.Client;
 using System.Collections.ObjectModel;
 
 using MonitorSystem.ZTControls;
+using SL4PopupMenu;
+using System.Threading;
 
 namespace MonitorSystem
 {
@@ -45,6 +47,8 @@ namespace MonitorSystem
            
             //实例化
             Init();
+
+            _SenceCommand = new DelegateCommand<t_Screen>(LoadSence);
         }
 
         #region 实例化
@@ -200,9 +204,63 @@ namespace MonitorSystem
                 return;
             }
             listScreen = result.Entities;
-
+            InitMainMenu();
             LoadCommpleteNumber++;
             InitComplete();
+        }
+
+        private void InitMainMenu()
+        {
+            SenceMenuButton.IsEnabled = false;
+            Thread thread = new Thread(InitMainMenuThread);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private void InitMainMenuThread()
+        {
+            this.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var itemsControl = new ListBox();
+                SencePopupMenu.Content = itemsControl;
+                var roots = listScreen.Where(s => s.ParentScreenID == 0);
+                foreach (var s in roots)
+                {
+                    itemsControl.Items.Add(InitMenuItem(s));
+                }
+                SenceMenuButton.IsEnabled = true;
+            
+            }));
+        }
+
+        public PopupMenuItem InitMenuItem(t_Screen screen)
+        {
+            var itemsControl = new ListBox();
+            var menuItem = new PopupMenuItem();
+            menuItem.Header = screen.ScreenName;
+            var children = listScreen.Where(s => s.ParentScreenID == screen.ScreenID);
+            if (children.Count() > 0)
+            {
+                menuItem.ImagePathForRightMargin = "Images/Common/arrow.png";
+                menuItem.Items.Add(new PopupMenu() { Content = itemsControl });
+                foreach (var s in children)
+                {
+                    itemsControl.Items.Add(InitMenuItem(s));
+                }
+            }
+            else
+            {
+                menuItem.Command = _SenceCommand;
+                menuItem.CommandParameter = screen;
+            }
+            return menuItem;
+        }
+
+        private readonly DelegateCommand<t_Screen> _SenceCommand;
+
+        private void LoadSence(t_Screen screen)
+        {
+            LoadScreenData(screen);
         }
         #endregion
 

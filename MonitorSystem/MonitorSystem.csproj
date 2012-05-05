@@ -60,6 +60,7 @@
   <ItemGroup>
     <Reference Include="FloatableWindow, Version=2.0.5.0, Culture=neutral, PublicKeyToken=dd6e2c92abf74ba1, processorArchitecture=MSIL" />
     <Reference Include="mscorlib" />
+    <Reference Include="SL4PopupMenu, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -282,6 +283,8 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Resource Include="Images\Common\arrow.png" />
+    <Content Include="Ref\SL4PopupMenu.dll" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\MyDataService\GetData.wsdl" />
     <None Include="Service References\MyDataService\GetData.xsd">
