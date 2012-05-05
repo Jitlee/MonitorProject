@@ -397,6 +397,18 @@ namespace MonitorSystem
                     zedGraphCtrl mzedGraphCtrl = new zedGraphCtrl();
                     SetEletemt(mzedGraphCtrl, obj, eleStae, listObj);
                     return mzedGraphCtrl;
+                case "zedGraphLineCtrl":
+                    zedGraphLineCtrl mzedGraphLineCtrl = new zedGraphLineCtrl();
+                    SetEletemt(mzedGraphLineCtrl, obj, eleStae, listObj);
+                    return mzedGraphLineCtrl;
+                case "zedGraphPieCtrl":
+                    zedGraphPieCtrl mzedGraphPieCtrl = new zedGraphPieCtrl();
+                    SetEletemt(mzedGraphPieCtrl, obj, eleStae, listObj);
+                    return mzedGraphPieCtrl;
+                case "MyLine"://曲线
+                    MyLine mMyLine = new MyLine();
+                    SetEletemt(mMyLine, obj, eleStae, listObj);
+                    return mMyLine;
                     
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);

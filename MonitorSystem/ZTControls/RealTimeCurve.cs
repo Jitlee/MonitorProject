@@ -68,12 +68,14 @@ namespace MonitorSystem.ZTControls
         private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
         {
             tpp = new SetSingleProperty();
-
-            tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
-            tpp.DeviceID = this.ScreenElement.DeviceID.Value;
-            tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
-            tpp.LevelNo = this.ScreenElement.LevelNo.Value;
-            tpp.ComputeStr = this.ScreenElement.ComputeStr;
+            if (ScreenElement != null)
+            {
+                tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
+                tpp.DeviceID = this.ScreenElement.DeviceID.Value;
+                tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
+                tpp.LevelNo = this.ScreenElement.LevelNo.Value;
+                tpp.ComputeStr = this.ScreenElement.ComputeStr;
+            }
             tpp.Init();
             tpp.Show();
         }

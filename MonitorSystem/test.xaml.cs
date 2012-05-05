@@ -10,12 +10,14 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Controls.DataVisualization.Charting.Compatible;
+using System.Windows.Threading;
 
 
 namespace MonitorSystem
 {
     public partial class SilverlightControl1 : UserControl
     {
+
         public SilverlightControl1()
         {
             InitializeComponent();
@@ -30,28 +32,21 @@ namespace MonitorSystem
 //            this.chart1.Series.x
            // ddd.
 
-            List<Test> listTest = new List<Test>();
-
-            Test t = new Test();
-            t.XValue = "2012.5";
-            t.YValue = 28;
-            listTest.Add(t);
-
-            Test t1 = new Test();
-            t1.XValue = "2012.6";
-            t1.YValue = 45;
-            listTest.Add(t1);
-
-            var column = new ColumnSeries();
-            chart1.Series.Add(column);
-            column.ItemsSource = listTest;
-
-            column.DependentValuePath = "YValue";
-            column.IndependentValuePath = "XValue";
+            //定时更新值
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 4);
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Start();
 
 
         }
-
+        protected void timer_Tick(object sender, EventArgs e)
+        {
+            Random r = new Random();
+           int x= r.Next(500);
+           this.myLine1.SetChannelValue(x);
+            //ShowCurve(RealtimeValue);
+        }
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
 

@@ -15,6 +15,7 @@ using System.Windows.Controls.DataVisualization.Charting;
 using System.Collections;
 using MonitorSystem.GetData;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace MonitorSystem.ZTControls
 {
@@ -28,6 +29,7 @@ namespace MonitorSystem.ZTControls
         {
             this.Content = _Chart;
 
+            _Chart.Title = "标题";
             _Chart.Background = new SolidColorBrush(Colors.White);
             _Chart.Width = 100;
             _Chart.Height = 100;
@@ -69,7 +71,7 @@ namespace MonitorSystem.ZTControls
         }
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
-            "Translate", "ConnectString","TalbeName","TitleName","XaxisName","YaxisName"};
+            "Translate", "ConnectString","TalbeName","TitleName","XaxisName","YaxisName","BarName"};
 
         public override string[] BrowsableProperties
         {
@@ -113,9 +115,13 @@ namespace MonitorSystem.ZTControls
                 {
                     _ConnectString = value;
                 }
-                else if (name == "TalbeName".ToUpper())
+                else if (name == "TableName".ToUpper())
                 {
                     _TalbeName = value;
+                }//
+                else if (name == "BarName".ToUpper())
+                {
+                    _BarName = value;
                 }
                 else if (name == "TitleName".ToUpper())
                 {
@@ -157,11 +163,10 @@ namespace MonitorSystem.ZTControls
         }
 
      
-        private static readonly DependencyProperty ConnectStringProperty =
-       DependencyProperty.Register("ConnectString",
+        private static readonly DependencyProperty ConnectStringProperty =DependencyProperty.Register("ConnectString",
        typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
-
         private string _ConnectString;
+        [DefaultValue(""), Description("连接字符串"), Category("我的属性")]
         public string ConnectString
         {
             get { return _ConnectString; }
@@ -173,27 +178,25 @@ namespace MonitorSystem.ZTControls
             }
         }
 
-        private static readonly DependencyProperty TableNameProperty =
-      DependencyProperty.Register("TalbeName",
+        private static readonly DependencyProperty TableNameProperty =DependencyProperty.Register("TalbeName",
       typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
-
         private string _TalbeName;
+        [DefaultValue(""), Description("表名"), Category("我的属性")]
         public string TalbeName
         {
             get { return _TalbeName; }
             set
             {
-                SetAttrByName("TalbeName", value);
+                SetAttrByName("TableName", value);
                 _TalbeName = value;
                 LoadData();
             }
         }
 
-        private static readonly DependencyProperty TitleNameProperty =
-       DependencyProperty.Register("TitleName",
+        private static readonly DependencyProperty TitleNameProperty =DependencyProperty.Register("TitleName",
        typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
-
         private string _TitleName;
+        [DefaultValue(""), Description("标题"), Category("我的属性")]
         public string TitleName
         {
             get { return _TitleName; }
@@ -201,16 +204,15 @@ namespace MonitorSystem.ZTControls
             {
                 SetAttrByName("TitleName", value);
                 _TitleName = value;
-                LoadData();
+                _Chart.Title = _TitleName;
             }
         }
 
 
-        private static readonly DependencyProperty XaxisNameProperty =
-       DependencyProperty.Register("XaxisName",
+        private static readonly DependencyProperty XaxisNameProperty =DependencyProperty.Register("XaxisName",
        typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
-
         private string _XaxisName;
+        [DefaultValue(""), Description("X轴名称"), Category("我的属性")]
         public string XaxisName
         {
             get { return _XaxisName; }
@@ -223,11 +225,10 @@ namespace MonitorSystem.ZTControls
         }
 
 
-        private static readonly DependencyProperty YaxisNameProperty =
-       DependencyProperty.Register("YaxisName",
+        private static readonly DependencyProperty YaxisNameProperty =DependencyProperty.Register("YaxisName",
        typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
-
         private string _YaxisName;
+        [DefaultValue(""), Description("Y轴名称"), Category("我的属性")]
         public string YaxisName
         {
             get { return _YaxisName; }
@@ -238,20 +239,35 @@ namespace MonitorSystem.ZTControls
                 LoadData();
             }
         }
+          private static readonly DependencyProperty BarNameProperty = DependencyProperty.Register("BarName",
+       typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
+        private string _BarName;
+        [DefaultValue(""), Description("栏目名字"), Category("我的属性")]
+        public string BarName
+        {
+            get { return _BarName; }
+            set
+            {
+                SetAttrByName("BarName", value);
+                _BarName = value;
+                LoadData();
+            }
+        }
         #endregion
 
+        
         #region 从wcf中加载数据
         /// <summary>
         /// 加载数据
         /// </summary>
         private void LoadData()
         {
-            string _TalbeName = "t_Station";
-            string _ColumnsName = "StationID as [站点ID],StationName as [站点名称]";
-
-
-            string strSql = @"select t.StationName,count(*) as Number from t_Device d 
-inner join t_Station t on t.stationid=d.stationid group by t.StationName";// string.Format("select {0} from {1}", _ColumnsName, _TalbeName);
+            if (string.IsNullOrEmpty(_ConnectString))
+                return;
+            if (string.IsNullOrEmpty(_TalbeName))
+                return;
+            //添加top 100主要是为了防止，表的数据太多，程序无法加载而死掉
+            string strSql =  string.Format("select top 100 * from {0}",  _TalbeName);
 
             GetData(strSql, "Data");
         }
@@ -260,7 +276,7 @@ inner join t_Station t on t.stationid=d.stationid group by t.StationName";// str
         private void GetData(string sql, object userState)
         {
             var ws = WCF.GetService();
-            string _ConnectString = "server=.;database=MonitorDemo2;uid=sa;pwd=sa";
+            //string _ConnectString = "server=.;database=MonitorDemo2;uid=sa;pwd=sa";
             ws.GetDataSetDataCompleted += new EventHandler<MyDataService.GetDataSetDataCompletedEventArgs>(ws_GetDataSetDataCompleted);
             ws.GetDataSetDataAsync(_ConnectString, sql, userState);
         }
@@ -272,23 +288,32 @@ inner join t_Station t on t.stationid=d.stationid group by t.StationName";// str
                 return;
             else if (e.ServiceError != null)
                 return;
-        
-            _tables = e.Result.Tables;
-            //IEnumerable list = DynamicDataBuilder.GetDataList(e.Result);
-            
-            var column = new ColumnSeries();
-            column.ItemsSource = DynamicDataBuilder.GetDataList(e.Result);
-            column.DependentValuePath = "Number";
-            column.IndependentValuePath = "StationName";
-            column.Title = "啥子名字";
+            //添加Seri
+            var _ColumnSeri = new ColumnSeries();
+            _ColumnSeri.ItemsSource = DynamicDataBuilder.GetDataList(e.Result);
+            _ColumnSeri.Title = _BarName;
+            if (e.Result.Tables.Count > 0)
+            {
+                int Number = 0;
+                if (e.Result.Tables[0].Columns.Count >= 2)
+                {
+                    foreach (MyDataService.DataColumnInfo column in e.Result.Tables[0].Columns)
+                    {
+                        if (Number == 0)
+                            _ColumnSeri.IndependentValuePath = column.ColumnName;
+                        else if (Number == 1)
+                            _ColumnSeri.DependentValuePath = column.ColumnName;
+                        Number++;
+                    }
+                }
+            }
 
+            _Chart.Title = _TitleName;
             _Chart.Series.Clear();
-            _Chart.Title = "标题";
-
-            _Chart.Series.Add(column);
-
-            //_Chart.LegendItems.Clear();
-          
+            _Chart.Axes.Clear();
+            _Chart.Axes.Add(new CategoryAxis() { Title=_XaxisName, Orientation= AxisOrientation.X });
+            _Chart.Axes.Add(new LinearAxis(){Title = _YaxisName,Orientation = AxisOrientation.Y });
+            _Chart.Series.Add(_ColumnSeri);
         }
         #endregion
     }

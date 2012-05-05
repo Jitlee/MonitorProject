@@ -88,6 +88,28 @@ namespace MonitorSystem.MonitorSystemGlobal
             SetValue(FontFamilyProperty, new FontFamily("宋体"));
             SetValue(ForegroundProperty, new SolidColorBrush(Colors.Black));
         }
+
+        #region 设置值
+        protected float m_fValue;//通道值
+        protected float[] m_fValueArray;
+        //设置元素的值
+        public virtual void SetChannelValue(float fValue)
+        {
+            m_fValue = fValue;
+        }
+
+        //设置元素的值(数组)
+        public virtual void SetChannelValue(float[] fValueArray)
+        {
+            m_fValueArray = fValueArray;
+        }
+
+        //设置元素的值(数组)
+        public virtual void SetChannelValue(float fPosition, float fValueArray)
+        {
+            //m_fValueArray = fValueArray;
+        }
+        #endregion
     }
 
     public enum ElementSate

@@ -128,10 +128,10 @@
     <Compile Include="ZTControls\ExtProControl.cs" />
     <Compile Include="ZTControls\InputTextBox.cs" />
     <Compile Include="ZTControls\MonitorVedioClient.cs" />
+    <Compile Include="ZTControls\MyLine.cs" />
     <Compile Include="ZTControls\PicBox.cs" />
     <Compile Include="ZTControls\RealTimeCurve.cs" />
     <Compile Include="MonitorSystemGlobal\temp.cs" />
-    <Compile Include="ZTControls\SetSingleProperty.cs" />
     <Compile Include="ZTControls\SetSingleProperty.xaml.cs">
       <DependentUpon>SetSingleProperty.xaml</DependentUpon>
     </Compile>
@@ -269,6 +269,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
+    <None Include="Properties\DataSources\MonitorSystem.Web.Servers.MonitorServers.datasource" />
     <None Include="Service References\MyDataService\GetData.disco" />
     <None Include="Service References\MyDataService\configuration91.svcinfo" />
     <None Include="Service References\MyDataService\configuration.svcinfo" />

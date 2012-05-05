@@ -33,7 +33,7 @@ namespace MonitorSystem.ZTControls
             sv.Content = theGrid;
             sv.Width = 300;
             sv.Height = 200;
-
+            sv.Background = new SolidColorBrush(Colors.White);
             this.Content = sv;
 
             LoadData();
@@ -300,7 +300,7 @@ namespace MonitorSystem.ZTControls
             if (string.IsNullOrEmpty(_ColumnsName))
                 return;
 
-            string strSql = string.Format("select {0} from {1}", _ColumnsName, _TalbeName);
+            string strSql = string.Format("select top 1000 {0} from {1}", _ColumnsName, _TalbeName);
 
             GetData(strSql,  "Data");
         }
@@ -313,72 +313,69 @@ namespace MonitorSystem.ZTControls
                 return;
             //else
             //{
-                _tables = e.Result.Tables;
-                IEnumerable list = DynamicDataBuilder.GetDataList(e.Result);
-                if (e.UserState as string == "Lookup")
-                    _lookup = list;
-                else
+            // _tables = e.Result.Tables;
+            IEnumerable list = DynamicDataBuilder.GetDataList(e.Result);
+
+            theGrid.Columns.Clear();
+            theGrid.ItemsSource = DynamicDataBuilder.GetDataList(e.Result);
+
+            if (e.Result.Tables.Count > 0)
+            {
+                foreach (MyDataService.DataColumnInfo column in e.Result.Tables[0].Columns)
                 {
-                    theGrid.Columns.Clear();
-                    theGrid.ItemsSource = DynamicDataBuilder.GetDataList(e.Result);
-
-                    if (e.Result.Tables.Count > 0)
+                    if (column.DisplayIndex != -1)
                     {
-                        foreach (MyDataService.DataColumnInfo column in e.Result.Tables[0].Columns)
+                        DataGridColumn col;
+                        DataTemplate dt;
+                        if (column.DataTypeName == typeof(bool).FullName)
                         {
-                            if (column.DisplayIndex != -1)
-                            {
-                                DataGridColumn col;
-                                DataTemplate dt;
-                                if (column.DataTypeName == typeof(bool).FullName)
-                                {
-                                    DataGridCheckBoxColumn checkBoxColumn = new DataGridCheckBoxColumn();
-                                    //checkBoxColumn.Binding = new Binding(column.ColumnName);
-                                    col = checkBoxColumn;
-                                }
-                                else if (column.DataTypeName == typeof(DateTime).FullName)
-                                {
-                                    DataGridTemplateColumn templateColumn = new DataGridTemplateColumn();
-                                    string temp = TemplateManager.DataTemplates["DateTimeCellTemplate"];
-                                    temp = temp.Replace("@HorizontalAlignment@", HorizontalAlignment.Left.ToString());
-                                    temp = temp.Replace("@Text@", column.ColumnName);
-                                    temp = temp.Replace("@DateTimeFormat@", "MM/dd/yyyy");
-
-                                    dt = XamlReader.Load(temp) as DataTemplate;
-                                    templateColumn.CellTemplate = dt;
-
-                                    DataTemplate t = new DataTemplate();
-
-                                    temp = TemplateManager.DataTemplates["DateTimeCellEditingTemplate"];
-                                    temp = temp.Replace("@HorizontalAlignment@", HorizontalAlignment.Left.ToString());
-                                    temp = temp.Replace("@SelectedDate@", column.ColumnName);
-
-                                    dt = XamlReader.Load(temp) as DataTemplate;
-
-                                    templateColumn.CellEditingTemplate = dt;
-                                    col = templateColumn;
-
-                                }
-                                else
-                                {
-                                    DataGridTextColumn textColumn = new DataGridTextColumn();
-                                    textColumn.Binding = new Binding(column.ColumnName);
-                                    textColumn.Binding.ValidatesOnExceptions = true;
-                                    col = textColumn;
-                                }
-                                col.IsReadOnly = true;
-
-                                col.Header = column.ColumnTitle;
-                                col.SortMemberPath = column.ColumnName;
-                            }
+                            DataGridCheckBoxColumn checkBoxColumn = new DataGridCheckBoxColumn();
+                            //checkBoxColumn.Binding = new Binding(column.ColumnName);
+                            col = checkBoxColumn;
                         }
+                        else if (column.DataTypeName == typeof(DateTime).FullName)
+                        {
+                            DataGridTemplateColumn templateColumn = new DataGridTemplateColumn();
+                            string temp = TemplateManager.DataTemplates["DateTimeCellTemplate"];
+                            temp = temp.Replace("@HorizontalAlignment@", HorizontalAlignment.Left.ToString());
+                            temp = temp.Replace("@Text@", column.ColumnName);
+                            temp = temp.Replace("@DateTimeFormat@", "MM/dd/yyyy");
+
+                            dt = XamlReader.Load(temp) as DataTemplate;
+                            templateColumn.CellTemplate = dt;
+
+                            DataTemplate t = new DataTemplate();
+
+                            temp = TemplateManager.DataTemplates["DateTimeCellEditingTemplate"];
+                            temp = temp.Replace("@HorizontalAlignment@", HorizontalAlignment.Left.ToString());
+                            temp = temp.Replace("@SelectedDate@", column.ColumnName);
+
+                            dt = XamlReader.Load(temp) as DataTemplate;
+
+                            templateColumn.CellEditingTemplate = dt;
+                            col = templateColumn;
+
+                        }
+                        else
+                        {
+                            DataGridTextColumn textColumn = new DataGridTextColumn();
+                            textColumn.Binding = new Binding(column.ColumnName);
+                            textColumn.Binding.ValidatesOnExceptions = true;
+                            col = textColumn;
+                        }
+                        col.IsReadOnly = true;
+
+                        col.Header = column.ColumnTitle;
+                        col.SortMemberPath = column.ColumnName;
                     }
-                    //theGrid.CanUserReorderColumns = false;
-                   // theGrid.FrozenColumnCount = 2;
-                    theGrid.HorizontalContentAlignment = HorizontalAlignment.Center;
                 }
-            
-            
+            }
+            //theGrid.CanUserReorderColumns = false;
+            // theGrid.FrozenColumnCount = 2;
+            theGrid.HorizontalContentAlignment = HorizontalAlignment.Center;
+
+
+
         }
         #endregion
 
