@@ -238,6 +238,17 @@ namespace MonitorSystem
             this.SetValue(Canvas.TopProperty, top - _offsetTop);
         }
 
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                _parent.Children.Remove(_associatedElement);
+                _parent.Children.Remove(this);
+                this.Dispose();
+            }
+            base.OnKeyUp(e);
+        }
+
         #endregion
 
         #region Conent Mouse Method
