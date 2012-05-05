@@ -80,8 +80,8 @@ namespace MonitorSystem.ZTControls
 
         protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (tpp.IsOK)
-            {
+            if (tpp.IsOK && ScreenElement != null)
+            {   
                 this.ScreenElement.DeviceID = tpp.DeviceID;
                 this.ScreenElement.ChannelNo = tpp.ChanncelID;
                 this.ScreenElement.LevelNo = tpp.LevelNo;
@@ -246,13 +246,9 @@ namespace MonitorSystem.ZTControls
                 _Transparent = value;
                 if (value == 1)
                 {
-                    //_mTxt.Background = new SolidColorBrush();
-                    //_mTxt.BorderBrush = new SolidColorBrush();
                 }
                 else
                 {
-                    //_mTxt.Background = new SolidColorBrush(Colors.White);
-
                 }
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
@@ -381,38 +377,6 @@ namespace MonitorSystem.ZTControls
         }
         #endregion
 
-        
-        public int GetDeviceID()
-        {
-            return 0;// this.m_ElementObj.DeviceID;
-        }
-
-        public int GetChannelNo()
-        {
-            return 0;// this.m_ElementObj.ChannelNo;
-        }
-
-        public void SetDeviceID(int deviceID)
-        {
-            //m_ElementObj.DeviceID = deviceID;
-            //m_ElementObj.SetState(ElementObj.STATE_MODIFY);
-        }
-        //2011-5-31:zeng
-        public void SetLevel(int levelNo)
-        {
-            //m_ElementObj.LevelNo = levelNo;
-            //m_ElementObj.SetState(ElementObj.STATE_MODIFY);
-        }
-        //2011-5-31:zeng
-        //public int GetLevel()
-        //{
-        //    return this.m_ElementObj.LevelNo;
-        //}
-        public void SetChannelID(int channelID)
-        {
-            //m_ElementObj.ChannelNo = channelID;
-            //m_ElementObj.SetState(ElementObj.STATE_MODIFY);
-        }
 
         public  void SetChannelValue(double fValue)
         {
@@ -422,21 +386,10 @@ namespace MonitorSystem.ZTControls
             if (temp <= 0)
                 temp = 1;
             fValue = (double)(fValue / temp);
-
-            RealtimeValue = fValue;
-            //mycurveControl.ShowCurve(RealtimeValue);
+            RealtimeValue = fValue;            
             ShowCurve(RealtimeValue);
         }
 
-        //private void mycontextMenuStrip_Opening(object sender, CancelEventArgs e)
-        //{
-        //    this.Property_Item.Enabled = m_showContexOrNot;
-        //}
-
-        private void Property_Item_Click(object sender, EventArgs e)
-        {
-
-        }
         #region 曲线数据定义
         /// <summary>
         /// 定义曲线窗体标题
@@ -801,12 +754,12 @@ namespace MonitorSystem.ZTControls
         public void ShowCurve()
         {
             //窗体高度发生变化，先刷新数组Y坐标值
-            if ((this.picCurveShow.Height != this.lastTimeSystemWindowHeight) || 
-                (this.picCurveShow.Width != this.lastTimeSystemWindowWidth))
-            {
-                this.RefurbishArray();
+            //if ((this.picCurveShow.Height != this.lastTimeSystemWindowHeight) || 
+            //    (this.picCurveShow.Width != this.lastTimeSystemWindowWidth))
+            //{
+            //    this.RefurbishArray();
                 
-            }
+            //}
             //绘制曲线
             //判断数组中是否有两个以上的数值
             //绘制直线
@@ -894,53 +847,6 @@ namespace MonitorSystem.ZTControls
             }
         }
         #endregion
-
-        #region 窗体大小变化，自动刷新窗体Y轴值
-        /// <summary>
-        /// 窗体大小变化，自动刷新窗体Y轴值
-        /// </summary>
-        private void RefurbishArray()
-        {
-            if (this.noteNow <= 0)
-                return;
-
-            //改变窗体大小时自动修改窗体高度临时值
-            this.lastTimeSystemWindowHeight = this.picCurveShow.Height;
-            this.lastTimeSystemWindowWidth = this.picCurveShow.Width;
-        }
-        #endregion
-
-        private void picCurveShow_MouseLeave(object sender, System.EventArgs e)
-        {
-            //鼠标离开曲线控件
-            //this.labShowView.Visible = false;
-        }
-
-        private void CurveControl_Paint(object sender, System.EventArgs e)
-        {
-            picCurveShow.Height = this.Height;
-            picCurveShow.Width = this.Width;
-        }
-
-        private void 属性ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void picCurveShow_Click(object sender, EventArgs e)
-        {
-            this.Focus();
-        }
-
-        private void RealTimeCurve_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void picCurveShow_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
     }
 
     #region 定义鼠标X，Y 坐标值，及该点坐标记录值、记录时间

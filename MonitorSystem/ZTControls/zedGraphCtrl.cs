@@ -11,6 +11,10 @@ using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
 using MonitorSystem.Web.Moldes;
 using System.Collections.Generic;
+using System.Windows.Controls.DataVisualization.Charting;
+using System.Collections;
+using MonitorSystem.GetData;
+using System.Collections.ObjectModel;
 
 namespace MonitorSystem.ZTControls
 {
@@ -19,35 +23,22 @@ namespace MonitorSystem.ZTControls
     /// </summary>
     public class zedGraphCtrl : MonitorControl
     {
-
-        #region 属性设置
-        SetSingleProperty tpp = new SetSingleProperty();
-        private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
+        Chart _Chart = new Chart();
+        public zedGraphCtrl()
         {
-            tpp = new SetSingleProperty();
+            this.Content = _Chart;
 
-            tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
-            tpp.DeviceID = this.ScreenElement.DeviceID.Value;
-            tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
-            tpp.LevelNo = this.ScreenElement.LevelNo.Value;
-            tpp.ComputeStr = this.ScreenElement.ComputeStr;
-            tpp.Init();
-            tpp.Show();
+            _Chart.Background = new SolidColorBrush(Colors.White);
+            _Chart.Width = 100;
+            _Chart.Height = 100;
+
+            this.SizeChanged += new SizeChangedEventHandler(zedGraphCtrl_SizeChanged);
         }
-
-        protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void zedGraphCtrl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (tpp.IsOK)
-            {
-                this.ScreenElement.DeviceID = tpp.DeviceID;
-                this.ScreenElement.ChannelNo = tpp.ChanncelID;
-                this.ScreenElement.LevelNo = tpp.LevelNo;
-                this.ScreenElement.ComputeStr = tpp.ComputeStr;
-            }
+           this.Width= _Chart.Width = e.NewSize.Width;
+           this.Height= _Chart.Height = e.NewSize.Height;
         }
-
-        #endregion
-
         #region 控件公共属性
         public override event EventHandler Selected;
         public override void DesignMode()
@@ -56,12 +47,6 @@ namespace MonitorSystem.ZTControls
             {
                 AdornerLayer = new Adorner(this);
                 AdornerLayer.Selected += OnSelected;
-
-                var menu = new ContextMenu();
-                var menuItem = new MenuItem() { Header = "属性" };
-                menuItem.Click += PropertyMenuItem_Click;
-                menu.Items.Add(menuItem);
-                AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
             }
         }
         public override void UnDesignMode()
@@ -84,7 +69,7 @@ namespace MonitorSystem.ZTControls
         }
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
-            "Translate", "Location", "RealtimeValue", "YmaxValue", "YminValue", "MyScale", "Yupper", "Ylower", "GridHeight" };
+            "Translate", "ConnectString","TalbeName","TitleName","XaxisName","YaxisName"};
 
         public override string[] BrowsableProperties
         {
@@ -94,9 +79,15 @@ namespace MonitorSystem.ZTControls
 
         public override void SetCommonPropertyValue()
         {
-            this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
-            this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
-            Transparent = ScreenElement.Transparent.Value;
+            if (ScreenElement != null)
+            {
+                this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
+                this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
+                Transparent = ScreenElement.Transparent.Value;
+
+                this.Width = _Chart.Width = (double)ScreenElement.Width.Value;
+                this.Height = _Chart.Height = (double)ScreenElement.Height.Value;
+            }
         }
 
         public List<t_ElementProperty> GetProperty()
@@ -109,35 +100,42 @@ namespace MonitorSystem.ZTControls
             return this;
         }
 
+        #endregion        
+
+        #region 属性
         public override void SetPropertyValue()
         {
             foreach (t_ElementProperty pro in ListElementProp)
             {
                 string name = pro.PropertyName.ToUpper();
                 string value = pro.PropertyValue;
-                //if (name == "RealtimeValue".ToUpper())
-                //{
-                //    if (value != null && value != "")
-                //    {
-                //        RealtimeValue = double.Parse(value);
-                //    }
-                //    else
-                //    {
-                //        RealtimeValue = 0f;
-                //    }
-                //}
-                
-               
-              
+                if (name == "ConnectString".ToUpper())
+                {
+                    _ConnectString = value;
+                }
+                else if (name == "TalbeName".ToUpper())
+                {
+                    _TalbeName = value;
+                }
+                else if (name == "TitleName".ToUpper())
+                {
+                    _TitleName = value;
+                }
+                else if (name == "XaxisName".ToUpper())
+                {
+                    _XaxisName = value;
+                }
+                else if (name == "YaxisName".ToUpper())
+                {
+                    _YaxisName = value;
+                }
             }
-          
+            LoadData();
         }
-        #endregion        
 
-        #region 属性
         private static readonly DependencyProperty TransparentProperty =
          DependencyProperty.Register("Transparent",
-         typeof(int), typeof(RealTimeCurve), new PropertyMetadata(0));
+         typeof(int), typeof(zedGraphCtrl), new PropertyMetadata(0));
         private int _Transparent;
         public int Transparent
         {
@@ -147,17 +145,150 @@ namespace MonitorSystem.ZTControls
                 _Transparent = value;
                 if (value == 1)
                 {
-                    //_mTxt.Background = new SolidColorBrush();
-                    //_mTxt.BorderBrush = new SolidColorBrush();
+                   
                 }
                 else
                 {
-                    //_mTxt.Background = new SolidColorBrush(Colors.White);
 
                 }
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
+        }
+
+     
+        private static readonly DependencyProperty ConnectStringProperty =
+       DependencyProperty.Register("ConnectString",
+       typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
+
+        private string _ConnectString;
+        public string ConnectString
+        {
+            get { return _ConnectString; }
+            set
+            {
+                SetAttrByName("ConnectString", value);
+                _ConnectString = value;
+                LoadData();
+            }
+        }
+
+        private static readonly DependencyProperty TableNameProperty =
+      DependencyProperty.Register("TalbeName",
+      typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
+
+        private string _TalbeName;
+        public string TalbeName
+        {
+            get { return _TalbeName; }
+            set
+            {
+                SetAttrByName("TalbeName", value);
+                _TalbeName = value;
+                LoadData();
+            }
+        }
+
+        private static readonly DependencyProperty TitleNameProperty =
+       DependencyProperty.Register("TitleName",
+       typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
+
+        private string _TitleName;
+        public string TitleName
+        {
+            get { return _TitleName; }
+            set
+            {
+                SetAttrByName("TitleName", value);
+                _TitleName = value;
+                LoadData();
+            }
+        }
+
+
+        private static readonly DependencyProperty XaxisNameProperty =
+       DependencyProperty.Register("XaxisName",
+       typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
+
+        private string _XaxisName;
+        public string XaxisName
+        {
+            get { return _XaxisName; }
+            set
+            {
+                SetAttrByName("XaxisName", value);
+                _XaxisName = value;
+                LoadData();
+            }
+        }
+
+
+        private static readonly DependencyProperty YaxisNameProperty =
+       DependencyProperty.Register("YaxisName",
+       typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
+
+        private string _YaxisName;
+        public string YaxisName
+        {
+            get { return _YaxisName; }
+            set
+            {
+                SetAttrByName("YaxisName", value);
+                _YaxisName = value;
+                LoadData();
+            }
+        }
+        #endregion
+
+        #region 从wcf中加载数据
+        /// <summary>
+        /// 加载数据
+        /// </summary>
+        private void LoadData()
+        {
+            string _TalbeName = "t_Station";
+            string _ColumnsName = "StationID as [站点ID],StationName as [站点名称]";
+
+
+            string strSql = @"select t.StationName,count(*) as Number from t_Device d 
+inner join t_Station t on t.stationid=d.stationid group by t.StationName";// string.Format("select {0} from {1}", _ColumnsName, _TalbeName);
+
+            GetData(strSql, "Data");
+        }
+
+        ObservableCollection<MyDataService.DataTableInfo> _tables;
+        private void GetData(string sql, object userState)
+        {
+            var ws = WCF.GetService();
+            string _ConnectString = "server=.;database=MonitorDemo2;uid=sa;pwd=sa";
+            ws.GetDataSetDataCompleted += new EventHandler<MyDataService.GetDataSetDataCompletedEventArgs>(ws_GetDataSetDataCompleted);
+            ws.GetDataSetDataAsync(_ConnectString, sql, userState);
+        }
+
+
+        void ws_GetDataSetDataCompleted(object sender, MyDataService.GetDataSetDataCompletedEventArgs e)
+        {
+            if (e.Error != null)
+                return;
+            else if (e.ServiceError != null)
+                return;
+        
+            _tables = e.Result.Tables;
+            //IEnumerable list = DynamicDataBuilder.GetDataList(e.Result);
+            
+            var column = new ColumnSeries();
+            column.ItemsSource = DynamicDataBuilder.GetDataList(e.Result);
+            column.DependentValuePath = "Number";
+            column.IndependentValuePath = "StationName";
+            column.Title = "啥子名字";
+
+            _Chart.Series.Clear();
+            _Chart.Title = "标题";
+
+            _Chart.Series.Add(column);
+
+            //_Chart.LegendItems.Clear();
+          
         }
         #endregion
     }

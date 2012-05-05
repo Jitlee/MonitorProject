@@ -21,6 +21,9 @@ namespace MonitorSystem
             string strWhere = string.Empty;
             if (HtmlPage.Document.QueryString.Count > 0)
                 strWhere = HtmlPage.Document.QueryString["toWhere"];
+
+            //this.Content = new SilverlightControl1();
+            //return;
             if (strWhere == "RealtimeCurve")
             {
                 this.Content = new MainRealtimeCurve();

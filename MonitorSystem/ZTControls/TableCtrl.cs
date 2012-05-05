@@ -108,7 +108,7 @@ namespace MonitorSystem.ZTControls
         }
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
-            "Translate", "Location", "RealtimeValue", "YmaxValue", "YminValue", "MyScale", "Yupper", "Ylower", "GridHeight" };
+            "Translate", "Location", "ConnectString" ,"TalbeName", "ColumnsName", "RefreshRate"};
 
         public override string[] BrowsableProperties
         {
@@ -121,6 +121,9 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             Transparent = ScreenElement.Transparent.Value;
+
+            sv.Width = this.Width = (double)ScreenElement.Width;
+            sv.Height = this.Height = (double)ScreenElement.Height;
         }
 
         public List<t_ElementProperty> GetProperty()
@@ -139,15 +142,32 @@ namespace MonitorSystem.ZTControls
             {
                 string name = pro.PropertyName.ToUpper();
                 string value = pro.PropertyValue;
+                //"ConnectString" ,"TableName", "ColumnsName", "RefreshRate"
+                if (name == "ConnectString".ToUpper())
+                {
+                    _ConnectString = value;
+                }
+                else if (name == "TalbeName".ToUpper())
+                {
+                    _TalbeName = value;
+                }
+                else if (name == "ColumnsName".ToUpper())
+                {
+                    ColumnsName = value;
+                }
+                else if (name == "RefreshRate".ToUpper())
+                {
+                    _RefreshRate = int.Parse(value);
+                }
             }
-
+            LoadData();
         }
         #endregion
 
         #region 属性
         private static readonly DependencyProperty TransparentProperty =
          DependencyProperty.Register("Transparent",
-         typeof(int), typeof(RealTimeCurve), new PropertyMetadata(0));
+         typeof(int), typeof(TableCtrl), new PropertyMetadata(0));
         private int _Transparent;
         public int Transparent
         {
@@ -163,43 +183,136 @@ namespace MonitorSystem.ZTControls
                 else
                 {
                     //_mTxt.Background = new SolidColorBrush(Colors.White);
-
                 }
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
         }
+
+        //"ConnectString" ,"TableName", "ColumnsName", "RefreshRate"
+
+        private static readonly DependencyProperty ConnectStringProperty =
+        DependencyProperty.Register("ConnectString",
+        typeof(string), typeof(TableCtrl), new PropertyMetadata(""));
+
+        private string _ConnectString;
+        public string ConnectString
+        {
+            get { return _ConnectString; }
+            set
+            {
+                SetAttrByName("ConnectString", value);
+                _ConnectString = value;
+                LoadData();
+            }
+        }
+
+        private static readonly DependencyProperty TableNameProperty =
+       DependencyProperty.Register("TalbeName",
+       typeof(string), typeof(TableCtrl), new PropertyMetadata(""));
+
+        private string _TalbeName;
+        public string TalbeName
+        {
+            get { return _TalbeName; }
+            set
+            {
+                SetAttrByName("TalbeName", value);
+                _TalbeName = value;
+                LoadData();
+            }
+        }
+
+        private static readonly DependencyProperty ColumnsNameProperty =
+       DependencyProperty.Register("ColumnsName",
+       typeof(string), typeof(TableCtrl), new PropertyMetadata(""));
+
+         private string _ColumnsName;
+         public string ColumnsName
+        {
+            get { return _ColumnsName; }
+            set
+            {
+                string Col=string.Empty;
+                if(value != "")
+                {
+                 string[] strArr = value.Split(';');
+                 if (strArr.Length > 0)
+                 {
+                     foreach (string str in strArr)
+                     {
+                         if (!string.IsNullOrEmpty(str))
+                         {
+                             Col = str;
+                         }
+                         else
+                         {
+                             Col += "," + str;
+                         }
+                     }
+                 }
+                }
+                _ColumnsName = Col;
+                SetAttrByName("ColumnsName", Col);
+                LoadData();
+            }
+        }
+
+         private static readonly DependencyProperty RefreshRateProperty =
+     DependencyProperty.Register("RefreshRate",
+     typeof(Int32), typeof(TableCtrl), new PropertyMetadata(30000));
+
+         private Int32 _RefreshRate;
+         public int RefreshRate
+         {
+             get { return _RefreshRate; }
+             set
+             {
+                 _RefreshRate = value;
+                 SetAttrByName("RefreshRate", value);
+             }
+         }
+
         #endregion
 
-        ObservableCollection<MyDataService.DataTableInfo> _tables;
+      #region 从wcf中加载数据
+         ObservableCollection<MyDataService.DataTableInfo> _tables;
         IEnumerable _lookup;
 
-        private void GetData(string sql, int pagenumber, int pagesize, object userState)
+        private void GetData(string sql, object userState)
         {
             var ws = WCF.GetService();
 
             ws.GetDataSetDataCompleted += new EventHandler<MyDataService.GetDataSetDataCompletedEventArgs>(ws_GetDataSetDataCompleted);
-            ws.GetDataSetDataAsync(sql, pagenumber, pagesize, userState);
+            ws.GetDataSetDataAsync( _ConnectString, sql , userState);
         }
 
-        #region 从wcf中加载数据
+
         /// <summary>
         /// 加载数据
         /// </summary>
         private void LoadData()
         {
-            string strSql = "SELECT * from t_Screen";
-            GetData(strSql, 1, 50, "Data");
+            if (string.IsNullOrEmpty(_ConnectString))
+                return;
+            if (string.IsNullOrEmpty(_TalbeName))
+                return;
+            if (string.IsNullOrEmpty(_ColumnsName))
+                return;
+
+            string strSql = string.Format("select {0} from {1}", _ColumnsName, _TalbeName);
+
+            GetData(strSql,  "Data");
         }
 
         void ws_GetDataSetDataCompleted(object sender, MyDataService.GetDataSetDataCompletedEventArgs e)
         {
             if (e.Error != null)
-                System.Windows.Browser.HtmlPage.Window.Alert(e.Error.Message);
+                return;
             else if (e.ServiceError != null)
-                System.Windows.Browser.HtmlPage.Window.Alert(e.ServiceError.Message);
-            else
-            {
+                return;
+            //else
+            //{
                 _tables = e.Result.Tables;
                 IEnumerable list = DynamicDataBuilder.GetDataList(e.Result);
                 if (e.UserState as string == "Lookup")
@@ -253,20 +366,18 @@ namespace MonitorSystem.ZTControls
                                     textColumn.Binding.ValidatesOnExceptions = true;
                                     col = textColumn;
                                 }
-
-                                col.IsReadOnly = column.IsReadOnly;
-
+                                col.IsReadOnly = true;
 
                                 col.Header = column.ColumnTitle;
                                 col.SortMemberPath = column.ColumnName;
                             }
                         }
                     }
-                    theGrid.CanUserReorderColumns = false;
-                    theGrid.FrozenColumnCount = 2;
+                    //theGrid.CanUserReorderColumns = false;
+                   // theGrid.FrozenColumnCount = 2;
                     theGrid.HorizontalContentAlignment = HorizontalAlignment.Center;
                 }
-            }
+            
             
         }
         #endregion

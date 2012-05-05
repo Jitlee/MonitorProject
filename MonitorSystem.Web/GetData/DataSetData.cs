@@ -34,13 +34,13 @@ public class DataSetData
 			tableInfo.Columns = new ObservableCollection<DataColumnInfo>();
 			foreach (DataColumn c in t.Columns)
 			{
-				DataColumnInfo col = new DataColumnInfo { ColumnName = c.ColumnName, ColumnTitle = c.ColumnName, DataTypeName = c.DataType.FullName, MaxLength=c.MaxLength, IsKey=c.Unique, IsReadOnly=(c.Unique || c.ReadOnly), IsRequired = !c.AllowDBNull};
-				if (c.DataType == typeof(System.Guid))
-				{
-					col.IsReadOnly = true;
-					col.DisplayIndex = -1;							
-				}
-				tableInfo.Columns.Add(col);
+                DataColumnInfo col = new DataColumnInfo { ColumnName = c.ColumnName, ColumnTitle = c.ColumnName, DataTypeName = c.DataType.FullName, MaxLength = c.MaxLength, IsKey = c.Unique, IsReadOnly = (c.Unique || c.ReadOnly), IsRequired = !c.AllowDBNull };
+                if (c.DataType == typeof(System.Guid))
+                {
+                    col.IsReadOnly = true;
+                    col.DisplayIndex = -1;
+                }
+                tableInfo.Columns.Add(col);
 			}
 	    }
 		dsd.DataXML = ds.GetXml();
@@ -61,20 +61,20 @@ public class DataSetData
             var rs = from row in xd.Descendants(dt.TableName)
                      select row;			
  			
-            int i = 0;
-            foreach (var r in rs)
-            {
-                DataRowState state = (DataRowState)Enum.Parse(typeof(DataRowState), r.Attribute("RowState").Value);
-                DataRow dr = dt.Rows[i];
-                dr.AcceptChanges();
-                if (state == DataRowState.Deleted)
-                    dr.Delete();
-                else if (state == DataRowState.Added)
-                    dr.SetAdded();
-                else if (state == DataRowState.Modified)
-                    dr.SetModified();               
-                i++;
-            }
+            //int i = 0;
+            //foreach (var r in rs)
+            //{
+            //    DataRowState state = (DataRowState)Enum.Parse(typeof(DataRowState), r.Attribute("RowState").Value);
+            //    DataRow dr = dt.Rows[i];
+            //    dr.AcceptChanges();
+            //    if (state == DataRowState.Deleted)
+            //        dr.Delete();
+            //    else if (state == DataRowState.Added)
+            //        dr.SetAdded();
+            //    else if (state == DataRowState.Modified)
+            //        dr.SetModified();               
+            //    i++;
+            //}
         }            
         return ds;
     }

@@ -4,4 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="911" d:DesignWidth="588" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" IsHitTestVisible="False" xmlns:my="clr-namespace:MonitorSystem.MonitorSystemGlobal"></UserControl>
+    d:DesignHeight="422" d:DesignWidth="623" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" IsHitTestVisible="False" xmlns:my="clr-namespace:MonitorSystem.MonitorSystemGlobal" xmlns:my1="clr-namespace:System;assembly=mscorlib">
+    <toolkit:Chart Height="252" Name="chart1" Title="标题" Width="509">
+    </toolkit:Chart>
+</UserControl>

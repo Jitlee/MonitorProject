@@ -122,44 +122,44 @@ namespace MonitorSystem.GetData
             return list as IEnumerable;
         }
 
-        public static MyDataService.DataSetData GetUpdatedDataSet(IEnumerable list, ObservableCollection<MyDataService.DataTableInfo> tables)
-        {
-            MyDataService.DataSetData data = new MyDataService.DataSetData();
-            data.Tables = tables;
-            //data.Tables = new ObservableCollection<DataSetInDataGrid.Silverlight.MyDataService.DataTableInfo>();
-            //foreach (MyDataService.DataTableInfo t in tables)
-            //{
-            //    MyDataService.DataTableInfo table = new MyDataService.DataTableInfo { TableName = t.TableName };
-            //    table.Columns = new ObservableCollection<DataSetInDataGrid.Silverlight.MyDataService.DataColumnInfo>();
-            //    foreach (MyDataService.DataColumnInfo c in t.Columns)
-            //    {
-            //        table.Columns.Add(new MyDataService.DataColumnInfo{ColumnName= c.ColumnName, DataTypeName
-            //    }
-            //}
+        //public static MyDataService.DataSetData GetUpdatedDataSet(IEnumerable list, ObservableCollection<MyDataService.DataTableInfo> tables)
+        //{
+        //    MyDataService.DataSetData data = new MyDataService.DataSetData();
+        //    data.Tables = tables;
+        //    //data.Tables = new ObservableCollection<DataSetInDataGrid.Silverlight.MyDataService.DataTableInfo>();
+        //    //foreach (MyDataService.DataTableInfo t in tables)
+        //    //{
+        //    //    MyDataService.DataTableInfo table = new MyDataService.DataTableInfo { TableName = t.TableName };
+        //    //    table.Columns = new ObservableCollection<DataSetInDataGrid.Silverlight.MyDataService.DataColumnInfo>();
+        //    //    foreach (MyDataService.DataColumnInfo c in t.Columns)
+        //    //    {
+        //    //        table.Columns.Add(new MyDataService.DataColumnInfo{ColumnName= c.ColumnName, DataTypeName
+        //    //    }
+        //    //}
 
-            XElement root = new XElement("DataSet");
-            foreach (DataObject d in list)
-            {
-                if (d.State != DataObject.DataStates.Unchanged)
-                {
-                    XElement row = new XElement("Data", new XAttribute("RowState", d.State.ToString()));
-                    PropertyInfo[] pis = d.GetType().GetProperties();
-                    foreach (PropertyInfo pi in pis)
-                    {
-                        object val = pi.GetValue(d, null);
-                        if (val != null)
-                            row.Add(new XElement(pi.Name, val.ToString()));
-                        else
-                            row.Add(new XElement(pi.Name, ""));
-                    }
-                    root.Add(row);
-                }
-            }
-            XDocument xdoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), root);
-            data.DataXML = xdoc.ToString();
+        //    XElement root = new XElement("DataSet");
+        //    foreach (DataObject d in list)
+        //    {
+        //        if (d.State != DataObject.DataStates.Unchanged)
+        //        {
+        //            XElement row = new XElement("Data", new XAttribute("RowState", d.State.ToString()));
+        //            PropertyInfo[] pis = d.GetType().GetProperties();
+        //            foreach (PropertyInfo pi in pis)
+        //            {
+        //                object val = pi.GetValue(d, null);
+        //                if (val != null)
+        //                    row.Add(new XElement(pi.Name, val.ToString()));
+        //                else
+        //                    row.Add(new XElement(pi.Name, ""));
+        //            }
+        //            root.Add(row);
+        //        }
+        //    }
+        //    XDocument xdoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), root);
+        //    data.DataXML = xdoc.ToString();
 
-            return data;
-        }
+        //    return data;
+        //}
 	
     }
 }

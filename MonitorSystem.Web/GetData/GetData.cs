@@ -13,15 +13,15 @@ using System.Collections.Generic;
 public class GetData
 {
 	// Change this connection string your need.
-    private const string connectionString = @"server=.;database=MonitorDemo2;uid=sa;pwd=sa";
+   // private const string connectionString = @"server=.;database=MonitorDemo2;uid=sa;pwd=sa";
     
 	//private const string connectionString = @"Data Source=LOCALHOST;Initial Catalog=AdventureWorks;Integrated Security=True;";		
 	[OperationContract]
-	public DataSetData GetDataSetData(string SQL, int PageNumber, int PageSize, out CustomException ServiceError)
+	public DataSetData GetDataSetData(string ConnStr,string SQL, out CustomException ServiceError)
 	{
 		try
 		{
-			DataSet ds = GetDataSet(SQL, PageNumber, PageSize);		
+            DataSet ds = GetDataSet(ConnStr,SQL);
             ServiceError = null;
             return DataSetData.FromDataSet(ds);
 		}
@@ -32,37 +32,37 @@ public class GetData
 		return null;
 	}
 
-	[OperationContract]
-	public bool Update(DataSetData d, out CustomException ServiceError)
-	{
-		try
-		{
-            DataSet ds = DataSetData.ToDataSet(d);
-			UpdataDataSet(ds);
-			ServiceError = null;
-			return true;
-		}
-		catch(Exception ex)
-		{
-			ServiceError = new CustomException(ex);	
-		}
-		return false;
-	}
+    //[OperationContract]
+    //public bool Update(DataSetData d, out CustomException ServiceError)
+    //{
+    //    try
+    //    {
+    //        DataSet ds = DataSetData.ToDataSet(d);
+    //        UpdataDataSet(ds);
+    //        ServiceError = null;
+    //        return true;
+    //    }
+    //    catch(Exception ex)
+    //    {
+    //        ServiceError = new CustomException(ex);	
+    //    }
+    //    return false;
+    //}
 
 
-    private void UpdataDataSet(DataSet ds)
-    {
-        try
-        {
-            //You need to Implement UpdataDataSet the way you want it. 
-        }      
-        catch (Exception e)
-        {
-            throw new Exception("Update DataSata Failed", e);
-        }
-    }
+    //private void UpdataDataSet(DataSet ds)
+    //{
+    //    try
+    //    {
+    //        //You need to Implement UpdataDataSet the way you want it. 
+    //    }      
+    //    catch (Exception e)
+    //    {
+    //        throw new Exception("Update DataSata Failed", e);
+    //    }
+    //}
    
-	private DataSet GetDataSet(string SQL, int PageNumber, int PageSize)
+	private DataSet GetDataSet(string connectionString,string SQL)
 	{		        
 		DataSet ds;
 		SqlConnection Connection = new SqlConnection(connectionString);
@@ -72,27 +72,10 @@ public class GetData
 			SqlDataAdapter adapter = new SqlDataAdapter();
 			adapter.SelectCommand = new SqlCommand(SQL);
 			adapter.SelectCommand.Connection = Connection;			
-			if (PageSize > 0)// Set rowcount =PageNumber * PageSize for best performance
-			{
-				long RowCount = PageNumber * PageSize;
-				SqlCommand cmd = new SqlCommand("SET ROWCOUNT " + RowCount.ToString() + " SET NO_BROWSETABLE ON", (SqlConnection)Connection);
-				cmd.ExecuteNonQuery();
-			}
+			
 			ds = new DataSet();         
-			adapter.Fill(ds, (PageNumber - 1) * PageSize, PageSize, "Data");
-            adapter.FillSchema(ds, SchemaType.Mapped, "DataSchema");
-			if (PageSize > 0) // Reset Rowcount back to 0
-			{
-				SqlCommand cmd = new SqlCommand("SET ROWCOUNT 0 SET NO_BROWSETABLE OFF", (SqlConnection)Connection);
-				cmd.ExecuteNonQuery();
-			}
-            if (ds.Tables.Count > 1)
-            {
-                DataTable data = ds.Tables["Data"];
-				DataTable schema = ds.Tables["DataSchema"];
-                data.Merge(schema);
-                ds.Tables.Remove(schema);
-            }           
+			adapter.Fill(ds);
+           
 		}
 		catch (Exception err)
 		{

@@ -388,6 +388,11 @@ namespace MonitorSystem
                     TableCtrl mTableCtrl = new TableCtrl();
                     SetEletemt(mTableCtrl, obj, eleStae, listObj);
                     return mTableCtrl;
+                case "zedGraphCtrl":
+                    zedGraphCtrl mzedGraphCtrl = new zedGraphCtrl();
+                    SetEletemt(mzedGraphCtrl, obj, eleStae, listObj);
+                    return mzedGraphCtrl;
+                    
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
@@ -604,8 +609,6 @@ namespace MonitorSystem
         int AddElementNumber = 0;
         private void SaveElement()
         {
-            
-
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var ui = csScreen.Children[i];

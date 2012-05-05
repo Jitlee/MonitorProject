@@ -13,15 +13,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Update">
-      <soap:operation soapAction="urn:GetData/Update" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="GetData">
     <wsdl:port name="BasicHttpBinding_GetData" binding="tns:BasicHttpBinding_GetData">
