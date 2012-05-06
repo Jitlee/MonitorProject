@@ -107,7 +107,7 @@ namespace MonitorSystem.ZTControls
             }
         }
 
-        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
+        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Transparent",
             "Translate", "Location", "ConnectString" ,"TalbeName", "ColumnsName", "RefreshRate"};
 
         public override string[] BrowsableProperties

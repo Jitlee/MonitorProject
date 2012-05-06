@@ -21,8 +21,6 @@ namespace MonitorSystem.ZTControls
         public MyLine()
         {
             this.Content = picCurveShow;
-            picCurveShow.Background = new SolidColorBrush(Colors.Black);
-
             this.Width = 300;
             this.Height = 400;
             this.SizeChanged += new SizeChangedEventHandler(MyLine_SizeChanged);
@@ -102,7 +100,7 @@ namespace MonitorSystem.ZTControls
             }
         }
 
-        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Translate", 
+        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","ForeColor","BackColor", "Transparent", 
             "MyData","Title","SetXTitle","Range","SetYTitle","SetMinValue","SetMaxValue","DataZone","DottedLine","LineColor"};
 
         public override string[] BrowsableProperties
@@ -118,6 +116,8 @@ namespace MonitorSystem.ZTControls
             Transparent = ScreenElement.Transparent.Value;
             picCurveShow.Width = this.Width = (double)ScreenElement.Width;
             picCurveShow.Height = this.Height = (double)ScreenElement.Height;
+            _ForeColor = Common.StringToColor(ScreenElement.ForeColor);
+            _BackColor = Common.StringToColor(ScreenElement.BackColor);
         }
 
         public List<t_ElementProperty> GetProperty()
@@ -156,7 +156,7 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "DataZone".ToUpper())
                 {
-                    //dataZone = SetColor(value);
+                    _dataZone= Common.StringToColor(value);
                 }
                 else if (name == "DottedLine".ToUpper())
                 {
@@ -164,7 +164,7 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "LineColor".ToUpper())
                 {
-                    //lineColor = SetColor(value);
+                    _lineColor = Common.StringToColor(value);
                 }
                 else if (name == "Range".ToUpper())
                 {
@@ -190,17 +190,47 @@ namespace MonitorSystem.ZTControls
                 }
                 else
                 {
-                    picCurveShow.Background = new SolidColorBrush(Colors.Black);
+                    picCurveShow.Background = new SolidColorBrush(_BackColor);
                 }
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
         }
 
+        private static readonly DependencyProperty BackColorProperty = DependencyProperty.Register("BackColor",
+    typeof(int), typeof(MyLine), new PropertyMetadata(0));
+        private Color _BackColor = Colors.Black;
+        [DefaultValue(""), Description("背景色"),Category("外观")]
+        public Color BackColor
+        {
+            get { return _BackColor; }
+            set
+            {
+                _BackColor = value;
+                picCurveShow.Background = new SolidColorBrush(_BackColor);
+                if (ScreenElement != null)
+                    ScreenElement.BackColor = value.ToString(); 
+            }
+        }
+
+        private static readonly DependencyProperty ForeColorProperty = DependencyProperty.Register("ForeColor",
+    typeof(int), typeof(MyLine), new PropertyMetadata(0));
+        private Color _ForeColor = Colors.Black;
+        [DefaultValue(""), Description("字体颜色"), Category("外观")]
+        public Color ForeColor
+        {
+            get { return _ForeColor; }
+            set
+            {
+                _ForeColor = value;
+                if (ScreenElement != null)
+                    ScreenElement.ForeColor = value.ToString(); 
+            }
+        }
         private static readonly DependencyProperty DataZoneProperty = DependencyProperty.Register("DataZone",
         typeof(Color), typeof(MyLine), new PropertyMetadata(Colors.White));
         private Color _dataZone = Colors.White;
-        [DefaultValue(""), Description("数据主显区的颜色"), Category("我的属性")]
+        [DefaultValue(""), Description("数据区域颜色"), Category("我的属性")]
         public Color DataZone
         {
             get { return _dataZone; }
@@ -402,9 +432,22 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
             }
         }
        
-
+        /// <summary>
+        /// 字体高度
+        /// </summary>
+        const int FontHeight=14;
         private void MyLine_Paint()
         {
+
+            if (_Transparent == 1)
+            {
+                picCurveShow.Background = new SolidColorBrush();
+            }
+            else
+            {
+                picCurveShow.Background = new SolidColorBrush(_BackColor);
+            }
+
             picCurveShow.Children.Clear();
             if (maxValue - minValue >= -0.0000001 && maxValue - minValue <= 0.0000001)
             {
@@ -427,32 +470,54 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
                 {
                     range = 10;
                 }
-            Color BackColor=Colors.Black;
+            Color BackColor=Colors.Red;
             Color end = BackColor; //Color.FromArgb(dataZone.R + range * (this.BackColor.R - dataZone.R) / 10, dataZone.G + range * (this.BackColor.G - dataZone.G) / 10, dataZone.B + range * (this.BackColor.B - dataZone.B) / 10);
             //LinearGradientBrush myLineBrush = new LinearGradientBrush(new Rectangle(40, 10, this.Width - 50, this.Height - 50), dataZone, end, 90);
             //g.FillRectangle(myLineBrush, 40, 10, this.Width - 50, this.Height - 50);
-            //Font myFont = new Font("宋体", 10);
-            //int len = ((xTitle.Trim().Length) * (myFont.Height)) / 2;
-            //g.DrawString(xTitle.Trim(), myFont, Brushes.Black, (Width - len) / 2, Height - myFont.Height);
+            Rectangle mrect = new Rectangle();
+            mrect.Fill = new SolidColorBrush(_dataZone);
+            mrect.Width = this.Width - 50;
+            mrect.Height = this.Height - 50;
+            mrect.SetValue(Canvas.LeftProperty, (double)40);
+            mrect.SetValue(Canvas.TopProperty, (double)10);
+            mrect.SetValue(Canvas.ZIndexProperty, 0);
+            picCurveShow.Children.Add(mrect);
 
-            //int currentY = (Height - yTitle.Trim().Length * myFont.Height) / 2;
-            //for (int i = 0; i < yTitle.Trim().Length; i++)
-            //{
-            //    g.DrawString(yTitle[i].ToString(), myFont, Brushes.Black, 0, currentY);
-            //    currentY += myFont.Height;
-            //}
+            //Font myFont = new Font("宋体", 10);
+            int len = ((xTitle.Trim().Length) * (FontHeight)) / 2;
+            //g.DrawString(xTitle.Trim(), myFont, Brushes.Black, (Width - len) / 2, Height - myFont.Height);
+            TextBlock txtXTitle = new TextBlock();
+            txtXTitle.Text = xTitle.Trim();
+            txtXTitle.Foreground = new SolidColorBrush(_ForeColor);
+
+            txtXTitle.SetValue(Canvas.LeftProperty, (Width - len) / 2);
+            txtXTitle.SetValue(Canvas.TopProperty, Height - FontHeight);
+            txtXTitle.SetValue(Canvas.ZIndexProperty, 500);
+            picCurveShow.Children.Add(txtXTitle);
+
+
+            double currentY = (Height - yTitle.Trim().Length * FontHeight) / 2;
+            for (int i = 0; i < yTitle.Trim().Length; i++)
+            {
+                //g.DrawString(yTitle[i].ToString(), myFont, Brushes.Black, 0, currentY);
+                currentY += FontHeight;
+                TextBlock txtyTitle = new TextBlock();
+                txtyTitle.Text = yTitle[i].ToString();
+                txtyTitle.Foreground = new SolidColorBrush(_ForeColor);
+
+                txtyTitle.SetValue(Canvas.LeftProperty, (double)0);
+                txtyTitle.SetValue(Canvas.TopProperty,currentY);
+                txtyTitle.SetValue(Canvas.ZIndexProperty, 0);
+                picCurveShow.Children.Add(txtyTitle);
+            }
+            
 
             //帽峰
-            //Pen myPen = new Pen(Color.Black, 2);
-            //myPen.EndCap = LineCap.ArrowAnchor;
-            //绘制指针
-            //g.DrawLine(myPen, 40, Height - 40, Width - 10, Height - 40);
-            //g.DrawLine(myPen, 40, Height - 40, 40, 10);
 
             Line lixLine = new Line();
-            //liGrid.StrokeThickness = 0.5;
+            lixLine.StrokeThickness = 1;
             //liGrid.StrokeDashArray = new DoubleCollection() { 2.0, 2.0 };
-            lixLine.Stroke = new SolidColorBrush(Colors.Red);
+            lixLine.Stroke = new SolidColorBrush(_lineColor);
             lixLine.X1 = 40;
             lixLine.X2 = Width - 10;
             lixLine.Y1 = lixLine.Y2 = Height - 40;
@@ -460,9 +525,9 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
             picCurveShow.Children.Add(lixLine);
 
             Line liGrid1 = new Line();
-            liGrid1.StrokeThickness = 0.5;
-            //liGrid.StrokeDashArray = new DoubleCollection() { 2.0, 2.0 };
-            liGrid1.Stroke = new SolidColorBrush(Colors.Blue);
+            liGrid1.StrokeThickness = 1;
+            //liGrid1.StrokeDashArray = new DoubleCollection() { 2.0, 2.0 };
+            liGrid1.Stroke = new SolidColorBrush(_lineColor);
             liGrid1.X1 = 40;
             liGrid1.X2 = 40;
             liGrid1.Y1 = Height - 40;
@@ -471,20 +536,15 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
             picCurveShow.Children.Add(liGrid1);
 
             //绘制时间轴的虚线
-            //Pen myAsixPen = new Pen(lineColor, 1);
-            //if (dottedLine)
-            //{
-            //    myAsixPen.DashStyle = DashStyle.DashDot;
-            //}
-
             for (int i = 0; i < 5; i++)
             {
                 //g.DrawLine(myAsixPen, Width - 10 - (this.Width - 50) * (countInFirst + i * 60) / 300, Height - 40,
                 //Width - 10 - (this.Width - 50) * (countInFirst + i * 60) / 300, 10);
                 Line liAsixPen = new Line();
                 liAsixPen.StrokeThickness = 0.5;
-                //liGrid.StrokeDashArray = new DoubleCollection() { 2.0, 2.0 };
-                liAsixPen.Stroke = new SolidColorBrush(Colors.Blue);
+                if (dottedLine)
+                    liAsixPen.StrokeDashArray = new DoubleCollection() { 3.0, 3.0 };
+                liAsixPen.Stroke = new SolidColorBrush(_lineColor);
                 liAsixPen.X2 = liAsixPen.X1 = Width - 10 - (this.Width - 50) * (countInFirst + i * 60) / 300;
                 //liAsixPen.X2 = Width - 10 - (this.Width - 50) * (countInFirst + i * 60) / 300;
                 liAsixPen.Y1 = Height - 40;
@@ -499,8 +559,8 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
                 //new PointF(Width - 10 - (this.Width - 50) * (countInFirst + i * 60) / 300 - xvalue.Trim().Length * myFont.Height / 2, this.Height - 38));
                 TextBlock txtValue = new TextBlock();
                 txtValue.Text = xvalue;
-                txtValue.Foreground = new SolidColorBrush(Colors.Red);
-                double x = Width - 10 - (this.Width - 50) * (countInFirst + i * 60) / 300 - xvalue.Trim().Length * 14 / 2;
+                txtValue.Foreground = new SolidColorBrush(_ForeColor);
+                double x = Width - 10 - (this.Width - 50) * (countInFirst + i * 60) / 300 - xvalue.Trim().Length * FontHeight / 2;
                 txtValue.SetValue(Canvas.LeftProperty, x);
                 txtValue.SetValue(Canvas.TopProperty, this.Height - 38);
                 txtValue.SetValue(Canvas.ZIndexProperty, 500);
@@ -514,10 +574,10 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
 
             TextBlock txtyvalue = new TextBlock();
             txtyvalue.Text = yvalue.ToString();
-            txtyvalue.Foreground = new SolidColorBrush(Colors.Red);
+            txtyvalue.Foreground = new SolidColorBrush(_ForeColor);
            
             txtyvalue.SetValue(Canvas.LeftProperty, (double)15.0);
-            txtyvalue.SetValue(Canvas.TopProperty, yPlace - 14 / 2);
+            txtyvalue.SetValue(Canvas.TopProperty, yPlace - FontHeight / 2);
             txtyvalue.SetValue(Canvas.ZIndexProperty, 500);
             picCurveShow.Children.Add(txtyvalue);
 
@@ -525,32 +585,26 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
             {
                 yvalue = minValue + i * (maxValue - minValue) / 10;
 
-                //g.DrawLine(myAsixPen, 40, Height - 40 - (this.Height - 50) * i / 10, 
-                //this.Width - 10, Height - 40 - (this.Height - 50) * i / 10);
                 Line liAsixPen = new Line();
                 liAsixPen.StrokeThickness = 0.5;
-                //liGrid.StrokeDashArray = new DoubleCollection() { 2.0, 2.0 };
-                liAsixPen.Stroke = new SolidColorBrush(Colors.Blue);
+                if (dottedLine)
+                    liAsixPen.StrokeDashArray = new DoubleCollection() { 3.0, 3.0 };
+                liAsixPen.Stroke = new SolidColorBrush(_lineColor);
                 liAsixPen.X1 = 40;
                 liAsixPen.X2 = this.Width - 10;
                 liAsixPen.Y1=liAsixPen.Y2 = Height - 40 - (this.Height - 50) * i / 10;
 
                 liAsixPen.SetValue(Canvas.ZIndexProperty, 1);
                 picCurveShow.Children.Add(liAsixPen);
-
-                //g.DrawString(yvalue.ToString(), myFont, Brushes.Black, new PointF(15, yPlace - i * (Height - 60) / 10 - myFont.Height / 2));
+                
                 TextBlock txtValue = new TextBlock();
                 txtValue.Text = yvalue.ToString();
-                txtValue.Foreground = new SolidColorBrush(Colors.Red);
+                txtValue.Foreground = new SolidColorBrush(_ForeColor);
                 txtValue.SetValue(Canvas.LeftProperty, (double)15.0);
-                txtValue.SetValue(Canvas.TopProperty, yPlace - i * (Height - 60) / 10 - 14 / 2);
+                txtValue.SetValue(Canvas.TopProperty, yPlace - i * (Height - 60) / 10 - FontHeight / 2);
                 txtValue.SetValue(Canvas.ZIndexProperty, 500);
                 picCurveShow.Children.Add(txtValue);
             }
-
-
-            //Pen CurvePen = new Pen(Brushes.Red, 1);
-           
         }
 
         public void DrawLine()

@@ -44,8 +44,7 @@ namespace MonitorSystem
         {
             Random r = new Random();
            int x= r.Next(500);
-           this.myLine1.SetChannelValue(x);
-            //ShowCurve(RealtimeValue);
+          
         }
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -53,22 +52,5 @@ namespace MonitorSystem
         }
     }
 
-    public class Test
-    {
-        private string _XValue;
-
-        public string XValue
-        {
-            get { return _XValue; }
-            set { _XValue = value; }
-        }
-
-        private int _YValue;
-
-        public int YValue
-        {
-            get { return _YValue; }
-            set { _YValue = value; }
-        }
-    }
+   
 }

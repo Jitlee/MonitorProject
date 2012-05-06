@@ -65,6 +65,9 @@ namespace MonitorSystem.MonitorSystemGlobal
         //    set { m_BrowsableProperties = value; }
         //}
 
+        
+
+
         public double Translate
         {
             get { return (double)GetValue(OpacityProperty) * 100d; }
@@ -127,232 +130,232 @@ namespace MonitorSystem.MonitorSystemGlobal
 
     #region 监组组态的共公数据结构
 
-    public class ControlPropertyObj
-    {
-        public int PropertyNo;
-        public string PropertyName;
-        public string DefaultValue;
-        public string Caption;
-        public int ControlID;
-    }
+    //public class ControlPropertyObj
+    //{
+    //    public int PropertyNo;
+    //    public string PropertyName;
+    //    public string DefaultValue;
+    //    public string Caption;
+    //    public int ControlID;
+    //}
 
-    public class UserObj
-    {
-        public int UserID;
-        public string UserPSW;
-        public string UserName;
-        public int UserType;
-    }
+    //public class UserObj
+    //{
+    //    public int UserID;
+    //    public string UserPSW;
+    //    public string UserName;
+    //    public int UserType;
+    //}
 
-    public class ControlObj
-    {
-        public int ControlID;
-        public string ControlName;
-        public int ControlType;
-        public string ImageURL;
-        public string ControlTypeName;
-        public string ControlCaption;
-        public IList<ControlPropertyObj> m_listProperty = new List<ControlPropertyObj>();//控件的所有属性
-    }
+    //public class ControlObj
+    //{
+    //    public int ControlID;
+    //    public string ControlName;
+    //    public int ControlType;
+    //    public string ImageURL;
+    //    public string ControlTypeName;
+    //    public string ControlCaption;
+    //    public IList<ControlPropertyObj> m_listProperty = new List<ControlPropertyObj>();//控件的所有属性
+    //}
 
-    public class ElementPropertyObj
-    {
-        public int PropertyNo;
-        public string PropertyValue;
-        public string PropertyName;
-        public string Caption;
-        public int m_State;//0,没修改过,1修改过
-        public int ElementID;
-    }
-    public class ElementObj
-    {
-        public int ElementID;
-        public int ScreenID;
-        public int Width;
-        public int Height;
-        public int ScreenX;
-        public int ScreenY;
-        // 2009-7-27
-        public string ChildScreenID;
-        public string TxtInfo;
-        public string ImageURL;
-        public string ForeColor;
-        public string BackColor;
-        // 2008-11-30:
-        public int Transparent;
-        // 2009-4-20
-        public int oldX;
-        public int oldY;
+    //public class ElementPropertyObj
+    //{
+    //    public int PropertyNo;
+    //    public string PropertyValue;
+    //    public string PropertyName;
+    //    public string Caption;
+    //    public int m_State;//0,没修改过,1修改过
+    //    public int ElementID;
+    //}
+    //public class ElementObj
+    //{
+    //    public int ElementID;
+    //    public int ScreenID;
+    //    public int Width;
+    //    public int Height;
+    //    public int ScreenX;
+    //    public int ScreenY;
+    //    // 2009-7-27
+    //    public string ChildScreenID;
+    //    public string TxtInfo;
+    //    public string ImageURL;
+    //    public string ForeColor;
+    //    public string BackColor;
+    //    // 2008-11-30:
+    //    public int Transparent;
+    //    // 2009-4-20
+    //    public int oldX;
+    //    public int oldY;
 
-        //2011-3-7 xxy增加
-        public int Method;
-        public float MinFloat;
-        public float MaxFloat;
-        public int SerialNum;
-        public float TotalLength;
-        //2011-5-30: zeng   
-        public int LevelNo;
-        // 2011-12-7:
-        public string ComputeStr;
+    //    //2011-3-7 xxy增加
+    //    public int Method;
+    //    public float MinFloat;
+    //    public float MaxFloat;
+    //    public int SerialNum;
+    //    public float TotalLength;
+    //    //2011-5-30: zeng   
+    //    public int LevelNo;
+    //    // 2011-12-7:
+    //    public string ComputeStr;
 
-        public string Font;
-        public string ElementName;
-        public IList<ElementPropertyObj> m_listProperty = new List<ElementPropertyObj>();
-        public int DeviceID;
-        public int ChannelNo;
-        //父类Control的属性,都入到这
-        public int ControlID;
-        public string ControlName;
-        public string ControlCaption;
-        public int ControlType;
-        public MonitorControl m_MonitorControl;//界面显示，对应的控件实体
+    //    public string Font;
+    //    public string ElementName;
+    //    public IList<ElementPropertyObj> m_listProperty = new List<ElementPropertyObj>();
+    //    public int DeviceID;
+    //    public int ChannelNo;
+    //    //父类Control的属性,都入到这
+    //    public int ControlID;
+    //    public string ControlName;
+    //    public string ControlCaption;
+    //    public int ControlType;
+    //    public MonitorControl m_MonitorControl;//界面显示，对应的控件实体
 
-        public int m_State;//0,没修改,1：修改,2:添加,3,删除
+    //    public int m_State;//0,没修改,1：修改,2:添加,3,删除
 
-        public static int STATE_NONE = 0;
-        public static int STATE_MODIFY = 1;
-        public static int STATE_ADD = 2;
-        public static int STATE_DELETE = 3;
+    //    public static int STATE_NONE = 0;
+    //    public static int STATE_MODIFY = 1;
+    //    public static int STATE_ADD = 2;
+    //    public static int STATE_DELETE = 3;
 
-        public static int CONTROLTYPE_TP = 1;//拓朴控件
-        public static int CONTROLTYPE_MONITOR = 2;//组态控件
-        public static int CONTROLTYPE_COMMON = 3;//组态控件
+    //    public static int CONTROLTYPE_TP = 1;//拓朴控件
+    //    public static int CONTROLTYPE_MONITOR = 2;//组态控件
+    //    public static int CONTROLTYPE_COMMON = 3;//组态控件
 
-        //public int m_IsShowContextMenu = false;
+    //    //public int m_IsShowContextMenu = false;
 
-        //深度复制
-        public static ElementObj ElementObjClone(ElementObj oldElement)
-        {
-            ElementObj newElement = new ElementObj();
-            //newElement.ElementID = oldElement.ElementID;
-            newElement.ScreenID = oldElement.ScreenID;
-            newElement.Width = oldElement.Width;
-            newElement.Height = oldElement.Height;
-            newElement.ScreenX = oldElement.ScreenX;
-            newElement.ScreenY = oldElement.ScreenY;
-            newElement.ChildScreenID = oldElement.ChildScreenID;
-            newElement.TxtInfo = oldElement.TxtInfo.Clone().ToString();
-            newElement.ImageURL = oldElement.ImageURL.Clone().ToString();
-            newElement.Font = oldElement.Font.Clone().ToString();
-            newElement.ForeColor = oldElement.ForeColor.Clone().ToString();
-            newElement.BackColor = oldElement.BackColor.Clone().ToString();
+    //    //深度复制
+    //    public static ElementObj ElementObjClone(ElementObj oldElement)
+    //    {
+    //        ElementObj newElement = new ElementObj();
+    //        //newElement.ElementID = oldElement.ElementID;
+    //        newElement.ScreenID = oldElement.ScreenID;
+    //        newElement.Width = oldElement.Width;
+    //        newElement.Height = oldElement.Height;
+    //        newElement.ScreenX = oldElement.ScreenX;
+    //        newElement.ScreenY = oldElement.ScreenY;
+    //        newElement.ChildScreenID = oldElement.ChildScreenID;
+    //        newElement.TxtInfo = oldElement.TxtInfo.Clone().ToString();
+    //        newElement.ImageURL = oldElement.ImageURL.Clone().ToString();
+    //        newElement.Font = oldElement.Font.Clone().ToString();
+    //        newElement.ForeColor = oldElement.ForeColor.Clone().ToString();
+    //        newElement.BackColor = oldElement.BackColor.Clone().ToString();
 
-            // 2008-11-30:
-            newElement.Transparent = oldElement.Transparent;
+    //        // 2008-11-30:
+    //        newElement.Transparent = oldElement.Transparent;
 
-            newElement.ElementName = oldElement.ElementName;
-            newElement.DeviceID = oldElement.DeviceID;
-            newElement.ChannelNo = oldElement.ChannelNo;
-            //父类Control的属性,都入到这
-            newElement.ControlID = oldElement.ControlID;
-            newElement.ControlName = oldElement.ControlName.Clone().ToString();
-            newElement.ControlType = oldElement.ControlType;
+    //        newElement.ElementName = oldElement.ElementName;
+    //        newElement.DeviceID = oldElement.DeviceID;
+    //        newElement.ChannelNo = oldElement.ChannelNo;
+    //        //父类Control的属性,都入到这
+    //        newElement.ControlID = oldElement.ControlID;
+    //        newElement.ControlName = oldElement.ControlName.Clone().ToString();
+    //        newElement.ControlType = oldElement.ControlType;
 
-            foreach (ElementPropertyObj pObj in oldElement.m_listProperty)
-            {
-                ElementPropertyObj newProperty = new ElementPropertyObj();
-                newProperty.m_State = ElementObj.STATE_ADD;
-                newProperty.PropertyName = pObj.PropertyName.Clone().ToString();
-                newProperty.PropertyNo = pObj.PropertyNo;
+    //        foreach (ElementPropertyObj pObj in oldElement.m_listProperty)
+    //        {
+    //            ElementPropertyObj newProperty = new ElementPropertyObj();
+    //            newProperty.m_State = ElementObj.STATE_ADD;
+    //            newProperty.PropertyName = pObj.PropertyName.Clone().ToString();
+    //            newProperty.PropertyNo = pObj.PropertyNo;
 
-                newProperty.Caption = pObj.Caption;
-                newProperty.PropertyValue = pObj.PropertyValue.Clone().ToString();
-                newProperty.ElementID = newElement.ElementID;
-                newElement.m_listProperty.Add(newProperty);
+    //            newProperty.Caption = pObj.Caption;
+    //            newProperty.PropertyValue = pObj.PropertyValue.Clone().ToString();
+    //            newProperty.ElementID = newElement.ElementID;
+    //            newElement.m_listProperty.Add(newProperty);
 
-            }
-            return newElement;
-        }
+    //        }
+    //        return newElement;
+    //    }
 
-        //从控件生成元素
-        public static ElementObj CreateByControl(ControlObj myControlObj)
-        {
+    //    //从控件生成元素
+    //    //public static ElementObj CreateByControl(ControlObj myControlObj)
+    //    //{
 
-            ElementObj newElement = new ElementObj();
-            newElement.ElementID = 0;
-            newElement.ScreenID = 0;
-            newElement.Width = 20;
-            newElement.Height = 20;
-            newElement.ScreenX = 0;
-            newElement.ScreenY = 0;
-            // 2009-7-27
-            newElement.ChildScreenID = "0";
-            newElement.TxtInfo = "";
-            newElement.ForeColor = "RGB(0,0,0)";
-            newElement.BackColor = "RGB(0,0,0)";
-            // 2008-11-30:
-            newElement.Transparent = 0;
+    //    //    ElementObj newElement = new ElementObj();
+    //    //    newElement.ElementID = 0;
+    //    //    newElement.ScreenID = 0;
+    //    //    newElement.Width = 20;
+    //    //    newElement.Height = 20;
+    //    //    newElement.ScreenX = 0;
+    //    //    newElement.ScreenY = 0;
+    //    //    // 2009-7-27
+    //    //    newElement.ChildScreenID = "0";
+    //    //    newElement.TxtInfo = "";
+    //    //    newElement.ForeColor = "RGB(0,0,0)";
+    //    //    newElement.BackColor = "RGB(0,0,0)";
+    //    //    // 2008-11-30:
+    //    //    newElement.Transparent = 0;
 
-            newElement.ImageURL = myControlObj.ImageURL;
-            newElement.Font = "宋体";
-            newElement.ElementName = myControlObj.ControlName;
-            newElement.DeviceID = -1;
-            newElement.ChannelNo = -1;
-            //父类Control的属性,都入到这
-            newElement.ControlID = myControlObj.ControlID;
-            newElement.ControlName = myControlObj.ControlName;
-            newElement.ControlType = myControlObj.ControlType;
+    //    //    newElement.ImageURL = myControlObj.ImageURL;
+    //    //    newElement.Font = "宋体";
+    //    //    newElement.ElementName = myControlObj.ControlName;
+    //    //    newElement.DeviceID = -1;
+    //    //    newElement.ChannelNo = -1;
+    //    //    //父类Control的属性,都入到这
+    //    //    newElement.ControlID = myControlObj.ControlID;
+    //    //    newElement.ControlName = myControlObj.ControlName;
+    //    //    newElement.ControlType = myControlObj.ControlType;
 
-            foreach (ControlPropertyObj pObj in myControlObj.m_listProperty)
-            {
-                ElementPropertyObj newProperty = new ElementPropertyObj();
-                newProperty.m_State = ElementObj.STATE_ADD;
-                newProperty.PropertyName = pObj.PropertyName;
-                newProperty.PropertyNo = pObj.PropertyNo;
-                newProperty.ElementID = newElement.ElementID;
-                newProperty.PropertyValue = pObj.DefaultValue;
-                newProperty.Caption = pObj.Caption;
-                newElement.m_listProperty.Add(newProperty);
-            }
-            return newElement;
-        }
-        //设置状态
-        public void SetState(int newState)
-        {
-            if (this.m_State == ElementObj.STATE_DELETE) return;
-            if (this.m_State == ElementObj.STATE_ADD && newState == STATE_MODIFY)
-                return;
+    //    //    foreach (ControlPropertyObj pObj in myControlObj.m_listProperty)
+    //    //    {
+    //    //        ElementPropertyObj newProperty = new ElementPropertyObj();
+    //    //        newProperty.m_State = ElementObj.STATE_ADD;
+    //    //        newProperty.PropertyName = pObj.PropertyName;
+    //    //        newProperty.PropertyNo = pObj.PropertyNo;
+    //    //        newProperty.ElementID = newElement.ElementID;
+    //    //        newProperty.PropertyValue = pObj.DefaultValue;
+    //    //        newProperty.Caption = pObj.Caption;
+    //    //        newElement.m_listProperty.Add(newProperty);
+    //    //    }
+    //    //    return newElement;
+    //    //}
+    //    //设置状态
+    //    //public void SetState(int newState)
+    //    //{
+    //    //    if (this.m_State == ElementObj.STATE_DELETE) return;
+    //    //    if (this.m_State == ElementObj.STATE_ADD && newState == STATE_MODIFY)
+    //    //        return;
 
-            this.m_State = newState;
+    //    //    this.m_State = newState;
 
-            //if (newState == 2 && this.m_State == 1) return;//添加时不要转换到修改
-            //this.m_State = newState;
+    //    //    //if (newState == 2 && this.m_State == 1) return;//添加时不要转换到修改
+    //    //    //this.m_State = newState;
 
-        }
-    }
+    //    //}
+    //}
 
     /// <summary>
     /// 2009-10-13
     /// </summary>
-    public class StationObj
-    {
-        public int StationID;
-        public string StationName;
-        public string IP;
-        public int Port;
-    }
+    //public class StationObj
+    //{
+    //    public int StationID;
+    //    public string StationName;
+    //    public string IP;
+    //    public int Port;
+    //}
 
-    public class ScreenObj
-    {
-        private int m_ScreenID;
+    //public class ScreenObj
+    //{
+    //    private int m_ScreenID;
 
-        public int ScreenID
-        {
-            get { return m_ScreenID; }
-            set { m_ScreenID = value; }
-        }
-        public int ParentScreenID;
-        private string m_ScreenName;
+    //    public int ScreenID
+    //    {
+    //        get { return m_ScreenID; }
+    //        set { m_ScreenID = value; }
+    //    }
+    //    public int ParentScreenID;
+    //    private string m_ScreenName;
 
-        public string ScreenName
-        {
-            get { return m_ScreenName; }
-            set { m_ScreenName = value; }
-        }
-        public string ImageURL;
-        public int StationID;
-        public IList<ElementObj> m_listElement = new List<ElementObj>();//本场景的所有元素
-    }
+    //    public string ScreenName
+    //    {
+    //        get { return m_ScreenName; }
+    //        set { m_ScreenName = value; }
+    //    }
+    //    public string ImageURL;
+    //    public int StationID;
+    //    public IList<ElementObj> m_listElement = new List<ElementObj>();//本场景的所有元素
+    //}
     #endregion
 
     #region 别一些共公数据(配置程序时)

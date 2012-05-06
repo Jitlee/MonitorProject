@@ -358,10 +358,6 @@ namespace MonitorSystem
         #endregion
         #endregion
 
-        #region 属性
-
-        #endregion
-
     }
 }
 
