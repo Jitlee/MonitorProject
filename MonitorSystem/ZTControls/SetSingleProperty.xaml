@@ -19,11 +19,11 @@
         </Grid.RowDefinitions>
 
         <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"   Text="关联设备："  />
-        <ComboBox Height="23" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" Name="cbDeviceID"  Width="150" SelectionChanged="cbDeviceID_SelectionChanged" />
+        <ComboBox Height="23" ItemsSource="{Binding Devices}" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" Name="cbDeviceID"  Width="150" SelectionChanged="cbDeviceID_SelectionChanged" />
 
 
         <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"   Text="关联通道："  />
-        <ComboBox Height="23" HorizontalAlignment="Left" DisplayMemberPath="ChannelName" Grid.Row="1" Grid.Column="1" Name="cbChanncel"  Width="150" />
+        <ComboBox Height="23" HorizontalAlignment="Left" ItemsSource="{Binding Channels}" DisplayMemberPath="ChannelName" Grid.Row="1" Grid.Column="1" Name="cbChanncel"  Width="150" />
 
         <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"   Text="控件所属层次："  />
         <ComboBox Height="23" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" Name="cbLayer"  Width="150">

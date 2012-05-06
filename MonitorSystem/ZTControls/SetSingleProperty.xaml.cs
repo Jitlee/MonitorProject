@@ -12,10 +12,12 @@ using System.Windows.Shapes;
 using System.ServiceModel.DomainServices.Client;
 using MonitorSystem.Web.Servers;
 using MonitorSystem.Web.Moldes;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace MonitorSystem.ZTControls
 {
-    public partial class SetSingleProperty : ChildWindow
+    public partial class SetSingleProperty : ChildWindow, INotifyPropertyChanged
     {
         #region 属性
         private int _DeviceID = 0;
@@ -74,10 +76,42 @@ namespace MonitorSystem.ZTControls
             InitializeComponent();
             _dataContext = LoadScreen._DataContext;
             
-            cbDeviceID.ItemsSource = _dataContext.t_Devices;
+            //cbDeviceID.ItemsSource = _dataContext.t_Devices;
+            Devices = new ObservableCollection<t_Device>(_dataContext.t_Devices);
             cbDeviceID.DisplayMemberPath = "DeviceName";
             //查询
-           
+
+            this.DataContext = this;
+        }
+
+        private ObservableCollection<t_Device> _devices;
+
+        public ObservableCollection<t_Device> Devices
+        {
+            get
+            {
+                return _devices;
+            }
+            set
+            {
+                _devices = value;
+                RaisePropertyChanged("Devices");
+            }
+        }
+
+        private ObservableCollection<t_Channel> _channels;
+
+        public ObservableCollection<t_Channel> Channels
+        {
+            get
+            {
+                return _channels;
+            }
+            set
+            {
+                _channels = value;
+                RaisePropertyChanged("Channels");
+            }
         }
 
         public void Init()
@@ -94,7 +128,7 @@ namespace MonitorSystem.ZTControls
 
         private void cbDeviceID_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            cbChanncel.Items.Clear();
+            //cbChanncel.Items.Clear();
             t_Device d=(t_Device)cbDeviceID.Items[cbDeviceID.SelectedIndex];
             LoadChanncel(d.DeviceID);
 
@@ -117,8 +151,8 @@ namespace MonitorSystem.ZTControls
             var v = result.Entities;
             if (v.Count() > 0)
             {
-                cbChanncel.ItemsSource = v;
-
+                //cbChanncel.ItemsSource = v;
+                Channels = new ObservableCollection<t_Channel>(v);
                 var vc = v.Where(a => a.ChannelNo == _ChanncelID);
                 if (vc.Count() > 0)
                 {
@@ -158,6 +192,16 @@ namespace MonitorSystem.ZTControls
             this.DialogResult = false;
         }
 
+    
+        private void RaisePropertyChanged(string propertyName)
+        {
+            if(null != PropertyChanged)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public event PropertyChangedEventHandler  PropertyChanged;
     }
 }
 
