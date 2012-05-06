@@ -119,6 +119,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ZTControls\BackgroundRect.cs" />
+    <Compile Include="ZTControls\BeautyFont.cs" />
     <Compile Include="ZTControls\ButtonCtrl.cs" />
     <Compile Include="ZTControls\ColorText.cs" />
     <Compile Include="ZTControls\DetailSwitch.cs" />

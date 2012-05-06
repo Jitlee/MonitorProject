@@ -235,26 +235,6 @@ namespace MonitorSystem.ZTControls
             SetText();
         }
 
-        private static readonly DependencyProperty MyScaleProperty = DependencyProperty.Register("MyScale",
-            typeof(double), typeof(DLBiaoPan), new PropertyMetadata(1d, new PropertyChangedCallback(MyScale_Changed)));
-
-        public double MyScale
-        {
-            get { return (double)this.GetValue(MyScaleProperty); }
-            set { this.SetValue(MyScaleProperty, value); }
-        }
-
-        private static void MyScale_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
-        {
-            DLBiaoPan DLBiaoPan = (DLBiaoPan)element;
-            DLBiaoPan.OnMyScaleChanged((double)e.NewValue, (double)e.OldValue);
-        }
-
-        public void OnMyScaleChanged(double oldValue, double newValue)
-        {
-            PaintBackground();
-        }
-
         #endregion
 
         private Canvas _canvas = new Canvas();

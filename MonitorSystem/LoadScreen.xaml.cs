@@ -443,6 +443,10 @@ namespace MonitorSystem
                     obj.Width = 2 * obj.Height.Value;
                     SetEletemt(mDLBiaoPan, obj, eleStae, listObj);
                     return mDLBiaoPan;
+                case "DigitalBiaoPan":
+                    DigitalBiaoPan mDigitalBiaoPan = new DigitalBiaoPan();
+                    SetEletemt(mDigitalBiaoPan, obj, eleStae, listObj);
+                    return mDigitalBiaoPan;
                 case "RealTimeCurve":
                     RealTimeCurve mRealTime = new RealTimeCurve();
                     SetEletemt(mRealTime, obj, eleStae, listObj);

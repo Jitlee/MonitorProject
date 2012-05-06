@@ -135,7 +135,7 @@ namespace MonitorSystem
                 _bottomCenterAdorner.Visibility = Visibility.Visible;
             }
 
-            if (null != _lastFocusObject)
+            if (_lastFocusObject != this && null != _lastFocusObject)
             {
                 _lastFocusObject.UnFocus();
             }
