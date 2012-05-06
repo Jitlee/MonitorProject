@@ -456,6 +456,10 @@ namespace MonitorSystem
                     obj.Width = obj.Height;
                     SetEletemt(mSignalSwitch, obj, eleStae, listObj);
                     return mSignalSwitch;
+                case "DetailSwitch":
+                    DetailSwitch mDetailSwitch = new DetailSwitch();
+                    SetEletemt(mDetailSwitch, obj, eleStae, listObj);
+                    return mDetailSwitch;
                 case "RealTimeCurve":
                     RealTimeCurve mRealTime = new RealTimeCurve();
                     SetEletemt(mRealTime, obj, eleStae, listObj);
