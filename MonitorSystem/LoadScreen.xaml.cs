@@ -211,25 +211,16 @@ namespace MonitorSystem
         private void InitMainMenu()
         {
             SenceMenuButton.IsEnabled = false;
-            Thread thread = new Thread(InitMainMenuThread);
-            thread.IsBackground = true;
-            thread.Start();
-        }
-
-        private void InitMainMenuThread()
-        {
-            this.Dispatcher.BeginInvoke(new Action(() =>
+            SenceMenuButton.IsHitTestVisible = false;
+            var itemsControl = new ListBox();
+            SencePopupMenu.Content = itemsControl;
+            var roots = listScreen.Where(s => s.ParentScreenID == 0);
+            foreach (var s in roots)
             {
-                var itemsControl = new ListBox();
-                SencePopupMenu.Content = itemsControl;
-                var roots = listScreen.Where(s => s.ParentScreenID == 0);
-                foreach (var s in roots)
-                {
-                    itemsControl.Items.Add(InitMenuItem(s));
-                }
-                SenceMenuButton.IsEnabled = true;
-            
-            }));
+                itemsControl.Items.Add(InitMenuItem(s));
+            }
+            SenceMenuButton.IsEnabled = true;
+            SenceMenuButton.IsHitTestVisible = true;
         }
 
         public PopupMenuItem InitMenuItem(t_Screen screen)

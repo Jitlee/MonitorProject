@@ -60,7 +60,6 @@
   <ItemGroup>
     <Reference Include="FloatableWindow, Version=2.0.5.0, Culture=neutral, PublicKeyToken=dd6e2c92abf74ba1, processorArchitecture=MSIL" />
     <Reference Include="mscorlib" />
-    <Reference Include="SL4PopupMenu, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -96,6 +95,11 @@
     <Compile Include="Controls\ColorPicker\PredefinedColor.cs" />
     <Compile Include="Controls\ColorPicker\PredefinedColorItem.cs" />
     <Compile Include="Common.cs" />
+    <Compile Include="Controls\PopupMenu\PopupMenu.cs" />
+    <Compile Include="Controls\PopupMenu\PopupMenuItem.cs" />
+    <Compile Include="Controls\PopupMenu\PopupMenuQueryPartial.cs" />
+    <Compile Include="Controls\PopupMenu\PopupMenuSeparator.cs" />
+    <Compile Include="Controls\PopupMenu\PopupMenuUtils.cs" />
     <Compile Include="Controls\PropertyGrid\Converters\ColorConverter.cs" />
     <Compile Include="Converters\ImagePathConverter.cs" />
     <Compile Include="GetData\DataObject.cs" />
@@ -228,6 +232,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\PopupMenu\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="LoadScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -294,7 +302,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <Resource Include="Images\Common\arrow.png" />
-    <Content Include="Ref\SL4PopupMenu.dll" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\MyDataService\GetData.wsdl" />
     <None Include="Service References\MyDataService\GetData.xsd">
