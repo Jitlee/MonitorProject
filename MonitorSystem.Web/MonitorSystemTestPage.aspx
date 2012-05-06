@@ -20,6 +20,11 @@
     </style>
     <script type="text/javascript" src="Silverlight.js"></script>
     <script type="text/javascript">
+
+        function ShowDoubleCurve() {
+            alert("通过这个函数，打开多曲线窗口。");
+        }
+
         function onSilverlightError(sender, args) {
             var appSource = "";
             if (sender != null && sender != 0) {

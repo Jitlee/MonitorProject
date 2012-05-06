@@ -471,7 +471,10 @@ namespace MonitorSystem
                     MyLine mMyLine = new MyLine();
                     SetEletemt(mMyLine, obj, eleStae, listObj);
                     return mMyLine;
-                    
+                case "BackgroundRect"://曲线
+                    BackgroundRect mBackgroundRect = new BackgroundRect();
+                    SetEletemt(mBackgroundRect, obj, eleStae, listObj);
+                    return mBackgroundRect;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
