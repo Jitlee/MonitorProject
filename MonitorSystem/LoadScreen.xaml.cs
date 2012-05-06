@@ -451,6 +451,11 @@ namespace MonitorSystem
                     Switch mSwitch = new Switch();
                     SetEletemt(mSwitch, obj, eleStae, listObj);
                     return mSwitch;
+                case "SignalSwitch":
+                    SignalSwitch mSignalSwitch = new SignalSwitch();
+                    obj.Width = obj.Height;
+                    SetEletemt(mSignalSwitch, obj, eleStae, listObj);
+                    return mSignalSwitch;
                 case "RealTimeCurve":
                     RealTimeCurve mRealTime = new RealTimeCurve();
                     SetEletemt(mRealTime, obj, eleStae, listObj);

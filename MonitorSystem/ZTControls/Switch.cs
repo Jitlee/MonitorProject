@@ -148,7 +148,7 @@ namespace MonitorSystem.ZTControls
             SetForeground();
         }
 
-        private static readonly DependencyProperty OpenOrNotProperty = DependencyProperty.Register("MyScale",
+        private static readonly DependencyProperty OpenOrNotProperty = DependencyProperty.Register("OpenOrNot",
             typeof(bool), typeof(Switch), new PropertyMetadata(default(bool), new PropertyChangedCallback(OpenOrNot_Changed)));
 
         [DefaultValue("false"), Description("开关是不是开状态"), Category("我的属性")]
