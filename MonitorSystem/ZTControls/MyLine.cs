@@ -15,6 +15,9 @@ using System.ComponentModel;
 
 namespace MonitorSystem.ZTControls
 {
+    /// <summary>
+    /// 3	MyLine	2	Line.jpg	组态控件	曲线
+    /// </summary>
     public class MyLine : MonitorControl
     {
         Canvas picCurveShow = new Canvas();

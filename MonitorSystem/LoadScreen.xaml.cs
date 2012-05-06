@@ -491,6 +491,11 @@ namespace MonitorSystem
                     PicBox mPicBox = new PicBox();
                     SetEletemt(mPicBox, obj, eleStae, listObj);
                     return mPicBox;
+                case "DrawLine"://窗口式背景控件
+                    DrawLine mDrawLine = new DrawLine();
+                    SetEletemt(mDrawLine, obj, eleStae, listObj);
+                    return mDrawLine;
+                    
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
