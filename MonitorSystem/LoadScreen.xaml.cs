@@ -47,7 +47,6 @@ namespace MonitorSystem
            
             //实例化
             Init();
-
             _SenceCommand = new DelegateCommand<t_Screen>(LoadSence);
         }
 
@@ -484,10 +483,14 @@ namespace MonitorSystem
                     MyLine mMyLine = new MyLine();
                     SetEletemt(mMyLine, obj, eleStae, listObj);
                     return mMyLine;
-                case "BackgroundRect"://曲线
+                case "BackgroundRect"://背景
                     BackgroundRect mBackgroundRect = new BackgroundRect();
                     SetEletemt(mBackgroundRect, obj, eleStae, listObj);
                     return mBackgroundRect;
+                case "PicBox"://窗口式背景控件
+                    PicBox mPicBox = new PicBox();
+                    SetEletemt(mPicBox, obj, eleStae, listObj);
+                    return mPicBox;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
@@ -503,9 +506,6 @@ namespace MonitorSystem
         private void SetEletemt(MonitorControl mControl, t_Element obj, ElementSate eleStae,
             List<t_ElementProperty> listObj)
         {
-          
-           // tp.Tag = t;
-            //tp.KeyDown += new KeyEventHandler(TP_KeyDown);
             mControl.Selected += (o, e) =>
             {
                 PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = mControl.BrowsableProperties;
@@ -515,6 +515,7 @@ namespace MonitorSystem
             mControl.ScreenElement = obj;
             mControl.ListElementProp = listObj;
             mControl.ElementState = eleStae;
+
             
             mControl.SetPropertyValue();
             mControl.SetCommonPropertyValue();

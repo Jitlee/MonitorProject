@@ -65,6 +65,7 @@
     <Content Include="ImageMap\22.JPG" />
     <Content Include="MonitorSystemTestPage.aspx" />
     <Content Include="MonitorSystemTestPage.html" />
+    <Content Include="Pic\bg1.jpg" />
     <Content Include="Silverlight.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

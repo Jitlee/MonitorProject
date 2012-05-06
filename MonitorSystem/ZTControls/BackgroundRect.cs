@@ -29,12 +29,12 @@ namespace MonitorSystem.ZTControls
 
             mRect.Width = 80;
             mRect.Height = 50;
-            this.SizeChanged += new SizeChangedEventHandler(zedGraphCtrl_SizeChanged);
-
             mRect.MouseLeftButtonDown += new MouseButtonEventHandler(BackgroundRect_MouseRightButtonDown);
             mRect.MouseLeftButtonUp += new MouseButtonEventHandler(BackgroundRect_MouseRightButtonUp);
+            
 
-           
+            this.SizeChanged += new SizeChangedEventHandler(zedGraphCtrl_SizeChanged);
+            this.SetValue(Canvas.ZIndexProperty, 0);
         }
         private void zedGraphCtrl_SizeChanged(object sender, SizeChangedEventArgs e)
         {

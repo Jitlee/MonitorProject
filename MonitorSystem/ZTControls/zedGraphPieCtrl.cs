@@ -34,6 +34,7 @@ namespace MonitorSystem.ZTControls
             _Chart.Width = 100;
             _Chart.Height = 100;
 
+            //this.SetValue(Canvas.ZIndexProperty, 1);
             this.SizeChanged += new SizeChangedEventHandler(zedGraphCtrl_SizeChanged);
         }
         private void zedGraphCtrl_SizeChanged(object sender, SizeChangedEventArgs e)
