@@ -10,14 +10,10 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
 using System.ComponentModel;
-using System.Windows.Media.Imaging;
 
 namespace MonitorSystem.ZTControls
 {
-    /// <summary>
-    /// 28	DetailSwitch	2	DetailSwitch.jpg	组态控件	普通开关
-    /// </summary>
-    public class DetailSwitch : MonitorControl
+    public class Switch : MonitorControl
     {
         public override void DesignMode()
         {
@@ -101,7 +97,7 @@ namespace MonitorSystem.ZTControls
             this.Height = (double)ScreenElement.Height;
         }
 
-        private string[] _browsableProperties = new[] { "Location", "Size", "Font", "ForeColor", "OpenOrNot", "IsRightDirect", "Transparent" };
+        private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "OpenOrNot" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -112,7 +108,7 @@ namespace MonitorSystem.ZTControls
 
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
-            typeof(Color), typeof(DetailSwitch), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
+            typeof(Color), typeof(Switch), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
 
         public Color BackColor
         {
@@ -122,8 +118,8 @@ namespace MonitorSystem.ZTControls
 
         private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
         {
-            DetailSwitch DetailSwitch = (DetailSwitch)element;
-            DetailSwitch.OnBackColorChanged((Color)e.NewValue, (Color)e.OldValue);
+            Switch Switch = (Switch)element;
+            Switch.OnBackColorChanged((Color)e.NewValue, (Color)e.OldValue);
         }
 
         public void OnBackColorChanged(Color oldValue, Color newValue)
@@ -133,7 +129,7 @@ namespace MonitorSystem.ZTControls
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(DetailSwitch), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
+            typeof(Color), typeof(Switch), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
 
         public Color ForeColor
         {
@@ -143,8 +139,8 @@ namespace MonitorSystem.ZTControls
 
         private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
         {
-            DetailSwitch DetailSwitch = (DetailSwitch)element;
-            DetailSwitch.OnForeColorChanged((Color)e.NewValue, (Color)e.OldValue);
+            Switch Switch = (Switch)element;
+            Switch.OnForeColorChanged((Color)e.NewValue, (Color)e.OldValue);
         }
 
         public void OnForeColorChanged(Color oldValue, Color newValue)
@@ -153,7 +149,7 @@ namespace MonitorSystem.ZTControls
         }
 
         private static readonly DependencyProperty OpenOrNotProperty = DependencyProperty.Register("OpenOrNot",
-            typeof(bool), typeof(DetailSwitch), new PropertyMetadata(default(bool), new PropertyChangedCallback(OpenOrNot_Changed)));
+            typeof(bool), typeof(Switch), new PropertyMetadata(default(bool), new PropertyChangedCallback(OpenOrNot_Changed)));
 
         [DefaultValue("false"), Description("开关是不是开状态"), Category("我的属性")]
         public bool OpenOrNot
@@ -164,87 +160,111 @@ namespace MonitorSystem.ZTControls
 
         private static void OpenOrNot_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
         {
-            DetailSwitch DetailSwitch = (DetailSwitch)element;
-            DetailSwitch.OnOpenOrNotChanged((bool)e.OldValue,(bool)e.NewValue);
+            Switch Switch = (Switch)element;
+            Switch.OnOpenOrNotChanged((bool)e.OldValue,(bool)e.NewValue);
         }
 
         public void OnOpenOrNotChanged(bool oldValue, bool newValue)
         {
-            Paint();
+            Paint(DesiredSize);
         }
 
-        private static readonly DependencyProperty IsRightDirectProperty = DependencyProperty.Register("IsRightDirect",
-            typeof(bool), typeof(DetailSwitch), new PropertyMetadata(default(bool), new PropertyChangedCallback(IsRightDirect_Changed)));
-
-        [DefaultValue("false"), Description("正相与反相的确定.正相时1为打开图片"), Category("我的属性")]
-        public bool IsRightDirect
-        {
-            get { return (bool)this.GetValue(IsRightDirectProperty); }
-            set { this.SetValue(IsRightDirectProperty, value); }
-        }
-
-        private static void IsRightDirect_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
-        {
-            DetailSwitch DetailSwitch = (DetailSwitch)element;
-            DetailSwitch.OnIsRightDirectChanged((bool)e.OldValue,(bool)e.NewValue);
-        }
-
-        public void OnIsRightDirectChanged(bool oldValue, bool newValue)
-        {
-            Paint();
-        }
         #endregion
 
-        private Image _image = new Image();
+        private Canvas _canvas = new Canvas();
+        private Rectangle _rect1 = new Rectangle();
+        private Ellipse _ellipse1 = new Ellipse();
+        private Polygon _polygon = new Polygon();
+        private Rectangle _rect2 = new Rectangle();
+        private Ellipse _ellipse2 = new Ellipse();
 
-        public DetailSwitch()
+        public Switch()
         {
-            this.Content = _image;
-            _image.Stretch = Stretch.Fill;
+            this.Content = _canvas;
+            _canvas.Children.Add(_rect1);
+            _canvas.Children.Add(_ellipse1);
+            _canvas.Children.Add(_polygon);
+            _canvas.Children.Add(_rect2);
+            _canvas.Children.Add(_ellipse2);
 
             SetForeground();
 
             PaintBackground();
-
-            Paint();
         }
 
         private void SetForeground()
         {
+            var brush = new SolidColorBrush(ForeColor);
+            _rect1.Fill = brush;
+            _ellipse1.Fill = brush;
+            _polygon.Fill = brush;
+            _rect2.Fill = brush;
+            _ellipse2.Fill = brush;
         }
 
         private void PaintBackground()
         {
-
+            _canvas.Background = new SolidColorBrush(BackColor);
         }
 
-        private void Paint()
+        private void Paint(Size finalSize)
         {
-            var iOpen = "/MonitorSystem;component/Images/ControlsImg/Open.jpg";
-            var iClose = "/MonitorSystem;component/Images/ControlsImg/Close.jpg";
-            _image.Source = new BitmapImage(new Uri(iOpen, UriKind.RelativeOrAbsolute));
-            if (IsRightDirect)
+            var circle = finalSize.Width / 20d;
+            _rect1.SetValue(Canvas.LeftProperty, finalSize.Width / 2d - 1d);
+            _rect1.SetValue(Canvas.TopProperty, 0d);
+            _rect1.SetValue(WidthProperty, 2d);
+            _rect1.SetValue(HeightProperty, finalSize.Height / 3d);
+
+            _ellipse1.SetValue(Canvas.LeftProperty, finalSize.Width / 2d - circle);
+            _ellipse1.SetValue(Canvas.TopProperty, finalSize.Height / 3d - circle);
+            _ellipse1.SetValue(WidthProperty, 2 * circle);
+            _ellipse1.SetValue(HeightProperty, 2 * circle);
+            //g.FillRectangle(Brushes.Black, new Rectangle(this.Width / 2 - 1, 0, 2, this.Height / 3));
+            //g.FillEllipse(Brushes.Black, this.Width / 2 - circle, this.Height / 3 - circle, 2 * circle, 2 * circle);
+            if (OpenOrNot)
             {
-                if (OpenOrNot)
-                {
-                    _image.Source = new BitmapImage(new Uri(iOpen, UriKind.RelativeOrAbsolute));
-                }
-                else
-                {
-                    _image.Source = new BitmapImage(new Uri(iClose, UriKind.RelativeOrAbsolute));
-                }
+                var pp = new PointCollection();
+                pp.Add(new Point( 2d * this.Width / 3d,this.Height / 3d));
+                
+                pp.Add(new Point( 2d * this.Width / 3d + 2d,this.Height / 3d));
+
+                pp.Add(new Point(this.Width / 2d + 1d, 2d * this.Height / 3d));
+
+                pp.Add(new Point(this.Width / 2d - 1d, 2d * this.Height / 3d));
+
+                _polygon.Points = pp;
             }
             else
             {
-                if (OpenOrNot == false)
-                {
-                    _image.Source = new BitmapImage(new Uri(iOpen, UriKind.RelativeOrAbsolute));
-                }
-                else
-                {
-                    _image.Source = new BitmapImage(new Uri(iClose, UriKind.RelativeOrAbsolute));
-                }
+                var pp = new PointCollection();
+                pp.Add(new Point(this.Width / 2d - 1d, this.Height / 3d));
+
+                pp.Add(new Point(this.Width / 2d + 1d, this.Height / 3d));
+
+                pp.Add(new Point(this.Width / 2d + 1d, 2d * this.Height / 3d));
+
+                pp.Add(new Point(this.Width / 2d - 1d, 2d * this.Height / 3d));
+
+                _polygon.Points = pp;
             }
+            //g.FillRectangle(Brushes.Black, new Rectangle(this.Width / 2 - 1, 2 * this.Height / 3, 2, this.Height / 3));
+            //g.FillEllipse(Brushes.Black, this.Width / 2 - circle, 2 * this.Height / 3 - circle, 2 * circle, 2 * circle);
+
+            _rect2.SetValue(Canvas.LeftProperty, finalSize.Width / 2d - 1d);
+            _rect2.SetValue(Canvas.TopProperty, 2 * this.Height / 3);
+            _rect2.SetValue(WidthProperty, 2d);
+            _rect2.SetValue(HeightProperty, finalSize.Height / 3d);
+
+            _ellipse2.SetValue(Canvas.LeftProperty, finalSize.Width / 2d - circle);
+            _ellipse2.SetValue(Canvas.TopProperty, 2d * finalSize.Height / 3d - circle);
+            _ellipse2.SetValue(WidthProperty, 2 * circle);
+            _ellipse2.SetValue(HeightProperty, 2 * circle);
+        }
+
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            Paint(availableSize);
+            return base.MeasureOverride(availableSize);
         }
     }
 }

@@ -8,14 +8,361 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using MonitorSystem.MonitorSystemGlobal;
+using System.ComponentModel;
 
 namespace MonitorSystem.ZTControls
 {
     /// <summary>
-    /// 20	SignalSwitch	2	Switch.jpg	组态控件	图形开关
+    /// 20	SignalSwitch	2	SignalSwitch.jpg	组态控件	图形开关
     /// </summary>
-    public class SignalSwitch
+    public class SignalSwitch: MonitorControl
     {
+        public override void DesignMode()
+        {
+            if (!IsDesignMode)
+            {
+                AdornerLayer = new Adorner(this);
+                AdornerLayer.Selected += OnSelected;
 
+                var menu = new ContextMenu();
+                var menuItem = new MenuItem() { Header = "属性" };
+                menuItem.Click += PropertyMenuItem_Click;
+                menu.Items.Add(menuItem);
+                AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
+            }
+        }
+
+        public override void UnDesignMode()
+        {
+            if (IsDesignMode)
+            {
+                AdornerLayer.Selected -= OnSelected;
+                AdornerLayer.ClearValue(ContextMenuService.ContextMenuProperty);
+                AdornerLayer.Dispose();
+                AdornerLayer = null;
+            }
+        }
+
+        private void OnSelected(object sender, EventArgs e)
+        {
+            if (null != Selected)
+            {
+                Selected(this, RoutedEventArgs.Empty);
+            }
+        }
+
+        #region 属性设置
+        SetSingleProperty tpp = new SetSingleProperty();
+        private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            tpp = new SetSingleProperty();
+
+            tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
+            tpp.DeviceID = this.ScreenElement.DeviceID.Value;
+            tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
+            tpp.LevelNo = this.ScreenElement.LevelNo.Value;
+            tpp.ComputeStr = this.ScreenElement.ComputeStr;
+            tpp.Init();
+            tpp.Show();
+        }
+
+        protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (tpp.IsOK)
+            {
+                this.ScreenElement.DeviceID = tpp.DeviceID;
+                this.ScreenElement.ChannelNo = tpp.ChanncelID;
+                this.ScreenElement.LevelNo = tpp.LevelNo;
+                this.ScreenElement.ComputeStr = tpp.ComputeStr;
+            }
+        }
+
+        #endregion
+
+        public override object GetRootControl()
+        {
+            return this;
+        }
+
+        public override event EventHandler Selected;
+
+        public override void SetPropertyValue()
+        {
+            
+        }
+
+        public override void SetCommonPropertyValue()
+        {
+            this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
+            this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
+            this.Width = (double)ScreenElement.Width;
+            this.Height = (double)ScreenElement.Height;
+        }
+
+        private string[] _browsableProperties = new[] { "Location", "Size", "Font", "OpenOrNot", "style", "TrueColor", "FalseColor", "IsFlash", "FlashLogic", "Transparent" };
+        public override string[] BrowsableProperties
+        {
+            get { return _browsableProperties; }
+            set { _browsableProperties = value; }
+        }
+
+        #region 属性
+
+        private static readonly DependencyProperty BackColorProperty =
+            DependencyProperty.Register("BackColor",
+            typeof(Color), typeof(SignalSwitch), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
+
+        public Color BackColor
+        {
+            get { return (Color)this.GetValue(BackColorProperty); }
+            set { this.SetValue(BackColorProperty, value); }
+        }
+
+        private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            SignalSwitch SignalSwitch = (SignalSwitch)element;
+            SignalSwitch.OnBackColorChanged((Color)e.NewValue, (Color)e.OldValue);
+        }
+
+        public void OnBackColorChanged(Color oldValue, Color newValue)
+        {
+            PaintBackground();
+        }
+
+        private static readonly DependencyProperty ForeColorProperty =
+            DependencyProperty.Register("ForeColor",
+            typeof(Color), typeof(SignalSwitch), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
+
+        public Color ForeColor
+        {
+            get { return (Color)this.GetValue(ForeColorProperty); }
+            set { this.SetValue(ForeColorProperty, value); }
+        }
+
+        private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            SignalSwitch SignalSwitch = (SignalSwitch)element;
+            SignalSwitch.OnForeColorChanged((Color)e.NewValue, (Color)e.OldValue);
+        }
+
+        public void OnForeColorChanged(Color oldValue, Color newValue)
+        {
+
+        }
+
+        private static readonly DependencyProperty styleProperty =
+           DependencyProperty.Register("style",
+           typeof(int), typeof(SignalSwitch), new PropertyMetadata(0, new PropertyChangedCallback(Style_Changed)));
+
+        [DefaultValue(0), Description("开关的形状，０为圆，其他为正方形"), Category("我的属性")]
+        public int style
+        {
+            get { return (int)this.GetValue(styleProperty); }
+            set { this.SetValue(styleProperty, value); }
+        }
+
+        private static void Style_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            SignalSwitch SignalSwitch = (SignalSwitch)element;
+            SignalSwitch.OnStyleChanged((int)e.OldValue, (int)e.NewValue);
+        }
+
+        public void OnStyleChanged(int oldValue, int newValue)
+        {
+            Paint(RenderSize);
+        }
+
+        private static readonly DependencyProperty TrueColorProperty =
+           DependencyProperty.Register("TrueColor",
+           typeof(Color), typeof(SignalSwitch), new PropertyMetadata(Color.FromArgb(0xff, 0xb1, 0xff, 0xff), new PropertyChangedCallback(TrueColor_Changed)));
+
+        [DefaultValue(typeof(Color), "RGB(177,255,255)"), Description("逻辑真颜色"), Category("我的属性")]
+        public Color TrueColor
+        {
+            get { return (Color)this.GetValue(TrueColorProperty); }
+            set { this.SetValue(TrueColorProperty, value); }
+        }
+
+        private static void TrueColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            SignalSwitch SignalSwitch = (SignalSwitch)element;
+            SignalSwitch.OnTrueColorChanged((Color)e.NewValue, (Color)e.OldValue);
+        }
+
+        public void OnTrueColorChanged(Color oldValue, Color newValue)
+        {
+            SetForeground();
+        }
+
+        private static readonly DependencyProperty FalseColorProperty =
+            DependencyProperty.Register("FalseColor",
+            typeof(Color), typeof(SignalSwitch), new PropertyMetadata(Color.FromArgb(0xff, 0xff, 0x64, 0x00), new PropertyChangedCallback(FalseColor_Changed)));
+
+        [DefaultValue(typeof(Color), "RGB(255, 100, 0)"), Description("逻辑假颜色"), Category("我的属性")]
+        public Color FalseColor
+        {
+            get { return (Color)this.GetValue(FalseColorProperty); }
+            set { this.SetValue(FalseColorProperty, value); }
+        }
+
+        private static void FalseColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            SignalSwitch SignalSwitch = (SignalSwitch)element;
+            SignalSwitch.OnFalseColorChanged((Color)e.NewValue, (Color)e.OldValue);
+        }
+
+        public void OnFalseColorChanged(Color oldValue, Color newValue)
+        {
+            SetForeground();
+        }
+
+        private static readonly DependencyProperty OpenOrNotProperty = DependencyProperty.Register("OpenOrNot",
+            typeof(bool), typeof(SignalSwitch), new PropertyMetadata(default(bool), new PropertyChangedCallback(OpenOrNot_Changed)));
+
+        [DefaultValue("false"), Description("开关是不是开状态"), Category("我的属性")]
+        public bool OpenOrNot
+        {
+            get { return (bool)this.GetValue(OpenOrNotProperty); }
+            set { this.SetValue(OpenOrNotProperty, value); }
+        }
+
+        private static void OpenOrNot_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            SignalSwitch SignalSwitch = (SignalSwitch)element;
+            SignalSwitch.OnOpenOrNotChanged((bool)e.OldValue,(bool)e.NewValue);
+        }
+
+        public void OnOpenOrNotChanged(bool oldValue, bool newValue)
+        {
+            SetForeground();
+        }
+
+        private static readonly DependencyProperty IsFlashProperty = DependencyProperty.Register("IsFlash",
+           typeof(bool), typeof(SignalSwitch), new PropertyMetadata(default(bool), new PropertyChangedCallback(IsFlash_Changed)));
+
+        [DefaultValue("false"), Description("是否闪动效果"), Category("我的属性")]
+        public bool IsFlash
+        {
+            get { return (bool)this.GetValue(IsFlashProperty); }
+            set { this.SetValue(IsFlashProperty, value); }
+        }
+
+        private static void IsFlash_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            SignalSwitch SignalSwitch = (SignalSwitch)element;
+            SignalSwitch.OnIsFlashChanged((bool)e.OldValue, (bool)e.NewValue);
+        }
+
+        public void OnIsFlashChanged(bool oldValue, bool newValue)
+        {
+            SetForeground();
+        }
+
+        private static readonly DependencyProperty FlashLogicProperty = DependencyProperty.Register("FlashLogic",
+           typeof(bool), typeof(SignalSwitch), new PropertyMetadata(default(bool), new PropertyChangedCallback(FlashLogic_Changed)));
+
+        [DefaultValue("false"), Description("逻辑真还是逻辑假时闪动"), Category("我的属性")]
+        public bool FlashLogic
+        {
+            get { return (bool)this.GetValue(FlashLogicProperty); }
+            set { this.SetValue(FlashLogicProperty, value); }
+        }
+
+        private static void FlashLogic_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            SignalSwitch SignalSwitch = (SignalSwitch)element;
+            SignalSwitch.OnFlashLogicChanged((bool)e.OldValue, (bool)e.NewValue);
+        }
+
+        public void OnFlashLogicChanged(bool oldValue, bool newValue)
+        {
+            SetForeground();
+        }
+
+        #endregion
+
+        private Canvas _canvas = new Canvas();
+        private Path _path = new Path();
+
+        public bool m_bThreadStart = false;
+        public bool m_bStop = false;
+        public bool m_bFlashTimers = false;
+
+        public SignalSwitch()
+        {
+            this.Content = _canvas;
+            _canvas.Children.Add(_path);
+
+            SetForeground();
+
+            PaintBackground();
+        }
+
+        private void SetForeground()
+        {
+            SolidColorBrush myLineBrush = null;
+            if (IsFlash && FlashLogic == OpenOrNot)
+            {
+                 if (m_bFlashTimers)
+                    myLineBrush = new SolidColorBrush(FalseColor);
+                else
+                    myLineBrush = new SolidColorBrush(TrueColor);
+            }
+            else if (OpenOrNot)
+            {
+                myLineBrush = new SolidColorBrush(TrueColor);
+            }
+            else
+            {
+                 myLineBrush = new SolidColorBrush(FalseColor);
+            }
+            _path.Fill = myLineBrush;
+        }
+
+        private void PaintBackground()
+        {
+            _canvas.Background = new SolidColorBrush(BackColor);
+        }
+
+        private void Paint(Size finalSize)
+        {
+            //Graphics g = e.Graphics;
+            //SolidColorBrush myLineBrush = null;
+            //Rectangle rec = new Rectangle(0, 0, this.Width, this.Height);
+            //if (IsFlash && FlashLogic == OpenOrNot)
+            //{
+
+                //if (m_bFlashTimers)
+                //    myLineBrush = new SolidColorBrush(FalseColor);
+                //else
+                //    myLineBrush = new SolidColorBrush(TrueColor);
+
+
+                if (style == 0)
+                    //g.FillEllipse(myLineBrush, 0, 0, this.Width, this.Height);
+                    _path.Data = new EllipseGeometry() { Center = new Point(finalSize.Width / 2d, finalSize.Height / 2d), RadiusX = finalSize.Width / 2d, RadiusY = finalSize.Height / 2d };
+                else
+                    //g.FillRectangle(myLineBrush, 0, 0, this.Width, this.Height);
+                    _path.Data = new RectangleGeometry() { Rect = new Rect(0d,0d, finalSize.Width, finalSize.Height) };
+                //return;
+            //}
+
+            //if (penOrNot)
+            //    myLineBrush = new SolidBrush(trueColor);
+            //else
+            //    myLineBrush = new SolidBrush(falseColor);
+
+            //if (Style == 0)
+            //    g.FillEllipse(myLineBrush, 0, 0, this.Width, this.Height);
+            //else
+            //    g.FillRectangle(myLineBrush, 0, 0, this.Width, this.Height);
+        }
+
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            Paint(availableSize);
+            return base.MeasureOverride(availableSize);
+        }
     }
 }
