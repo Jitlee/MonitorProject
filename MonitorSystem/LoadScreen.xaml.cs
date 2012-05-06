@@ -447,6 +447,10 @@ namespace MonitorSystem
                     DigitalBiaoPan mDigitalBiaoPan = new DigitalBiaoPan();
                     SetEletemt(mDigitalBiaoPan, obj, eleStae, listObj);
                     return mDigitalBiaoPan;
+                case "Switch":
+                    Switch mSwitch = new Switch();
+                    SetEletemt(mSwitch, obj, eleStae, listObj);
+                    return mSwitch;
                 case "RealTimeCurve":
                     RealTimeCurve mRealTime = new RealTimeCurve();
                     SetEletemt(mRealTime, obj, eleStae, listObj);

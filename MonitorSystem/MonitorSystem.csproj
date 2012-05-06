@@ -138,6 +138,7 @@
       <DependentUpon>SetSingleProperty.xaml</DependentUpon>
     </Compile>
     <Compile Include="ZTControls\SignalSwitch.cs" />
+    <Compile Include="ZTControls\Switch.cs" />
     <Compile Include="ZTControls\TableCtrl.cs" />
     <Compile Include="ZTControls\Temprary.cs" />
     <Compile Include="Utilities\Logging\ILogger.cs" />
