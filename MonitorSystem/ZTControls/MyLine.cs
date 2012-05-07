@@ -26,6 +26,7 @@ namespace MonitorSystem.ZTControls
             this.Content = picCurveShow;
             this.Width = 300;
             this.Height = 400;
+            picCurveShow.Background = new SolidColorBrush(Colors.Black);
             this.SizeChanged += new SizeChangedEventHandler(MyLine_SizeChanged);
 
             //MyLine_Paint();

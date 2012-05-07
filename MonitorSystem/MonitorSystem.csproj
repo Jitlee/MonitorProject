@@ -137,6 +137,9 @@
     <Compile Include="ZTControls\SetSingleProperty.xaml.cs">
       <DependentUpon>SetSingleProperty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ZTControls\SetSinglePropertyDrawLine.xaml.cs">
+      <DependentUpon>SetSinglePropertyDrawLine.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ZTControls\SignalSwitch.cs" />
     <Compile Include="ZTControls\Switch.cs" />
     <Compile Include="ZTControls\TableCtrl.cs" />
@@ -242,6 +245,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ZTControls\SetSingleProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ZTControls\SetSinglePropertyDrawLine.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

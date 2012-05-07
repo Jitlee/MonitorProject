@@ -41,10 +41,10 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性设置
-        SetSingleProperty tpp = new SetSingleProperty();
+        SetSinglePropertyDrawLine tpp = new SetSinglePropertyDrawLine();
         private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            tpp = new SetSingleProperty();
+            tpp = new SetSinglePropertyDrawLine();
             if (ScreenElement != null)
             {
                 tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
@@ -52,6 +52,10 @@ namespace MonitorSystem.ZTControls
                 tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
                 tpp.LevelNo = this.ScreenElement.LevelNo.Value;
                 tpp.ComputeStr = this.ScreenElement.ComputeStr;
+
+                tpp.Method = this.ScreenElement.Method.Value;
+                tpp.MinFloat = this.ScreenElement.MinFloat.Value;
+                tpp.MaxFloat = this.ScreenElement.MaxFloat.Value;
             }
             tpp.Init();
             tpp.Show();
@@ -65,6 +69,10 @@ namespace MonitorSystem.ZTControls
                 this.ScreenElement.ChannelNo = tpp.ChanncelID;
                 this.ScreenElement.LevelNo = tpp.LevelNo;
                 this.ScreenElement.ComputeStr = tpp.ComputeStr;
+
+                this.ScreenElement.Method = tpp.Method;
+                this.ScreenElement.MinFloat = tpp.MinFloat;
+                this.ScreenElement.MaxFloat = tpp.MaxFloat;
             }
         }
 
@@ -343,10 +351,11 @@ namespace MonitorSystem.ZTControls
             //位置0
             double ZerroPosi=0;
             Rectangle rect = new Rectangle();
-            rect.SetValue(Canvas.LeftProperty, ZerroPosi);
-            rect.SetValue(Canvas.TopProperty, ZerroPosi);
             rect.Width = lineWidths;
             rect.Height = lineWidths;
+            rect.SetValue(Canvas.LeftProperty, ZerroPosi);
+            rect.SetValue(Canvas.TopProperty, ZerroPosi);
+            rect.SetValue(Canvas.ZIndexProperty, 500);
             _Canv.Children.Add(rect);
 
             Rectangle rect2 = new Rectangle();
@@ -356,6 +365,7 @@ namespace MonitorSystem.ZTControls
             rect2.Height = lineWidths;
             rect2.SetValue(Canvas.LeftProperty, ZerroPosi);
             rect2.SetValue(Canvas.TopProperty, this.Height - lineWidths);
+            rect2.SetValue(Canvas.ZIndexProperty, 500);
             _Canv.Children.Add(rect2);
 
             Rectangle rect3 = new Rectangle();            
@@ -363,6 +373,7 @@ namespace MonitorSystem.ZTControls
             rect3.Height = lineWidths;
             rect3.SetValue(Canvas.LeftProperty, this.Width - lineWidths);
             rect3.SetValue(Canvas.TopProperty, ZerroPosi);
+            rect3.SetValue(Canvas.ZIndexProperty, 500);
             _Canv.Children.Add(rect3);
 
             Rectangle rect4 = new Rectangle();
@@ -370,6 +381,7 @@ namespace MonitorSystem.ZTControls
             rect4.Height = lineWidths;
             rect4.SetValue(Canvas.LeftProperty, this.Width - lineWidths);
             rect4.SetValue(Canvas.TopProperty, this.Height - lineWidths);
+            rect4.SetValue(Canvas.ZIndexProperty, 500);
             _Canv.Children.Add(rect4);
 
             if (beeline == false)
@@ -416,18 +428,14 @@ namespace MonitorSystem.ZTControls
                 //此处可修改myBrush的相关属性
                 //Pen tempPen = new Pen(Brushes.Red, 4);
                 //Pen tempPen = new Pen(myBrush, lineWidths);
-
                 foreach (string s in allStr)
                 {
                     //循环画的计数
                     int count;
-
                     //小边的每段长度
                     int lineWidth = 5;
-
                     //小边的流水线初始位置
                     int i = 10;
-
                     //间隔画小边的标志位
                     bool flag = true;
                     if (s == "1")
@@ -456,12 +464,13 @@ namespace MonitorSystem.ZTControls
                                // g.DrawLine(tempPen, j + 10, 0, i, 0);
                                 Line li = new Line();
                                 li.X1 = j + 10;
-                                li.Y1 = ZerroPosi;
+                                //li.Y1 = ZerroPosi;
                                 li.X2 = (double)i;
-                                li.Y2 = ZerroPosi;
+                                li.Y1 = li.Y2 = lineWidths / 2;
                                 li.Stroke = myBrush;
-                                li.StrokeThickness = lineWidth;
+                                li.StrokeThickness = lineWidths;
                                 _Canv.Children.Add(li);
+                                //ToolTipService.SetToolTip(li,string.Format("11x1={0},y1={1},x2={2},y2={3}",li.X1,li.Y1,li.X2,li.Y2));
                                 //g.DrawImage(near, rect2);
                                 flag = false;
                             }
@@ -497,14 +506,14 @@ namespace MonitorSystem.ZTControls
                                 //g.DrawImage(near, rect4);
 
                                 Line li = new Line();
-                                li.X1 = ZerroPosi;
+                                //li.X1 = ZerroPosi;
                                 li.Y1 = (double)j;
-                                li.X2 = ZerroPosi;
+                                li.X1 = li.X2 = lineWidths / 2;
                                 li.Y2 = (double)i;
                                 li.Stroke = myBrush;
-                                li.StrokeThickness = lineWidth;
+                                li.StrokeThickness = lineWidths;
                                 _Canv.Children.Add(li);
-                                
+                                //ToolTipService.SetToolTip(li, string.Format("22x1={0},y1={1},x2={2},y2={3}", li.X1, li.Y1, li.X2, li.Y2));
                                 flag = false;
                             }
                             else flag = true;
@@ -537,12 +546,13 @@ namespace MonitorSystem.ZTControls
                                 //g.DrawLine(tempPen, this.Width, j, this.Width, i);
                                 //g.DrawImage(near, rect);
                                 Line li = new Line();
-                                li.X1 = this.Width;
+                                //li.X1 = this.Width;
                                 li.Y1 = (double)j;
-                                li.X2 = this.Width;
+                                li.X1=li.X2 = this.Width-(lineWidths/2);
                                 li.Y2 = (double)i;
                                 li.Stroke = myBrush;
-                                li.StrokeThickness = lineWidth;
+                                li.StrokeThickness = lineWidths;
+                               // ToolTipService.SetToolTip(li, string.Format("33x1={0},y1={1},x2={2},y2={3}", li.X1, li.Y1, li.X2, li.Y2));
                                 _Canv.Children.Add(li);
                                
                                 flag = false;
@@ -579,11 +589,12 @@ namespace MonitorSystem.ZTControls
 
                                 Line li = new Line();
                                 li.X1 = (double)(j+10);
-                                li.Y1 = this.Height;
+                                //li.Y1 = this.Height;
                                 li.X2 = (double)i;
-                                li.Y2 = this.Height;
+                                li.Y1=li.Y2 = this.Height-(lineWidths/2);
                                 li.Stroke = myBrush;
-                                li.StrokeThickness = lineWidth;
+                                li.StrokeThickness = lineWidths;
+                                //ToolTipService.SetToolTip(li, string.Format("44x1={0},y1={1},x2={2},y2={3}", li.X1, li.Y1, li.X2, li.Y2));
                                 _Canv.Children.Add(li);
                                
                                 flag = false;

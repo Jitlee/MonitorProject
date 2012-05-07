@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using MonitorSystem.Web.Moldes;
 using System.Linq;
 using MonitorSystem.MonitorSystemGlobal;
+using System.ComponentModel;
 
 namespace MonitorSystem.ZTControls
 {
@@ -19,6 +20,11 @@ namespace MonitorSystem.ZTControls
     /// </summary>
     public class Temprary : MonitorControl
     {
+        public override void SetChannelValue(float fValue)
+        {
+            MyTemp = (int)fValue;
+        }
+
         public override void DesignMode()
         {
             if (!IsDesignMode)
@@ -90,15 +96,48 @@ namespace MonitorSystem.ZTControls
 
         public override void SetPropertyValue()
         {
-            
+            foreach (t_ElementProperty pro in ListElementProp)
+            {
+                string name = pro.PropertyName.Trim().ToUpper();
+                string value = pro.PropertyValue.Trim();
+                if (name == "MaxValue".ToUpper())
+                {
+                    MaxValue = Int32.Parse(value);
+                }
+                else if (name == "MinValue".ToUpper())
+                {
+                    MinValue = Int32.Parse(value);
+                }
+                else if (name == "MyTemp".ToUpper())
+                {
+                    MyTemp = Int32.Parse(value);
+                }
+                else if (name == "BlankColor".ToUpper())
+                {
+                    BlankColor = Common.StringToColor(value);
+                }
+                else if (name == "DataZoneColor".ToUpper())
+                {
+                    DataZoneColor = Common.StringToColor(value);
+                }
+                else if (name == "Range".ToUpper())
+                {
+                    Range = int.Parse(value);
+                }
+            }
         }
 
         public override void SetCommonPropertyValue()
         {
             this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
+
+            
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+
+            BackColor = Common.StringToColor(ScreenElement.BackColor);
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor); 
         }
 
         private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "BlankColor", "DataZoneColor", "MinValue", "MaxValue", "MyTemp", "Range" };
@@ -113,11 +152,14 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
             typeof(Color), typeof(Temprary), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
-
+        [DefaultValue(30), Description("背景色"), Category("外观")]
         public Color BackColor
         {
             get { return (Color)this.GetValue(BackColorProperty); }
-            set { this.SetValue(BackColorProperty, value); }
+            set { this.SetValue(BackColorProperty, value);
+            if (ScreenElement != null)
+                ScreenElement.BackColor = value.ToString();
+            }
         }
 
         private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -134,11 +176,14 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
             typeof(Color), typeof(Temprary), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
-
+        [DefaultValue(30), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
-            set { this.SetValue(ForeColorProperty, value); }
+            set { this.SetValue(ForeColorProperty, value);
+            if (ScreenElement != null)
+                ScreenElement.ForeColor = value.ToString();
+            }
         }
 
         private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -155,11 +200,13 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty BlankColorProperty =
             DependencyProperty.Register("BlankColor",
             typeof(Color), typeof(Temprary), new PropertyMetadata(Colors.Red, new PropertyChangedCallback(BlankColor_Changed)));
-
+        [Category("我的属性")]
         public Color BlankColor
         {
             get { return (Color)this.GetValue(BlankColorProperty); }
-            set { this.SetValue(BlankColorProperty, value); }
+            set { this.SetValue(BlankColorProperty, value);
+            SetAttrByName("BlankColor", value.ToString());
+            }
         }
 
         private static void BlankColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -176,11 +223,13 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty DataZoneColorProperty =
             DependencyProperty.Register("DataZoneColor",
             typeof(Color), typeof(Temprary), new PropertyMetadata(Colors.White, new PropertyChangedCallback(DataZoneColor_Changed)));
-
+        [Category("我的属性")]
         public Color DataZoneColor
         {
             get { return (Color)this.GetValue(DataZoneColorProperty); }
-            set { this.SetValue(DataZoneColorProperty, value); }
+            set { this.SetValue(DataZoneColorProperty, value);
+                SetAttrByName("DataZoneColor", value.ToString()); 
+            }
         }
 
         private static void DataZoneColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -197,11 +246,13 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty MinValueProperty =
             DependencyProperty.Register("MinValue",
             typeof(int), typeof(Temprary), new PropertyMetadata(0, new PropertyChangedCallback(MinValue_Changed)));
-
+        [DefaultValue(0), Description("温度计的最小刻度值"), Category("我的属性")]
         public int MinValue
         {
             get { return (int)this.GetValue(MinValueProperty); }
-            set { this.SetValue(MinValueProperty, value); }
+            set { this.SetValue(MinValueProperty, value);
+            SetAttrByName("MimValue", value.ToString());
+            }
         }
 
         private static void MinValue_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -218,11 +269,13 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty MaxValueProperty =
             DependencyProperty.Register("MaxValue",
             typeof(int), typeof(Temprary), new PropertyMetadata(100, new PropertyChangedCallback(MaxValue_Changed)));
-
+        [DefaultValue(100), Description("温度计的最大刻度值"), Category("我的属性")]
         public int MaxValue
         {
             get { return (int)this.GetValue(MaxValueProperty); }
-            set { this.SetValue(MaxValueProperty, value); }
+            set { this.SetValue(MaxValueProperty, value);
+            SetAttrByName("MaxValue", value.ToString());
+            }
         }
 
         private static void MaxValue_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -239,11 +292,13 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty MyTempProperty =
             DependencyProperty.Register("MyTemp",
             typeof(int), typeof(Temprary), new PropertyMetadata(30, new PropertyChangedCallback(MyTemp_Changed)));
-
+        [DefaultValue(30), Description("温度计当前值"), Category("我的属性")]
         public int MyTemp
         {
             get { return (int)this.GetValue(MyTempProperty); }
-            set { this.SetValue(MyTempProperty, value); }
+            set { this.SetValue(MyTempProperty, value);
+            SetAttrByName("MyTemp", value.ToString());
+            }
         }
 
         private static void MyTemp_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -261,11 +316,13 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty RangeProperty =
             DependencyProperty.Register("Range",
             typeof(int), typeof(Temprary), new PropertyMetadata(10, new PropertyChangedCallback(Range_Changed)));
-
+        [Category("我的属性")]
         public int Range
         {
             get { return (int)this.GetValue(RangeProperty); }
-            set { this.SetValue(RangeProperty, value); }
+            set { this.SetValue(RangeProperty, value);
+            SetAttrByName("Range", value.ToString());
+            }
         }
 
         private static void Range_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
