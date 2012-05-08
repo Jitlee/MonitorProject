@@ -90,7 +90,56 @@ namespace MonitorSystem.ZTControls
 
         public override void SetPropertyValue()
         {
-            
+            try
+            {
+                // 2009-1-17
+                foreach (var pro in ListElementProp)
+                {
+                    string name = pro.PropertyName.Trim().ToUpper();
+                    string value = pro.PropertyValue.Trim();
+                    if (string.Compare(name, "BackColor", StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        BackColor = Common.StringToColor(value);
+                    }
+                    else
+                    {
+                        if (string.Compare(name, "Font", StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            //this.textBox1.Font = GetFontFromStr(value);
+                            ////SetMyFont(value);
+                            //Font = GetFontFromStr(value);
+
+                            //Font = value;
+                        }
+                        else
+                        {
+                            if (string.Compare(name, "ForeColor", StringComparison.OrdinalIgnoreCase) == 0)
+                            {
+                                ForeColor = Common.StringToColor(value);
+                            }
+                            else if (name == "MyScrollBars".ToUpper())
+                            {
+                                //SetScrollBar(value);
+                                MyScrollBars = value;
+
+                            }
+                            else if (name == "MyText".ToUpper())
+                            {
+                                //this.textBox1.Text = value;
+                                MyText = value;
+                            }
+
+
+                        }
+                    }
+
+
+                }
+                //this.Invalidate();
+            }
+            catch
+            {
+            }
         }
 
         public override void SetCommonPropertyValue()
@@ -117,7 +166,7 @@ namespace MonitorSystem.ZTControls
         public Color BackColor
         {
             get { return (Color)this.GetValue(BackColorProperty); }
-            set { this.SetValue(BackColorProperty, value); }
+            set { this.SetValue(BackColorProperty, value); SetAttrByName("BackColor", value); }
         }
 
         private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -138,7 +187,7 @@ namespace MonitorSystem.ZTControls
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
-            set { this.SetValue(ForeColorProperty, value); }
+            set { this.SetValue(ForeColorProperty, value); SetAttrByName("ForeColor", value); }
         }
 
         private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -158,7 +207,7 @@ namespace MonitorSystem.ZTControls
         public string MyText
         {
             get { return (string)_textBox.GetValue(TextBox.TextProperty); }
-            set { _textBox.SetValue(TextBox.TextProperty, value); }
+            set { _textBox.SetValue(TextBox.TextProperty, value); SetAttrByName("MyText", value); }
         }
 
         public static readonly DependencyProperty MyScrollBarsProperty =
@@ -168,7 +217,7 @@ namespace MonitorSystem.ZTControls
         public string MyScrollBars
         {
             get { return (string)this.GetValue(MyScrollBarsProperty); }
-            set { this.SetValue(MyScrollBarsProperty, value); }
+            set { this.SetValue(MyScrollBarsProperty, value); SetAttrByName("MyScrollBars", value); }
         }
 
         private static void MyScrollBars_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -196,7 +245,10 @@ namespace MonitorSystem.ZTControls
             SetScrollBar(MyScrollBars);
 
             _textBox.GotFocus += (o, e) => {
-                AdornerLayer.IsSelected = true; AdornerLayer.OnSelected();
+                if (null != AdornerLayer)
+                {
+                    AdornerLayer.IsSelected = true; AdornerLayer.OnSelected();
+                }
                 _textBox.TextChanged -= Text_Changed;
                 _textBox.TextChanged += Text_Changed;
             };
@@ -207,7 +259,11 @@ namespace MonitorSystem.ZTControls
 
         private void Text_Changed(object sender, TextChangedEventArgs e)
         {
-            AdornerLayer.OnSelected();
+            if (null != AdornerLayer)
+            {
+                AdornerLayer.OnSelected();
+            }
+            SetAttrByName("MyText", MyText);
         }
 
         private void SetForeground()
