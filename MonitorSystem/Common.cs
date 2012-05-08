@@ -55,5 +55,58 @@ namespace MonitorSystem
                 return Colors.White;
             }
         }
+
+        //public struct Font
+        //{
+        //    public double FontSize { get; set; }
+        //    public FontWeight Font
+        //    public FontFamily FontFamily { get; set; }
+        //    public override string ToString()
+        //    {
+        //        return base.ToString();
+        //    }
+        //}
+
+        //public Font GetFontFromStr(string strFont)
+        //{
+        //    if (strFont == null)
+        //        return new Font("宋体", 12);
+        //    // 设置字体
+        //    string Name = "宋体";
+        //    float fontSize = 12;
+        //    FontStyle style = FontStyle.Regular;
+        //    GraphicsUnit units = 0;
+        //    byte gdiCharSet = 1;
+        //    bool gdiVerti = false;
+
+        //    int idx = strFont.IndexOf("Font:");
+        //    if (idx != -1)
+        //    {
+        //        strFont = strFont.Substring(idx + 5);
+        //        strFont = strFont.Remove(strFont.Length - 1);
+        //        char[] slip = new char[] { ',' };
+        //        string[] arrStr = strFont.Split(slip);
+        //        foreach (string str in arrStr)
+        //        {
+        //            char[] slipKey = new char[] { '=' };
+        //            string[] keyVal = str.Split(slipKey);
+        //            int LEN = keyVal[0].Length;
+        //            string tmp = "Name";
+        //            int LEN2 = tmp.Length;
+        //            if (keyVal[0].Equals(" Name", StringComparison.OrdinalIgnoreCase))
+        //                Name = keyVal[1];
+        //            if (keyVal[0].Equals(" Size", StringComparison.OrdinalIgnoreCase))
+        //                fontSize = (float)(Convert.ToDouble(keyVal[1]));
+        //            if (keyVal[0] == " Units")
+        //                units = (GraphicsUnit)Convert.ToInt32(keyVal[1]);
+        //            if (keyVal[0] == " GdiCharSet")
+        //                gdiCharSet = Convert.ToByte(keyVal[1]);
+        //            if (keyVal[0] == " GdiVerticalFont")
+        //                gdiVerti = Convert.ToBoolean(keyVal[1]);
+        //        }
+        //    }
+        //    Font tmpfont = new Font(Name, fontSize, style, units, gdiCharSet, gdiVerti);
+        //    return tmpfont;
+        //}
     }
 }

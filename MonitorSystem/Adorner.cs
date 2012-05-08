@@ -92,6 +92,81 @@ namespace MonitorSystem
             }
         }
 
+        private static readonly DependencyProperty EditabledProperty =
+            DependencyProperty.Register("Editabled",
+            typeof(bool), typeof(Adorner), new PropertyMetadata(default(bool), new PropertyChangedCallback(Editabled_Changed)));
+
+        public bool Editabled
+        {
+            get { return (bool)this.GetValue(EditabledProperty); }
+            set { this.SetValue(EditabledProperty, value); }
+        }
+
+        private static void Editabled_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            Adorner adorner = (Adorner)element;
+            adorner.OnEditabledChanged((bool)e.NewValue, (bool)e.OldValue);
+        }
+
+        public void OnEditabledChanged(bool oldValue, bool newValue)
+        {
+            if (null != _backgroundAdorner
+                && null != _associatedElement)
+            {
+                if (newValue)
+                {
+                    _backgroundAdorner.Visibility = Visibility.Collapsed;
+                    _backgroundAdorner.MouseLeftButtonDown -= BackgroundAdorner_MouseLeftButtonDown;
+                    _backgroundAdorner.MouseLeftButtonUp -= BackgroundAdorner_MouseLeftButtonUp;
+
+                    _associatedElement.MouseLeftButtonDown -= BackgroundAdorner_MouseLeftButtonDown;
+                    _associatedElement.MouseLeftButtonDown += BackgroundAdorner_MouseLeftButtonDown;
+                    _associatedElement.MouseLeftButtonUp -= BackgroundAdorner_MouseLeftButtonUp;
+                    _associatedElement.MouseLeftButtonUp += BackgroundAdorner_MouseLeftButtonUp;
+                }
+                else
+                {
+                    _backgroundAdorner.Visibility = Visibility.Visible;
+
+                    _associatedElement.MouseLeftButtonDown -= BackgroundAdorner_MouseLeftButtonDown;
+                    _associatedElement.MouseLeftButtonUp -= BackgroundAdorner_MouseLeftButtonUp;
+
+                    _backgroundAdorner.MouseLeftButtonDown -= BackgroundAdorner_MouseLeftButtonDown;
+                    _backgroundAdorner.MouseLeftButtonDown += BackgroundAdorner_MouseLeftButtonDown;
+                    _backgroundAdorner.MouseLeftButtonUp -= BackgroundAdorner_MouseLeftButtonUp;
+                    _backgroundAdorner.MouseLeftButtonUp += BackgroundAdorner_MouseLeftButtonUp;
+                }
+            }
+        }
+
+        private static readonly DependencyProperty IsSelectedProperty =
+            DependencyProperty.Register("IsSelected",
+            typeof(bool), typeof(Adorner), new PropertyMetadata(default(bool), new PropertyChangedCallback(IsSelected_Changed)));
+
+        public bool IsSelected
+        {
+            get { return (bool)this.GetValue(IsSelectedProperty); }
+            set { this.SetValue(IsSelectedProperty, value); }
+        }
+
+        private static void IsSelected_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            Adorner adorner = (Adorner)element;
+            adorner.OnIsSelectedChanged((bool)e.OldValue, (bool)e.NewValue);
+        }
+
+        public void OnIsSelectedChanged(bool oldValue, bool newValue)
+        {
+            if (IsSelected)
+            {
+                SetSelect();
+            }
+            else
+            {
+                SetUnselect();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -121,25 +196,7 @@ namespace MonitorSystem
         protected override void OnGotFocus(RoutedEventArgs e)
         {
             base.OnGotFocus(e);
-
-            _contentAdorner.Opacity = 1;
-            _topLeftAdorner.Visibility = Visibility.Visible;
-            _topRightAdorner.Visibility = Visibility.Visible;
-            _bottomLeftAdorner.Visibility = Visibility.Visible;
-            _bottomRightAdorner.Visibility = Visibility.Visible;
-            if (!IsLockScale)
-            {
-                _topCenterAdorner.Visibility = Visibility.Visible;
-                _centerLeftAdorner.Visibility = Visibility.Visible;
-                _centerRightAdorner.Visibility = Visibility.Visible;
-                _bottomCenterAdorner.Visibility = Visibility.Visible;
-            }
-
-            if (_lastFocusObject != this && null != _lastFocusObject)
-            {
-                _lastFocusObject.UnFocus();
-            }
-            _lastFocusObject = this;
+            SetSelect();
         }
 
         //protected override void OnLostFocus(RoutedEventArgs e)
@@ -147,19 +204,77 @@ namespace MonitorSystem
         //    base.OnLostFocus(e);
         //}
 
-        private void UnFocus()
+        private void SetSelect()
         {
-            _contentAdorner.Opacity = 0;
-            _topLeftAdorner.Visibility = Visibility.Collapsed;
-            _topRightAdorner.Visibility = Visibility.Collapsed;
-            _bottomLeftAdorner.Visibility = Visibility.Collapsed;
-            _bottomRightAdorner.Visibility = Visibility.Collapsed;
-            if (!IsLockScale)
+            if (!IsSelected)
             {
-                _topCenterAdorner.Visibility = Visibility.Collapsed;
-                _centerLeftAdorner.Visibility = Visibility.Collapsed;
-                _centerRightAdorner.Visibility = Visibility.Collapsed;
-                _bottomCenterAdorner.Visibility = Visibility.Collapsed;
+                IsSelected = true;
+                return;
+            }
+            if (null != _contentAdorner
+                   && null != _topLeftAdorner
+                   && null != _topRightAdorner
+                   && null != _bottomLeftAdorner
+                   && null != _bottomLeftAdorner
+                   && null != _bottomRightAdorner
+                   && null != _topLeftAdorner
+                   && null != _topCenterAdorner
+                   && null != _centerLeftAdorner
+                   && null != _centerRightAdorner
+                   && null != _bottomCenterAdorner)
+            {
+                _contentAdorner.Opacity = 1;
+                _topLeftAdorner.Visibility = Visibility.Visible;
+                _topRightAdorner.Visibility = Visibility.Visible;
+                _bottomLeftAdorner.Visibility = Visibility.Visible;
+                _bottomRightAdorner.Visibility = Visibility.Visible;
+                if (!IsLockScale)
+                {
+                    _topCenterAdorner.Visibility = Visibility.Visible;
+                    _centerLeftAdorner.Visibility = Visibility.Visible;
+                    _centerRightAdorner.Visibility = Visibility.Visible;
+                    _bottomCenterAdorner.Visibility = Visibility.Visible;
+                }
+
+                if (_lastFocusObject != this && null != _lastFocusObject)
+                {
+                    _lastFocusObject.SetUnselect();
+                }
+                _lastFocusObject = this;
+            }
+        }
+
+        private void SetUnselect()
+        {
+            if (IsSelected)
+            {
+                IsSelected = false;
+                return;
+            }
+            if (null != _contentAdorner
+                && null != _topLeftAdorner
+                && null != _topRightAdorner
+                && null != _bottomLeftAdorner
+                && null != _bottomLeftAdorner
+                && null != _bottomRightAdorner
+                && null != _topLeftAdorner
+                && null != _topCenterAdorner
+                && null != _centerLeftAdorner
+                && null != _centerRightAdorner
+                && null != _bottomCenterAdorner)
+            {
+                _contentAdorner.Opacity = 0;
+                _topLeftAdorner.Visibility = Visibility.Collapsed;
+                _topRightAdorner.Visibility = Visibility.Collapsed;
+                _bottomLeftAdorner.Visibility = Visibility.Collapsed;
+                _bottomRightAdorner.Visibility = Visibility.Collapsed;
+                if (!IsLockScale)
+                {
+                    _topCenterAdorner.Visibility = Visibility.Collapsed;
+                    _centerLeftAdorner.Visibility = Visibility.Collapsed;
+                    _centerRightAdorner.Visibility = Visibility.Collapsed;
+                    _bottomCenterAdorner.Visibility = Visibility.Collapsed;
+                }
             }
         }
 
@@ -181,8 +296,7 @@ namespace MonitorSystem
         public override void OnApplyTemplate()
         {
             _backgroundAdorner = base.GetTemplateChild("BackgroundAdorner") as FrameworkElement;
-            _backgroundAdorner.MouseLeftButtonDown += BackgroundAdorner_MouseLeftButtonDown;
-            _backgroundAdorner.MouseLeftButtonUp += BackgroundAdorner_MouseLeftButtonUp;
+            OnEditabledChanged(false, Editabled);
 
             _contentAdorner = base.GetTemplateChild("ContentAdorner") as FrameworkElement;
             _contentAdorner.Opacity = 0;
@@ -266,16 +380,18 @@ namespace MonitorSystem
 
         private void BackgroundAdorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _backgroundAdorner.CaptureMouse();
-            _backgroundAdorner.MouseMove -= BackgroundAdorner_MouseMove;
-            _backgroundAdorner.MouseMove += BackgroundAdorner_MouseMove;
+            var source = sender as FrameworkElement;
+            source.CaptureMouse();
+            source.MouseMove -= BackgroundAdorner_MouseMove;
+            source.MouseMove += BackgroundAdorner_MouseMove;
             _initialPoint = e.GetPosition(_contentAdorner);
         }
 
         private void BackgroundAdorner_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _backgroundAdorner.ReleaseMouseCapture();
-            _backgroundAdorner.MouseMove -= BackgroundAdorner_MouseMove;
+            var source = sender as FrameworkElement;
+            source.ReleaseMouseCapture();
+            source.MouseMove -= BackgroundAdorner_MouseMove;
             OnSelected();
         }
 
@@ -634,7 +750,7 @@ namespace MonitorSystem
 
         #endregion
 
-        private void OnSelected()
+        public void OnSelected()
         {
             if (null != Selected)
             {
