@@ -112,11 +112,14 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
             typeof(Color), typeof(SignalSwitch), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
-
+        [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
             get { return (Color)this.GetValue(BackColorProperty); }
-            set { this.SetValue(BackColorProperty, value); }
+            set { this.SetValue(BackColorProperty, value);
+            if (ScreenElement != null)
+                ScreenElement.BackColor = value.ToString();
+            }
         }
 
         private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -133,11 +136,14 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
             typeof(Color), typeof(SignalSwitch), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
-
+        [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
-            set { this.SetValue(ForeColorProperty, value); }
+            set { this.SetValue(ForeColorProperty, value);
+            if (ScreenElement != null)
+                ScreenElement.ForeColor = value.ToString();
+            }
         }
 
         private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)

@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
 using System.ComponentModel;
+using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem.ZTControls
 {
@@ -86,7 +87,20 @@ namespace MonitorSystem.ZTControls
 
         public override void SetPropertyValue()
         {
-            
+            foreach (t_ElementProperty pro in ListElementProp)
+            {
+                string name = pro.PropertyName.ToUpper();
+                string value = pro.PropertyValue;
+                if (name == "OpenOrNot".ToUpper())
+                {
+                   
+                        if (value == "1" || value=="true")
+                            OpenOrNot = true;
+                        else
+                            OpenOrNot = false;
+                  
+                }
+            }
         }
 
         public override void SetCommonPropertyValue()
@@ -95,6 +109,9 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+
+            BackColor = Common.StringToColor(ScreenElement.BackColor);
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor); 
         }
 
         private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "OpenOrNot" };
@@ -109,11 +126,14 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
             typeof(Color), typeof(Switch), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
-
+        [DefaultValue(30), Description("背景色"), Category("外观")]
         public Color BackColor
         {
             get { return (Color)this.GetValue(BackColorProperty); }
-            set { this.SetValue(BackColorProperty, value); }
+            set { this.SetValue(BackColorProperty, value);
+            if (ScreenElement != null)
+                ScreenElement.BackColor = value.ToString();
+            }
         }
 
         private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -130,11 +150,14 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
             typeof(Color), typeof(Switch), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
-
+        [DefaultValue(30), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
-            set { this.SetValue(ForeColorProperty, value); }
+            set { this.SetValue(ForeColorProperty, value);
+            if (ScreenElement != null)
+                ScreenElement.ForeColor = value.ToString();
+            }
         }
 
         private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -155,7 +178,9 @@ namespace MonitorSystem.ZTControls
         public bool OpenOrNot
         {
             get { return (bool)this.GetValue(OpenOrNotProperty); }
-            set { this.SetValue(OpenOrNotProperty, value); }
+            set { this.SetValue(OpenOrNotProperty, value);
+                SetAttrByName("ConnectString", value);
+            }
         }
 
         private static void OpenOrNot_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)

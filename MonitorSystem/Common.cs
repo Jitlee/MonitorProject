@@ -30,10 +30,25 @@ namespace MonitorSystem
                 {
                     a = Convert.ToByte(htmlColr.Substring(baseIndex, 2), 16); baseIndex += 2;
                 }
-                r = Convert.ToByte(htmlColr.Substring(baseIndex, 2), 16);
-                g = Convert.ToByte(htmlColr.Substring(baseIndex += 2, 2), 16);
-                b = Convert.ToByte(htmlColr.Substring(baseIndex += 2, 2), 16);
+                if (htmlColr.IndexOf("RGB(") == 0)
+                {
+                    string[] rgb = htmlColr.ToUpper().Replace("RGB(", "").Replace(")", "").Split(',');
+                    if (rgb.Length == 3)//RGB(177,255,255)
+                    {
+                        r=Convert.ToByte(int.Parse(rgb[0]));
+                        g=Convert.ToByte(int.Parse(rgb[1]));
+                        b=Convert.ToByte(int.Parse(rgb[2]));
+                    }
+                }
+                else
+                {
+                    r = Convert.ToByte(htmlColr.Substring(baseIndex, 2), 16);
+                    g = Convert.ToByte(htmlColr.Substring(baseIndex += 2, 2), 16);
+                    b = Convert.ToByte(htmlColr.Substring(baseIndex += 2, 2), 16);
+                }
                 return Color.FromArgb(a, r, g, b);
+
+                //ColorTranslator.FromHtml(strColor);
             }
             catch
             {
