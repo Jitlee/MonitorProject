@@ -50,7 +50,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                 if (ep.PropertyName.Trim().ToUpper() == name.Trim().ToUpper())
                 {
                     ep.PropertyValue = value.ToString();
-                    break;
+                    //break;
                 }
             }
         }

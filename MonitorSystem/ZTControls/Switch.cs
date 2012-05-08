@@ -16,6 +16,7 @@ namespace MonitorSystem.ZTControls
 {
     public class Switch : MonitorControl
     {
+       
         public override void DesignMode()
         {
             if (!IsDesignMode)
@@ -94,7 +95,7 @@ namespace MonitorSystem.ZTControls
                 if (name == "OpenOrNot".ToUpper())
                 {
                    
-                        if (value == "1" || value=="true")
+                        if (value == "1" || value.ToUpper()=="TRUE")
                             OpenOrNot = true;
                         else
                             OpenOrNot = false;
@@ -126,7 +127,7 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
             typeof(Color), typeof(Switch), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
-        [DefaultValue(30), Description("背景色"), Category("外观")]
+        [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
             get { return (Color)this.GetValue(BackColorProperty); }
@@ -150,7 +151,7 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
             typeof(Color), typeof(Switch), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
-        [DefaultValue(30), Description("前景色"), Category("外观")]
+        [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
@@ -179,7 +180,7 @@ namespace MonitorSystem.ZTControls
         {
             get { return (bool)this.GetValue(OpenOrNotProperty); }
             set { this.SetValue(OpenOrNotProperty, value);
-                SetAttrByName("ConnectString", value);
+            SetAttrByName("OpenOrNot", value.ToString());
             }
         }
 
@@ -211,6 +212,8 @@ namespace MonitorSystem.ZTControls
             _canvas.Children.Add(_polygon);
             _canvas.Children.Add(_rect2);
             _canvas.Children.Add(_ellipse2);
+            this.Width = 20;
+            this.Height = 20;
 
             SetForeground();
 
@@ -274,7 +277,7 @@ namespace MonitorSystem.ZTControls
             }
             //g.FillRectangle(Brushes.Black, new Rectangle(this.Width / 2 - 1, 2 * this.Height / 3, 2, this.Height / 3));
             //g.FillEllipse(Brushes.Black, this.Width / 2 - circle, 2 * this.Height / 3 - circle, 2 * circle, 2 * circle);
-
+            
             _rect2.SetValue(Canvas.LeftProperty, finalSize.Width / 2d - 1d);
             _rect2.SetValue(Canvas.TopProperty, 2 * this.Height / 3);
             _rect2.SetValue(WidthProperty, 2d);

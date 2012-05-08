@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
 using System.ComponentModel;
+using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem.ZTControls
 {
@@ -89,6 +90,36 @@ namespace MonitorSystem.ZTControls
 
         public override void SetPropertyValue()
         {
+            foreach (t_ElementProperty pro in ListElementProp)
+            {
+                string name = pro.PropertyName.ToUpper();
+                string value = pro.PropertyValue;
+
+                if (name == "TrueColor".ToUpper())
+                {
+                    TrueColor = Common.StringToColor(value);
+                }
+                else if (name == "FalseColor".ToUpper())
+                {
+                    FalseColor = Common.StringToColor( value);
+                }
+                else if (name == "IsFlash".ToUpper())
+                {
+                    IsFlash = bool.Parse(value);
+                }
+                else if (name == "FlashLogic".ToUpper())
+                {
+                    FlashLogic = bool.Parse(value);
+                }
+                else if (name == "Style".ToUpper())
+                {
+                    style =int.Parse( value);
+                }
+                else if (name == "OpenOrNot".ToUpper())
+                {
+                    OpenOrNot =bool.Parse(value);
+                }
+            }
             
         }
 
@@ -165,7 +196,9 @@ namespace MonitorSystem.ZTControls
         public int style
         {
             get { return (int)this.GetValue(styleProperty); }
-            set { this.SetValue(styleProperty, value); }
+            set { this.SetValue(styleProperty, value);
+            SetAttrByName("Style", value.ToString());
+            }
         }
 
         private static void Style_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -187,7 +220,9 @@ namespace MonitorSystem.ZTControls
         public Color TrueColor
         {
             get { return (Color)this.GetValue(TrueColorProperty); }
-            set { this.SetValue(TrueColorProperty, value); }
+            set { this.SetValue(TrueColorProperty, value);
+                SetAttrByName("TrueColor", value.ToString());
+            }
         }
 
         private static void TrueColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -209,7 +244,9 @@ namespace MonitorSystem.ZTControls
         public Color FalseColor
         {
             get { return (Color)this.GetValue(FalseColorProperty); }
-            set { this.SetValue(FalseColorProperty, value); }
+            set { this.SetValue(FalseColorProperty, value);
+                SetAttrByName("FalseColor", value.ToString());
+            }
         }
 
         private static void FalseColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -230,7 +267,9 @@ namespace MonitorSystem.ZTControls
         public bool OpenOrNot
         {
             get { return (bool)this.GetValue(OpenOrNotProperty); }
-            set { this.SetValue(OpenOrNotProperty, value); }
+            set { this.SetValue(OpenOrNotProperty, value);
+                SetAttrByName("OpenOrNot", value.ToString());
+            }
         }
 
         private static void OpenOrNot_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -251,7 +290,9 @@ namespace MonitorSystem.ZTControls
         public bool IsFlash
         {
             get { return (bool)this.GetValue(IsFlashProperty); }
-            set { this.SetValue(IsFlashProperty, value); }
+            set { this.SetValue(IsFlashProperty, value);
+            SetAttrByName("IsFlash", value.ToString());
+            }
         }
 
         private static void IsFlash_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -272,7 +313,9 @@ namespace MonitorSystem.ZTControls
         public bool FlashLogic
         {
             get { return (bool)this.GetValue(FlashLogicProperty); }
-            set { this.SetValue(FlashLogicProperty, value); }
+            set { this.SetValue(FlashLogicProperty, value);
+                SetAttrByName("FlashLogic", value.ToString());
+            }
         }
 
         private static void FlashLogic_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
