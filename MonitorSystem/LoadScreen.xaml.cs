@@ -404,6 +404,12 @@ namespace MonitorSystem
                     SetEletemt(mPubText, obj, eleStae, listObj);
                     return mPubText;
                     //break;
+                case "InputTextBox":
+                    InputTextBox mInputTextBox = new InputTextBox();
+                    mInputTextBox.MyText = obj.TxtInfo;
+                    SetEletemt(mInputTextBox, obj, eleStae, listObj);
+                    return mInputTextBox;
+                    //break;
                 case "MonitorCur":
                     MonitorCur mPubCur = new MonitorCur();
                     SetEletemt(mPubCur, obj, eleStae, listObj);
@@ -504,6 +510,7 @@ namespace MonitorSystem
         {
             mControl.Selected += (o, e) =>
             {
+                PropertyMain.Instance.ControlPropertyGrid.SelectedObject = null;
                 PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = mControl.BrowsableProperties;
                 PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl.GetRootControl(); 
             };
