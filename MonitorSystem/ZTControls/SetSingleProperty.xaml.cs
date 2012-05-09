@@ -99,6 +99,21 @@ namespace MonitorSystem.ZTControls
             }
         }
 
+        private t_Device _selectedDevices;
+
+        public t_Device SelectedDevices
+        {
+            get
+            {
+                return _selectedDevices;
+            }
+            set
+            {
+                _selectedDevices = value;
+                RaisePropertyChanged("SelectedDevices");
+            }
+        }
+
         private ObservableCollection<t_Channel> _channels;
 
         public ObservableCollection<t_Channel> Channels
@@ -116,14 +131,21 @@ namespace MonitorSystem.ZTControls
 
         public void Init()
         {
-            var v = LoadScreen._DataContext.t_Devices.Where(a => a.DeviceID == _DeviceID);
-            if (v.Count() > 0)
-            {
-                cbDeviceID.SelectedItem = v.First();
-            }
-            //通道
-            cbLayer.SelectedIndex = _LevelNo - 1;
+            //var v = LoadScreen._DataContext.t_Devices.Where(a => a.DeviceID == _DeviceID);
+
+            //if (v.Count() > 0)
+            //{
+            //    cbDeviceID.SelectedItem = v.First();
+            //}
+            ////通道
+            //cbLayer.SelectedIndex = _LevelNo - 1;
             txtBDS.Text = _ComputeStr;
+            var v = _devices.FirstOrDefault(a => a.DeviceID == _DeviceID);
+            if (null != v)
+            {
+                SelectedDevices = v;
+            }
+            cbLayer.SelectedIndex = _LevelNo - 1;
         }
 
         private void cbDeviceID_SelectionChanged(object sender, SelectionChangedEventArgs e)

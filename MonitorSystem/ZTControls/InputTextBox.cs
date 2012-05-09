@@ -30,6 +30,7 @@ namespace MonitorSystem.ZTControls
                 menuItem.Click += PropertyMenuItem_Click;
                 menu.Items.Add(menuItem);
                 AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
+                this.SetValue(ContextMenuService.ContextMenuProperty, menu);
                 AdornerLayer.Editabled = true;
             }
         }
@@ -40,6 +41,7 @@ namespace MonitorSystem.ZTControls
             {
                 AdornerLayer.Selected -= OnSelected;
                 AdornerLayer.ClearValue(ContextMenuService.ContextMenuProperty);
+                this.ClearValue(ContextMenuService.ContextMenuProperty);
                 AdornerLayer.Dispose();
                 AdornerLayer = null;
             }

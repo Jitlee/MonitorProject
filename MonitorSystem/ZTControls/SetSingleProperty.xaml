@@ -19,7 +19,9 @@
         </Grid.RowDefinitions>
 
         <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"   Text="关联设备："  />
-        <ComboBox Height="23" ItemsSource="{Binding Devices}" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" Name="cbDeviceID"  Width="150" SelectionChanged="cbDeviceID_SelectionChanged" />
+        <ComboBox Height="23" ItemsSource="{Binding Devices}" HorizontalAlignment="Left"
+                  SelectedItem="{Binding SelectedDevices, Mode=TwoWay}"
+                  Grid.Row="0" Grid.Column="1" Name="cbDeviceID"  Width="150" SelectionChanged="cbDeviceID_SelectionChanged" />
 
 
         <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"   Text="关联通道："  />
