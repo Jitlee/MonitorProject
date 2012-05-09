@@ -309,8 +309,8 @@ namespace MonitorSystem.ZTControls
             SetText();
             PaintBackground();
 
-            this.Width = 40;
-            this.Height = 20;
+            //this.Width = 40;
+            //this.Height = 20;
         }
 
         private void SetText()
@@ -590,12 +590,12 @@ namespace MonitorSystem.ZTControls
             _pointerTransform.Rotation = angle;
         }
 
-        //protected override Size MeasureOverride(Size availableSize)
-        //{
-        //    if (availableSize.Height == 0 && availableSize.Width == 0)
-        //        return new Size(40, 20);
-        //    Paint(availableSize);
-        //    return base.MeasureOverride(availableSize);
-        //}
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            //if (availableSize.Height == 0 && availableSize.Width == 0)
+            //    return new Size(40, 20);
+            Paint(availableSize);
+            return base.MeasureOverride(availableSize);
+        }
     }
 }
