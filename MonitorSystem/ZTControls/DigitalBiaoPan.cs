@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
 using System.ComponentModel;
+using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem.ZTControls
 {
@@ -89,7 +90,24 @@ namespace MonitorSystem.ZTControls
 
         public override void SetPropertyValue()
         {
-            
+            foreach (t_ElementProperty pro in ListElementProp)
+            {
+                string name = pro.PropertyName.ToUpper();
+                string value = pro.PropertyValue;
+
+                if (name == "MyNum".ToUpper())
+                {
+                    MyNum = value;
+                }
+                else if (name == "RadixLen".ToUpper())
+                {
+                    RadixLen = int.Parse(value);
+                }
+                else if (name == "IntLen".ToUpper())
+                {
+                    IntLen = int.Parse(value);
+                }
+            }
         }
 
         public override void SetCommonPropertyValue()
@@ -98,6 +116,9 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor);
+            BackColor = Common.StringToColor(ScreenElement.BackColor); 
         }
 
         private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "RadixLen", "IntLen", "MyNum" };
@@ -116,7 +137,10 @@ namespace MonitorSystem.ZTControls
         public Color BackColor
         {
             get { return (Color)this.GetValue(BackColorProperty); }
-            set { this.SetValue(BackColorProperty, value); }
+            set { this.SetValue(BackColorProperty, value);
+            if (ScreenElement != null)
+                ScreenElement.BackColor = value.ToString();
+            }
         }
 
         private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -137,7 +161,10 @@ namespace MonitorSystem.ZTControls
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
-            set { this.SetValue(ForeColorProperty, value); }
+            set { this.SetValue(ForeColorProperty, value);
+            if (ScreenElement != null)
+                ScreenElement.ForeColor = value.ToString();
+            }
         }
 
         private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -158,7 +185,9 @@ namespace MonitorSystem.ZTControls
         public string MyNum
         {
             get { return (string)this.GetValue(MyNumProperty); }
-            set { this.SetValue(MyNumProperty, value); }
+            set { this.SetValue(MyNumProperty, value);
+            SetAttrByName("MyNum", value);
+            }
         }
 
         private static void MyNum_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -179,7 +208,9 @@ namespace MonitorSystem.ZTControls
         public int RadixLen
         {
             get { return (int)this.GetValue(RadixLenProperty); }
-            set { this.SetValue(RadixLenProperty, value); }
+            set { this.SetValue(RadixLenProperty, value);
+                    SetAttrByName("RadixLen", value);
+            }
         }
 
         private static void RadixLen_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -200,7 +231,9 @@ namespace MonitorSystem.ZTControls
         public int IntLen
         {
             get { return (int)this.GetValue(IntLenProperty); }
-            set { this.SetValue(IntLenProperty, value); }
+            set { this.SetValue(IntLenProperty, value);
+                    SetAttrByName("IntLen", value);
+            }
         }
 
         private static void IntLen_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)

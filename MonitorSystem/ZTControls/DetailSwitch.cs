@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
+using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem.ZTControls
 {
@@ -90,7 +91,19 @@ namespace MonitorSystem.ZTControls
 
         public override void SetPropertyValue()
         {
-            
+            foreach (t_ElementProperty pro in ListElementProp)
+            {
+                string name = pro.PropertyName.ToUpper();
+                string value = pro.PropertyValue;
+                if (name == "OpenOrNot".ToUpper())
+                {
+                    OpenOrNot = bool.Parse(value);
+                }
+                else if (name == "IsRightDirect".ToUpper())
+                {
+                    IsRightDirect = bool.Parse(value);
+                }
+            }
         }
 
         public override void SetCommonPropertyValue()
@@ -99,9 +112,12 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor); 
         }
 
-        private string[] _browsableProperties = new[] { "Location", "Size", "Font", "ForeColor", "OpenOrNot", "IsRightDirect", "Transparent" };
+        private string[] _browsableProperties = new[] { "Location", "Size", "Font", "ForeColor", 
+            "OpenOrNot", "IsRightDirect", "Transparent" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -134,11 +150,16 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
             typeof(Color), typeof(DetailSwitch), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
-
+        [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
-            set { this.SetValue(ForeColorProperty, value); }
+            set
+            {
+                this.SetValue(ForeColorProperty, value);
+                if (ScreenElement != null)
+                    ScreenElement.ForeColor = value.ToString();
+            }
         }
 
         private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -159,7 +180,9 @@ namespace MonitorSystem.ZTControls
         public bool OpenOrNot
         {
             get { return (bool)this.GetValue(OpenOrNotProperty); }
-            set { this.SetValue(OpenOrNotProperty, value); }
+            set { this.SetValue(OpenOrNotProperty, value);
+                SetAttrByName("OpenOrNot", value.ToString());
+            }
         }
 
         private static void OpenOrNot_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -180,7 +203,9 @@ namespace MonitorSystem.ZTControls
         public bool IsRightDirect
         {
             get { return (bool)this.GetValue(IsRightDirectProperty); }
-            set { this.SetValue(IsRightDirectProperty, value); }
+            set { this.SetValue(IsRightDirectProperty, value);
+                SetAttrByName("IsRightDirect", value.ToString());
+            }
         }
 
         private static void IsRightDirect_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)

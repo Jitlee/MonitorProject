@@ -10,6 +10,8 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
 using MonitorSystem.MonitorSystemGlobal;
+using MonitorSystem.Web.Moldes;
+using System.ComponentModel;
 
 namespace MonitorSystem.ZTControls
 {
@@ -90,7 +92,32 @@ namespace MonitorSystem.ZTControls
 
         public override void SetPropertyValue()
         {
-            
+            foreach (t_ElementProperty pro in ListElementProp)
+            {
+                string name = pro.PropertyName.ToUpper();
+                string value = pro.PropertyValue;
+
+                if (name == "Title".ToUpper())
+                {
+                    Title = value;
+                }
+                else if (name == "MaxValue".ToUpper())
+                {
+                    MaxValue =int.Parse( value);
+                }
+                else if (name == "MinValue".ToUpper())
+                {
+                    MinValue = int.Parse(value);
+                }
+                else if (name == "CurrenValue".ToUpper())
+                {
+                    CurrenValue = int.Parse(value);
+                }
+                //else if (name == "MyScale".ToUpper())
+                //{
+                //    MyScale = int.Parse(value);
+                //}
+            }
         }
 
         public override void SetCommonPropertyValue()
@@ -99,6 +126,9 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor);
+            BackColor = Common.StringToColor(ScreenElement.BackColor); 
         }
 
         private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "MinValue", "MaxValue", "CurrenValue", "Title"};
@@ -117,7 +147,11 @@ namespace MonitorSystem.ZTControls
         public Color BackColor
         {
             get { return (Color)this.GetValue(BackColorProperty); }
-            set { this.SetValue(BackColorProperty, value); }
+            set { this.SetValue(BackColorProperty, value);
+            
+                if (ScreenElement != null)
+                ScreenElement.BackColor = value.ToString();
+            }
         }
 
         private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -138,7 +172,10 @@ namespace MonitorSystem.ZTControls
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
-            set { this.SetValue(ForeColorProperty, value); }
+            set { this.SetValue(ForeColorProperty, value); 
+                    if(ScreenElement !=null)
+                        ScreenElement.ForeColor=value.ToString();
+            }
         }
 
         private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -155,11 +192,13 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty MinValueProperty =
             DependencyProperty.Register("MinValue",
             typeof(int), typeof(DLBiaoPan), new PropertyMetadata(0, new PropertyChangedCallback(MinValue_Changed)));
-
+        [DefaultValue(0), Description("表盘的最小刻度值"), Category("我的属性")]
         public int MinValue
         {
             get { return (int)this.GetValue(MinValueProperty); }
-            set { this.SetValue(MinValueProperty, value); }
+            set { this.SetValue(MinValueProperty, value);
+                    SetAttrByName("MinValue", value);
+            }
         }
 
         private static void MinValue_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -176,11 +215,13 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty MaxValueProperty =
             DependencyProperty.Register("MaxValue",
             typeof(int), typeof(DLBiaoPan), new PropertyMetadata(100, new PropertyChangedCallback(MaxValue_Changed)));
-
+        [DefaultValue(100), Description("表盘的最大刻度值"), Category("我的属性")]
         public int MaxValue
         {
             get { return (int)this.GetValue(MaxValueProperty); }
-            set { this.SetValue(MaxValueProperty, value); }
+            set { this.SetValue(MaxValueProperty, value);
+                    SetAttrByName("MaxValue", value);
+            }
         }
 
         private static void MaxValue_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -197,11 +238,13 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty CurrenValueProperty =
             DependencyProperty.Register("CurrenValue",
             typeof(int), typeof(DLBiaoPan), new PropertyMetadata(50, new PropertyChangedCallback(CurrenValue_Changed)));
-
+        [DefaultValue(50), Description("表盘当前值"), Category("我的属性")]
         public int CurrenValue
         {
             get { return (int)this.GetValue(CurrenValueProperty); }
-            set { this.SetValue(CurrenValueProperty, value); }
+            set { this.SetValue(CurrenValueProperty, value);
+                    SetAttrByName("CurrenValue", value);
+            }
         }
 
         private static void CurrenValue_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -217,11 +260,13 @@ namespace MonitorSystem.ZTControls
 
         private static readonly DependencyProperty TitleProperty =  DependencyProperty.Register("Title",
             typeof(string), typeof(DLBiaoPan), new PropertyMetadata("A", new PropertyChangedCallback(Title_Changed)));
-
+        [DefaultValue("A"), Description("表盘下面的单位"), Category("我的属性")]
         public string Title
         {
             get { return (string)this.GetValue(TitleProperty); }
-            set { this.SetValue(TitleProperty, value); }
+            set { this.SetValue(TitleProperty, value);
+                SetAttrByName("Title", value);
+            }
         }
 
         private static void Title_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -263,6 +308,9 @@ namespace MonitorSystem.ZTControls
 
             SetText();
             PaintBackground();
+
+            this.Width = 40;
+            this.Height = 20;
         }
 
         private void SetText()
@@ -542,10 +590,12 @@ namespace MonitorSystem.ZTControls
             _pointerTransform.Rotation = angle;
         }
 
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            Paint(availableSize);
-            return base.MeasureOverride(availableSize);
-        }
+        //protected override Size MeasureOverride(Size availableSize)
+        //{
+        //    if (availableSize.Height == 0 && availableSize.Width == 0)
+        //        return new Size(40, 20);
+        //    Paint(availableSize);
+        //    return base.MeasureOverride(availableSize);
+        //}
     }
 }
