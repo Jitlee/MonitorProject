@@ -138,8 +138,7 @@ namespace MonitorSystem.ZTControls
         {
             get { return (Color)this.GetValue(BackColorProperty); }
             set { this.SetValue(BackColorProperty, value);
-            if (ScreenElement != null)
-                ScreenElement.BackColor = value.ToString();
+            
             }
         }
 
@@ -161,8 +160,8 @@ namespace MonitorSystem.ZTControls
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
-            set { this.SetValue(ForeColorProperty, value);
-            if (ScreenElement != null)
+            set { this.SetValue(ForeColorProperty, value); 
+                if (ScreenElement != null)
                 ScreenElement.ForeColor = value.ToString();
             }
         }

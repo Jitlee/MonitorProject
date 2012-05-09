@@ -15,7 +15,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <toolkit:WrapPanel  Height="100"  Background="#e5eff8" Grid.Row="1" Name="wrapPanel1" >
-                <CheckBox  Canvas.Left="13" Canvas.Top="10" Content="组态" Height="21" Name="checkBox1" Checked="zt_Checked" Unchecked="zt_Unchecked"  IsEnabled="False" />
+                <CheckBox  Canvas.Left="13" Canvas.Top="10" Content="组态" Height="21" Name="CBIsztControl" Checked="zt_Checked" Unchecked="zt_Unchecked"  IsEnabled="False" />
                 <Button Padding="5"  Content="保存" Height="23" Name="btnSave" Width="75" Click="btnSave_Click" />
                 <Button x:Name="SenceMenuButton" Content="所有场景"/>
                 <menu:PopupMenu LeftClickElements="SenceMenuButton" x:Name="SencePopupMenu"/>

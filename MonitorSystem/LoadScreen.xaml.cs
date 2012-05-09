@@ -95,7 +95,7 @@ namespace MonitorSystem
             double mLeft = 800;
             fwProperty.SetValue(Canvas.TopProperty, mtop);
             fwProperty.SetValue(Canvas.LeftProperty, mLeft);
-            checkBox1.IsEnabled = true;
+            CBIsztControl.IsEnabled = true;
         }
 
         #region 加载数据 完成处理 当前共五项 t_Element_Library、t_ElementProperty_Library、t_Screen、t_MonitorSystemParam、t_ControlProperty
@@ -321,7 +321,10 @@ namespace MonitorSystem
         #endregion
 
         #region 加载场景
-
+        /// <summary>
+        /// 当前屏幕所有元素,已保存的元素
+        /// </summary>
+        List<t_Element> ScreenAllElement = new List<t_Element>();
         /// <summary>
         /// 加载场景
         /// </summary>
@@ -329,31 +332,36 @@ namespace MonitorSystem
         private void LoadScreenData(t_Screen _Screen)
         {
             tbWait.Visibility = Visibility.Visible;
+            ScreenAllElement.Clear();
 
             csScreen.Children.Clear();
+            lblShowMsg.Content = _Screen.ScreenName;
+
             string url = string.Format("{0}/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
             BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Absolute));
+
             ImageBrush imgB = new ImageBrush();
-            imgB.ImageSource = bitmap;
-           // imgB.Stretch = Stretch.Uniform;
+            imgB.ImageSource = bitmap;           
             imgB.Stretch = Stretch.None;
             imgB.AlignmentX = AlignmentX.Left;
             imgB.AlignmentY = AlignmentY.Top;
-
             csScreen.Background = imgB;
-
-            lblShowMsg.Content = _Screen.ScreenName;
-
+            
             RC.SetValue(Canvas.ZIndexProperty, 1000);
             RC.Stroke = new SolidColorBrush(Colors.Black);
             csScreen.Children.Add(RC);
-
+            //设置当前
+            _CurrentScreen = _Screen;
             //加载元素
             _DataContext.Load(_DataContext.GetT_ElementQuery().Where(a => a.ScreenID == _Screen.ScreenID),
                 LoadElementCompleted, _Screen.ScreenID);
 
         }
 
+        /// <summary>
+        /// 加载元素
+        /// </summary>
+        /// <param name="result"></param>
         private void LoadElementCompleted(LoadOperation<t_Element> result)
         {
             if (result.HasError)
@@ -365,7 +373,11 @@ namespace MonitorSystem
                 LoadElementPropertiesCompleted, result.UserState);
            
         }
-
+       
+        /// <summary>
+        /// 加载，元素属性完成
+        /// </summary>
+        /// <param name="result"></param>
         private void LoadElementPropertiesCompleted(LoadOperation<t_ElementProperty> result)
         {
             if (result.HasError)
@@ -378,11 +390,20 @@ namespace MonitorSystem
             {
                 var list = _DataContext.t_ElementProperties.Where(a => a.ElementID == el.ElementID);
                 ShowElement(el, ElementSate.Save, list.ToList());
+                ScreenAllElement.Add(el);
             }
             tbWait.Visibility = Visibility.Collapsed;
         }
         #endregion
 
+       
+        /// <summary>
+        /// 显示元素
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="eleStae"></param>
+        /// <param name="listObj"></param>
+        /// <returns></returns>
         private MonitorControl ShowElement(t_Element obj, ElementSate eleStae, List<t_ElementProperty> listObj)
         { 
             
@@ -519,12 +540,17 @@ namespace MonitorSystem
             mControl.ListElementProp = listObj;
             mControl.ElementState = eleStae;
 
-            
+            if (eleStae == ElementSate.Save)
+            {
+                mControl.Name = obj.ElementID.ToString();
+            }
             mControl.SetPropertyValue();
             mControl.SetCommonPropertyValue();
             //添加到场景
             csScreen.Children.Add(mControl);
-            //mControl.DesignMode();
+
+            if (CBIsztControl.IsChecked.Value)
+                mControl.DesignMode();
         }
 
         /// <summary>
@@ -642,7 +668,7 @@ namespace MonitorSystem
 
         private void Content_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (IsDown &&  checkBox1.IsChecked.Value)
+            if (IsDown && CBIsztControl.IsChecked.Value)
             {
                 double mMagrinX = mStartPoint.X;
                 double mMagrinY = mStartPoint.Y - 35;
@@ -708,6 +734,8 @@ namespace MonitorSystem
         int AddElementNumber = 0;
         private void SaveElement()
         {
+            //循环所有存在元素
+            listMonitorAddElement.Clear();
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var ui = csScreen.Children[i];
@@ -748,6 +776,28 @@ namespace MonitorSystem
                     }
                 }
             }
+
+            //循环已添加的属性
+            foreach (t_Element mEle in ScreenAllElement)
+            {
+               var v= csScreen.FindName(mEle.ElementID.ToString());
+               if (v == null)
+               {
+                   _DataContext.t_Elements.Remove(mEle);
+                   //移出属性
+                   var vPro = _DataContext.t_ElementProperties.Where(a => a.ElementID == mEle.ElementID);
+                   if (vPro.Count() > 0)
+                   {
+                       List<t_ElementProperty> listEp=vPro.ToList();
+                       foreach (t_ElementProperty ep in listEp)
+                       {
+                           //_DataContext.t_ElementProperties.d
+                           _DataContext.t_ElementProperties.Remove(ep);
+                       }
+                   }
+               }
+            }
+
             if (listMonitorAddElement.Count > 0)
             {
                 AddElementNumber = 0;
@@ -758,7 +808,7 @@ namespace MonitorSystem
             }
             else
             {
-                _DataContext.SubmitChanges();
+                _DataContext.SubmitChanges(SubmitCompleted, null);
             }
         }
 
@@ -769,6 +819,11 @@ namespace MonitorSystem
         private void SubmitCompleted(SubmitOperation result)
         {
            EntityChangeSet obj= result.ChangeSet;
+           if (obj.AddedEntities.Count == 0)
+           {
+               MessageBox.Show("保存成功！", "温馨提示", MessageBoxButton.OK);
+               return;
+           }
            foreach (var v in obj.AddedEntities)
            {
                if (v is t_Element)
@@ -776,7 +831,7 @@ namespace MonitorSystem
                    t_Element vobj = (t_Element)v;
                    foreach (t_ElementProperty ep in listMonitorAddElement[AddElementNumber].ListElementProp)
                    {
-                       ep.ElementID = vobj.ElementID;
+                        ep.ElementID = vobj.ElementID;
                        _DataContext.t_ElementProperties.Add(ep);
                    }
                    _DataContext.SubmitChanges(SubmitPropertyCompleted,null);
@@ -793,6 +848,7 @@ namespace MonitorSystem
             if (listMonitorAddElement.Count <= AddElementNumber)
             {
                 LoadScreenData(_CurrentScreen);
+                MessageBox.Show("保存成功！","温馨提示",MessageBoxButton.OK);
                 return;
             }
             t_Element elem = listMonitorAddElement[AddElementNumber].ScreenElement;
