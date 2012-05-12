@@ -37,6 +37,8 @@ namespace MonitorSystem
         /// </summary>
         t_Screen _CurrentScreen;
 
+        static LoadScreen _instance = null;
+
         /// <summary>
         /// 系统参数
         /// </summary>
@@ -49,6 +51,12 @@ namespace MonitorSystem
             //实例化
             Init();
             _SenceCommand = new DelegateCommand<t_Screen>(LoadSence);
+            _instance = this;
+        }
+
+        public static void Load(t_Screen screen)
+        {
+            _instance.LoadScreenData(screen);
         }
 
         #region 实例化
@@ -480,6 +488,11 @@ namespace MonitorSystem
                     mPubText.MyText = obj.TxtInfo;
                     SetEletemt(mPubText, obj, eleStae, listObj);
                     return mPubText;
+                    //break;
+                case "ColorText":
+                    ColorText mColorText = new ColorText();
+                    SetEletemt(mColorText, obj, eleStae, listObj);
+                    return mColorText;
                     //break;
                 case "InputTextBox":
                     InputTextBox mInputTextBox = new InputTextBox();

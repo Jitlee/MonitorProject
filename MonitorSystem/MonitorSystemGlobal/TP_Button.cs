@@ -120,7 +120,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// 将对象的ScreenElement的ChildScreenID解析为场景 
         /// </summary>
         /// <returns></returns>
-        public ObservableCollection<ScreenAddShowName> GetChildScreenObj()
+        public override ObservableCollection<ScreenAddShowName> GetChildScreenObj()
         {
             string mScreenID = base.ScreenElement.ChildScreenID;
             if (mScreenID == "0")
@@ -152,7 +152,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// 设置属性
         /// </summary>
         /// <param name="litobj"></param>
-        public void SetChildScreen(ObservableCollection<ScreenAddShowName> litobj)
+        public override void SetChildScreen(ObservableCollection<ScreenAddShowName> litobj)
         {
             string strScreen = "";
             if (litobj == null)

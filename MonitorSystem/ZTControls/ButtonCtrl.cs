@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonitorSystem.MonitorSystemGlobal;
+using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem.ZTControls
 {
@@ -48,30 +51,86 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性设置
-        SetSingleProperty tpp = new SetSingleProperty();
+
+        /// <summary>
+        /// 设置属性
+        /// </summary>
+        /// <param name="litobj"></param>
+        public override void SetChildScreen(ObservableCollection<ScreenAddShowName> litobj)
+        {
+            string strScreen = "";
+            if (litobj == null)
+                strScreen = "0";
+            else if (litobj.Count == 0)
+                strScreen = "0";
+            else
+            {
+                foreach (ScreenAddShowName obj in litobj)
+                {
+                    strScreen += string.Format("{0}#{1};", obj.ScreenShowName, obj.Screen.ScreenID);
+                }
+            }
+            ScreenElement.ChildScreenID = strScreen;
+        }
+
+        /// <summary>
+        /// 将对象的ScreenElement的ChildScreenID解析为场景 
+        /// </summary>
+        /// <returns></returns>
+        public override ObservableCollection<ScreenAddShowName> GetChildScreenObj()
+        {
+            string mScreenID = base.ScreenElement.ChildScreenID;
+            if (mScreenID == "0")
+            {
+                return null;
+            }
+            ObservableCollection<ScreenAddShowName> listScreenShow = new ObservableCollection<ScreenAddShowName>();
+            string[] attrS = mScreenID.Split(';');
+            foreach (string str in attrS)
+            {
+                mScreenID = str.Replace(";", "");
+                string[] attr = mScreenID.Split('#');
+                if (attr.Length == 2)
+                {
+                    int Scrennid = Convert.ToInt32(attr[1]);
+                    t_Screen t = LoadScreen.listScreen.Single(a => a.ScreenID == Scrennid);
+
+                    ScreenAddShowName mShow = new ScreenAddShowName();
+                    mShow.ScreenName = t.ScreenName;
+                    mShow.Screen = t;
+                    mShow.ScreenShowName = attr[0];
+                    listScreenShow.Add(mShow);
+                }
+            }
+            return listScreenShow;
+        }
+
+        //SetSingleProperty tpp = new SetSingleProperty();
         private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            tpp = new SetSingleProperty();
+            //tpp = new SetSingleProperty();
 
-            tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
-            tpp.DeviceID = this.ScreenElement.DeviceID.Value;
-            tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
-            tpp.LevelNo = this.ScreenElement.LevelNo.Value;
-            tpp.ComputeStr = this.ScreenElement.ComputeStr;
-            tpp.Init();
+            //tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
+            //tpp.DeviceID = this.ScreenElement.DeviceID.Value;
+            //tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
+            //tpp.LevelNo = this.ScreenElement.LevelNo.Value;
+            //tpp.ComputeStr = this.ScreenElement.ComputeStr;
+            //tpp.Init();
+            //tpp.Show();
+            var tpp = new TP_ButtonSetProperty(this);
             tpp.Show();
         }
 
-        protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (tpp.IsOK)
-            {
-                this.ScreenElement.DeviceID = tpp.DeviceID;
-                this.ScreenElement.ChannelNo = tpp.ChanncelID;
-                this.ScreenElement.LevelNo = tpp.LevelNo;
-                this.ScreenElement.ComputeStr = tpp.ComputeStr;
-            }
-        }
+        //protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        //{
+        //    if (tpp.IsOK)
+        //    {
+        //        this.ScreenElement.DeviceID = tpp.DeviceID;
+        //        this.ScreenElement.ChannelNo = tpp.ChanncelID;
+        //        this.ScreenElement.LevelNo = tpp.LevelNo;
+        //        this.ScreenElement.ComputeStr = tpp.ComputeStr;
+        //    }
+        //}
 
         #endregion
 
@@ -332,7 +391,7 @@ namespace MonitorSystem.ZTControls
         }
 
         public static readonly DependencyProperty BackImageNameProperty =
-           DependencyProperty.Register("BackImageName", typeof(string), typeof(ButtonCtrl), new PropertyMetadata("1", new PropertyChangedCallback(BackImageName_Changed)));
+           DependencyProperty.Register("BackImageName", typeof(string), typeof(ButtonCtrl), new PropertyMetadata("", new PropertyChangedCallback(BackImageName_Changed)));
 
         [DefaultValue(""), Description("背景图片名字\r\n注意：\r\n背景图片一定要放在程序\r\n所在目录的\\PIC\\ButtonImage下\r\n必须带后缀名"), Category("我的属性")]
         public string BackImageName
@@ -357,6 +416,8 @@ namespace MonitorSystem.ZTControls
         private Image _image = new Image();
         private Button _button = new Button();
         private Grid _grid = new Grid();
+        private ContextMenu _menu = new ContextMenu();
+        private readonly DelegateCommand<t_Screen> _command;
 
         public ButtonCtrl()
         {
@@ -372,6 +433,26 @@ namespace MonitorSystem.ZTControls
             PaintBackground();
 
             SetTextImageRelation();
+
+            _button.Click += Button_Click;
+
+            _command = new DelegateCommand<t_Screen>(ShowName);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var list = GetChildScreenObj();
+            _menu.Items.Clear();
+            foreach (var screen in list)
+            {
+                _menu.Items.Add(new MenuItem() { Header = screen.ScreenName, Command = _command, CommandParameter = screen.Screen, });
+            }
+            _menu.IsOpen = true;
+        }
+
+        private void ShowName(t_Screen screen)
+        {
+            LoadScreen.Load(screen);
         }
 
         private void SetTextImageRelation()

@@ -66,6 +66,7 @@
     <Content Include="MonitorSystemTestPage.aspx" />
     <Content Include="MonitorSystemTestPage.html" />
     <Content Include="Pic\bg1.jpg" />
+    <Content Include="Pic\jump.jpg" />
     <Content Include="Pic\Near2.jpg" />
     <Content Include="Silverlight.js" />
     <Content Include="test1.aspx" />

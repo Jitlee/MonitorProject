@@ -263,7 +263,7 @@ namespace MonitorSystem.ZTControls
         }
 
         private static readonly DependencyProperty MyScaleProperty = DependencyProperty.Register("MyScale",
-            typeof(String), typeof(DigitalBiaoPan), new PropertyMetadata(1d, new PropertyChangedCallback(MyScale_Changed)));
+            typeof(String), typeof(DigitalBiaoPan), new PropertyMetadata("1", new PropertyChangedCallback(MyScale_Changed)));
         private string myScale;
         [DefaultValue("1"), Description("显示比例"), Category("我的属性")]
         public String MyScale
