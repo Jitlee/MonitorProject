@@ -68,6 +68,7 @@
     <Content Include="Pic\bg1.jpg" />
     <Content Include="Pic\Near2.jpg" />
     <Content Include="Silverlight.js" />
+    <Content Include="test1.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -87,12 +88,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Monitor.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Servers\Analysis.cs" />
+    <Compile Include="Servers\Paser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servers\MonitorServers.cs" />
     <Compile Include="Servers\MonitorServers.metadata.cs" />
     <Compile Include="Servers\MonitorServers.metadataC.cs" />
     <Compile Include="Servers\MonitorServersC.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test1.aspx.cs">
+      <DependentUpon>test1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="test1.aspx.designer.cs">
+      <DependentUpon>test1.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

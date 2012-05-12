@@ -19,6 +19,18 @@ namespace MonitorSystem.ZTControls
     /// </summary>
     public class SignalSwitch: MonitorControl
     {
+        public override void SetChannelValue(float fValue)
+        {
+            OpenOrNot = Convert.ToBoolean(fValue);
+            if (IsFlash)
+            {
+                if (OpenOrNot == FlashLogic)
+                {
+                    m_bFlashTimers = !m_bFlashTimers;
+                }
+            }
+        }
+
         public override void DesignMode()
         {
             if (!IsDesignMode)

@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using MonitorSystem.ZTControls;
 using SL4PopupMenu;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace MonitorSystem
 {
@@ -116,6 +117,9 @@ namespace MonitorSystem
                 }
             }
             SetDefultScreen();
+            //初使化定时器
+            timerRefrshValue.Interval = new TimeSpan(0, 0, 5);
+            timerRefrshValue.Tick += new EventHandler(timer_Tick);
             if (_CurrentScreen != null)
             {
                 LoadScreenData(_CurrentScreen);
@@ -303,11 +307,58 @@ namespace MonitorSystem
         }
         #endregion
 
+        #region 定时更新值
+        /// <summary>
+        /// 定时更新值
+        /// </summary>
+        DispatcherTimer timerRefrshValue = new DispatcherTimer();
+
+        protected void timer_Tick(object sender, EventArgs e)
+        {
+            LoadChanncelValue();
+        }
+
+        private void LoadChanncelValue()
+        {
+            EntityQuery<V_ScreenMonitorValue>  v=_DataContext.GetScreenMonitorValueQuery(_CurrentScreen.ScreenID) ;
+
+            _DataContext.Load(v, ValueLoadComplete, null);
+        }
+
+        public void ValueLoadComplete(LoadOperation<V_ScreenMonitorValue> result)
+        {
+            if (result.HasError)
+                return;
+            float digitalValue = 0f;
+            foreach (V_ScreenMonitorValue obj in result.Entities)
+            {
+                var vobj = (MonitorControl)this.csScreen.FindName(obj.ElementID.ToString());
+                float fValue = float.Parse(obj.MonitorValue.ToString());
+                if (vobj.ScreenElement.ElementName == "DigitalBiaoPan")
+                {
+                    digitalValue = fValue;
+                    vobj.SetChannelValue(fValue);
+                }
+                else if (vobj.ScreenElement.ElementName == "DrawLine")
+                {
+                    vobj.SetChannelValue(fValue, digitalValue);
+                }
+                else
+                {
+                    vobj.SetChannelValue(fValue);
+                }
+            }
+            _DataContext.V_ScreenMonitorValues.Clear();
+        }
+        #endregion
+
         #region 实例化其它参数
+        
         private void InitOther()
         {
             _DataContext.Load(_DataContext.GetT_DeviceQuery().Where(a => a.StationID == this._CurrentScreen.StationID.Value), LoadDeviceListComplete, null);
         }
+
 
         public void LoadDeviceListComplete(LoadOperation<t_Device> result)
         {
@@ -393,6 +444,11 @@ namespace MonitorSystem
                 ScreenAllElement.Add(el);
             }
             tbWait.Visibility = Visibility.Collapsed;
+            //如果不是组态，打开定时器
+            if (CBIsztControl.IsChecked == false)
+            {
+                timerRefrshValue.Start();
+            }
         }
         #endregion
 
@@ -535,7 +591,7 @@ namespace MonitorSystem
                 PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = mControl.BrowsableProperties;
                 PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl.GetRootControl(); 
             };
-           
+            mControl.Name = obj.ElementID.ToString();
             mControl.ScreenElement = obj;
             mControl.ListElementProp = listObj;
             mControl.ElementState = eleStae;
@@ -937,6 +993,7 @@ namespace MonitorSystem
                     mControl.DesignMode();
                 }
             }
+            timerRefrshValue.Stop();
         }
 
         private void zt_Unchecked(object sender, RoutedEventArgs e)
@@ -957,6 +1014,7 @@ namespace MonitorSystem
             fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
             prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
             fwProperty.Close();
+            timerRefrshValue.Start();
         }
 
        

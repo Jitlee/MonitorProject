@@ -16,7 +16,11 @@ namespace MonitorSystem.ZTControls
 {
     public class Switch : MonitorControl
     {
-       
+        public override void SetChannelValue(float fValue)
+        {
+            OpenOrNot = Convert.ToBoolean(fValue);
+        }
+
         public override void DesignMode()
         {
             if (!IsDesignMode)
@@ -99,7 +103,6 @@ namespace MonitorSystem.ZTControls
                             OpenOrNot = true;
                         else
                             OpenOrNot = false;
-                  
                 }
             }
         }

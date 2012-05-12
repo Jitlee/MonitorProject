@@ -20,6 +20,15 @@ namespace MonitorSystem.ZTControls
     /// </summary>
     public class DLBiaoPan : MonitorControl
     {
+
+        public override void SetChannelValue(float fValue)
+        {
+            if (MyScale == "") MyScale = "1";
+            float temp = float.Parse(MyScale);
+            if (temp <= 0) temp = 1;
+            CurrenValue = (int)(fValue / temp);
+        }
+
         public override void DesignMode()
         {
             if (!IsDesignMode)
@@ -113,10 +122,10 @@ namespace MonitorSystem.ZTControls
                 {
                     CurrenValue = int.Parse(value);
                 }
-                //else if (name == "MyScale".ToUpper())
-                //{
-                //    MyScale = int.Parse(value);
-                //}
+                else if (name == "MyScale".ToUpper())
+                {
+                    MyScale =value;
+                }
             }
         }
 
@@ -131,7 +140,7 @@ namespace MonitorSystem.ZTControls
             BackColor = Common.StringToColor(ScreenElement.BackColor); 
         }
 
-        private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "MinValue", "MaxValue", "CurrenValue", "Title"};
+        private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "MinValue", "MaxValue", "CurrenValue", "Title","MyScale"};
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -139,6 +148,17 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
+        private string myScale;
+        [DefaultValue("1"), Description("显示比例"), Category("我的属性")]
+        public String MyScale
+        {
+            get { return myScale; }
+            set
+            {
+                 myScale = value;
+                 SetAttrByName("MyScale", value);
+            }
+        }
 
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",

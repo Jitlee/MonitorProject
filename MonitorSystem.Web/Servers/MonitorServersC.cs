@@ -37,65 +37,43 @@ namespace MonitorSystem.Web.Servers
             return -999;
         }
 
-        [OperationContract]
-        public int GetDataSetData(string StrConn, string SQL)
+        //
+
+        public List<V_ScreenMonitorValue> GetScreenMonitorValue(int mScreenID)
         {
-            try
+            var v = from f in ObjectContext.V_ScreenMonitorValue where f.ScreenID == mScreenID select f;
+            List<V_ScreenMonitorValue> eValue = v.ToList();
+
+            foreach (V_ScreenMonitorValue obj in eValue)
             {
-                //DataSet ds = GetDataSet(StrConn, SQL);
-                //ServiceError = null;
-                //return DataSetData.FromDataSet(ds);
+                if (!string.IsNullOrEmpty(obj.ComputeStr.Trim()))
+                {
+                    Paser p = new Paser();
+                    string s = p.Execute("", obj.ComputeStr.Trim());
+                    if (!string.IsNullOrEmpty(s))
+                    {
+                        float fValue = (float)Convert.ToDouble(s);
+                        obj.MonitorValue = fValue;
+                    }
+                    else
+                    {
+                        obj.MonitorValue = -1.0f;
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                //ServiceError = new CustomException(ex);
-            }
-            return 1;
+
+            return eValue;
         }
 
-       
-        //public string GetStringXmlValue()
-        //{
-
-        //    MemoryStream ms = null;
-        //    XmlTextWriter XmlWt = null;
-            
-        //    ms = new MemoryStream();
-        //    //根据ms实例化XmlWt
-        //    XmlWt = new XmlTextWriter(ms, Encoding.Unicode);
-        //    DataTable dt = new DataTable();
-        //    //查询数据
-        //    DataSet ds = new DataSet();
-        //    string StrConn = "server=.;database=GDK_BCM;uid=sa;pwd=sa";
-        //    SqlConnection Conn = new SqlConnection(StrConn);
-        //    string strSql = "select * from t_Station";
-
-        //    string dataname = "Appl_Info";
-
-        //    SqlDataAdapter da = new SqlDataAdapter(strSql, Conn);
-        //    Conn.Open();
-        //    da.Fill(ds);
-        //    Conn.Close();
-        //    Conn.Dispose();
-
-        //    if (ds != null && ds.Tables.Count > 0)
-        //    {
-        //        dt = ds.Tables[0];
-        //        //dt.WriteXml(XmlWt);
-               
-        //        int count = (int)ms.Length;
-        //        byte[] temp = new byte[count];
-        //        ms.Seek(0, SeekOrigin.Begin);
-        //        ms.Read(temp, 0, count);
-
-        //        //返回Unicode编码的文本
-        //        UnicodeEncoding ucode = new UnicodeEncoding();
-        //        string returnValue = ucode.GetString(temp).Trim();
-                
-        //        return returnValue;
-        //    }
-        //    return string.Empty;
-        //}
+        public void GetChanncelValue(int iP1, int iP2, int iP3, out float fResult)
+        {
+            var v = from f in ObjectContext.t_TmpValue where f.StationID == iP1 && f.DeviceID == iP2 && f.ChannelNO == iP3 select f;
+            if (v.Count() > 0)
+                fResult =float.Parse( v.First().MonitorValue.Value.ToString());
+            else
+                fResult = -1.0f;
+        }
+     
     }
 
     

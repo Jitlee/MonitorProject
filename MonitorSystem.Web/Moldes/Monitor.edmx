@@ -48,6 +48,19 @@
           <EntitySet Name="t_Station" EntityType="MonitorDemo2Model.Store.t_Station" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_Sys_MainRealTimeSet" EntityType="MonitorDemo2Model.Store.t_Sys_MainRealTimeSet" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_TmpValue" EntityType="MonitorDemo2Model.Store.t_TmpValue" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="V_ScreenMonitorValue" EntityType="MonitorDemo2Model.Store.V_ScreenMonitorValue" store:Type="Views" store:Schema="dbo" store:Name="V_ScreenMonitorValue">
+            <DefiningQuery>SELECT 
+      [V_ScreenMonitorValue].[ElementID] AS [ElementID], 
+      [V_ScreenMonitorValue].[ScreenID] AS [ScreenID], 
+      [V_ScreenMonitorValue].[DeviceID] AS [DeviceID], 
+      [V_ScreenMonitorValue].[ChannelNo] AS [ChannelNo], 
+      [V_ScreenMonitorValue].[ComputeStr] AS [ComputeStr], 
+      [V_ScreenMonitorValue].[StationID] AS [StationID], 
+      [V_ScreenMonitorValue].[ChanenlSubNo] AS [ChanenlSubNo], 
+      [V_ScreenMonitorValue].[MonitorValue] AS [MonitorValue], 
+      [V_ScreenMonitorValue].[flag] AS [flag]
+      FROM [dbo].[V_ScreenMonitorValue] AS [V_ScreenMonitorValue]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
         <EntityType Name="t_AlarmAction">
           <Key>
@@ -367,6 +380,23 @@
           <Property Name="MonitorValue" Type="float" />
           <Property Name="Flag" Type="int" />
         </EntityType>
+        <!--生成过程中发现错误:
+      警告 6002: 表/视图“GDK_BCM.dbo.V_ScreenMonitorValue”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
+      -->
+        <EntityType Name="V_ScreenMonitorValue">
+          <Key>
+            <PropertyRef Name="ElementID" />
+          </Key>
+          <Property Name="ElementID" Type="int" Nullable="false" />
+          <Property Name="ScreenID" Type="int" />
+          <Property Name="DeviceID" Type="int" />
+          <Property Name="ChannelNo" Type="int" />
+          <Property Name="ComputeStr" Type="varchar" MaxLength="100" />
+          <Property Name="StationID" Type="int" Nullable="false" />
+          <Property Name="ChanenlSubNo" Type="int" />
+          <Property Name="MonitorValue" Type="float" />
+          <Property Name="flag" Type="int" />
+        </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -395,6 +425,7 @@
           <EntitySet Name="t_Station" EntityType="MonitorDemo2Model.t_Station" />
           <EntitySet Name="t_TmpValue" EntityType="MonitorDemo2Model.t_TmpValue" />
           <EntitySet Name="t_Sys_MainRealTimeSet" EntityType="MonitorDemo2Model.t_Sys_MainRealTimeSet" />
+          <EntitySet Name="V_ScreenMonitorValue" EntityType="MonitorDemo2Model.V_ScreenMonitorValue" />
         </EntityContainer>
         <EntityType Name="t_AlarmAction">
           <Key>
@@ -707,6 +738,20 @@
           <Property Type="Double" Name="Yupper" Nullable="false" />
           <Property Type="Double" Name="Ylower" Nullable="false" />
           <Property Type="Double" Name="GridHeight" Nullable="false" />
+        </EntityType>
+        <EntityType Name="V_ScreenMonitorValue">
+          <Key>
+            <PropertyRef Name="ElementID" />
+          </Key>
+          <Property Type="Int32" Name="ElementID" Nullable="false" />
+          <Property Type="Int32" Name="ScreenID" />
+          <Property Type="Int32" Name="DeviceID" />
+          <Property Type="Int32" Name="ChannelNo" />
+          <Property Type="String" Name="ComputeStr" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="StationID" Nullable="false" />
+          <Property Type="Int32" Name="ChanenlSubNo" />
+          <Property Type="Double" Name="MonitorValue" />
+          <Property Type="Int32" Name="flag" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1040,6 +1085,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="V_ScreenMonitorValue">
+            <EntityTypeMapping TypeName="MonitorDemo2Model.V_ScreenMonitorValue">
+              <MappingFragment StoreEntitySet="V_ScreenMonitorValue">
+                <ScalarProperty Name="flag" ColumnName="flag" />
+                <ScalarProperty Name="MonitorValue" ColumnName="MonitorValue" />
+                <ScalarProperty Name="ChanenlSubNo" ColumnName="ChanenlSubNo" />
+                <ScalarProperty Name="StationID" ColumnName="StationID" />
+                <ScalarProperty Name="ComputeStr" ColumnName="ComputeStr" />
+                <ScalarProperty Name="ChannelNo" ColumnName="ChannelNo" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="ScreenID" ColumnName="ScreenID" />
+                <ScalarProperty Name="ElementID" ColumnName="ElementID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1065,25 +1125,26 @@
         <EntityTypeShape EntityType="MonitorDemo2Model.t_AlarmGroup" Width="1.5" PointX="2.75" PointY="0.75" Height="1.6222135416666674" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_AlarmLevel" Width="1.5" PointX="4.75" PointY="0.75" Height="1.4535937499999818" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_Channel" Width="1.5" PointX="6.625" PointY="0.75" Height="2.1280729166666674" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ChannelHistoryValue" Width="1.875" PointX="3.625" PointY="10.125" Height="1.9594531249999818" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_ChannelHistoryValue" Width="1.875" PointX="3.75" PointY="5.625" Height="1.9594531249999818" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_ChannelHistoryValuetemp" Width="2.625" PointX="0.75" PointY="2.875" Height="2.296692708333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ChannelType" Width="1.5" PointX="8.25" PointY="8" Height="2.4653124999999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Control" Width="1.5" PointX="0.5" PointY="10.5" Height="1.9594531249999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ControlProperty" Width="2.125" PointX="1.5" PointY="8.25" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_ChannelType" Width="1.5" PointX="7.5" PointY="4.125" Height="2.4653124999999818" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Control" Width="1.5" PointX="2.875" PointY="8.125" Height="1.9594531249999996" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_ControlProperty" Width="2.125" PointX="0.5" PointY="8.375" Height="1.790833333333353" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_Device" Width="1.5" PointX="8.25" PointY="0.625" Height="3.1397916666666674" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_Element" Width="1.5" PointX="5.75" PointY="3" Height="5.331848958333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Element_Library" Width="2.125" PointX="8.25" PointY="10.875" Height="4.9946093749999818" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Element_Library" Width="2.125" PointX="9.375" PointY="4.5" Height="4.9946093749999818" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty" Width="1.75" PointX="10.125" PointY="0.5" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty_Library" Width="1.75" PointX="4" PointY="12.75" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_KeyWord" Width="1.5" PointX="0.5" PointY="13" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Mainte" Width="1.5" PointX="2.375" PointY="5.625" Height="2.296692708333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty_Library" Width="1.75" PointX="2.5" PointY="10.5" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_KeyWord" Width="1.5" PointX="0.625" PointY="10.375" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Mainte" Width="1.5" PointX="3.625" PointY="2.875" Height="2.296692708333353" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_MonitorServerParam" Width="1.5" PointX="0.5" PointY="5.5" Height="2.296692708333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_MonitorSystemParam" Width="2.25" PointX="5.75" PointY="8.875" Height="2.4653125000000031" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Screen" Width="1.5" PointX="0.5" PointY="15.5" Height="1.9594531249999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Screen_Library" Width="2.125" PointX="7.875" PointY="6" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Station" Width="1.5" PointX="9.625" PointY="3.875" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_TmpValue" Width="1.5" PointX="4.25" PointY="14.75" Height="1.9594531249999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Sys_MainRealTimeSet" Width="1.5" PointX="6.25" PointY="11.75" Height="2.6339322916666674" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_MonitorSystemParam" Width="2.25" PointX="4.625" PointY="8.75" Height="2.4653125000000031" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Screen" Width="1.5" PointX="0.625" PointY="12.625" Height="1.9594531249999818" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Screen_Library" Width="2.125" PointX="9.875" PointY="2.5" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Station" Width="1.5" PointX="2.125" PointY="5.5" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_TmpValue" Width="1.5" PointX="2.75" PointY="12.5" Height="1.9594531249999818" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Sys_MainRealTimeSet" Width="1.5" PointX="7.5" PointY="7.875" Height="2.6339322916666674" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.V_ScreenMonitorValue" Width="2" PointX="4.625" PointY="11.625" Height="2.4653125000000102" />
       </Diagram>
     </Diagrams>
   </Designer>

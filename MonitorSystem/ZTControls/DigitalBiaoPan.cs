@@ -19,6 +19,18 @@ namespace MonitorSystem.ZTControls
     /// </summary>
     public class DigitalBiaoPan : MonitorControl
     {
+        public override void SetChannelValue(float fValue)
+        {
+            if (MyScale == null || MyScale == "")
+                MyScale = "1";
+            float temp = float.Parse(MyScale);
+            if (temp <= 0)
+                temp = 1;
+            fValue = (float)(fValue / temp);
+
+            MyNum = Convert.ToString(fValue);
+        }
+
         public override void DesignMode()
         {
             if (!IsDesignMode)
@@ -106,6 +118,10 @@ namespace MonitorSystem.ZTControls
                 else if (name == "IntLen".ToUpper())
                 {
                     IntLen = int.Parse(value);
+                }
+                else if (name == "MyScale".ToUpper())
+                {
+                    MyScale = value;
                 }
             }
         }
@@ -247,14 +263,26 @@ namespace MonitorSystem.ZTControls
         }
 
         private static readonly DependencyProperty MyScaleProperty = DependencyProperty.Register("MyScale",
-            typeof(double), typeof(DigitalBiaoPan), new PropertyMetadata(1d, new PropertyChangedCallback(MyScale_Changed)));
-
+            typeof(String), typeof(DigitalBiaoPan), new PropertyMetadata(1d, new PropertyChangedCallback(MyScale_Changed)));
+        private string myScale;
         [DefaultValue("1"), Description("显示比例"), Category("我的属性")]
-        public double MyScale
+        public String MyScale
         {
-            get { return (double)this.GetValue(MyScaleProperty); }
-            set { this.SetValue(MyScaleProperty, value); }
+            get { return myScale; }
+            set
+            {
+                myScale = value;
+                SetAttrByName("MyScale", value);
+            }
         }
+        //[DefaultValue("1"), Description("显示比例"), Category("我的属性")]
+        //public double MyScale
+        //{
+        //    get { return (double)this.GetValue(MyScaleProperty); }
+        //    set { this.SetValue(MyScaleProperty, value);
+            
+        //    }
+        //}
 
         private static void MyScale_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
         {

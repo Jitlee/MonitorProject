@@ -826,6 +826,41 @@ namespace MonitorSystem.Web.Servers
             }
             this.ObjectContext.t_TmpValue.DeleteObject(t_TmpValue);
         }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'V_ScreenMonitorValue' query.
+        public IQueryable<V_ScreenMonitorValue> GetV_ScreenMonitorValue()
+        {
+            return this.ObjectContext.V_ScreenMonitorValue;
+        }
+
+        public void InsertV_ScreenMonitorValue(V_ScreenMonitorValue v_ScreenMonitorValue)
+        {
+            if ((v_ScreenMonitorValue.EntityState != EntityState.Detached))
+            {
+                this.ObjectContext.ObjectStateManager.ChangeObjectState(v_ScreenMonitorValue, EntityState.Added);
+            }
+            else
+            {
+                this.ObjectContext.V_ScreenMonitorValue.AddObject(v_ScreenMonitorValue);
+            }
+        }
+
+        public void UpdateV_ScreenMonitorValue(V_ScreenMonitorValue currentV_ScreenMonitorValue)
+        {
+            this.ObjectContext.V_ScreenMonitorValue.AttachAsModified(currentV_ScreenMonitorValue, this.ChangeSet.GetOriginal(currentV_ScreenMonitorValue));
+        }
+
+        public void DeleteV_ScreenMonitorValue(V_ScreenMonitorValue v_ScreenMonitorValue)
+        {
+            if ((v_ScreenMonitorValue.EntityState == EntityState.Detached))
+            {
+                this.ObjectContext.V_ScreenMonitorValue.Attach(v_ScreenMonitorValue);
+            }
+            this.ObjectContext.V_ScreenMonitorValue.DeleteObject(v_ScreenMonitorValue);
+        }
     }
 }
 

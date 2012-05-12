@@ -20,6 +20,11 @@ namespace MonitorSystem.ZTControls
     /// </summary>
     public class DetailSwitch : MonitorControl
     {
+        public override void SetChannelValue(float fValue)
+        {
+            OpenOrNot = Convert.ToBoolean(fValue);
+        }
+
         public override void DesignMode()
         {
             if (!IsDesignMode)
