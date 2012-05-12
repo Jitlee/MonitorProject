@@ -47,7 +47,7 @@ namespace MonitorSystem
         private FrameworkElement _bottomLeftAdorner;
         private FrameworkElement _bottomCenterAdorner;
         private FrameworkElement _bottomRightAdorner;
-        private const double MIN_SIZE = 0d;
+        private const double MIN_SIZE = 0;
         #endregion
 
         #region Properties
@@ -186,6 +186,9 @@ namespace MonitorSystem
             _parent = _associatedElement.Parent as Canvas;
             _parent.Children.Add(this);
             this.LayoutUpdated += PopupLayoutUpdated;
+
+            this.SetValue(MinHeightProperty, associatedElement.MinHeight + 5d);
+            this.SetValue(MinWidthProperty, associatedElement.MinWidth + 5d);
             //_associatedElement.SizeChanged += _associatedElement_SizeChanged;
             //_popup = new Popup();
             //_popup.Child = this;
@@ -300,6 +303,8 @@ namespace MonitorSystem
 
             _contentAdorner = base.GetTemplateChild("ContentAdorner") as FrameworkElement;
             _contentAdorner.Opacity = 0;
+            _contentAdorner.SetValue(MinHeightProperty, _associatedElement.MinHeight);
+            _contentAdorner.SetValue(MinWidthProperty, _associatedElement.MinWidth);
 
             _topLeftAdorner = base.GetTemplateChild("TopLeftAdorner") as FrameworkElement;
             _topLeftAdorner.MouseLeftButtonDown += TopLeftAdorner_MouseLeftButtonDown;

@@ -329,6 +329,9 @@ namespace MonitorSystem.ZTControls
             SetText();
             PaintBackground();
 
+            SetValue(MinHeightProperty, 50d);
+            SetValue(MinWidthProperty, 100d);
+
             //this.Width = 40;
             //this.Height = 20;
         }
@@ -376,6 +379,12 @@ namespace MonitorSystem.ZTControls
             var heightSpan = 20d;
             var width = finalSize.Width;
             var height = finalSize.Height;
+
+            if (width < 100d || height < 50d)
+            {
+                this.Width = width = 100d;
+                this.Height = height = 50d;
+            }
             var centerX = (width - widthSpan) / 2d + heightSpan;
             var centerY = height - heightSpan + 10d;
 

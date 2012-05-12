@@ -38,6 +38,8 @@ namespace MonitorSystem
         /// </summary>
         t_Screen _CurrentScreen;
 
+        static LoadScreen _instance = null;
+
         /// <summary>
         /// 系统参数
         /// </summary>
@@ -50,6 +52,12 @@ namespace MonitorSystem
             //实例化
             Init();
             _SenceCommand = new DelegateCommand<t_Screen>(LoadSence);
+            _instance = this;
+        }
+
+        public static void Load(t_Screen screen)
+        {
+            _instance.LoadScreenData(screen);
         }
 
         #region 实例化
@@ -485,11 +493,22 @@ namespace MonitorSystem
                     SetEletemt(mPubText, obj, eleStae, listObj);
                     return mPubText;
                     //break;
+                case "ColorText":
+                    ColorText mColorText = new ColorText();
+                    SetEletemt(mColorText, obj, eleStae, listObj);
+                    return mColorText;
+                    //break;
                 case "InputTextBox":
                     InputTextBox mInputTextBox = new InputTextBox();
                     mInputTextBox.MyText = obj.TxtInfo;
                     SetEletemt(mInputTextBox, obj, eleStae, listObj);
                     return mInputTextBox;
+                    //break;
+                case "ButtonCtrl":
+                    ButtonCtrl mButtonCtrl = new ButtonCtrl();
+                    mButtonCtrl.MyText = obj.TxtInfo;
+                    SetEletemt(mButtonCtrl, obj, eleStae, listObj);
+                    return mButtonCtrl;
                     //break;
                 case "MonitorCur":
                     MonitorCur mPubCur = new MonitorCur();

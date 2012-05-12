@@ -8,52 +8,367 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using MonitorSystem.Web.Moldes;
+using MonitorSystem.ZTControls;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
     public class ColorText : MonitorControl
     {
-        private readonly TextBlock _text = new TextBlock();
 
+        public override void DesignMode()
+        {
+            if (!IsDesignMode)
+            {
+                AdornerLayer = new Adorner(this);
+                AdornerLayer.Selected += OnSelected;
+
+                var menu = new ContextMenu();
+                var menuItem = new MenuItem() { Header = "属性" };
+                menuItem.Click += PropertyMenuItem_Click;
+                menu.Items.Add(menuItem);
+                AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
+                AdornerLayer.IsLockScale = true;
+            }
+        }
+
+        public override void UnDesignMode()
+        {
+            if (IsDesignMode)
+            {
+                AdornerLayer.Selected -= OnSelected;
+                AdornerLayer.ClearValue(ContextMenuService.ContextMenuProperty);
+                AdornerLayer.Dispose();
+                AdornerLayer = null;
+            }
+        }
+
+        private void OnSelected(object sender, EventArgs e)
+        {
+            if (null != Selected)
+            {
+                Selected(this, RoutedEventArgs.Empty);
+            }
+        }
+
+        #region 属性设置
+        SetSingleProperty tpp = new SetSingleProperty();
+        private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            tpp = new SetSingleProperty();
+
+            tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
+            tpp.DeviceID = this.ScreenElement.DeviceID.Value;
+            tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
+            tpp.LevelNo = this.ScreenElement.LevelNo.Value;
+            tpp.ComputeStr = this.ScreenElement.ComputeStr;
+            tpp.Init();
+            tpp.Show();
+        }
+
+        protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (tpp.IsOK)
+            {
+                this.ScreenElement.DeviceID = tpp.DeviceID;
+                this.ScreenElement.ChannelNo = tpp.ChanncelID;
+                this.ScreenElement.LevelNo = tpp.LevelNo;
+                this.ScreenElement.ComputeStr = tpp.ComputeStr;
+            }
+        }
+
+        #endregion
+
+        public override object GetRootControl()
+        {
+            return this;
+        }
+
+        public override event EventHandler Selected;
+
+        public override void SetPropertyValue()
+        {
+            try
+            {
+                foreach (var ep in ListElementProp)
+                {
+                    string name = ep.PropertyName.Trim().ToUpper();
+                    string value = ep.PropertyValue.Trim();
+                    if (name == "OpenOrNot".ToUpper())
+                    {
+                        if (value == null || value == "")
+                        {
+                            OpenOrNot = false;
+                        }
+                        else
+                        {
+                            OpenOrNot = Boolean.Parse(value);
+                        }
+                    }
+                    else if (name == "OpenText".ToUpper())
+                    {
+                        OpenText = value;
+                    }
+                    else if (name == "CloseText".ToUpper())
+                    {
+                        CloseText = value;
+                    }
+                    // 2009-6-29
+                    else if (name == "TrueColor".ToUpper())
+                    {
+                        TrueColor = Common.StringToColor(value);
+                    }
+                    else if (name == "FalseColor".ToUpper())
+                    {
+                        FalseColor = Common.StringToColor(value);
+                    }
+
+                }
+                //this.Invalidate();
+            }
+            catch
+            {
+            }
+        }
+
+        public override void SetCommonPropertyValue()
+        {
+            this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
+            this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
+            this.Width = (double)ScreenElement.Width;
+            this.Height = (double)ScreenElement.Height;
+
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor);
+            BackColor = Common.StringToColor(ScreenElement.BackColor); 
+        }
+
+        private string[] _browsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
+            "Transparent", "Foreground","Transparent","MyText","LinearChange","FromColor","ToColor" };
+        public override string[] BrowsableProperties
+        {
+            get { return _browsableProperties; }
+            set { _browsableProperties = value; }
+        }
+
+        #region 属性
+
+        private static readonly DependencyProperty OpenOrNotProperty =
+            DependencyProperty.Register("OpenOrNot",
+            typeof(bool), typeof(ColorText), new PropertyMetadata(default(bool), new PropertyChangedCallback(OpenOrNot_Changed)));
+
+        /// <summary>
+        /// 开关是不是开状态
+        /// </summary>
+        [DefaultValue("false"), Description("开关是不是开状态"), Category("我的属性")]
+        public bool OpenOrNot
+        {
+            get { return (bool)this.GetValue(OpenOrNotProperty); }
+            set
+            {
+                this.SetValue(OpenOrNotProperty, value);
+                SetAttrByName("OpenOrNot", value);
+            }
+        }
+
+        private static void OpenOrNot_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            ColorText ColorText = (ColorText)element;
+            ColorText.OnOpenOrNotChanged((bool)e.NewValue, (bool)e.OldValue);
+        }
+
+        public void OnOpenOrNotChanged(bool oldValue, bool newValue)
+        {
+            ShowText();
+        }
+
+        private static readonly DependencyProperty OpenTextProperty =
+            DependencyProperty.Register("OpenText",
+            typeof(string), typeof(ColorText), new PropertyMetadata("正常", new PropertyChangedCallback(OpenText_Changed)));
+
+        /// <summary>
+        /// 开关是不是开状态
+        /// </summary>
+        [DefaultValue("正常"), Description("开状态时显示的文本"), Category("我的属性")]
+        public string OpenText
+        {
+            get { return (string)this.GetValue(OpenTextProperty); }
+            set
+            {
+                this.SetValue(OpenTextProperty, value);
+                SetAttrByName("OpenText", value);
+            }
+        }
+
+        private static void OpenText_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            ColorText ColorText = (ColorText)element;
+            ColorText.OnOpenTextChanged((string)e.NewValue, (string)e.OldValue);
+        }
+
+        public void OnOpenTextChanged(string oldValue, string newValue)
+        {
+            ShowText();
+        }
+
+        private static readonly DependencyProperty CloseTextProperty =
+            DependencyProperty.Register("CloseText",
+            typeof(string), typeof(ColorText), new PropertyMetadata("报警", new PropertyChangedCallback(CloseText_Changed)));
+
+        /// <summary>
+        /// 关状态显示的文本
+        /// </summary>
+        [DefaultValue("报警"), Description("关状态时显示的文本"), Category("我的属性")]
+        public string CloseText
+        {
+            get { return (string)this.GetValue(CloseTextProperty); }
+            set
+            {
+                this.SetValue(CloseTextProperty, value);
+                SetAttrByName("CloseText", value);
+            }
+        }
+
+        private static void CloseText_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            ColorText ColorText = (ColorText)element;
+            ColorText.OnCloseTextChanged((string)e.NewValue, (string)e.OldValue);
+        }
+
+        public void OnCloseTextChanged(string oldValue, string newValue)
+        {
+            ShowText();
+        }
+
+        private static readonly DependencyProperty TrueColorProperty =
+            DependencyProperty.Register("TrueColor",
+            typeof(Color), typeof(ColorText), new PropertyMetadata(Color.FromArgb(0xff, 0xb1,0xff,0xff), new PropertyChangedCallback(TrueColor_Changed)));
+
+        /// <summary>
+        /// 逻辑真颜色
+        /// </summary>
+        private Color trueColor;
+        [DefaultValue("RGB(177,255,255)"), Description("逻辑真颜色"), Category("我的属性")]
+        public Color TrueColor
+        {
+            get { return (Color)this.GetValue(TrueColorProperty); }
+            set
+            {
+                this.SetValue(TrueColorProperty, value);
+
+                SetAttrByName("TrueColor", trueColor.ToString());
+            }
+        }
+
+        private static void TrueColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            ColorText ColorText = (ColorText)element;
+            ColorText.OnTrueColorChanged((Color)e.NewValue, (Color)e.OldValue);
+        }
+
+        public void OnTrueColorChanged(Color oldValue, Color newValue)
+        {
+            ShowText();
+        }
+
+        private static readonly DependencyProperty FalseColorProperty =
+            DependencyProperty.Register("FalseColor",
+            typeof(Color), typeof(ColorText), new PropertyMetadata(Color.FromArgb(0xff, 0xff, 0x64, 0x00), new PropertyChangedCallback(FalseColor_Changed)));
+
+        /// <summary>
+        /// 逻辑假颜色
+        /// </summary>
+        private Color falseColor;
+        [DefaultValue("RGB(255,100,0)"), Description("逻辑假颜色"), Category("我的属性")]
+        public Color FalseColor
+        {
+            get { return (Color)this.GetValue(FalseColorProperty); }
+            set
+            {
+                this.SetValue(FalseColorProperty, value);
+
+                SetAttrByName("FalseColor", FalseColor.ToString());
+            }
+        }
+
+        private static void FalseColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            ColorText ColorText = (ColorText)element;
+            ColorText.OnFalseColorChanged((Color)e.NewValue, (Color)e.OldValue);
+        }
+
+        public void OnFalseColorChanged(Color oldValue, Color newValue)
+        {
+            ShowText();
+        }
+
+        private static readonly DependencyProperty BackColorProperty =
+            DependencyProperty.Register("BackColor",
+            typeof(Color), typeof(ColorText), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
+
+        public Color BackColor
+        {
+            get { return (Color)this.GetValue(BackColorProperty); }
+            set { this.SetValue(BackColorProperty, value);
+            
+                if (ScreenElement != null)
+                ScreenElement.BackColor = value.ToString();
+            }
+        }
+
+        private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            ColorText ColorText = (ColorText)element;
+            ColorText.OnBackColorChanged((Color)e.NewValue, (Color)e.OldValue);
+        }
+
+        public void OnBackColorChanged(Color oldValue, Color newValue)
+        {
+        }
+
+        private static readonly DependencyProperty ForeColorProperty =
+            DependencyProperty.Register("ForeColor",
+            typeof(Color), typeof(ColorText), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
+
+        public Color ForeColor
+        {
+            get { return (Color)this.GetValue(ForeColorProperty); }
+            set { this.SetValue(ForeColorProperty, value); 
+                    if(ScreenElement !=null)
+                        ScreenElement.ForeColor=value.ToString();
+            }
+        }
+
+        private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            ColorText ColorText = (ColorText)element;
+            ColorText.OnForeColorChanged((Color)e.NewValue, (Color)e.OldValue);
+        }
+
+        public void OnForeColorChanged(Color oldValue, Color newValue)
+        {
+        }
+
+        #endregion
+
+        private TextBlock _text = new TextBlock() { VerticalAlignment= VerticalAlignment.Top, HorizontalAlignment= HorizontalAlignment.Left };
         public ColorText()
         {
             this.Content = _text;
         }
 
-        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
-            "Transparent", "Foreground","Transparent","MyText","LinearChange","FromColor","ToColor" };
-
-        public override string[] BrowsableProperties
+        private void ShowText()
         {
-            get { return m_BrowsableProperties; }
-            set { m_BrowsableProperties = value; }
-        }
-
-        public override void DesignMode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void UnDesignMode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override object GetRootControl()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetPropertyValue()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override event EventHandler Selected;
-
-        public override void SetCommonPropertyValue()
-        {
-
+            if (OpenOrNot)
+            {
+                _text.Foreground = new SolidColorBrush(TrueColor);//如一SolidBrush   
+                _text.Text = OpenText;
+            }
+            else
+            {
+                _text.Foreground = new SolidColorBrush(falseColor);//如一SolidBrush   
+                _text.Text = CloseText;
+            }
         }
     }
 }

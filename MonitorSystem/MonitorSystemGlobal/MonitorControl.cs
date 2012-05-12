@@ -21,6 +21,15 @@ namespace MonitorSystem.MonitorSystemGlobal
         public abstract void DesignMode();
         public abstract void UnDesignMode();
         public abstract object GetRootControl();
+        public virtual void SetChildScreen(ObservableCollection<ScreenAddShowName> litobj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual ObservableCollection<ScreenAddShowName> GetChildScreenObj()
+        {
+            throw new NotImplementedException();
+        }
 
         public abstract event EventHandler Selected;
         public t_Element ScreenElement { get; set; }

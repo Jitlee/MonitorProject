@@ -155,7 +155,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MonitorSystemGlobal\ColorText.cs" />
+    <None Include="MonitorSystemGlobal\ColorText.cs" />
     <Compile Include="MonitorSystemGlobal\DelegateCommand.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorControl.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorLine.cs" />

@@ -15,9 +15,9 @@ namespace MonitorSystem.MonitorSystemGlobal
 {
     public partial class TP_ButtonSetProperty : ChildWindow
     {
-        TP_Button BaseCtl;
+        MonitorControl BaseCtl;
         public ObservableCollection<ScreenAddShowName> ListScreenShow { get; set; }
-        public TP_ButtonSetProperty(TP_Button _baseCtl)
+        public TP_ButtonSetProperty(MonitorControl _baseCtl)
         {
             InitializeComponent();
 
