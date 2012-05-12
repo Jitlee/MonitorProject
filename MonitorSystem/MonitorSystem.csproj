@@ -302,6 +302,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <Resource Include="Images\Common\arrow.png" />
+    <Resource Include="Images\ControlsImg\can_move.png" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\MyDataService\GetData.wsdl" />
     <None Include="Service References\MyDataService\GetData.xsd">

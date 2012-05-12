@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
 using System.ComponentModel;
+using System.Windows.Media.Imaging;
 
 namespace MonitorSystem.ZTControls
 {
@@ -32,6 +33,7 @@ namespace MonitorSystem.ZTControls
                 AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
                 this.SetValue(ContextMenuService.ContextMenuProperty, menu);
                 AdornerLayer.Editabled = true;
+                _grid.Children.Add(_moveImage);
             }
         }
 
@@ -44,6 +46,7 @@ namespace MonitorSystem.ZTControls
                 this.ClearValue(ContextMenuService.ContextMenuProperty);
                 AdornerLayer.Dispose();
                 AdornerLayer = null;
+                _grid.Children.Remove(_moveImage);
             }
         }
 
@@ -234,11 +237,15 @@ namespace MonitorSystem.ZTControls
         }
         #endregion
 
+
+        private Grid _grid = new Grid();
         private TextBox _textBox = new TextBox();
+        private Image _moveImage = new Image() { Height = 32d, Width = 32d, Source = new BitmapImage(new Uri("/MonitorSystem;component/Images/ControlsImg/can_move.png", UriKind.RelativeOrAbsolute)), HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(3d), Cursor= Cursors.Hand };
 
         public InputTextBox()
         {
-            this.Content = _textBox;
+            this.Content = _grid;
+            _grid.Children.Add(_textBox);
 
             SetForeground();
 
