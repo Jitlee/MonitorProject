@@ -136,7 +136,7 @@ namespace MonitorSystem.ZTControls
 
         private void cbDeviceID_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            cbChanncel.Items.Clear();
+            //cbChanncel.Items.Clear();
             t_Device d=(t_Device)cbDeviceID.Items[cbDeviceID.SelectedIndex];
             LoadChanncel(d.DeviceID);
 

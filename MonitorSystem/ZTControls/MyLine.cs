@@ -475,9 +475,8 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
                     range = 10;
                 }
             Color BackColor=Colors.Red;
-            Color end = BackColor; //Color.FromArgb(dataZone.R + range * (this.BackColor.R - dataZone.R) / 10, dataZone.G + range * (this.BackColor.G - dataZone.G) / 10, dataZone.B + range * (this.BackColor.B - dataZone.B) / 10);
-            //LinearGradientBrush myLineBrush = new LinearGradientBrush(new Rectangle(40, 10, this.Width - 50, this.Height - 50), dataZone, end, 90);
-            //g.FillRectangle(myLineBrush, 40, 10, this.Width - 50, this.Height - 50);
+            Color end = BackColor;
+
             Rectangle mrect = new Rectangle();
             mrect.Fill = new SolidColorBrush(_dataZone);
             mrect.Width = this.Width - 50;

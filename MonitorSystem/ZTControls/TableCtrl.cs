@@ -30,9 +30,6 @@ namespace MonitorSystem.ZTControls
         //ScrollViewer sv = new ScrollViewer();
         public TableCtrl()
         {
-            //sv.Content = theGrid;
-            //sv.Width = 300;
-            //sv.Height = 200;
             theGrid.Background = new SolidColorBrush(Colors.White);
             this.Content = theGrid;
 
@@ -44,33 +41,7 @@ namespace MonitorSystem.ZTControls
             theGrid.Width = e.NewSize.Width;
             theGrid.Height = e.NewSize.Height;
         }
-        #region 属性设置
-        //SetSingleProperty tpp = new SetSingleProperty();
-        //private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
-        //{
-        //    tpp = new SetSingleProperty();
-
-        //    tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
-        //    tpp.DeviceID = this.ScreenElement.DeviceID.Value;
-        //    tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
-        //    tpp.LevelNo = this.ScreenElement.LevelNo.Value;
-        //    tpp.ComputeStr = this.ScreenElement.ComputeStr;
-        //    tpp.Init();
-        //    tpp.Show();
-        //}
-
-        //protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        //{
-        //    if (tpp.IsOK)
-        //    {
-        //        this.ScreenElement.DeviceID = tpp.DeviceID;
-        //        this.ScreenElement.ChannelNo = tpp.ChanncelID;
-        //        this.ScreenElement.LevelNo = tpp.LevelNo;
-        //        this.ScreenElement.ComputeStr = tpp.ComputeStr;
-        //    }
-        //}
-
-        #endregion
+      
 
         #region 控件公共属性
         public override event EventHandler Selected;
@@ -80,12 +51,6 @@ namespace MonitorSystem.ZTControls
             {
                 AdornerLayer = new Adorner(this);
                 AdornerLayer.Selected += OnSelected;
-
-                //var menu = new ContextMenu();
-                //var menuItem = new MenuItem() { Header = "属性" };
-                //menuItem.Click += PropertyMenuItem_Click;
-                //menu.Items.Add(menuItem);
-                //AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
             }
         }
         public override void UnDesignMode()
@@ -177,12 +142,9 @@ namespace MonitorSystem.ZTControls
                 _Transparent = value;
                 if (value == 1)
                 {
-                    //_mTxt.Background = new SolidColorBrush();
-                    //_mTxt.BorderBrush = new SolidColorBrush();
                 }
                 else
                 {
-                    //_mTxt.Background = new SolidColorBrush(Colors.White);
                 }
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
@@ -276,9 +238,6 @@ namespace MonitorSystem.ZTControls
         #endregion
 
       #region 从wcf中加载数据
-         //ObservableCollection<MyDataService.DataTableInfo> _tables;
-        //IEnumerable _lookup;
-
         private void GetData(string sql, object userState)
         {
             var ws = WCF.GetService();
@@ -311,20 +270,11 @@ namespace MonitorSystem.ZTControls
                 return;
             else if (e.ServiceError != null)
                 return;
-            //else
-            //{
-            // _tables = e.Result.Tables;
-            IEnumerable list = DynamicDataBuilder.GetDataList(e.Result);
 
+            IEnumerable list = DynamicDataBuilder.GetDataList(e.Result);
             theGrid.Columns.Clear();
             theGrid.ItemsSource = DynamicDataBuilder.GetDataList(e.Result);
-
-           
-          
             theGrid.HorizontalContentAlignment = HorizontalAlignment.Center;
-
-
-
         }
         #endregion
 

@@ -25,12 +25,11 @@ namespace MonitorSystem.ZTControls
         public DrawLine()
         {
             this.Content = _Canv;
-            _Canv.Background = new SolidColorBrush(Colors.White);
 
-         this.Height=   _Canv.Height = 20;
-           this.Width= _Canv.Width = 150;
+            this.Height = _Canv.Height = 20;
+            this.Width = _Canv.Width = 150;
 
-           this.SizeChanged +=new SizeChangedEventHandler(DrawLine_SizeChanged);
+            this.SizeChanged += new SizeChangedEventHandler(DrawLine_SizeChanged);
         }
 
         private void DrawLine_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -114,7 +113,7 @@ namespace MonitorSystem.ZTControls
         }
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
-            "Transparent","Translate","LeftOrNot","GoodOrNot","LineWidths","Beeline","EdgeSize","EdgeArray","IsRightDirect"};
+            "Transparent","Translate","LeftOrNot","GoodOrNot","LineWidths","Beeline","EdgeSize","EdgeArray","IsRightDirect","BackColor"};
 
         public override string[] BrowsableProperties
         {
@@ -129,6 +128,8 @@ namespace MonitorSystem.ZTControls
                 this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
                 this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
                 Transparent = ScreenElement.Transparent.Value;
+
+                _BackColor = Common.StringToColor(ScreenElement.BackColor);
 
                 this.Width = _Canv.Width = (double)ScreenElement.Width;
                 this.Height = _Canv.Height = (double)ScreenElement.Height;
@@ -154,7 +155,7 @@ namespace MonitorSystem.ZTControls
             {
                 string name = pro.PropertyName.ToUpper();
                 string value = pro.PropertyValue;
-                
+
                 if (name == "LeftOrNot".ToUpper())
                 {
                     leftOrNot = Convert.ToBoolean(value);
@@ -202,30 +203,16 @@ namespace MonitorSystem.ZTControls
                 _Transparent = value;
                 if (value == 1)
                 {
+                    _Canv.Background = new SolidColorBrush();
                 }
                 else
                 {
+                    _Canv.Background = new SolidColorBrush(_BackColor);
                 }
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
         }
-
-
-       // private static readonly DependencyProperty ConnectStringProperty = DependencyProperty.Register("ConnectString",
-       //typeof(string), typeof(zedGraphCtrl), new PropertyMetadata(""));
-       // private string _ConnectString;
-       // [DefaultValue(""), Description("连接字符串"), Category("我的属性")]
-       // public string ConnectString
-       // {
-       //     get { return _ConnectString; }
-       //     set
-       //     {
-       //         SetAttrByName("ConnectString", value);
-       //         _ConnectString = value;
-       //         DrawLine_Paint();
-       //     }
-       // }
         #endregion
 
         public override void SetChannelValue(float fValue, float dValue)
@@ -236,8 +223,6 @@ namespace MonitorSystem.ZTControls
                 m_innerChangeStatus++;
                 if (m_innerChangeStatus > 3)
                     m_innerChangeStatus = 1;
-                //digitalValue = dValue;
-                //2011-09-06 fsm修改
                 digitalValue = fValue;
             }
             else
@@ -246,10 +231,9 @@ namespace MonitorSystem.ZTControls
                 m_innerChangeStatus++;
                 if (m_innerChangeStatus > 3)
                     m_innerChangeStatus = 1;
-                //digitalValue = dValue;
-                //2011-09-06 fsm修改
                 digitalValue = fValue;
             }
+            DrawLine_Paint();
         }
 
         public int m_innerChangeStatus = 0;
@@ -266,7 +250,7 @@ namespace MonitorSystem.ZTControls
             get { return leftOrNot; }
             set
             {
-                leftOrNot = value; 
+                leftOrNot = value;
                 SetAttrByName("LeftOrNot", value.ToString());
                 DrawLine_Paint();
             }
@@ -277,34 +261,52 @@ namespace MonitorSystem.ZTControls
             get { return goodOrNot; }
             set
             {
-                goodOrNot = value; 
+                goodOrNot = value;
                 SetAttrByName("GoodOrNot", value.ToString());
                 DrawLine_Paint();
             }
         }
 
+        private static readonly DependencyProperty BackColorProperty = DependencyProperty.Register("BackColor", typeof(int), typeof(MyLine), new PropertyMetadata(0));
+        private Color _BackColor = Colors.Black;
+        [DefaultValue(""), Description("背景色"), Category("外观")]
+        public Color BackColor
+        {
+            get { return _BackColor; }
+            set
+            {
+                _BackColor = value;
+                _Canv.Background = new SolidColorBrush(_BackColor);
+                if (ScreenElement != null)
+                    ScreenElement.BackColor = value.ToString();
+            }
+        }
+
+
         // 2009-1-17
         private bool beeline;
-
         // 边的粗细
         [DefaultValue("3"), Description("边的流水状态"), Category("我的属性")]
-        private int edgeSize=5;
+        private int edgeSize = 3;
         public int EdgeSize
         {
             get { return edgeSize; }
-            set {
+            set
+            {
                 edgeSize = value;
                 SetAttrByName("EdgeSize", value.ToString());
                 DrawLine_Paint();
             }
         }
         [DefaultValue("10"), Description("设置漏水绳的高"), Category("我的属性")]
-        private int lineWidths=10;
+        private int lineWidths = 10;
 
         public int LineWidths
         {
             get { return lineWidths; }
-            set { lineWidths = value;
+            set
+            {
+                lineWidths = value;
                 SetAttrByName("LineWidths", value.ToString());
                 DrawLine_Paint();
             }
@@ -316,7 +318,9 @@ namespace MonitorSystem.ZTControls
         public string EdgeArray
         {
             get { return edgeArray; }
-            set { edgeArray = value; 
+            set
+            {
+                edgeArray = value;
                 SetAttrByName("EdgeArray", value.ToString());
                 DrawLine_Paint();
             }
@@ -331,7 +335,9 @@ namespace MonitorSystem.ZTControls
         public bool IsRightDirect
         {
             get { return isRightDirect; }
-            set { isRightDirect = value; 
+            set
+            {
+                isRightDirect = value;
                 SetAttrByName("IsRightDirect", value.ToString());
                 DrawLine_Paint();
             }
@@ -340,16 +346,26 @@ namespace MonitorSystem.ZTControls
         private void DrawLine_Paint()
         {
             _Canv.Children.Clear();
+
+            if (_Transparent == 1)
+            {
+                _Canv.Background = new SolidColorBrush();
+            }
+            else
+            {
+                _Canv.Background = new SolidColorBrush(_BackColor);
+            }
+
             string gbUrl = string.Format("{0}/Pic/Near2.jpg", Common.TopUrl());
             BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
             ImageBrush near = new ImageBrush();
             near.ImageSource = bitmap;
 
-         
+
             beeline = false;
-           
+
             //位置0
-            double ZerroPosi=0;
+            double ZerroPosi = 0;
             Rectangle rect = new Rectangle();
             rect.Width = lineWidths;
             rect.Height = lineWidths;
@@ -368,8 +384,8 @@ namespace MonitorSystem.ZTControls
             rect2.SetValue(Canvas.ZIndexProperty, 500);
             _Canv.Children.Add(rect2);
 
-            Rectangle rect3 = new Rectangle();            
-            rect3.Width = lineWidths;          
+            Rectangle rect3 = new Rectangle();
+            rect3.Width = lineWidths;
             rect3.Height = lineWidths;
             rect3.SetValue(Canvas.LeftProperty, this.Width - lineWidths);
             rect3.SetValue(Canvas.TopProperty, ZerroPosi);
@@ -448,7 +464,7 @@ namespace MonitorSystem.ZTControls
                         }
                         if (m_innerChangeStatus == 2)
                         {
-                            i = (int)( (this.Width / lineWidth) / 2);
+                            i = (int)((this.Width / lineWidth) / 2);
                         }
                         if (m_innerChangeStatus == 3)
                         {
@@ -461,30 +477,26 @@ namespace MonitorSystem.ZTControls
                             i += lineWidth;
                             if (flag)
                             {
-                               // g.DrawLine(tempPen, j + 10, 0, i, 0);
+                                if (i > this.Width)
+                                    break;
                                 Line li = new Line();
                                 li.X1 = j + 10;
-                                //li.Y1 = ZerroPosi;
                                 li.X2 = (double)i;
                                 li.Y1 = li.Y2 = lineWidths / 2;
                                 li.Stroke = myBrush;
                                 li.StrokeThickness = lineWidths;
                                 _Canv.Children.Add(li);
-                                //ToolTipService.SetToolTip(li,string.Format("11x1={0},y1={1},x2={2},y2={3}",li.X1,li.Y1,li.X2,li.Y2));
-                                //g.DrawImage(near, rect2);
                                 flag = false;
                             }
                             else flag = true;
                         }
 
                     }
-
                     else if (s == "2")
                     {
                         count = 0;
                         if (m_innerChangeStatus == 1)
                         {
-
                             i = (int)(this.Width / lineWidth);
                         }
                         if (m_innerChangeStatus == 2)
@@ -502,18 +514,15 @@ namespace MonitorSystem.ZTControls
                             i += lineWidth;
                             if (flag)
                             {
-                                //g.DrawLine(tempPen, 0, j, 0, i);
-                                //g.DrawImage(near, rect4);
-
+                                if (i > this.Height)
+                                    break;
                                 Line li = new Line();
-                                //li.X1 = ZerroPosi;
                                 li.Y1 = (double)j;
                                 li.X1 = li.X2 = lineWidths / 2;
                                 li.Y2 = (double)i;
                                 li.Stroke = myBrush;
                                 li.StrokeThickness = lineWidths;
                                 _Canv.Children.Add(li);
-                                //ToolTipService.SetToolTip(li, string.Format("22x1={0},y1={1},x2={2},y2={3}", li.X1, li.Y1, li.X2, li.Y2));
                                 flag = false;
                             }
                             else flag = true;
@@ -543,18 +552,17 @@ namespace MonitorSystem.ZTControls
                             i += lineWidth;
                             if (flag)
                             {
-                                //g.DrawLine(tempPen, this.Width, j, this.Width, i);
-                                //g.DrawImage(near, rect);
+                                if (i > this.Height)
+                                    break;
+
                                 Line li = new Line();
                                 //li.X1 = this.Width;
                                 li.Y1 = (double)j;
-                                li.X1=li.X2 = this.Width-(lineWidths/2);
+                                li.X1 = li.X2 = this.Width - (lineWidths / 2);
                                 li.Y2 = (double)i;
                                 li.Stroke = myBrush;
                                 li.StrokeThickness = lineWidths;
-                               // ToolTipService.SetToolTip(li, string.Format("33x1={0},y1={1},x2={2},y2={3}", li.X1, li.Y1, li.X2, li.Y2));
                                 _Canv.Children.Add(li);
-                               
                                 flag = false;
                             }
                             else flag = true;
@@ -571,7 +579,7 @@ namespace MonitorSystem.ZTControls
                         }
                         if (m_innerChangeStatus == 2)
                         {
-                            i =(int)( (this.Width / lineWidth) / 2);
+                            i = (int)((this.Width / lineWidth) / 2);
                         }
                         if (m_innerChangeStatus == 3)
                         {
@@ -584,24 +592,23 @@ namespace MonitorSystem.ZTControls
                             i += lineWidth;
                             if (flag)
                             {
-                                //g.DrawLine(tempPen, j + 10, this.Height, i, this.Height);
-                                //g.DrawImage(near, rect3);
-
+                                if (i > this.Width)
+                                    break;
                                 Line li = new Line();
-                                li.X1 = (double)(j+10);
+                                li.X1 = (double)(j + 10);
                                 //li.Y1 = this.Height;
                                 li.X2 = (double)i;
-                                li.Y1=li.Y2 = this.Height-(lineWidths/2);
+                                li.Y1 = li.Y2 = this.Height - (lineWidths / 2);
                                 li.Stroke = myBrush;
                                 li.StrokeThickness = lineWidths;
                                 //ToolTipService.SetToolTip(li, string.Format("44x1={0},y1={1},x2={2},y2={3}", li.X1, li.Y1, li.X2, li.Y2));
                                 _Canv.Children.Add(li);
-                               
+
                                 flag = false;
                             }
                             else flag = true;
-                        }
-                    }
+                        }//for
+                    }//4
                 }
             }
         }
