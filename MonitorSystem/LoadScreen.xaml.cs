@@ -588,7 +588,11 @@ namespace MonitorSystem
                     DrawLine mDrawLine = new DrawLine();
                     SetEletemt(mDrawLine, obj, eleStae, listObj);
                     return mDrawLine;
-                    
+
+                case "ExtProControl"://窗口式背景控件
+                    ExtProControl mExtProControl = new ExtProControl();
+                    SetEletemt(mExtProControl, obj, eleStae, listObj);
+                    return mExtProControl;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
