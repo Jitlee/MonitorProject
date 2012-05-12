@@ -487,6 +487,12 @@ namespace MonitorSystem
                     SetEletemt(mInputTextBox, obj, eleStae, listObj);
                     return mInputTextBox;
                     //break;
+                case "ButtonCtrl":
+                    ButtonCtrl mButtonCtrl = new ButtonCtrl();
+                    mButtonCtrl.MyText = obj.TxtInfo;
+                    SetEletemt(mButtonCtrl, obj, eleStae, listObj);
+                    return mButtonCtrl;
+                    //break;
                 case "MonitorCur":
                     MonitorCur mPubCur = new MonitorCur();
                     SetEletemt(mPubCur, obj, eleStae, listObj);

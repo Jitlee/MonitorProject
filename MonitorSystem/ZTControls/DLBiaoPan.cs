@@ -329,6 +329,9 @@ namespace MonitorSystem.ZTControls
             SetText();
             PaintBackground();
 
+            SetValue(MinHeightProperty, 50d);
+            SetValue(MinWidthProperty, 100d);
+
             //this.Width = 40;
             //this.Height = 20;
         }
