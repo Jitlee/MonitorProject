@@ -257,8 +257,7 @@ namespace MonitorSystem.ZTControls
             }
         }
 
-        private static readonly DependencyProperty myScaleProperty =
-         DependencyProperty.Register("MyScale",
+        private static readonly DependencyProperty myScaleProperty =DependencyProperty.Register("MyScale",
          typeof(String), typeof(RealTimeCurve), new PropertyMetadata(""));
         private string myScale;
         public String MyScale
@@ -380,15 +379,15 @@ namespace MonitorSystem.ZTControls
         #endregion
 
 
-        public  void SetChannelValue(double fValue)
+        public override void SetChannelValue(float fValue)
         {
             if (MyScale == null || MyScale == "")
                 MyScale = "1";
-            double temp = double.Parse(MyScale);
+            float temp = float.Parse(MyScale);
             if (temp <= 0)
                 temp = 1;
-            fValue = (double)(fValue / temp);
-            RealtimeValue = fValue;            
+            fValue =(float)( fValue / temp);
+            RealtimeValue = double.Parse(fValue.ToString());            
             ShowCurve(RealtimeValue);
         }
 
