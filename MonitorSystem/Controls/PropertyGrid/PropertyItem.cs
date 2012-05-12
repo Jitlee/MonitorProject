@@ -82,6 +82,20 @@ namespace MonitorSystem.Controls
 			}
 		} private string _displayName;
 
+        public string Description
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_description))
+                {
+                    DescriptionAttribute attr = GetAttribute<DescriptionAttribute>(_propertyInfo);
+                    _description = (attr != null) ? attr.Description : Name;
+                }
+
+                return _description;
+            }
+        } private string _description;
+
 		public string Category
 		{
 			get

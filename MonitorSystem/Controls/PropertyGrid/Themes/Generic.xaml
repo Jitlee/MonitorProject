@@ -58,14 +58,32 @@
 									HorizontalScrollBarVisibility="Disabled"
 									VerticalScrollBarVisibility="Auto"
 									>
-						<Grid x:Name="MainGrid" VerticalAlignment="Top">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="16"/>
-								<ColumnDefinition Width="{TemplateBinding DefaultLabelWidth}" MinWidth="50"/>
-								<ColumnDefinition/>
-							</Grid.ColumnDefinitions>
-						</Grid>
-					</ScrollViewer>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Border Height="60" 
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="3"
+                                    BorderBrush="#FFA0A0A0"
+                                    BorderThickness="0,1,0,0"
+                                    Background="#FFDEE1E7">
+                                <TextBlock TextWrapping="Wrap">
+                                <Run x:Name="PropertyNameRun" FontWeight="Bold"/>
+                                <LineBreak/>
+                                <Run x:Name="PropertyDescriptionRun" />
+                                </TextBlock>
+                            </Border>
+						    <Grid x:Name="MainGrid" VerticalAlignment="Top">
+							    <Grid.ColumnDefinitions>
+								    <ColumnDefinition Width="16"/>
+								    <ColumnDefinition Width="{TemplateBinding DefaultLabelWidth}" MinWidth="50"/>
+								    <ColumnDefinition/>
+							    </Grid.ColumnDefinitions>
+                            </Grid>
+                        </Grid>
+                    </ScrollViewer>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>

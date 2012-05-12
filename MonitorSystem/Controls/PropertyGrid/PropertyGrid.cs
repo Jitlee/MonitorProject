@@ -13,6 +13,7 @@ namespace MonitorSystem.Controls
 	using System.Windows.Input;
 	using System.Windows.Media;
 	using System.Windows.Media.Imaging;
+using System.Windows.Documents;
 
 	#endregion
 
@@ -36,6 +37,8 @@ namespace MonitorSystem.Controls
 		ValueEditorBase selectedEditor;
 		ScrollViewer LayoutRoot;
 		Grid MainGrid;
+        Run _propertyNameRun;
+        Run _propertyDescritpionRun;
 		bool loaded = false;
 		bool resetLoadedObject;
 
@@ -154,7 +157,8 @@ namespace MonitorSystem.Controls
 
 			this.LayoutRoot = (ScrollViewer)this.GetTemplateChild("LayoutRoot");
 			this.MainGrid = (Grid)this.GetTemplateChild("MainGrid");
-
+            _propertyNameRun = this.GetTemplateChild("PropertyNameRun") as Run;
+            _propertyDescritpionRun = this.GetTemplateChild("PropertyDescriptionRun") as Run;
 			loaded = true;
 
 			if (resetLoadedObject)
@@ -214,6 +218,8 @@ namespace MonitorSystem.Controls
 		{
 			this.MainGrid.Children.Clear();
 			this.MainGrid.RowDefinitions.Clear();
+            this._propertyDescritpionRun.Text = string.Empty;
+            this._propertyNameRun.Text = string.Empty;
 		}
 		void AddHeaderRow(string category, ref int rowIndex)
 		{
@@ -244,6 +250,10 @@ namespace MonitorSystem.Controls
 			#region Create Display Objects
 			PropertyGridLabel label = CreateLabel(item.Name, item.DisplayName);
 			ValueEditorBase editor = EditorService.GetEditor(item, label);
+            editor.Selected += (o, e) => {
+                this._propertyNameRun.Text = item.DisplayName;
+                this._propertyDescritpionRun.Text = item.Description;
+            };
 			if (null == editor)
 				return;
 			editor.GotFocus += new RoutedEventHandler(this.Editor_GotFocus);
