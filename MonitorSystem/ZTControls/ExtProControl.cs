@@ -110,7 +110,15 @@ namespace MonitorSystem.ZTControls
                     {
                         ForeColor = Common.StringToColor(value);
                     }
-
+                    else if (name == "ExtPath".ToUpper())
+                    {
+                        ExtPath = value;
+                    }
+                    else if (name == "ExtParam".ToUpper())
+                    {
+                        ExtParam = value;
+                    }
+                        
                     else if (name == "MyText".ToUpper())
                     {
                         //this.button1.Text = value;
