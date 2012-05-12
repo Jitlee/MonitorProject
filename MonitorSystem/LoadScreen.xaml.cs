@@ -25,6 +25,7 @@ namespace MonitorSystem
 {
     public partial class LoadScreen : UserControl
     {
+       
         #region 变量 
         public static MonitorServers _DataContext = new MonitorServers();
         /// <summary>
@@ -333,19 +334,22 @@ namespace MonitorSystem
             foreach (V_ScreenMonitorValue obj in result.Entities)
             {
                 var vobj = (MonitorControl)this.csScreen.FindName(obj.ElementID.ToString());
-                float fValue = float.Parse(obj.MonitorValue.ToString());
-                if (vobj.ScreenElement.ElementName == "DigitalBiaoPan")
+                if (vobj.ScreenElement.DeviceID.Value != -1 && vobj.ScreenElement.ChannelNo.Value != -1)
                 {
-                    digitalValue = fValue;
-                    vobj.SetChannelValue(fValue);
-                }
-                else if (vobj.ScreenElement.ElementName == "DrawLine")
-                {
-                    vobj.SetChannelValue(fValue, digitalValue);
-                }
-                else
-                {
-                    vobj.SetChannelValue(fValue);
+                    float fValue = float.Parse(obj.MonitorValue.ToString());
+                    if (vobj.ScreenElement.ElementName == "DigitalBiaoPan")
+                    {
+                        digitalValue = fValue;
+                        vobj.SetChannelValue(fValue);
+                    }
+                    else if (vobj.ScreenElement.ElementName == "DrawLine")
+                    {
+                        vobj.SetChannelValue(fValue, digitalValue);
+                    }
+                    else
+                    {
+                        vobj.SetChannelValue(fValue);
+                    }
                 }
             }
             _DataContext.V_ScreenMonitorValues.Clear();
@@ -569,7 +573,10 @@ namespace MonitorSystem
                     DrawLine mDrawLine = new DrawLine();
                     SetEletemt(mDrawLine, obj, eleStae, listObj);
                     return mDrawLine;
-                    
+                case "DimorphismGraphCtrl"://窗口式背景控件
+                    DimorphismGraphCtrl mDimorphismGraphCtrl = new DimorphismGraphCtrl();
+                    SetEletemt(mDimorphismGraphCtrl, obj, eleStae, listObj);
+                    return mDimorphismGraphCtrl;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));

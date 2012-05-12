@@ -32,11 +32,6 @@ namespace MonitorSystem.ZTControls
 
             this.SetValue(Canvas.ZIndexProperty, 0);
         }
-        private void zedGraphCtrl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            mRect.Width = e.NewSize.Width;
-            mRect.Height = e.NewSize.Height;
-        }
 
         #region 双击事件
         DateTime MousedownTime = DateTime.Now;
