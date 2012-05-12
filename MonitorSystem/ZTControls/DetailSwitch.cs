@@ -102,11 +102,11 @@ namespace MonitorSystem.ZTControls
                 string value = pro.PropertyValue;
                 if (name == "OpenOrNot".ToUpper())
                 {
-                    OpenOrNot = bool.Parse(value);
+                    OpenOrNot = Convert.ToBoolean(value);
                 }
                 else if (name == "IsRightDirect".ToUpper())
                 {
-                    IsRightDirect = bool.Parse(value);
+                    IsRightDirect = Convert.ToBoolean(value);
                 }
             }
         }

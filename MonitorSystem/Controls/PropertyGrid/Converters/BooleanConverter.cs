@@ -18,7 +18,7 @@ namespace MonitorSystem.Controls.Converters
 				string str = ((string)value).Trim();
 				try
 				{
-					return bool.Parse(str);
+					return Convert.ToBoolean(str);
 				}
 				catch (FormatException exception)
 				{

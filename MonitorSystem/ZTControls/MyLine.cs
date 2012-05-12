@@ -164,7 +164,7 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "DottedLine".ToUpper())
                 {
-                    dottedLine = bool.Parse(value);
+                    dottedLine = Convert.ToBoolean(value);
                 }
                 else if (name == "LineColor".ToUpper())
                 {

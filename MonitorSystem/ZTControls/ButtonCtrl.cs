@@ -442,6 +442,8 @@ namespace MonitorSystem.ZTControls
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var list = GetChildScreenObj();
+            if (list == null)
+                return;
             _menu.Items.Clear();
             foreach (var screen in list)
             {

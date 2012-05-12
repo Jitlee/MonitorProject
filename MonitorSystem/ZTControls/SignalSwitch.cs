@@ -117,11 +117,11 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "IsFlash".ToUpper())
                 {
-                    IsFlash = bool.Parse(value);
+                    IsFlash = Convert.ToBoolean(value);
                 }
                 else if (name == "FlashLogic".ToUpper())
                 {
-                    FlashLogic = bool.Parse(value);
+                    FlashLogic = Convert.ToBoolean(value);
                 }
                 else if (name == "Style".ToUpper())
                 {
@@ -129,7 +129,7 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "OpenOrNot".ToUpper())
                 {
-                    OpenOrNot =bool.Parse(value);
+                    OpenOrNot =Convert.ToBoolean(value);
                 }
             }
             

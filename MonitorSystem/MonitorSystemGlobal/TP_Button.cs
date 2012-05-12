@@ -221,7 +221,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                 }
                 else if (pro.PropertyName == "HaveEdge")
                 {
-                    HaveEdge =bool.Parse( pro.PropertyValue);
+                    HaveEdge =Convert.ToBoolean( pro.PropertyValue);
                 }
             }
         }

@@ -157,11 +157,11 @@ namespace MonitorSystem.ZTControls
                 
                 if (name == "LeftOrNot".ToUpper())
                 {
-                    leftOrNot = bool.Parse(value);
+                    leftOrNot = Convert.ToBoolean(value);
                 }
                 else if (name == "GoodOrNot".ToUpper())
                 {
-                    goodOrNot = bool.Parse(value);
+                    goodOrNot = Convert.ToBoolean(value);
                 }
                 else if (name == "LineWidths".ToUpper())
                 {
@@ -169,7 +169,7 @@ namespace MonitorSystem.ZTControls
                 }
                 if (name == "Beeline".ToUpper())
                 {
-                    beeline = bool.Parse(value);
+                    beeline = Convert.ToBoolean(value);
                 }
                 else if (name == "EdgeSize".ToUpper())
                 {
@@ -182,7 +182,7 @@ namespace MonitorSystem.ZTControls
 
                 else if (name == "IsRightDirect".ToUpper())
                 {
-                    isRightDirect = bool.Parse(value);
+                    isRightDirect = Convert.ToBoolean(value);
                 }
             }
 

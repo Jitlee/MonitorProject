@@ -44,6 +44,17 @@ namespace MonitorSystem
         /// 系统参数
         /// </summary>
         t_MonitorSystemParam SystemParam;
+
+        /// <summary>
+        /// 当前屏幕所有元素,已保存的元素,用于删除
+        /// </summary>
+        List<t_Element> ScreenAllElement = new List<t_Element>();
+
+        /// <summary>
+        /// 定时更新值
+        /// </summary>
+        DispatcherTimer timerRefrshValue = new DispatcherTimer();
+
         #endregion
         public LoadScreen()
         {
@@ -57,6 +68,8 @@ namespace MonitorSystem
 
         public static void Load(t_Screen screen)
         {
+            if (screen == null)
+                return;
             _instance.LoadScreenData(screen);
         }
 
@@ -127,7 +140,10 @@ namespace MonitorSystem
             }
             SetDefultScreen();
             //初使化定时器
-            timerRefrshValue.Interval = new TimeSpan(0, 0, 5);
+            int MonitorTime=SystemParam.MonitorRefreshTime.Value;
+            if(MonitorTime <=0)
+                MonitorTime=5;
+            timerRefrshValue.Interval = new TimeSpan(0, 0, MonitorTime);
             timerRefrshValue.Tick += new EventHandler(timer_Tick);
             if (_CurrentScreen != null)
             {
@@ -317,10 +333,7 @@ namespace MonitorSystem
         #endregion
 
         #region 定时更新值
-        /// <summary>
-        /// 定时更新值
-        /// </summary>
-        DispatcherTimer timerRefrshValue = new DispatcherTimer();
+        
 
         protected void timer_Tick(object sender, EventArgs e)
         {
@@ -384,10 +397,7 @@ namespace MonitorSystem
         #endregion
 
         #region 加载场景
-        /// <summary>
-        /// 当前屏幕所有元素,已保存的元素
-        /// </summary>
-        List<t_Element> ScreenAllElement = new List<t_Element>();
+        
         /// <summary>
         /// 加载场景
         /// </summary>
@@ -906,6 +916,7 @@ namespace MonitorSystem
            EntityChangeSet obj= result.ChangeSet;
            if (obj.AddedEntities.Count == 0)
            {
+               LoadScreenData(_CurrentScreen);
                MessageBox.Show("保存成功！", "温馨提示", MessageBoxButton.OK);
                return;
            }

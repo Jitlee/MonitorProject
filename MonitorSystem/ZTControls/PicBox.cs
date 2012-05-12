@@ -81,11 +81,11 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "OpenOrNot".ToUpper())
                 {
-                    _OpenOrNot =bool.Parse(value);
+                    _OpenOrNot =Convert.ToBoolean(value);
                 }
                 else if (name == "PicInBack".ToUpper())
                 {
-                    _PicInBack = bool.Parse(value);
+                    _PicInBack = Convert.ToBoolean(value);
                 }
             }
             FullRect();

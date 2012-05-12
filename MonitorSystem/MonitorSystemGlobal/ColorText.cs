@@ -97,14 +97,9 @@ namespace MonitorSystem.MonitorSystemGlobal
                     string value = ep.PropertyValue.Trim();
                     if (name == "OpenOrNot".ToUpper())
                     {
-                        if (value == null || value == "")
-                        {
-                            OpenOrNot = false;
-                        }
-                        else
-                        {
-                            OpenOrNot = Boolean.Parse(value);
-                        }
+                       
+                            OpenOrNot = Convert.ToBoolean(value);
+                       
                     }
                     else if (name == "OpenText".ToUpper())
                     {

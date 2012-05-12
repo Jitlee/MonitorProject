@@ -101,14 +101,7 @@ namespace MonitorSystem.ZTControls
                     string value = ep.PropertyValue.Trim();
                     if (name == "OpenOrNot".ToUpper())
                     {
-                        if (value == null || value == "")
-                        {
-                            OpenOrNot = false;
-                        }
-                        else
-                        {
-                            OpenOrNot = Boolean.Parse(value);
-                        }
+                        OpenOrNot = Convert.ToBoolean(value);
                     }
                     else if (name == "OpenText".ToUpper())
                     {
@@ -127,7 +120,6 @@ namespace MonitorSystem.ZTControls
                     {
                         FalseColor = Common.StringToColor(value);
                     }
-
                 }
                 //this.Invalidate();
             }
@@ -142,6 +134,7 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+            Transparent = ScreenElement.Transparent.Value;
 
             ForeColor = Common.StringToColor(ScreenElement.ForeColor);
             BackColor = Common.StringToColor(ScreenElement.BackColor);
@@ -155,6 +148,28 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
+        private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
+        typeof(int), typeof(ColorText), new PropertyMetadata(0));
+        private int _Transparent = 0;
+        [DefaultValue(""), Description("透明属性"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                if (value == 1)
+                {
+                    _background.Background = new SolidColorBrush();
+                }
+                else
+                {
+                    _background.Background = new SolidColorBrush(Colors.White);
+                }
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
 
         private static readonly DependencyProperty OpenOrNotProperty =
             DependencyProperty.Register("OpenOrNot",
@@ -250,7 +265,6 @@ namespace MonitorSystem.ZTControls
         /// <summary>
         /// 逻辑真颜色
         /// </summary>
-        private Color trueColor;
         [DefaultValue("RGB(177,255,255)"), Description("逻辑真颜色"), Category("我的属性")]
         public Color TrueColor
         {
@@ -258,8 +272,7 @@ namespace MonitorSystem.ZTControls
             set
             {
                 this.SetValue(TrueColorProperty, value);
-
-                SetAttrByName("TrueColor", trueColor.ToString());
+                SetAttrByName("TrueColor", value.ToString());
             }
         }
 
@@ -379,7 +392,7 @@ namespace MonitorSystem.ZTControls
         {
             if (OpenOrNot)
             {
-                _text.Foreground = new SolidColorBrush(TrueColor);//如一SolidBrush   
+                _text.Foreground = new SolidColorBrush(TrueColor);//如一SolidBrush
                 _text.Text = OpenText;
             }
             else

@@ -21,7 +21,17 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             Content = _image;
             Stretch = Stretch.Fill;
+
+            this.MouseLeftButtonUp +=new MouseButtonEventHandler(TP_MouseLeftButtonUp);
         }
+
+        public void TP_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            //MessageBox.Show("");
+           t_Screen ts= GetChildScreenID();
+           LoadScreen.Load(ts);
+        }
+
 
         #region 属性
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Translate", "Foreground",
