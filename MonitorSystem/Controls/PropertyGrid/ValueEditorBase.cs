@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System;
 
 namespace MonitorSystem.Controls
 {
@@ -65,7 +66,13 @@ namespace MonitorSystem.Controls
 			this.Focus();
 		}
 
-
+        private void OnSelected()
+        {
+            if (null != Selected)
+            {
+                Selected(this, EventArgs.Empty);
+            }
+        }
 		/// <summary>
 		/// Gets or sets whether this item is selected
 		/// </summary>
@@ -85,6 +92,7 @@ namespace MonitorSystem.Controls
 					{
 						this.Label.Background = new SolidColorBrush(PropertyGrid.backgroundColorFocused);
 						this.Label.Foreground = new SolidColorBrush(Colors.White);
+                        OnSelected();
 					}
 					else
 					{
@@ -106,7 +114,9 @@ namespace MonitorSystem.Controls
 		/// <summary>
 		/// Gets the associated PropertyItem for this control
 		/// </summary>
-		public PropertyItem Property { get; private set; }
+        public PropertyItem Property { get; private set; }
+
+        public event EventHandler Selected;
 		#endregion
 	}
 }

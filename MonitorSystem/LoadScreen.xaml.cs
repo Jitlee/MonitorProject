@@ -108,16 +108,19 @@ namespace MonitorSystem
            
             fwProperty.Width = 300;
             fwProperty.Height = 600;
-            fwProperty.Title = "设计";
+            fwProperty.Title = "场景";
             fwProperty.MaxHeight = 600;
             fwProperty.MaxWidth = 400;
            // fwProperty.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
            // double d = Convert.ToDouble(gdContent.GetValue(Canvas.WidthProperty));
            //MessageBox.Show(d.ToString());
-            double mtop = 100;
-            double mLeft = 800;
-            fwProperty.SetValue(Canvas.TopProperty, mtop);
-            fwProperty.SetValue(Canvas.LeftProperty, mLeft);
+            //double mtop = 100;
+            //double mLeft = 800;
+            //fwProperty.SetValue(Canvas.TopProperty, mtop);
+            //fwProperty.SetValue(Canvas.LeftProperty, mLeft);
+            fwProperty.SetValue(MarginProperty, new Thickness(50,0,30,0));
+            fwProperty.VerticalAlignment = VerticalAlignment.Center;
+            fwProperty.HorizontalAlignment = HorizontalAlignment.Right;
             CBIsztControl.IsEnabled = true;
         }
 
@@ -602,6 +605,10 @@ namespace MonitorSystem
                     DrawLine mDrawLine = new DrawLine();
                     SetEletemt(mDrawLine, obj, eleStae, listObj);
                     return mDrawLine;
+                case "ExtProControl"://窗口式背景控件
+                    ExtProControl mExtProControl = new ExtProControl();
+                    SetEletemt(mExtProControl, obj, eleStae, listObj);
+                    return mExtProControl;
                 case "DimorphismGraphCtrl"://窗口式背景控件
                     DimorphismGraphCtrl mDimorphismGraphCtrl = new DimorphismGraphCtrl();
                     SetEletemt(mDimorphismGraphCtrl, obj, eleStae, listObj);
