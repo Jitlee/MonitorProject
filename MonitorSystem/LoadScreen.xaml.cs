@@ -591,7 +591,10 @@ namespace MonitorSystem
                 PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = mControl.BrowsableProperties;
                 PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl.GetRootControl(); 
             };
-            mControl.Name = obj.ElementID.ToString();
+            if (eleStae == ElementSate.Save)
+            {
+                mControl.Name = obj.ElementID.ToString();
+            }
             mControl.ScreenElement = obj;
             mControl.ListElementProp = listObj;
             mControl.ElementState = eleStae;

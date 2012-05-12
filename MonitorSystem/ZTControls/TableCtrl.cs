@@ -27,22 +27,22 @@ namespace MonitorSystem.ZTControls
     public class TableCtrl : MonitorControl
     {
         DataGrid theGrid = new DataGrid();
-        ScrollViewer sv = new ScrollViewer();
+        //ScrollViewer sv = new ScrollViewer();
         public TableCtrl()
         {
-            sv.Content = theGrid;
-            sv.Width = 300;
-            sv.Height = 200;
-            sv.Background = new SolidColorBrush(Colors.White);
-            this.Content = sv;
+            //sv.Content = theGrid;
+            //sv.Width = 300;
+            //sv.Height = 200;
+            theGrid.Background = new SolidColorBrush(Colors.White);
+            this.Content = theGrid;
 
             LoadData();
             this.SizeChanged += new SizeChangedEventHandler(TableCtrl_SizeChanged);
         }
         private void TableCtrl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            sv.Width = e.NewSize.Width;
-            sv.Height = e.NewSize.Height;
+            theGrid.Width = e.NewSize.Width;
+            theGrid.Height = e.NewSize.Height;
         }
         #region 属性设置
         //SetSingleProperty tpp = new SetSingleProperty();
@@ -122,8 +122,8 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             Transparent = ScreenElement.Transparent.Value;
 
-            sv.Width = this.Width = (double)ScreenElement.Width;
-            sv.Height = this.Height = (double)ScreenElement.Height;
+            theGrid.Width = this.Width = (double)ScreenElement.Width;
+            theGrid.Height = this.Height = (double)ScreenElement.Height;
         }
 
         public List<t_ElementProperty> GetProperty()
@@ -276,8 +276,8 @@ namespace MonitorSystem.ZTControls
         #endregion
 
       #region 从wcf中加载数据
-         ObservableCollection<MyDataService.DataTableInfo> _tables;
-        IEnumerable _lookup;
+         //ObservableCollection<MyDataService.DataTableInfo> _tables;
+        //IEnumerable _lookup;
 
         private void GetData(string sql, object userState)
         {
@@ -319,59 +319,8 @@ namespace MonitorSystem.ZTControls
             theGrid.Columns.Clear();
             theGrid.ItemsSource = DynamicDataBuilder.GetDataList(e.Result);
 
-            if (e.Result.Tables.Count > 0)
-            {
-                foreach (MyDataService.DataColumnInfo column in e.Result.Tables[0].Columns)
-                {
-                    if (column.DisplayIndex != -1)
-                    {
-                        DataGridColumn col;
-                        DataTemplate dt;
-                        if (column.DataTypeName == typeof(bool).FullName)
-                        {
-                            DataGridCheckBoxColumn checkBoxColumn = new DataGridCheckBoxColumn();
-                            //checkBoxColumn.Binding = new Binding(column.ColumnName);
-                            col = checkBoxColumn;
-                        }
-                        else if (column.DataTypeName == typeof(DateTime).FullName)
-                        {
-                            DataGridTemplateColumn templateColumn = new DataGridTemplateColumn();
-                            string temp = TemplateManager.DataTemplates["DateTimeCellTemplate"];
-                            temp = temp.Replace("@HorizontalAlignment@", HorizontalAlignment.Left.ToString());
-                            temp = temp.Replace("@Text@", column.ColumnName);
-                            temp = temp.Replace("@DateTimeFormat@", "MM/dd/yyyy");
-
-                            dt = XamlReader.Load(temp) as DataTemplate;
-                            templateColumn.CellTemplate = dt;
-
-                            DataTemplate t = new DataTemplate();
-
-                            temp = TemplateManager.DataTemplates["DateTimeCellEditingTemplate"];
-                            temp = temp.Replace("@HorizontalAlignment@", HorizontalAlignment.Left.ToString());
-                            temp = temp.Replace("@SelectedDate@", column.ColumnName);
-
-                            dt = XamlReader.Load(temp) as DataTemplate;
-
-                            templateColumn.CellEditingTemplate = dt;
-                            col = templateColumn;
-
-                        }
-                        else
-                        {
-                            DataGridTextColumn textColumn = new DataGridTextColumn();
-                            textColumn.Binding = new Binding(column.ColumnName);
-                            textColumn.Binding.ValidatesOnExceptions = true;
-                            col = textColumn;
-                        }
-                        col.IsReadOnly = true;
-
-                        col.Header = column.ColumnTitle;
-                        col.SortMemberPath = column.ColumnName;
-                    }
-                }
-            }
-            //theGrid.CanUserReorderColumns = false;
-            // theGrid.FrozenColumnCount = 2;
+           
+          
             theGrid.HorizontalContentAlignment = HorizontalAlignment.Center;
 
 

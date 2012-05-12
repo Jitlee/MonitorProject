@@ -18,14 +18,14 @@ namespace MonitorSystem.GetData
     {
         protected Dictionary<string, object> _backupData = new Dictionary<string, object>();
 
-        public enum DataStates
-        {
-            Unchanged = 2,
-            Added = 4,
-            Deleted = 8,
-            Modified = 16,
-        }
-        public DataStates State { get; set; }
+        //public enum DataStates
+        //{
+        //    Unchanged = 2,
+        //    Added = 4,
+        //    Deleted = 8,
+        //    Modified = 16,
+        //}
+        //public DataStates State { get; set; }
         public object GetFieldValue(string fieldname)
         {
             PropertyInfo pi = this.GetType().GetProperty(fieldname);
@@ -38,7 +38,7 @@ namespace MonitorSystem.GetData
             this.SetFieldValue(fieldname, value);
             if (initial)
             {
-                this.State = DataStates.Unchanged;
+                //this.State = DataStates.Unchanged;
                 if (!_backupData.ContainsKey(fieldname))
                     _backupData.Add(fieldname, value);
             }
@@ -54,21 +54,21 @@ namespace MonitorSystem.GetData
                     pi.SetValue(this, pValue, null);
             }
         }
-        public void Delete()
-        {
-            this.State = DataStates.Deleted;
-        }
-        public void NewRow()
-        {
-            this.State = DataStates.Added;
-        }
+        //public void Delete()
+        //{
+        //    this.State = DataStates.Deleted;
+        //}
+        //public void NewRow()
+        //{
+        //    this.State = DataStates.Added;
+        //}
         protected void NotifyChange(params string[] properties)
         {
             if (PropertyChanged != null)
             {
                 foreach (string p in properties)
                     PropertyChanged(this, new PropertyChangedEventArgs(p));
-                this.State = DataStates.Modified;
+                //this.State = DataStates.Modified;
             }
         }
         #region INotifyPropertyChanged Members
@@ -91,7 +91,6 @@ namespace MonitorSystem.GetData
         {
 
         }
-
         #endregion
     }
 }
