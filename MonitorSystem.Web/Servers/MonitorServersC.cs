@@ -52,8 +52,15 @@ namespace MonitorSystem.Web.Servers
                     string s = p.Execute("", obj.ComputeStr.Trim());
                     if (!string.IsNullOrEmpty(s))
                     {
-                        float fValue = (float)Convert.ToDouble(s);
-                        obj.MonitorValue = fValue;
+                        float fValue ;
+                        if (float.TryParse(s, out fValue))
+                        {
+                            obj.MonitorValue = fValue;
+                        }
+                        else
+                        {
+                            obj.MonitorValue = -1.0f;
+                        }
                     }
                     else
                     {

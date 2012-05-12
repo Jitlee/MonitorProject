@@ -100,50 +100,32 @@ namespace MonitorSystem.ZTControls
                     string value = pro.PropertyValue.Trim();
                     if (name == "BackColor".ToUpper())
                     {
-                        //this.button1.BackColor = GetColorFromStr(value);
                         BackColor = Common.StringToColor(value);
                     }
-                    else
-                    {
-                        if (name == "Font".ToUpper())
-                        {
+                    else if (name == "Font".ToUpper())
+                    { 
 
-                            //SetMyFont(value);
-                            //Font = GetFontFromStr(value);
-
-                            //Font = value;
-                        }
-                        else
-                        {
-
-                            if (name == "ForeColor".ToUpper())
-                            {
-                                //this.button1.ForeColor = GetColorFromStr(value);
-                                ForeColor = Common.StringToColor(value);
-                            }
-
-                            else if (name == "MyText".ToUpper())
-                            {
-                                //this.button1.Text = value;
-                                MyText = value;
-                            }
-                            else if (name == "BackImageName".ToUpper())
-                            {
-                                if (value != null && value.Trim() != "")
-                                    BackImageName = value.Trim();
-                            }
-                            else if (name == "myTextImageRelation".ToUpper())
-                            {
-                                if (value != null && value.Trim() != "")
-                                    myTextImageRelation = GetTextImageRelationFromStr(value.Trim());
-                            }
-
-
-
-                        }
                     }
-                    //this.Invalidate();
+                    else if (name == "ForeColor".ToUpper())
+                    {
+                        ForeColor = Common.StringToColor(value);
+                    }
 
+                    else if (name == "MyText".ToUpper())
+                    {
+                        //this.button1.Text = value;
+                        MyText = value;
+                    }
+                    else if (name == "BackImageName".ToUpper())
+                    {
+                        if (value != null && value.Trim() != "")
+                            BackImageName = value.Trim();
+                    }
+                    else if (name == "myTextImageRelation".ToUpper())
+                    {
+                        if (value != null && value.Trim() != "")
+                            myTextImageRelation = GetTextImageRelationFromStr(value.Trim());
+                    }
                 }
                 catch
                 {
