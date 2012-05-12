@@ -11,7 +11,7 @@
              xmlns:controls="clr-namespace:MonitorSystem.Controls">
     
     <Grid x:Name="LayoutRoot" Background="White">
-        <sdk:TabControl   Name="tabControl1" >
+        <sdk:TabControl   Name="tabControl1" SelectionChanged="tabControl1_SelectionChanged">
             <sdk:TabItem Header="场景" Name="tabItem1">
                 <Grid  Name="canvs1">
                     <sdk:TreeView    Name="tvScreen">

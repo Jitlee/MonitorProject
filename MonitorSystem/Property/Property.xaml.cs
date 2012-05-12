@@ -18,21 +18,6 @@ using System.Collections;
 
 namespace MonitorSystem
 {
-    public class ScreenArgs:  EventArgs
-    {
-        t_Screen _Screen;
-        /// <summary>
-        /// 场景对象 
-        /// </summary>
-        public t_Screen Screen
-        {
-            get { return _Screen; }
-            set { _Screen = value; }
-        }
-    }
-
-   
-
     public partial class PropertyMain : UserControl
     {
         MonitorServers _DataContext = new MonitorServers();
@@ -356,8 +341,34 @@ namespace MonitorSystem
             TreeItemRightItem = null;
         }
         #endregion
+
+
+        private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.Parent is FloatableWindow)
+            {
+                (this.Parent as FloatableWindow).Title = (tabControl1.SelectedItem as TabItem).Header;
+            }
+        }
         #endregion
 
     }
+
+
+    public class ScreenArgs : EventArgs
+    {
+        t_Screen _Screen;
+        /// <summary>
+        /// 场景对象 
+        /// </summary>
+        public t_Screen Screen
+        {
+            get { return _Screen; }
+            set { _Screen = value; }
+        }
+    }
+
+   
+
 }
 

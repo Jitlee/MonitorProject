@@ -94,7 +94,7 @@ namespace MonitorSystem
            
             fwProperty.Width = 300;
             fwProperty.Height = 600;
-            fwProperty.Title = "设计";
+            fwProperty.Title = "场景";
             fwProperty.MaxHeight = 600;
             fwProperty.MaxWidth = 400;
            // fwProperty.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
