@@ -203,7 +203,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             {
                 if (pro.PropertyName == "IsRightDirect")
                 {
-                    _IsRightDirect = Convert.ToBoolean(pro.PropertyValue);
+                    _IsRightDirect = Common.ConvertToBool(pro.PropertyValue);
                 }
                 else if (pro.PropertyName == "EdgeSize")
                 {

@@ -56,6 +56,20 @@ namespace MonitorSystem
             }
         }
 
+        public static bool ConvertToBool(string strValue)
+        {
+            strValue = strValue.ToUpper();
+            if(string.IsNullOrEmpty(strValue))
+                return false;
+            if (strValue == "0")
+                return false;
+            if (strValue == "1")
+                return true;
+            if (strValue == "TRUE" || strValue== "FALSE")
+                return Convert.ToBoolean(strValue);
+            return false;
+        }
+
         //public struct Font
         //{
         //    public double FontSize { get; set; }
@@ -102,7 +116,7 @@ namespace MonitorSystem
         //            if (keyVal[0] == " GdiCharSet")
         //                gdiCharSet = Convert.ToByte(keyVal[1]);
         //            if (keyVal[0] == " GdiVerticalFont")
-        //                gdiVerti = Convert.ToBoolean(keyVal[1]);
+        //                gdiVerti = Common.ConvertToBool(keyVal[1]);
         //        }
         //    }
         //    Font tmpfont = new Font(Name, fontSize, style, units, gdiCharSet, gdiVerti);

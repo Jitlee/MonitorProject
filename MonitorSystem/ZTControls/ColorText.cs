@@ -23,7 +23,7 @@ namespace MonitorSystem.ZTControls
 
         public override void SetChannelValue(float fValue)
         {
-            OpenOrNot = Convert.ToBoolean(fValue);
+            OpenOrNot = Common.ConvertToBool(fValue.ToString());
         }
 
         public override void DesignMode()
@@ -106,7 +106,7 @@ namespace MonitorSystem.ZTControls
                     string value = ep.PropertyValue.Trim();
                     if (name == "OpenOrNot".ToUpper())
                     {
-                        OpenOrNot = Convert.ToBoolean(value);
+                        OpenOrNot = Common.ConvertToBool(value);
                     }
                     else if (name == "OpenText".ToUpper())
                     {
@@ -169,7 +169,7 @@ namespace MonitorSystem.ZTControls
                 }
                 else
                 {
-                    _background.Background = new SolidColorBrush(Colors.White);
+                    _background.Background = new SolidColorBrush(BackColor);
                 }
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
@@ -390,11 +390,19 @@ namespace MonitorSystem.ZTControls
 
         private void PaintBackground()
         {
-            _background.Background = new SolidColorBrush(BackColor);
+         //   _background.Background = new SolidColorBrush(BackColor);
         }
 
         private void ShowText()
         {
+            if (_Transparent == 1)
+            {
+                _background.Background = new SolidColorBrush();
+            }
+            else
+            {
+                _background.Background = new SolidColorBrush(BackColor);
+            }
             if (OpenOrNot)
             {
                 _text.Foreground = new SolidColorBrush(TrueColor);//如一SolidBrush

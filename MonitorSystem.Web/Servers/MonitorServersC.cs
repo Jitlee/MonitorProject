@@ -50,7 +50,7 @@ namespace MonitorSystem.Web.Servers
 
             foreach (V_ScreenMonitorValue obj in eValue)
             {
-                if (!string.IsNullOrEmpty(obj.ComputeStr.Trim()))
+                if (!string.IsNullOrEmpty(obj.ComputeStr))
                 {
                     Paser p = new Paser();
                     string s = p.Execute("", obj.ComputeStr.Trim());

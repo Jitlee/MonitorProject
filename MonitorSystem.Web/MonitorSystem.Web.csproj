@@ -70,7 +70,9 @@
     <Content Include="Pic\Near2.jpg" />
     <Content Include="Silverlight.js" />
     <Content Include="test1.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

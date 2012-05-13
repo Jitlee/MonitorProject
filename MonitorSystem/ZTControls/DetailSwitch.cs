@@ -22,7 +22,7 @@ namespace MonitorSystem.ZTControls
     {
         public override void SetChannelValue(float fValue)
         {
-            OpenOrNot = Convert.ToBoolean(fValue);
+            OpenOrNot = Common.ConvertToBool(fValue.ToString());
         }
 
         public override void DesignMode()
@@ -102,11 +102,11 @@ namespace MonitorSystem.ZTControls
                 string value = pro.PropertyValue;
                 if (name == "OpenOrNot".ToUpper())
                 {
-                    OpenOrNot = Convert.ToBoolean(value);
+                    OpenOrNot = Common.ConvertToBool(value);
                 }
                 else if (name == "IsRightDirect".ToUpper())
                 {
-                    IsRightDirect = Convert.ToBoolean(value);
+                    IsRightDirect = Common.ConvertToBool(value);
                 }
             }
         }

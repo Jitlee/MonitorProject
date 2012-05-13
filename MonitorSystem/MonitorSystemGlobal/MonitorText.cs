@@ -164,7 +164,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             {
                 if (pro.PropertyName == "LinearChange")
                 {
-                    LinearChange = Convert.ToBoolean(pro.PropertyValue);
+                    LinearChange = Common.ConvertToBool(pro.PropertyValue);
                 }
                 else if (pro.PropertyName == "FromColor")
                 {

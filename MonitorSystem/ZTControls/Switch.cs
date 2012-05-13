@@ -18,7 +18,7 @@ namespace MonitorSystem.ZTControls
     {
         public override void SetChannelValue(float fValue)
         {
-            OpenOrNot = Convert.ToBoolean(fValue);
+            OpenOrNot = Common.ConvertToBool(fValue.ToString());
         }
 
         public override void DesignMode()

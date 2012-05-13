@@ -131,14 +131,8 @@ namespace MonitorSystem.ZTControls
 
         public void Init()
         {
-            //var v = LoadScreen._DataContext.t_Devices.Where(a => a.DeviceID == _DeviceID);
-
-            //if (v.Count() > 0)
-            //{
-            //    cbDeviceID.SelectedItem = v.First();
-            //}
-            ////通道
-            //cbLayer.SelectedIndex = _LevelNo - 1;
+            if (_ComputeStr == null)
+                _ComputeStr = "";
             txtBDS.Text = _ComputeStr;
             var v = _devices.FirstOrDefault(a => a.DeviceID == _DeviceID);
             if (null != v)

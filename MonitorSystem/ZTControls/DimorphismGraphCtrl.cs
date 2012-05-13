@@ -120,7 +120,7 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "WhichBackImage".ToUpper())
                 {
-                    _WhichBackImage = Convert.ToBoolean(value);
+                    _WhichBackImage = Common.ConvertToBool(value);
                 }
                 else if (name == "RefreshRate".ToUpper())
                 {

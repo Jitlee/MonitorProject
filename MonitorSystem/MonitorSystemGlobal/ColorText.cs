@@ -98,7 +98,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                     if (name == "OpenOrNot".ToUpper())
                     {
                        
-                            OpenOrNot = Convert.ToBoolean(value);
+                            OpenOrNot = Common.ConvertToBool(value);
                        
                     }
                     else if (name == "OpenText".ToUpper())

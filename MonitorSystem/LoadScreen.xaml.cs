@@ -394,24 +394,33 @@ namespace MonitorSystem
         }
 
         /// <summary>
+        /// 是否显示保存成功提示
+        /// </summary>
+        Boolean IsShowSaveToot = false;
+        /// <summary>
         /// 属性窗口，打开场景事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
         protected void prop_ChangeScreen(object sender,EventArgs args)
         {
+            ScreenArgs mobj = (ScreenArgs)args;
+            _CurrentScreen = mobj.Screen;
+
             if (_CurrentScreen != null)
             {
                 if (MessageBox.Show("确定当前改动吗？", "提示", MessageBoxButton.OKCancel)
                     == MessageBoxResult.OK)
                 {
+                    IsShowSaveToot = false;
                     SaveElement();
                 }
+                else
+                {
+                    LoadScreenData(_CurrentScreen);
+                }
             }
-
-            ScreenArgs mobj = (ScreenArgs)args;
-            _CurrentScreen = mobj.Screen;
-            LoadScreenData(_CurrentScreen);
+            
         }
         #endregion
 
@@ -438,6 +447,8 @@ namespace MonitorSystem
             foreach (V_ScreenMonitorValue obj in result.Entities)
             {
                 var vobj = (MonitorControl)this.csScreen.FindName(obj.ElementID.ToString());
+                if (vobj == null)
+                    continue;
                 if (vobj.ScreenElement.DeviceID.Value != -1 && vobj.ScreenElement.ChannelNo.Value != -1)
                 {
                     float fValue = float.Parse(obj.MonitorValue.ToString());
@@ -502,16 +513,12 @@ namespace MonitorSystem
             imgB.AlignmentX = AlignmentX.Left;
             imgB.AlignmentY = AlignmentY.Top;
             csScreen.Background = imgB;
-            
-            //RC.SetValue(Canvas.ZIndexProperty, 1000);
-            //RC.Stroke = new SolidColorBrush(Colors.Black);
-            //csScreen.Children.Add(RC);
+
             //设置当前
             _CurrentScreen = _Screen;
             //加载元素
             _DataContext.Load(_DataContext.GetT_ElementQuery().Where(a => a.ScreenID == _Screen.ScreenID),
                 LoadElementCompleted, _Screen.ScreenID);
-
         }
 
         /// <summary>
@@ -527,7 +534,6 @@ namespace MonitorSystem
             }
             _DataContext.Load(_DataContext.GetScreenElementPropertyQuery(Convert.ToInt32(result.UserState)),
                 LoadElementPropertiesCompleted, result.UserState);
-           
         }
        
         /// <summary>
@@ -827,6 +833,7 @@ namespace MonitorSystem
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            IsShowSaveToot = true;//显示保存成功提示
             SaveElement();
         }
 
@@ -1003,8 +1010,12 @@ namespace MonitorSystem
            EntityChangeSet obj= result.ChangeSet;
            if (obj.AddedEntities.Count == 0)
            {
+               if (IsShowSaveToot)
+               {
+                   IsShowSaveToot = false;
+                   MessageBox.Show("保存成功！", "温馨提示", MessageBoxButton.OK);
+               }
                LoadScreenData(_CurrentScreen);
-               MessageBox.Show("保存成功！", "温馨提示", MessageBoxButton.OK);
                return;
            }
            foreach (var v in obj.AddedEntities)
@@ -1030,8 +1041,12 @@ namespace MonitorSystem
             AddElementNumber++;
             if (listMonitorAddElement.Count <= AddElementNumber)
             {
+                if (IsShowSaveToot)
+                {
+                    IsShowSaveToot = false;
+                    MessageBox.Show("保存成功！", "温馨提示", MessageBoxButton.OK);
+                }
                 LoadScreenData(_CurrentScreen);
-                MessageBox.Show("保存成功！","温馨提示",MessageBoxButton.OK);
                 return;
             }
             t_Element elem = listMonitorAddElement[AddElementNumber].ScreenElement;

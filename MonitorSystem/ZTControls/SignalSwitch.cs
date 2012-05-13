@@ -21,7 +21,7 @@ namespace MonitorSystem.ZTControls
     {
         public override void SetChannelValue(float fValue)
         {
-            OpenOrNot = Convert.ToBoolean(fValue);
+            OpenOrNot = Common.ConvertToBool(fValue.ToString());
             if (IsFlash)
             {
                 if (OpenOrNot == FlashLogic)
@@ -117,11 +117,11 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "IsFlash".ToUpper())
                 {
-                    IsFlash = Convert.ToBoolean(value);
+                    IsFlash = Common.ConvertToBool(value);
                 }
                 else if (name == "FlashLogic".ToUpper())
                 {
-                    FlashLogic = Convert.ToBoolean(value);
+                    FlashLogic = Common.ConvertToBool(value);
                 }
                 else if (name == "Style".ToUpper())
                 {
@@ -129,7 +129,7 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "OpenOrNot".ToUpper())
                 {
-                    OpenOrNot =Convert.ToBoolean(value);
+                    OpenOrNot =Common.ConvertToBool(value);
                 }
             }
             
