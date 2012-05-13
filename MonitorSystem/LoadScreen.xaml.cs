@@ -59,7 +59,7 @@ namespace MonitorSystem
         public LoadScreen()
         {
             InitializeComponent();
-           
+            wrapPanel1.SetValue(Canvas.ZIndexProperty, 999);
             //实例化
             Init();
             _SenceCommand = new DelegateCommand<t_Screen>(LoadSence);
@@ -477,7 +477,7 @@ namespace MonitorSystem
         }
         #endregion
 
-       
+        #region 将元素显示到场景
         /// <summary>
         /// 显示元素
         /// </summary>
@@ -654,6 +654,7 @@ namespace MonitorSystem
             if (CBIsztControl.IsChecked.Value)
                 mControl.DesignMode();
         }
+        #endregion
 
         /// <summary>
         /// 从设计中选择的控件并在场景中，画的控件 
@@ -690,7 +691,6 @@ namespace MonitorSystem
                 }
 
                 ShowElement(mElement, ElementSate.New, listElementPro).DesignMode();
-                //_DataContext.t_Elements.Add(mElement);
             }
         }
 
@@ -735,6 +735,7 @@ namespace MonitorSystem
             return mElem;
         }
         #endregion
+
         /// <summary>
         /// 属性窗口改变大小时发生
         /// </summary>
@@ -743,6 +744,10 @@ namespace MonitorSystem
         protected void f_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             prop.ChangeSize(e.NewSize.Height, e.NewSize.Width);
+        }
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveElement();
         }
 
         #region 添加元素，处理鼠标事件
@@ -825,11 +830,6 @@ namespace MonitorSystem
             RC.Height = mHeight;
         }
         #endregion      
-
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            SaveElement();
-        }
         #region 保存场景及元素、属性
 
         List<MonitorControl> listMonitorAddElement=new List<MonitorControl>();
@@ -959,18 +959,16 @@ namespace MonitorSystem
             _DataContext.SubmitChanges(SubmitCompleted, null);
         }
 
-        #endregion
-
-
         /// <summary>
         /// 检查更新字段并赋值
         /// </summary>
         /// <param name="mobj"></param>
         private void CheckElementChange(t_Element mobj)
         {
-            t_Element saveEle = _DataContext.t_Elements.Single(a => a.ElementID == mobj.ElementID);
-            if (saveEle == null)
+            var vobj = _DataContext.t_Elements.Where(a => a.ElementID == mobj.ElementID);
+            if (vobj.Count() > 0)
                 return;
+            t_Element saveEle = vobj.First();
 
             if (saveEle.ScreenX != mobj.ScreenX)
                 saveEle.ScreenX = mobj.ScreenX;
@@ -1019,9 +1017,12 @@ namespace MonitorSystem
             if (saveEle.ComputeStr != mobj.ComputeStr)
                 saveEle.ComputeStr = mobj.ComputeStr;
         }
-
+        #endregion
+        #region 组态控件
         private void zt_Checked(object sender, RoutedEventArgs e)
         {
+            btnSave.Visibility = Visibility.Visible;
+            SenceMenuButton.Visibility = Visibility.Collapsed;
             //加截属性窗口
             fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
             prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
@@ -1040,15 +1041,25 @@ namespace MonitorSystem
                     mControl.DesignMode();
                 }
             }
+            //定时更新值关闭
             timerRefrshValue.Stop();
         }
 
         private void zt_Unchecked(object sender, RoutedEventArgs e)
         {
+            if (MessageBox.Show("是否保存对场景的修改！\r\n确定：保存。\r\n取消：取消修改。","",MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                SaveElement();
+            }
+            else
+            {
+                LoadScreenData(_CurrentScreen);
+            }
+            btnSave.Visibility = Visibility.Collapsed;
+            SenceMenuButton.Visibility = Visibility.Visible;
             //取消注册
             Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
             Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
-
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var ui = csScreen.Children[i];
@@ -1061,9 +1072,11 @@ namespace MonitorSystem
             fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
             prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
             fwProperty.Close();
+
+            //定时更新值开启
             timerRefrshValue.Start();
         }
+        #endregion
 
-       
     }
 }

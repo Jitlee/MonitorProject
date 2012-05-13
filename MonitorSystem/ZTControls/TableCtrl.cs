@@ -31,6 +31,7 @@ namespace MonitorSystem.ZTControls
         public TableCtrl()
         {
             theGrid.Background = new SolidColorBrush(Colors.White);
+            theGrid.IsReadOnly = true;
             this.Content = theGrid;
 
             LoadData();

@@ -120,13 +120,14 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "WhichBackImage".ToUpper())
                 {
-                    
+                    _WhichBackImage = Convert.ToBoolean(value);
                 }
                 else if (name == "RefreshRate".ToUpper())
                 {
                     RefreshRate = int.Parse(value);
                 }
             }
+            ChangeImage();
         }
         #endregion
 

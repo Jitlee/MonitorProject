@@ -19,6 +19,11 @@ namespace MonitorSystem.ZTControls
     /// </summary>
     public class InputTextBox : MonitorControl
     {
+        public override void SetChannelValue(float fValue)
+        {
+            _textBox.SetValue(TextBox.TextProperty, fValue.ToString());
+        }
+
         public override void DesignMode()
         {
             if (!IsDesignMode)
@@ -106,41 +111,29 @@ namespace MonitorSystem.ZTControls
                     {
                         BackColor = Common.StringToColor(value);
                     }
-                    else
+                    else if (string.Compare(name, "Font", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        if (string.Compare(name, "Font", StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            //this.textBox1.Font = GetFontFromStr(value);
-                            ////SetMyFont(value);
-                            //Font = GetFontFromStr(value);
+                        //this.textBox1.Font = GetFontFromStr(value);
+                        ////SetMyFont(value);
+                        //Font = GetFontFromStr(value);
 
-                            //Font = value;
-                        }
-                        else
-                        {
-                            if (string.Compare(name, "ForeColor", StringComparison.OrdinalIgnoreCase) == 0)
-                            {
-                                ForeColor = Common.StringToColor(value);
-                            }
-                            else if (name == "MyScrollBars".ToUpper())
-                            {
-                                //SetScrollBar(value);
-                                MyScrollBars = value;
-
-                            }
-                            else if (name == "MyText".ToUpper())
-                            {
-                                //this.textBox1.Text = value;
-                                MyText = value;
-                            }
-
-
-                        }
+                        //Font = value;
                     }
+                    else if (string.Compare(name, "ForeColor", StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        ForeColor = Common.StringToColor(value);
+                    }
+                    else if (name == "MyScrollBars".ToUpper())
+                    {
+                        //SetScrollBar(value);
+                        MyScrollBars = value;
 
-
+                    }
+                    else if (name == "MyText".ToUpper())
+                    {
+                        MyText = value;
+                    }
                 }
-                //this.Invalidate();
             }
             catch
             {
@@ -163,11 +156,12 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
+        
 
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
             typeof(Color), typeof(InputTextBox), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
-
+        [DefaultValue(""), Description("背影色"), Category("外观")]
         public Color BackColor
         {
             get { return (Color)this.GetValue(BackColorProperty); }
@@ -188,7 +182,7 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
             typeof(Color), typeof(InputTextBox), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
-
+        [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
             get { return (Color)this.GetValue(ForeColorProperty); }
@@ -208,7 +202,7 @@ namespace MonitorSystem.ZTControls
 
         public static readonly DependencyProperty MyTextProperty =
             DependencyProperty.Register("MyText", typeof(string), typeof(InputTextBox), new PropertyMetadata(string.Empty));
-
+        [DefaultValue(""), Description("文本内容"), Category("杂项")]
         public string MyText
         {
             get { return (string)_textBox.GetValue(TextBox.TextProperty); }
@@ -240,7 +234,7 @@ namespace MonitorSystem.ZTControls
 
         private Grid _grid = new Grid();
         private TextBox _textBox = new TextBox();
-        private Image _moveImage = new Image() { Height = 32d, Width = 32d, Source = new BitmapImage(new Uri("/MonitorSystem;component/Images/ControlsImg/can_move.png", UriKind.RelativeOrAbsolute)), HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(3d), Cursor= Cursors.Hand };
+        private Image _moveImage = new Image() { Height = 32d, Width = 32d, Source = new BitmapImage(new Uri("/MonitorSystem;component/Images/ControlsImg/can_move.png", UriKind.RelativeOrAbsolute)), HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(3d), Cursor = Cursors.Hand };
 
         public InputTextBox()
         {
@@ -253,7 +247,8 @@ namespace MonitorSystem.ZTControls
 
             SetScrollBar(MyScrollBars);
 
-            _textBox.GotFocus += (o, e) => {
+            _textBox.GotFocus += (o, e) =>
+            {
                 if (null != AdornerLayer)
                 {
                     AdornerLayer.IsSelected = true; AdornerLayer.OnSelected();
@@ -261,7 +256,8 @@ namespace MonitorSystem.ZTControls
                 _textBox.TextChanged -= Text_Changed;
                 _textBox.TextChanged += Text_Changed;
             };
-            _textBox.LostFocus += (o, e) => { 
+            _textBox.LostFocus += (o, e) =>
+            {
                 _textBox.TextChanged -= Text_Changed;
             };
         }
@@ -272,7 +268,8 @@ namespace MonitorSystem.ZTControls
             {
                 AdornerLayer.OnSelected();
             }
-            SetAttrByName("MyText", MyText);
+            //SetAttrByName("MyText", MyText);
+            MyText = this._textBox.Text;
         }
 
         private void SetForeground()
