@@ -96,6 +96,7 @@
     <Compile Include="Controls\ColorPicker\PredefinedColorItem.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Controls\CustomCursor.cs" />
+    <Compile Include="Controls\ImageButton.cs" />
     <Compile Include="Controls\MenuScript\MainMenu.cs" />
     <Compile Include="Controls\MenuScript\MainMenuItem.cs" />
     <Compile Include="Controls\PropertyGrid\Converters\ColorConverter.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="ZTControls\zedGraphCtrl.cs" />
     <Compile Include="ZTControls\zedGraphLineCtrl.cs" />
     <Compile Include="ZTControls\zedGraphPieCtrl.cs" />
+    <None Include="新添加的图片（用完就删掉）.rar" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

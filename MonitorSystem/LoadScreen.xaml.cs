@@ -1156,8 +1156,8 @@ namespace MonitorSystem
         #region 组态控件
         private void zt_Checked(object sender, RoutedEventArgs e)
         {
-            btnSave.Visibility = Visibility.Visible;
-            SenceMenuButton.Visibility = Visibility.Collapsed;
+            //btnSave.Visibility = Visibility.Visible;
+            //SenceMenuButton.Visibility = Visibility.Collapsed;
             //加截属性窗口
             fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
             prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
@@ -1190,8 +1190,8 @@ namespace MonitorSystem
             {
                 LoadScreenData(_CurrentScreen);
             }
-            btnSave.Visibility = Visibility.Collapsed;
-            SenceMenuButton.Visibility = Visibility.Visible;
+            //btnSave.Visibility = Visibility.Collapsed;
+            //SenceMenuButton.Visibility = Visibility.Visible;
             //Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
             //Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
             for (int i = 0; i < csScreen.Children.Count; i++)
@@ -1228,8 +1228,8 @@ namespace MonitorSystem
             IsZT = true;
 
             // TODO :
-            btnSave.Visibility = Visibility.Visible;
-            SenceMenuButton.Visibility = Visibility.Collapsed;
+            //btnSave.Visibility = Visibility.Visible;
+            //SenceMenuButton.Visibility = Visibility.Collapsed;
             //加截属性窗口
             fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
             prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
@@ -1283,8 +1283,8 @@ namespace MonitorSystem
             {
                 LoadScreenData(_CurrentScreen);
             }
-            btnSave.Visibility = Visibility.Collapsed;
-            SenceMenuButton.Visibility = Visibility.Visible;
+            //btnSave.Visibility = Visibility.Collapsed;
+            //SenceMenuButton.Visibility = Visibility.Visible;
             //Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
             //Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
             for (int i = 0; i < csScreen.Children.Count; i++)
@@ -1307,6 +1307,16 @@ namespace MonitorSystem
         private void Top_Click(object sender, MouseButtonEventArgs e)
         {
             MainScript.CloseAllItems();
+        }
+
+        private void Home_Click(object sender, RoutedEventArgs e)
+        {
+            // 首页
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            // 后退
         }
 
     }

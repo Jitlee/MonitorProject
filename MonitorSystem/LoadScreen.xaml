@@ -36,27 +36,25 @@
                 </ctrls:MenuScript>
             </Border>
             <Grid  Background="#e5eff8" Name="wrapPanel1"  Grid.Row="1" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition  Width="8"/>
-                    <ColumnDefinition Width="58"/>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition Width="25"/>
-                    <ColumnDefinition Width="8"/>
-                </Grid.ColumnDefinitions>
                 <!--<StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <CheckBox   Canvas.Left="13" Canvas.Top="10" Content="组态" Height="21" Name="CBIsztControl" Checked="zt_Checked" Unchecked="zt_Unchecked"  IsEnabled="False" />
                 </StackPanel>-->
-
-
-                <Button HorizontalAlignment="Left"  Grid.Column="2" Content="保存" Height="28"   Visibility="Collapsed" Name="btnSave" Width="75" Click="btnSave_Click" />
-                <Button HorizontalAlignment="Left"  Grid.Column="2" Content="所有场景" Height="28"  Visibility="Visible"  x:Name="SenceMenuButton"  Width="75"/>
+                <StackPanel  HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
+                    <ctrls:ImageButton Height="23" Width="75" Content="首页" Margin="5,0" Image="/MonitorSystem;component/Images/Common/首页_工具条.jpg" Click="Home_Click"/>
+                    <ctrls:ImageButton Height="23" Width="75" Content="后退" Margin="5,0" Image="/MonitorSystem;component/Images/Common/prev.JPG" Click="Back_Click"/>
+                </StackPanel>
+                <!--<Button HorizontalAlignment="Left"  Grid.Column="2" Content="保存" Height="28"   Visibility="Collapsed" Name="btnSave" Width="75" Click="btnSave_Click" />
+                <Button HorizontalAlignment="Left"  Grid.Column="2" Content="所有场景" Height="28"  Visibility="Visible"  x:Name="SenceMenuButton"  Width="75"/>-->
                     <!--<menu:PopupMenu LeftClickElements="SenceMenuButton" x:Name="SencePopupMenu"/>-->
-                
-                
-                <sdk:Label  Grid.Column="3"  HorizontalAlignment="Right" VerticalAlignment="Center"    Height="35" Name="lblShowMsg" />
-                <StackPanel Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Image Source="Images/arrow_inout.png"  Stretch="None" MouseLeftButtonUp="Image_MouseLeftButtonUp" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <sdk:Label Margin="5,5"
+                               VerticalAlignment="Center"
+                               Height="35" Name="lblShowMsg" />
+                    <Image Source="Images/arrow_inout.png"
+                           Margin="5,5"
+                           VerticalAlignment="Center"
+                           Stretch="None" MouseLeftButtonUp="Image_MouseLeftButtonUp" />
                 </StackPanel>
             </Grid>
             
