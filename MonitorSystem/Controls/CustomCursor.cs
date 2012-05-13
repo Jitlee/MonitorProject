@@ -25,8 +25,10 @@ namespace MonitorSystem.Controls
             element.SetValue(CustomCursorProperty, this);
             originalCursor = element.Cursor;
             element.Cursor = Cursors.None;
+            element.MouseEnter += element_MouseEnter;
             element.MouseLeave += element_MouseLeave;
             element.MouseMove += element_MouseMove;
+            element.LayoutUpdated += (o, e) => { if (element.Visibility != Visibility.Visible && cursorContainer.IsOpen) { cursorContainer.IsOpen = false; } };
             cursorContainer = new System.Windows.Controls.Primitives.Popup()
             {
                 IsOpen = false,
@@ -42,7 +44,7 @@ namespace MonitorSystem.Controls
 
         private void element_MouseMove(object sender, MouseEventArgs e)
         {
-            cursorContainer.IsOpen = true;
+            //cursorContainer.IsOpen = true;
             var p = e.GetPosition(null);
             var t = (cursorContainer.Child.RenderTransform as TranslateTransform);
             t.X = p.X;
@@ -51,11 +53,19 @@ namespace MonitorSystem.Controls
 
         private void element_MouseLeave(object sender, MouseEventArgs e)
         {
+            //element.ReleaseMouseCapture();
             cursorContainer.IsOpen = false;
+        }
+
+        private void element_MouseEnter(object sender, MouseEventArgs e)
+        {
+            //element.CaptureMouse();
+            cursorContainer.IsOpen = true;
         }
 
         private void Dispose()
         {
+            element.MouseEnter += element_MouseEnter;
             element.MouseLeave -= element_MouseLeave;
             element.MouseMove -= element_MouseMove;
             element.ClearValue(CustomCursorProperty);
