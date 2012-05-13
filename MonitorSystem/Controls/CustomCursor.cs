@@ -28,6 +28,7 @@ namespace MonitorSystem.Controls
             element.MouseEnter += element_MouseEnter;
             element.MouseLeave += element_MouseLeave;
             element.MouseMove += element_MouseMove;
+            element.LayoutUpdated += (o, e) => { if (element.Visibility != Visibility.Visible && cursorContainer.IsOpen) { cursorContainer.IsOpen = false; } };
             cursorContainer = new System.Windows.Controls.Primitives.Popup()
             {
                 IsOpen = false,
@@ -52,13 +53,13 @@ namespace MonitorSystem.Controls
 
         private void element_MouseLeave(object sender, MouseEventArgs e)
         {
-            element.ReleaseMouseCapture();
+            //element.ReleaseMouseCapture();
             cursorContainer.IsOpen = false;
         }
 
         private void element_MouseEnter(object sender, MouseEventArgs e)
         {
-            element.CaptureMouse();
+            //element.CaptureMouse();
             cursorContainer.IsOpen = true;
         }
 
