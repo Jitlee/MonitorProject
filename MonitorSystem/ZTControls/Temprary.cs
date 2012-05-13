@@ -511,7 +511,12 @@ namespace MonitorSystem.ZTControls
             _blankRectangle.SetValue(Canvas.LeftProperty, width / 4d - cudu);
             _blankRectangle.SetValue(Canvas.TopProperty, 0d);
             _blankRectangle.SetValue(WidthProperty, 2d * cudu);
-            _blankRectangle.SetValue(HeightProperty, (MaxValue - trueValue) * (4d * this.Height / 5 - circle) / (MaxValue - MinValue));
+            var height = (MaxValue - trueValue) * (4d * this.Height / 5 - circle) / (MaxValue - MinValue);
+            if(height < 0d)
+            {
+                height = 0d;
+            }
+            _blankRectangle.SetValue(HeightProperty, height);
         }
 
         protected override Size MeasureOverride(Size availableSize)

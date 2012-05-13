@@ -65,11 +65,16 @@ namespace MonitorSystem
 
         public void ResetSelected()
         {
-            tpListBox.SelectedIndex = 0;
+            if (null != tpListBox
+                && null != ztListBox
+                && null != ggListBox)
+            {
+                tpListBox.SelectedIndex = 0;
 
-            ztListBox.SelectedIndex = 0;
+                ztListBox.SelectedIndex = 0;
 
-            ggListBox.SelectedIndex = 0;
+                ggListBox.SelectedIndex = 0;
+            }
         }
 
         #region  控件
@@ -349,9 +354,21 @@ namespace MonitorSystem
             {
                 (this.Parent as FloatableWindow).Title = (tabControl1.SelectedItem as TabItem).Header;
             }
+            ResetSelected();
         }
         #endregion
 
+        private void Control_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as ListBox).SelectedIndex < 1)
+            {
+                LoadScreen.UnAddElementModel();
+            }
+            else
+            {
+                LoadScreen.AddElementModel();
+            }
+        }
     }
 
 

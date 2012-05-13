@@ -95,6 +95,7 @@
     <Compile Include="Controls\ColorPicker\PredefinedColor.cs" />
     <Compile Include="Controls\ColorPicker\PredefinedColorItem.cs" />
     <Compile Include="Common.cs" />
+    <Compile Include="Controls\CustomCursor.cs" />
     <Compile Include="Controls\PopupMenu\PopupMenu.cs" />
     <Compile Include="Controls\PopupMenu\PopupMenuItem.cs" />
     <Compile Include="Controls\PopupMenu\PopupMenuQueryPartial.cs" />

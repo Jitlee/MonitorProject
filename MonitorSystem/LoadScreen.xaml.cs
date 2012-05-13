@@ -64,6 +64,9 @@ namespace MonitorSystem
             Init();
             _SenceCommand = new DelegateCommand<t_Screen>(LoadSence);
             _instance = this;
+
+            AddElementCanvas.MouseLeftButtonDown += AddElementCanvas_MouseLeftButtonDown;
+            AddElementCanvas.MouseLeftButtonUp += AddElementCanvas_MouseLeftButtonUp;
         }
 
         public static void Load(t_Screen screen)
@@ -72,6 +75,82 @@ namespace MonitorSystem
                 return;
             _instance.LoadScreenData(screen);
         }
+
+        #region 绘制控件
+
+        /// <summary>
+        /// 表示添加新控件模式
+        /// </summary>
+        public static void AddElementModel()
+        {
+            if (null != _instance && _instance.AddElementCanvas.Visibility != Visibility.Visible)
+            {
+                _instance.AddElementCanvas.Visibility = Visibility.Visible;
+            }
+        }
+
+        /// <summary>
+        /// 表示添加新控件模式
+        /// </summary>
+        public static void UnAddElementModel()
+        {
+            if (null != _instance && _instance.AddElementCanvas.Visibility != Visibility.Collapsed)
+            {
+                _instance.AddElementCanvas.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private Point _originPoint;
+        private void AddElementCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            AddElementCanvas.CaptureMouse();
+            _originPoint = e.GetPosition(AddElementCanvas);
+            AddElementRectangle.SetValue(Canvas.LeftProperty, _originPoint.X);
+            AddElementRectangle.SetValue(Canvas.TopProperty, _originPoint.Y);
+            AddElementRectangle.SetValue(HeightProperty, 0d);
+            AddElementRectangle.SetValue(WidthProperty, 0d);
+            AddElementRectangle.Visibility = Visibility.Visible;
+            AddElementCanvas.MouseMove -= AddElementCanvas_MouseMove;
+            AddElementCanvas.MouseMove += AddElementCanvas_MouseMove;
+        }
+
+        private void AddElementCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            AddElementCanvas.MouseMove -= AddElementCanvas_MouseMove;
+
+            AddElementCanvas.ReleaseMouseCapture();
+
+            AddElementRectangle.Visibility = Visibility.Collapsed;
+
+
+            var point = e.GetPosition(AddElementCanvas);
+            var offsetX = point.X - _originPoint.X;
+            var offsetY = point.Y - _originPoint.Y;
+            var left = offsetX < 0 ? point.X : _originPoint.X;
+            var top = offsetY < 0 ? point.Y : _originPoint.Y;
+            var width = Math.Abs(offsetX);
+            var height = Math.Abs(offsetY);
+
+            if (width > 0 && height > 0)
+            {
+                AddSelectControlElement(width, height, left, top);
+            }
+
+            PropertyMain.Instance.ResetSelected();
+        }
+
+        private void AddElementCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            var point = e.GetPosition(AddElementCanvas);
+            var offsetX = point.X - _originPoint.X;
+            var offsetY = point.Y - _originPoint.Y;
+            AddElementRectangle.SetValue(Canvas.LeftProperty, offsetX < 0 ? point.X : _originPoint.X);
+            AddElementRectangle.SetValue(Canvas.TopProperty, offsetY < 0 ? point.Y : _originPoint.Y);
+            AddElementRectangle.SetValue(WidthProperty, Math.Abs(offsetX));
+            AddElementRectangle.SetValue(HeightProperty, Math.Abs(offsetY));
+        }
+
+        #endregion
 
         #region 实例化
         /// <summary>
@@ -122,6 +201,7 @@ namespace MonitorSystem
             fwProperty.VerticalAlignment = VerticalAlignment.Center;
             fwProperty.HorizontalAlignment = HorizontalAlignment.Right;
             CBIsztControl.IsEnabled = true;
+            fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
         }
 
         #region 加载数据 完成处理 当前共五项 t_Element_Library、t_ElementProperty_Library、t_Screen、t_MonitorSystemParam、t_ControlProperty
@@ -423,9 +503,9 @@ namespace MonitorSystem
             imgB.AlignmentY = AlignmentY.Top;
             csScreen.Background = imgB;
             
-            RC.SetValue(Canvas.ZIndexProperty, 1000);
-            RC.Stroke = new SolidColorBrush(Colors.Black);
-            csScreen.Children.Add(RC);
+            //RC.SetValue(Canvas.ZIndexProperty, 1000);
+            //RC.Stroke = new SolidColorBrush(Colors.Black);
+            //csScreen.Children.Add(RC);
             //设置当前
             _CurrentScreen = _Screen;
             //加载元素
@@ -752,83 +832,83 @@ namespace MonitorSystem
 
         #region 添加元素，处理鼠标事件
 
-        Point mStartPoint;
-        bool IsDown = false;
-        Rectangle RC = new Rectangle();
-        private void Content_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-             t_Control t = GetSelectControl();
-             if (t != null && t.ControlID > 0)
-             {
-                 IsDown = true;
-                 var point = e.GetPosition(this);
+        //Point mStartPoint;
+        //bool IsDown = false;
+        //Rectangle RC = new Rectangle();
+        //private void Content_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //     t_Control t = GetSelectControl();
+        //     if (t != null && t.ControlID > 0)
+        //     {
+        //         IsDown = true;
+        //         var point = e.GetPosition(this);
 
-                 RC.Visibility = Visibility.Visible;
-                 mStartPoint = point;
+        //         RC.Visibility = Visibility.Visible;
+        //         mStartPoint = point;
 
-                 RC.Width = 0;
-                 RC.Height = 0;
-                 RC.Margin = new Thickness(point.X, point.Y - 35, 0, 0);
-             }
+        //         RC.Width = 0;
+        //         RC.Height = 0;
+        //         RC.Margin = new Thickness(point.X, point.Y - 35, 0, 0);
+        //     }
            
-        }
+        //}
 
-        private void Content_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (IsDown && CBIsztControl.IsChecked.Value)
-            {
-                double mMagrinX = mStartPoint.X;
-                double mMagrinY = mStartPoint.Y - 35;
+        //private void Content_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (IsDown && CBIsztControl.IsChecked.Value)
+        //    {
+        //        double mMagrinX = mStartPoint.X;
+        //        double mMagrinY = mStartPoint.Y - 35;
 
-                var mEndPoint = e.GetPosition(this);
-                double mWidth = mEndPoint.X - mStartPoint.X;
-                if (mWidth < 0)
-                {
-                    mWidth = mStartPoint.X - mEndPoint.X;
-                    mMagrinX = mEndPoint.X;
-                }
-                double mHeight = mEndPoint.Y - mStartPoint.Y;
-                if (mHeight < 0)
-                {
-                    mHeight = mStartPoint.Y - mEndPoint.Y;
-                    mMagrinY = mEndPoint.Y - 35;
-                }
-                if (mWidth > 0 && mHeight > 0 && mMagrinX > 0 && mMagrinY > 0)
-                {
-                    AddSelectControlElement(mWidth, mHeight, mMagrinX, mMagrinY);
-                }
+        //        var mEndPoint = e.GetPosition(this);
+        //        double mWidth = mEndPoint.X - mStartPoint.X;
+        //        if (mWidth < 0)
+        //        {
+        //            mWidth = mStartPoint.X - mEndPoint.X;
+        //            mMagrinX = mEndPoint.X;
+        //        }
+        //        double mHeight = mEndPoint.Y - mStartPoint.Y;
+        //        if (mHeight < 0)
+        //        {
+        //            mHeight = mStartPoint.Y - mEndPoint.Y;
+        //            mMagrinY = mEndPoint.Y - 35;
+        //        }
+        //        if (mWidth > 0 && mHeight > 0 && mMagrinX > 0 && mMagrinY > 0)
+        //        {
+        //            AddSelectControlElement(mWidth, mHeight, mMagrinX, mMagrinY);
+        //        }
 
-                PropertyMain.Instance.ResetSelected();
-            }
-            IsDown = false;
-            RC.Visibility = Visibility.Collapsed;
-        }
-        private void Content_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (IsDown)
-            {
-                var EndPoint = e.GetPosition(this);
-                SetRCProperty(EndPoint);
-            }
-        }
+        //        PropertyMain.Instance.ResetSelected();
+        //    }
+        //    IsDown = false;
+        //    RC.Visibility = Visibility.Collapsed;
+        //}
+        //private void Content_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    if (IsDown)
+        //    {
+        //        var EndPoint = e.GetPosition(this);
+        //        SetRCProperty(EndPoint);
+        //    }
+        //}
 
-        private void SetRCProperty(Point mEndPoint)
-        {
+        //private void SetRCProperty(Point mEndPoint)
+        //{
 
-            double mWidth = mEndPoint.X - mStartPoint.X;
-            if (mWidth < 0)
-            {
-                mWidth = mStartPoint.X - mEndPoint.X;
-            }            
-            double mHeight = mEndPoint.Y - mStartPoint.Y;
-            if (mHeight < 0)
-            {
-                mHeight = mStartPoint.Y - mEndPoint.Y;               
-            }
+        //    double mWidth = mEndPoint.X - mStartPoint.X;
+        //    if (mWidth < 0)
+        //    {
+        //        mWidth = mStartPoint.X - mEndPoint.X;
+        //    }            
+        //    double mHeight = mEndPoint.Y - mStartPoint.Y;
+        //    if (mHeight < 0)
+        //    {
+        //        mHeight = mStartPoint.Y - mEndPoint.Y;               
+        //    }
            
-            RC.Width = mWidth;
-            RC.Height = mHeight;
-        }
+        //    RC.Width = mWidth;
+        //    RC.Height = mHeight;
+        //}
         #endregion      
         #region 保存场景及元素、属性
 
@@ -1028,9 +1108,9 @@ namespace MonitorSystem
             prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
             fwProperty.Show();
 
-            //注册事件
-            Content.MouseLeftButtonDown += new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-            Content.MouseLeftButtonUp += new MouseButtonEventHandler(Content_MouseLeftButtonUp);
+            ////注册事件
+            //Content.MouseLeftButtonDown += new MouseButtonEventHandler(Content_MouseLeftButtonDown);
+            //Content.MouseLeftButtonUp += new MouseButtonEventHandler(Content_MouseLeftButtonUp);
 
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
@@ -1057,9 +1137,8 @@ namespace MonitorSystem
             }
             btnSave.Visibility = Visibility.Collapsed;
             SenceMenuButton.Visibility = Visibility.Visible;
-            //取消注册
-            Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-            Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
+            //Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
+            //Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var ui = csScreen.Children[i];

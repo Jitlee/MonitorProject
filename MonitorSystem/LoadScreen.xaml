@@ -5,7 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"  d:DesignHeight="400" d:DesignWidth="500" 
              xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
-             MouseMove="Content_MouseMove" xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+             xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+             xmlns:ctrls="clr-namespace:MonitorSystem.Controls"
              xmlns:menu="clr-namespace:SL4PopupMenu">
     <Grid x:Name="LayoutRoot">
         <Grid x:Name="gdContent"  Background="#A0A0A0" ShowGridLines="False" Margin="0">
@@ -22,6 +23,13 @@
                 <sdk:Label  Padding="5" Height="35" Name="lblShowMsg" Width="145" />
             </toolkit:WrapPanel>
             <Canvas Grid.Row="2" x:Name="csScreen" Background="Beige">                
+            </Canvas>
+            <Canvas Grid.Row="2"
+                    x:Name="AddElementCanvas"
+                    Background="Transparent"
+                    ctrls:CustomCursor.CursorTemplate="{StaticResource Target}"
+                    Visibility="Collapsed">
+                <Rectangle x:Name="AddElementRectangle" Stroke="Black" StrokeThickness="1" StrokeDashArray="5,5" Visibility="Collapsed"/>
             </Canvas>
             <TextBlock x:Name="tbWait" Text="数据加载中，请稍候 ..."  Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
