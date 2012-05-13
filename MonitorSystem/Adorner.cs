@@ -372,6 +372,7 @@ namespace MonitorSystem
         {
             if (e.Key == Key.Delete)
             {
+                _backgroundAdorner.Visibility = Visibility.Collapsed;
                 _parent.Children.Remove(_associatedElement);
                 _parent.Children.Remove(this);
                 this.Dispose();
