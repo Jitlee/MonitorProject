@@ -17,7 +17,7 @@ using System.ServiceModel.DomainServices.Client;
 using System.Collections.ObjectModel;
 
 using MonitorSystem.ZTControls;
-using SL4PopupMenu;
+//using SL4PopupMenu;
 using System.Threading;
 using System.Windows.Threading;
 using MonitorSystem.Controls;
@@ -28,6 +28,11 @@ namespace MonitorSystem
     {
        
         #region 变量 
+        /// <summary>
+        /// 获取是否是组态模式
+        /// </summary>
+        public static bool IsZT { get; private set; }
+
         public static MonitorServers _DataContext = new MonitorServers();
         /// <summary>
         /// 场景列表
@@ -203,7 +208,7 @@ namespace MonitorSystem
             fwProperty.SetValue(MarginProperty, new Thickness(50,0,30,0));
             fwProperty.VerticalAlignment = VerticalAlignment.Center;
             fwProperty.HorizontalAlignment = HorizontalAlignment.Right;
-            CBIsztControl.IsEnabled = true;
+            //CBIsztControl.IsEnabled = true;
             fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
         }
 
@@ -318,48 +323,74 @@ namespace MonitorSystem
                 return;
             }
             listScreen = result.Entities;
-            InitMainMenu();
+            InitMenuScript();
             LoadCommpleteNumber++;
             InitComplete();
         }
 
-        private void InitMainMenu()
+        private void InitMenuScript()
         {
-            SenceMenuButton.IsEnabled = false;
-            SenceMenuButton.IsHitTestVisible = false;
-            var itemsControl = new ListBox();
-            SencePopupMenu.Content = itemsControl;
+            //SenceMenuButton.IsEnabled = false;
+            //SenceMenuButton.IsHitTestVisible = false;
+            //var itemsControl = new ListBox();
+            //SencePopupMenu.Content = itemsControl;
+            //var roots = listScreen.Where(s => s.ParentScreenID == 0);
+            //foreach (var s in roots)
+            //{
+            //    itemsControl.Items.Add(InitMenuItem(s));
+            //}
+            //SenceMenuButton.IsEnabled = true;
+            //SenceMenuButton.IsHitTestVisible = true;
+
             var roots = listScreen.Where(s => s.ParentScreenID == 0);
             foreach (var s in roots)
             {
-                itemsControl.Items.Add(InitMenuItem(s));
+                AllSencesMenuScriptItem.Items.Add(InitMenuScriptItem(s));
             }
-            SenceMenuButton.IsEnabled = true;
-            SenceMenuButton.IsHitTestVisible = true;
         }
 
-        public PopupMenuItem InitMenuItem(t_Screen screen)
+
+
+        //public PopupMenuItem InitMenuItem(t_Screen screen)
+        //{
+        //    var itemsControl = new ListBox();
+        //    var menuItem = new PopupMenuItem();
+        //    menuItem.Header = screen.ScreenName;
+        //    var children = listScreen.Where(s => s.ParentScreenID == screen.ScreenID);
+        //    if (children.Count() > 0)
+        //    {
+        //        menuItem.ImagePathForRightMargin = "Images/Common/arrow.png";
+        //        menuItem.Items.Add(new PopupMenu() { Content = itemsControl });
+        //        foreach (var s in children)
+        //        {
+        //            itemsControl.Items.Add(InitMenuItem(s));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        menuItem.Command = _SenceCommand;
+        //        menuItem.CommandParameter = screen;
+        //    }
+        //    return menuItem;
+        //}
+
+        public MenuScriptItem InitMenuScriptItem(t_Screen screen)
         {
-            var itemsControl = new ListBox();
-            var menuItem = new PopupMenuItem();
+            var menuItem = new MenuScriptItem();
             menuItem.Header = screen.ScreenName;
             var children = listScreen.Where(s => s.ParentScreenID == screen.ScreenID);
             if (children.Count() > 0)
             {
-                menuItem.ImagePathForRightMargin = "Images/Common/arrow.png";
-                menuItem.Items.Add(new PopupMenu() { Content = itemsControl });
                 foreach (var s in children)
                 {
-                    itemsControl.Items.Add(InitMenuItem(s));
+                    menuItem.Items.Add(InitMenuScriptItem(s));
                 }
             }
-            else
-            {
-                menuItem.Command = _SenceCommand;
-                menuItem.CommandParameter = screen;
-            }
+            menuItem.Command = _SenceCommand;
+            menuItem.CommandParameter = screen;
             return menuItem;
         }
+
 
         private readonly DelegateCommand<t_Screen> _SenceCommand;
 
@@ -559,7 +590,8 @@ namespace MonitorSystem
             }
             tbWait.Visibility = Visibility.Collapsed;
             //如果不是组态，打开定时器
-            if (CBIsztControl.IsChecked == false)
+            //if (CBIsztControl.IsChecked == false)
+            if(IsZT)
             {
                 timerRefrshValue.Start();
             }
@@ -740,8 +772,11 @@ namespace MonitorSystem
             //添加到场景
             csScreen.Children.Add(mControl);
 
-            if (CBIsztControl.IsChecked.Value)
+            //if (CBIsztControl.IsChecked.Value)
+            if (IsZT)
+            {
                 mControl.DesignMode();
+            }
         }
         #endregion
 
@@ -1182,6 +1217,96 @@ namespace MonitorSystem
             System.Windows.Application.Current.Host.Content.IsFullScreen =
                 !System.Windows.Application.Current.Host.Content.IsFullScreen;
             
+        }
+
+        private void TP_Click(object sender, RoutedEventArgs e)
+        {
+            // 组态设计
+            OpartionMenuScriptItem.Visibility = Visibility.Visible;
+            ZTMenuScriptItem.Visibility = Visibility.Collapsed;
+            AllSencesMenuScriptItem.Visibility = Visibility.Collapsed;
+            IsZT = true;
+
+            // TODO :
+            btnSave.Visibility = Visibility.Visible;
+            SenceMenuButton.Visibility = Visibility.Collapsed;
+            //加截属性窗口
+            fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
+            prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
+            fwProperty.Show();
+
+            ////注册事件
+            //Content.MouseLeftButtonDown += new MouseButtonEventHandler(Content_MouseLeftButtonDown);
+            //Content.MouseLeftButtonUp += new MouseButtonEventHandler(Content_MouseLeftButtonUp);
+
+            for (int i = 0; i < csScreen.Children.Count; i++)
+            {
+                var ui = csScreen.Children[i];
+                if (ui is MonitorControl)
+                {
+                    MonitorControl mControl = ui as MonitorControl;
+                    mControl.DesignMode();
+                }
+            }
+            //定时更新值关闭
+            timerRefrshValue.Stop();
+        }
+
+        private void SaveCurrentSence_Click(object sender, RoutedEventArgs e)
+        {
+            // 保存当前场景
+            IsShowSaveToot = true;//显示保存成功提示
+            SaveElement();
+        }
+
+        private void SaveAllSences_Click(object sender, RoutedEventArgs e)
+        {
+            // 保存所有场景
+
+        }
+
+        private void ZTExit_Click(object sender, RoutedEventArgs e)
+        {
+            // 退出组态
+            OpartionMenuScriptItem.Visibility = Visibility.Collapsed;
+            ZTMenuScriptItem.Visibility = Visibility.Visible;
+            AllSencesMenuScriptItem.Visibility = Visibility.Visible;
+            IsZT = false;
+            // TODO :
+
+
+            if (MessageBox.Show("是否保存对场景的修改！\r\n确定：保存。\r\n取消：不保存，修改的内容将被取消。", "", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                SaveElement();
+            }
+            else
+            {
+                LoadScreenData(_CurrentScreen);
+            }
+            btnSave.Visibility = Visibility.Collapsed;
+            SenceMenuButton.Visibility = Visibility.Visible;
+            //Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
+            //Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
+            for (int i = 0; i < csScreen.Children.Count; i++)
+            {
+                var ui = csScreen.Children[i];
+                if (ui is MonitorControl)
+                {
+                    MonitorControl mControl = ui as MonitorControl;
+                    mControl.UnDesignMode();
+                }
+            }
+            fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
+            prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
+            fwProperty.Close();
+
+            //定时更新值开启
+            timerRefrshValue.Start();
+        }
+
+        private void Top_Click(object sender, MouseButtonEventArgs e)
+        {
+            MainScript.CloseAllItems();
         }
 
     }

@@ -96,11 +96,8 @@
     <Compile Include="Controls\ColorPicker\PredefinedColorItem.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Controls\CustomCursor.cs" />
-    <Compile Include="Controls\PopupMenu\PopupMenu.cs" />
-    <Compile Include="Controls\PopupMenu\PopupMenuItem.cs" />
-    <Compile Include="Controls\PopupMenu\PopupMenuQueryPartial.cs" />
-    <Compile Include="Controls\PopupMenu\PopupMenuSeparator.cs" />
-    <Compile Include="Controls\PopupMenu\PopupMenuUtils.cs" />
+    <Compile Include="Controls\MenuScript\MainMenu.cs" />
+    <Compile Include="Controls\MenuScript\MainMenuItem.cs" />
     <Compile Include="Controls\PropertyGrid\Converters\ColorConverter.cs" />
     <Compile Include="Converters\ImagePathConverter.cs" />
     <Compile Include="GetData\DataObject.cs" />
@@ -233,10 +230,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\PopupMenu\Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="LoadScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -307,6 +300,49 @@
     <Resource Include="Images\Common\index.png" />
     <Resource Include="Images\Common\open.jpg" />
     <Resource Include="Images\arrow_inout.png" />
+    <Resource Include="Images\Common\main.JPG" />
+    <Resource Include="Images\Common\next.JPG" />
+    <Resource Include="Images\Common\prev.JPG" />
+    <Resource Include="Images\Common\停止录像.JPG" />
+    <Resource Include="Images\Common\停止运动检测.JPG" />
+    <Resource Include="Images\Common\关于.JPG" />
+    <Resource Include="Images\Common\关于1.JPG" />
+    <Resource Include="Images\Common\关于2.JPG" />
+    <Resource Include="Images\Common\历史曲线.JPG" />
+    <Resource Include="Images\Common\开始录像.JPG" />
+    <Resource Include="Images\Common\开始运动检测.JPG" />
+    <Resource Include="Images\Common\报警分组.JPG" />
+    <Resource Include="Images\Common\报警历史记录.JPG" />
+    <Resource Include="Images\Common\报警对象.JPG" />
+    <Resource Include="Images\Common\报警方式.JPG" />
+    <Resource Include="Images\Common\报警策略.JPG" />
+    <Resource Include="Images\Common\报警设置_工具条.jpg" />
+    <Resource Include="Images\Common\拓扑组态.JPG" />
+    <Resource Include="Images\Common\查询.JPG" />
+    <Resource Include="Images\Common\树背景.jpg" />
+    <Resource Include="Images\Common\欢迎_状态栏.JPG" />
+    <Resource Include="Images\Common\注销用户.JPG" />
+    <Resource Include="Images\Common\用户登录.JPG" />
+    <Resource Include="Images\Common\保存场景.jpg" />
+    <Resource Include="Images\Common\保存所有场景.jpg" />
+    <Resource Include="Images\Common\报警_工具条.jpg" />
+    <Content Include="Images\Common\用户管理.ico" />
+    <Resource Include="Images\Common\用户管理.jpg" />
+    <Resource Include="Images\Common\用户管理1.jpg" />
+    <Resource Include="Images\Common\登录时间_状态栏.JPG" />
+    <Resource Include="Images\Common\登录用户_状态栏.JPG" />
+    <Resource Include="Images\Common\登录用户_状态栏1.JPG" />
+    <Resource Include="Images\Common\监控模式_状态栏.JPG" />
+    <Resource Include="Images\Common\系统参数.JPG" />
+    <Resource Include="Images\Common\系统参数1.JPG" />
+    <Resource Include="Images\Common\系统结构_工具条.jpg" />
+    <Resource Include="Images\Common\系统结构_工具条1.jpg" />
+    <Resource Include="Images\Common\统计报表.JPG" />
+    <Resource Include="Images\Common\网络状态_状态栏.JPG" />
+    <Resource Include="Images\Common\网络状态_状态栏1.JPG" />
+    <Resource Include="Images\Common\网络连接.JPG" />
+    <Resource Include="Images\Common\退出.JPG" />
+    <Resource Include="Images\Common\首页_工具条.jpg" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\MyDataService\GetData.wsdl" />
     <None Include="Service References\MyDataService\GetData.xsd">

@@ -64,8 +64,6 @@ namespace MonitorSystem.MonitorSystemGlobal
             }
         }
 
-        
-
         private  string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Translate", "Foreground" };
 
         public abstract string[] BrowsableProperties { set; get; }

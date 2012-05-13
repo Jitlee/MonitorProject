@@ -2,13 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="MonitorSystem.App"
              xmlns:local="clr-namespace:MonitorSystem"
+             xmlns:vsm="clr-namespace:System.Windows;assembly=System.Windows"
              xmlns:controls="clr-namespace:MonitorSystem.Controls">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/MonitorSystem;component/Controls/PropertyGrid/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="/MonitorSystem;component/Controls/ColorPicker/Themes/Generic.xaml"/>
-                <ResourceDictionary Source="/MonitorSystem;component/Controls/PopupMenu/Themes/Generic.xaml"/>
+                <!--<ResourceDictionary Source="/MonitorSystem;component/Controls/PopupMenu/Themes/Generic.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
 
 
@@ -99,6 +100,219 @@
     								VerticalAlignment="Bottom"
     								Style="{StaticResource HandleBorderStyle}"
     								Cursor="SizeNS"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="ToggleButton" x:Key="MenuScriptToggleButtonStyle">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="5,3"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid>
+                                <vsm:VisualStateManager.VisualStateGroups>
+                                    <vsm:VisualStateGroup x:Name="CommonStates">
+                                        <vsm:VisualState x:Name="Normal"/>
+                                        <vsm:VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" To="#FFC0DDFC"/>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.BorderBrush).(SolidColorBrush.Color)" To="#FF3399FF"/>
+                                            </Storyboard>
+                                        </vsm:VisualState>
+                                        <vsm:VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" To="#FFC0DDFC"/>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.BorderBrush).(SolidColorBrush.Color)" To="#FF3399FF"/>
+                                            </Storyboard>
+                                        </vsm:VisualState>
+                                        <vsm:VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" Storyboard.TargetName="DisabledVisualElement" Storyboard.TargetProperty="Opacity" To=".55"/>
+                                            </Storyboard>
+                                        </vsm:VisualState>
+                                    </vsm:VisualStateGroup>
+                                    <vsm:VisualStateGroup x:Name="CheckStates">
+                                        <vsm:VisualState x:Name="Checked">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="BackgroundGradient" Storyboard.TargetProperty="Opacity"/>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="BackgroundGradient" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" To="#FFF9F9F9"/>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="BackgroundGradient" Storyboard.TargetProperty="(Panel.BorderBrush).(SolidColorBrush.Color)" To="#FF000000"/>
+                                            </Storyboard>
+                                        </vsm:VisualState>
+                                        <vsm:VisualState x:Name="Unchecked"/>
+                                    </vsm:VisualStateGroup>
+                                    <vsm:VisualStateGroup x:Name="FocusStates">
+                                        <vsm:VisualState x:Name="Focused"/>
+                                        <vsm:VisualState x:Name="Unfocused" />
+                                    </vsm:VisualStateGroup>
+                                </vsm:VisualStateManager.VisualStateGroups>
+                                <Border x:Name="BackgroundGradient"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"/>
+                                <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter
+                                    x:Name="contentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    Margin="{TemplateBinding Padding}"/>
+                                </Border>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="ToggleButton" x:Key="MinorMenuToggleButtonStyle">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="30,2,20,2"/>
+                <Setter Property="Margin" Value="1"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid>
+                                <vsm:VisualStateManager.VisualStateGroups>
+                                    <vsm:VisualStateGroup x:Name="CommonStates">
+                                        <vsm:VisualState x:Name="Normal"/>
+                                        <vsm:VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" To="#FFC0DDFC"/>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.BorderBrush).(SolidColorBrush.Color)" To="#FF3399FF"/>
+                                            </Storyboard>
+                                        </vsm:VisualState>
+                                        <vsm:VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" To="#FFC0DDFC"/>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.BorderBrush).(SolidColorBrush.Color)" To="#FF3399FF"/>
+                                            </Storyboard>
+                                        </vsm:VisualState>
+                                        <vsm:VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" Storyboard.TargetName="DisabledVisualElement" Storyboard.TargetProperty="Opacity" To=".55"/>
+                                            </Storyboard>
+                                        </vsm:VisualState>
+                                    </vsm:VisualStateGroup>
+                                    <vsm:VisualStateGroup x:Name="CheckStates">
+                                        <vsm:VisualState x:Name="Checked">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="BackgroundGradient" Storyboard.TargetProperty="Opacity"/>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="BackgroundGradient" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" To="#FFC0DDFC"/>
+                                                <ColorAnimation Duration="0" Storyboard.TargetName="BackgroundGradient" Storyboard.TargetProperty="(Panel.BorderBrush).(SolidColorBrush.Color)" To="#FF3399FF"/>
+                                            </Storyboard>
+                                        </vsm:VisualState>
+                                        <vsm:VisualState x:Name="Unchecked"/>
+                                    </vsm:VisualStateGroup>
+                                    <vsm:VisualStateGroup x:Name="FocusStates">
+                                        <vsm:VisualState x:Name="Focused"/>
+                                        <vsm:VisualState x:Name="Unfocused" />
+                                    </vsm:VisualStateGroup>
+                                </vsm:VisualStateManager.VisualStateGroups>
+                                <Rectangle Fill="Transparent"/>
+                                <Border x:Name="BackgroundGradient"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"/>
+                                <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter
+                                    x:Name="contentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    Margin="{TemplateBinding Padding}"/>
+                                </Border>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="controls:MenuScript">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="controls:MenuScript">
+                            <Grid x:Name="PART_Root">
+                                <Rectangle
+                                x:Name="Part_Background"  Fill="Transparent"/>
+                                <Popup x:Name="PART_Popup"
+                                       VerticalAlignment="Bottom"
+                                   IsOpen="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsOpened}">
+                                    <Border>
+                                        <Canvas x:Name="PART_Canvas">
+                                            <Rectangle x:Name="PART_Mask" Fill="Transparent"/>
+                                        </Canvas>
+                                    </Border>
+                                </Popup>
+                                <ItemsPresenter x:Name="PART_ItemsPresenter" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="controls:MenuScriptItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="controls:MenuScriptItem">
+                            <Grid>
+                                <Popup x:Name="PART_Popup"
+                                   HorizontalAlignment="Right">
+                                    <Grid>
+                                        <Border Background="#FFF9F9F9" BorderBrush="#FF000000" BorderThickness="1">
+                                            <Border Width="26" HorizontalAlignment="Left">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                        <GradientStop Color="#FFFCFCFC" Offset="0"/>
+                                                        <GradientStop Color="#FFF1F1F1" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                        </Border>
+                                        <ItemsPresenter/>
+                                        <Rectangle x:Name="PART_Top"
+                                                Height="2"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Top"
+                                               Margin="1,-1,1,0"
+                                               Width="{Binding ElementName=PART_Button, Path=ActualWidth}"
+                                               Fill="#FFF9F9F9"/>
+                                    </Grid>
+                                </Popup>
+                                <ToggleButton x:Name="PART_Button"
+                                          Content="{TemplateBinding Header}"
+                                          ClickMode="{TemplateBinding ClickMode}"
+                                          Style="{StaticResource MinorMenuToggleButtonStyle}"/>
+                                <Path x:Name="PART_Path"
+                                  Height="10" Width="10"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Data="M0,0 L7,5 L0,10z"
+                                  Visibility="Collapsed"
+                                  Fill="Black"/>
+                                <Image Height="16" Width="16" Source="{TemplateBinding Image}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3"/>
+                                <Rectangle Fill="Transparent" x:Name="PART_Mask" Visibility="Collapsed" />
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
