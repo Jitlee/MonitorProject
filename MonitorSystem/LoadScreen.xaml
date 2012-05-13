@@ -44,6 +44,7 @@
             <Canvas Grid.Row="2"
                     x:Name="AddElementCanvas"
                     Background="Transparent"
+                    ctrls:CustomCursor.Custom="False"
                     ctrls:CustomCursor.CursorTemplate="{StaticResource Target}"
                     Visibility="Collapsed">
                 <Rectangle x:Name="AddElementRectangle" Stroke="Black" StrokeThickness="1" StrokeDashArray="5,5" Visibility="Collapsed"/>

@@ -20,6 +20,7 @@ using MonitorSystem.ZTControls;
 using SL4PopupMenu;
 using System.Threading;
 using System.Windows.Threading;
+using MonitorSystem.Controls;
 
 namespace MonitorSystem
 {
@@ -85,6 +86,7 @@ namespace MonitorSystem
         {
             if (null != _instance && _instance.AddElementCanvas.Visibility != Visibility.Visible)
             {
+                _instance.AddElementCanvas.SetValue(CustomCursor.CustomProperty, true);
                 _instance.AddElementCanvas.Visibility = Visibility.Visible;
             }
         }
@@ -97,6 +99,7 @@ namespace MonitorSystem
             if (null != _instance && _instance.AddElementCanvas.Visibility != Visibility.Collapsed)
             {
                 _instance.AddElementCanvas.Visibility = Visibility.Collapsed;
+                _instance.AddElementCanvas.SetValue(CustomCursor.CustomProperty, false);
             }
         }
 

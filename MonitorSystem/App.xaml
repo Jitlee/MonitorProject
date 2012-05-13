@@ -56,6 +56,7 @@
     								StrokeDashArray="5,5"
                                     Margin="4"/>
                                 <Rectangle x:Name="BackgroundAdorner"
+                                    controls:CustomCursor.Custom="False"
                                     controls:CustomCursor.CursorTemplate="{StaticResource Move}"
     								Fill="Transparent"/>
                                 <Rectangle x:Name="TopLeftAdorner"

@@ -14,32 +14,86 @@ namespace MonitorSystem.Controls
     public class CustomCursor
     {
         private FrameworkElement element;
+        private DataTemplate template;
         private Cursor originalCursor;
         System.Windows.Controls.Primitives.Popup cursorContainer;
         private static readonly DependencyProperty CustomCursorProperty =
             DependencyProperty.RegisterAttached("CustomCursor", typeof(CustomCursor), typeof(CustomCursor), null);
 
+        public static readonly DependencyProperty CustomProperty = DependencyProperty.RegisterAttached("Custom", typeof(bool), typeof(CustomCursor), new PropertyMetadata(new PropertyChangedCallback(OnCustomPropertyChanged)));
+        private static void OnCustomPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var element = d as FrameworkElement;
+            if (element != null)
+            {
+                var customCursor = element.GetValue(CustomCursorProperty) as CustomCursor;
+                if(null != customCursor)
+                {
+                    customCursor.OnCustomChanged((bool)e.OldValue, (bool)e.NewValue);
+                }
+            }
+        }
+
+        public static bool GetCustom(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(CustomProperty);
+        }
+
+        public static void SetCustom(DependencyObject obj, bool value)
+        {
+            obj.SetValue(CustomProperty, value);
+        }
+
+        private void OnCustomChanged(bool oldValue, bool newValue)
+        {
+            if (newValue)
+            {
+                element.SetValue(CustomCursorProperty, this);
+                originalCursor = element.Cursor;
+                element.Cursor = Cursors.None;
+                element.MouseEnter += element_MouseEnter;
+                element.MouseLeave += element_MouseLeave;
+                element.MouseMove += element_MouseMove;
+                cursorContainer = new System.Windows.Controls.Primitives.Popup()
+                {
+                    IsOpen = false,
+                    Child = new ContentControl()
+                    {
+                        ContentTemplate = template,
+                        IsHitTestVisible = false,
+                        RenderTransform = new TranslateTransform()
+                    }
+                };
+                cursorContainer.IsHitTestVisible = false;
+            }
+            else
+            {
+                Dispose();
+            }
+        }
+
         private CustomCursor(FrameworkElement element, DataTemplate template)
         {
             this.element = element;
+            this.template = template;
             element.SetValue(CustomCursorProperty, this);
-            originalCursor = element.Cursor;
-            element.Cursor = Cursors.None;
-            element.MouseEnter += element_MouseEnter;
-            element.MouseLeave += element_MouseLeave;
-            element.MouseMove += element_MouseMove;
-            element.LayoutUpdated += (o, e) => { if (element.Visibility != Visibility.Visible && cursorContainer.IsOpen) { cursorContainer.IsOpen = false; } };
-            cursorContainer = new System.Windows.Controls.Primitives.Popup()
-            {
-                IsOpen = false,
-                Child = new ContentControl()
-                {
-                    ContentTemplate = template,
-                    IsHitTestVisible = false,
-                    RenderTransform = new TranslateTransform()
-                }
-            };
-            cursorContainer.IsHitTestVisible = false;
+            //originalCursor = element.Cursor;
+            //element.Cursor = Cursors.None;
+            //element.MouseEnter += element_MouseEnter;
+            //element.MouseLeave += element_MouseLeave;
+            //element.MouseMove += element_MouseMove;
+            //element.LayoutUpdated += (o, e) => { if (element.Visibility != Visibility.Visible && cursorContainer.IsOpen) { cursorContainer.IsOpen = false; } };
+            //cursorContainer = new System.Windows.Controls.Primitives.Popup()
+            //{
+            //    IsOpen = false,
+            //    Child = new ContentControl()
+            //    {
+            //        ContentTemplate = template,
+            //        IsHitTestVisible = false,
+            //        RenderTransform = new TranslateTransform()
+            //    }
+            //};
+            //cursorContainer.IsHitTestVisible = false;
         }
 
         private void element_MouseMove(object sender, MouseEventArgs e)
@@ -54,13 +108,19 @@ namespace MonitorSystem.Controls
         private void element_MouseLeave(object sender, MouseEventArgs e)
         {
             //element.ReleaseMouseCapture();
-            cursorContainer.IsOpen = false;
+            if (null != cursorContainer)
+            {
+                cursorContainer.IsOpen = false;
+            }
         }
 
         private void element_MouseEnter(object sender, MouseEventArgs e)
         {
             //element.CaptureMouse();
-            cursorContainer.IsOpen = true;
+            if (null != cursorContainer)
+            {
+                cursorContainer.IsOpen = true;
+            }
         }
 
         private void Dispose()
