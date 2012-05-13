@@ -917,6 +917,7 @@ namespace MonitorSystem
         //    RC.Height = mHeight;
         //}
         #endregion      
+
         #region 保存场景及元素、属性
 
         List<MonitorControl> listMonitorAddElement=new List<MonitorControl>();
@@ -1113,6 +1114,7 @@ namespace MonitorSystem
                 saveEle.ComputeStr = mobj.ComputeStr;
         }
         #endregion
+
         #region 组态控件
         private void zt_Checked(object sender, RoutedEventArgs e)
         {
@@ -1142,7 +1144,7 @@ namespace MonitorSystem
 
         private void zt_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("是否保存对场景的修改！\r\n确定：保存。\r\n取消：取消修改。","",MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            if (MessageBox.Show("是否保存对场景的修改！\r\n确定：保存。\r\n取消：不保存，修改的内容将被取消。","",MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 SaveElement();
             }
@@ -1171,6 +1173,13 @@ namespace MonitorSystem
             timerRefrshValue.Start();
         }
         #endregion
+
+        private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Application.Current.Host.Content.IsFullScreen =
+                !System.Windows.Application.Current.Host.Content.IsFullScreen;
+            
+        }
 
     }
 }

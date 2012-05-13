@@ -46,6 +46,7 @@
                             <my:MenuItem   x:Name="miOpen" Click="MenuItem_Click">
                                 <my:MenuItem.Header>
                                     <StackPanel Orientation="Horizontal">
+                                        <Image Source="../Images/Common/open.jpg" Width="16" Height="16" />
                                         <TextBlock Text="打开" Padding="5"></TextBlock>
                                     </StackPanel>
                                 </my:MenuItem.Header>
@@ -53,6 +54,7 @@
                             <my:MenuItem   x:Name="miSetDeftult" Click="MenuItem_Click">
                                 <my:MenuItem.Header>
                                     <StackPanel Orientation="Horizontal">
+                                        <Image Source="../Images/Common/index.png" Width="16" Height="16" />
                                         <TextBlock Text="设为首页" Padding="5"></TextBlock>
                                     </StackPanel>
                                 </my:MenuItem.Header>

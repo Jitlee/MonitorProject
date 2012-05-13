@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonitorSystem.MonitorSystemGlobal;
 using MonitorSystem.Web.Moldes;
+using System.Windows.Input;
 
 namespace MonitorSystem.ZTControls
 {
@@ -22,12 +23,6 @@ namespace MonitorSystem.ZTControls
             {
                 AdornerLayer = new Adorner(this);
                 AdornerLayer.Selected += OnSelected;
-
-                //var menu = new ContextMenu();
-                //var menuItem = new MenuItem() { Header = "属性" };
-                //menuItem.Click += PropertyMenuItem_Click;
-                //menu.Items.Add(menuItem);
-                //AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
             }
         }
 
@@ -393,7 +388,6 @@ namespace MonitorSystem.ZTControls
         private Image _image = new Image();
         private Button _button = new Button();
         private Grid _grid = new Grid();
-        private ContextMenu _menu = new ContextMenu();
         private readonly DelegateCommand<t_Screen> _command;
 
         public ExtProControl()
@@ -411,27 +405,43 @@ namespace MonitorSystem.ZTControls
 
             SetTextImageRelation();
 
-            _button.Click += Button_Click;
+            //_button.Click += Button_Click;
 
-            _command = new DelegateCommand<t_Screen>(ShowName);
+            //_command = new DelegateCommand<t_Screen>(ShowName);
+
+            _button.Click +=_button_Click;
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void _button_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                System.Windows.Browser.HtmlPage.Window.Navigate(new Uri(ExtPath, UriKind.Absolute), "_blank");
-            }
-            catch (Exception ex)
-            {
+            if (string.IsNullOrEmpty(ExtPath))
                 return;
+            string mUrl =ExtPath;
+            if (!string.IsNullOrEmpty(ExtParam))
+            {
+                mUrl += "?" + ExtParam.Trim();
             }
+            if (!(mUrl.IndexOf("http") == 0))
+                mUrl = "http://" + mUrl;
+            System.Windows.Browser.HtmlPage.Window.Navigate(new Uri(mUrl, UriKind.RelativeOrAbsolute), "_blank");
+            //
+            //System.Windows.Browser.HtmlPage.Window.NavigateToBookmark(ExtPath);
         }
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        System.Windows.Browser.HtmlPage.Window.Navigate(new Uri(ExtPath, UriKind.Absolute), "_blank");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return;
+        //    }
+        //}
 
-        private void ShowName(t_Screen screen)
-        {
-            LoadScreen.Load(screen);
-        }
+        //private void ShowName(t_Screen screen)
+        //{
+        //    LoadScreen.Load(screen);
+        //}
 
         private void SetTextImageRelation()
         {

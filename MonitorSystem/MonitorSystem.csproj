@@ -304,6 +304,9 @@
     </None>
     <Resource Include="Images\Common\arrow.png" />
     <Resource Include="Images\ControlsImg\can_move.png" />
+    <Resource Include="Images\Common\index.png" />
+    <Resource Include="Images\Common\open.jpg" />
+    <Resource Include="Images\arrow_inout.png" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\MyDataService\GetData.wsdl" />
     <None Include="Service References\MyDataService\GetData.xsd">

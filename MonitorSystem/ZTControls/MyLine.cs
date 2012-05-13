@@ -634,8 +634,7 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
                 }
                 else
                     if (myData.Count > 1)
-                    {
-                        //g.DrawCurve(CurvePen, pp);
+                    {                       
                         PointCollection pc = new PointCollection();
                         foreach (Point p in pp)
                         {
@@ -645,9 +644,12 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
                         pl.Stroke = new SolidColorBrush(Colors.Yellow);
                         pl.StrokeThickness = 2;
                         pl.Points = pc;
-                        pl.Name = "ShowLinePolyline";
-                        var v = picCurveShow.FindName("ShowLinePolyline");
-                        picCurveShow.Children.Remove((Polyline)v);
+                        if (this.ScreenElement.ElementID != 0)
+                        {
+                            pl.Name = "ShowLinePolyline" + this.ScreenElement.ElementID;
+                            var v = picCurveShow.FindName("ShowLinePolyline" + this.ScreenElement.ElementID);
+                            picCurveShow.Children.Remove((Polyline)v);
+                        }
                         picCurveShow.Children.Add(pl);
                     }
             }

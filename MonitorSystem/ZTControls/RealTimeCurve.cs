@@ -61,7 +61,6 @@ namespace MonitorSystem.ZTControls
            picCurveShow.Height= e.NewSize.Height;
            RefBackground();
         }
-       
 
         #region 属性设置
         SetSingleProperty tpp = new SetSingleProperty();
@@ -92,7 +91,6 @@ namespace MonitorSystem.ZTControls
         }
 
         #endregion
-
         
         #region 控件公共属性
         public override event EventHandler Selected;
@@ -145,6 +143,9 @@ namespace MonitorSystem.ZTControls
             Transparent = ScreenElement.Transparent.Value;
             picCurveShow.Width = this.Width = (double)ScreenElement.Width;
             picCurveShow.Height=this.Height = (double)ScreenElement.Height;
+
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor);
+            BackColor = Common.StringToColor(ScreenElement.BackColor); 
         }
 
         public List<t_ElementProperty> GetProperty()
@@ -235,9 +236,37 @@ namespace MonitorSystem.ZTControls
         #endregion        
 
         #region 属性
+        private static readonly DependencyProperty BackColorProperty =
+            DependencyProperty.Register("BackColor",
+            typeof(Color), typeof(DLBiaoPan), new PropertyMetadata(Colors.Black));
+        private Color _BackColor = Colors.Black;
+        public Color BackColor
+        {
+            get { return (Color)this.GetValue(BackColorProperty); }
+            set
+            {
+                _BackColor = value;
+                if (ScreenElement != null)
+                    ScreenElement.BackColor = value.ToString();
+            }
+        }
 
-        private static readonly DependencyProperty TransparentProperty =
-         DependencyProperty.Register("Transparent",
+        private static readonly DependencyProperty ForeColorProperty =
+           DependencyProperty.Register("ForeColor",
+           typeof(Color), typeof(DLBiaoPan), new PropertyMetadata(Colors.Red));
+        private Color _ForeColor = Colors.Red;
+        public Color ForeColor
+        {
+            get { return (Color)this.GetValue(ForeColorProperty); }
+            set
+            {
+                _ForeColor = value;
+                if (ScreenElement != null)
+                    ScreenElement.ForeColor = value.ToString();
+            }
+        }
+
+        private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
          typeof(int), typeof(RealTimeCurve), new PropertyMetadata(0));
         private int _Transparent;
         public int Transparent
@@ -550,6 +579,7 @@ namespace MonitorSystem.ZTControls
             }
             picCurveShow.Children.Clear();
 
+           // picCurveShow.Background = new SolidColorBrush(_BackColor);
             picCurveShow.Background = new SolidColorBrush(Colors.Black);
                         
             //绘制表格背景线
@@ -783,9 +813,12 @@ namespace MonitorSystem.ZTControls
                 pl.Stroke = new SolidColorBrush(Colors.Yellow);
                 pl.StrokeThickness = 2;
                 pl.Points = pc;
-                pl.Name = "ShowLinePolyline";
-               var v= picCurveShow.FindName("ShowLinePolyline");
-               picCurveShow.Children.Remove((Polyline)v);
+                if (this.ScreenElement.ElementID != 0)
+                {
+                    pl.Name = "ShowLinePolyline" + this.ScreenElement.ElementID;
+                    var v = picCurveShow.FindName("ShowLinePolyline" + this.ScreenElement.ElementID);
+                    picCurveShow.Children.Remove((Polyline)v);
+                }
                 picCurveShow.Children.Add(pl);
             }
 

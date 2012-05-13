@@ -109,10 +109,6 @@ namespace MonitorSystem
 
         public void ChangeSize(double Height, double Width)
         {
-            //if (Height > 370)
-            //{
-            //    tpControls.Width = accordion.Width = Width;//组件宽度
-            //}
         }
 
         #region 场景
@@ -194,58 +190,6 @@ namespace MonitorSystem
                 TreeItemRightItem = (TreeViewItem)sender;
             }
         }
-
-        #region 双击加载场景，但事件不触发
-        //private int ClickNumber = 0;
-        //private bool IsClick = false;
-        //private DateTime _startTime;
-        //protected void tvi_MouseLeftButtonUp(object sender, MouseEventArgs e)
-        //{
-        //    if (IsClick)//处理双击
-        //    {
-        //        TimeSpan t = DateTime.Now - _startTime;
-        //        if (t.Minutes == 0 && t.Seconds == 0 && t.Milliseconds < 500)
-        //        {
-        //            ClickNumber++;
-        //        }
-        //        else
-        //        {
-        //            IsClick = false;
-        //            ClickNumber = 0;
-        //        }
-        //        if (ClickNumber == 2)
-        //        {
-        //            IsClick = false;
-        //            ClickNumber = 0;
-        //            //显示信息
-        //            MessageBox.Show("");
-        //        }
-        //    }
-        //}
-        //protected void tvi_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (IsClick)
-        //    {
-        //        TimeSpan t = DateTime.Now - _startTime;
-        //        if (t.Minutes == 0 && t.Seconds == 0 && t.Milliseconds < 500)
-        //        {
-        //            _startTime = DateTime.Now;
-        //        }
-        //        else
-        //        {
-        //            _startTime = DateTime.Now;
-        //            ClickNumber = 0;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        IsClick = true;
-        //        _startTime = DateTime.Now;
-        //        ClickNumber = 0;
-        //    }
-        //}
-        #endregion
-
         #region 菜单
         /// <summary>
         /// 加载的时候
@@ -267,6 +211,18 @@ namespace MonitorSystem
                 mymenu.IsOpen = false;
                 TreeItemRightItem = null;
                 return;
+            }
+            miDelete.Visibility = Visibility.Visible;
+            miOpen.Visibility = Visibility.Visible;
+            miSetDeftult.Visibility = Visibility.Visible;
+            if (SelectItem.Items.Count >0)
+            {
+                //mymenu.IsOpen = false;
+                //TreeItemRightItem = null;
+                miDelete.Visibility = Visibility.Collapsed;
+                miOpen.Visibility = Visibility.Collapsed;
+                miSetDeftult.Visibility = Visibility.Collapsed;
+                //return;
             }
             t_Screen m_obj = (t_Screen)TreeItemRightItem.Tag;
             EnableMenu(true);
