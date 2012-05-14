@@ -193,11 +193,11 @@ namespace MonitorSystem
             fwProperty.ParentLayoutRoot = LayoutRoot;
             fwProperty.Content = prop;
            
-            fwProperty.Width = 300;
-            fwProperty.Height = 600;
+            fwProperty.Width = 300d;
+            //fwProperty.Height = 600;
             fwProperty.Title = "场景";
-            fwProperty.MaxHeight = 600;
-            fwProperty.MaxWidth = 400;
+            //fwProperty.MaxHeight = 600;
+            //fwProperty.MaxWidth = 400;
            // fwProperty.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
            // double d = Convert.ToDouble(gdContent.GetValue(Canvas.WidthProperty));
            //MessageBox.Show(d.ToString());
@@ -205,10 +205,14 @@ namespace MonitorSystem
             //double mLeft = 800;
             //fwProperty.SetValue(Canvas.TopProperty, mtop);
             //fwProperty.SetValue(Canvas.LeftProperty, mLeft);
-            fwProperty.SetValue(MarginProperty, new Thickness(50,0,30,0));
-            fwProperty.VerticalAlignment = VerticalAlignment.Center;
-            fwProperty.HorizontalAlignment = HorizontalAlignment.Right;
+            //fwProperty.SetValue(MarginProperty, new Thickness(0,60,30,0));
+            //fwProperty.VerticalAlignment = VerticalAlignment.Stretch;
+            //fwProperty.HorizontalAlignment = HorizontalAlignment.Right;
             //CBIsztControl.IsEnabled = true;
+            this.SizeChanged += (o, e) => {
+                    fwProperty.Height = csScreen.ActualHeight * 0.95d;
+                    fwProperty.RenderTransform = new CompositeTransform() { TranslateX = (e.NewSize.Width - fwProperty.Width) / 2d - 15d, TranslateY = (e.NewSize .Height - fwProperty.Height) / 2d - 15d };
+            };
             fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
         }
 
@@ -535,6 +539,7 @@ namespace MonitorSystem
             tbWait.Visibility = Visibility.Visible;
             ScreenAllElement.Clear();
 
+            csScreen.Children.OfType<MonitorControl>().ToList().ForEach(mc => mc.UnDesignMode()); ;
             csScreen.Children.Clear();
             lblShowMsg.Content = _Screen.ScreenName;
 
