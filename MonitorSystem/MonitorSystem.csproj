@@ -221,7 +221,6 @@
     <Compile Include="ZTControls\zedGraphCtrl.cs" />
     <Compile Include="ZTControls\zedGraphLineCtrl.cs" />
     <Compile Include="ZTControls\zedGraphPieCtrl.cs" />
-    <None Include="新添加的图片（用完就删掉）.rar" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

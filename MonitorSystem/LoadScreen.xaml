@@ -57,7 +57,6 @@
                            Stretch="None" MouseLeftButtonUp="Image_MouseLeftButtonUp" />
                 </StackPanel>
             </Grid>
-            
             <Canvas Grid.Row="2" x:Name="csScreen" Background="Beige">                
             </Canvas>
             <Canvas Grid.Row="2"
