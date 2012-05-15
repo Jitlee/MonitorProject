@@ -60,7 +60,22 @@ namespace MonitorSystem
         /// 定时更新值
         /// </summary>
         DispatcherTimer timerRefrshValue = new DispatcherTimer();
-
+        /// <summary>
+        /// 加载场景列表，用于后退功能
+        /// </summary>
+        Stack<t_Screen> LoadScreenList = new Stack<t_Screen>();
+        /// <summary>
+        /// 用于记录上一个场景
+        /// </summary>
+        t_Screen ReturnScreen;
+        /// <summary>
+        /// 主页
+        /// </summary>
+        t_Screen MainPage;
+        /// <summary>
+        /// 是否Pop列表
+        /// </summary>
+        bool IsPop = false;
         #endregion
         public LoadScreen()
         {
@@ -429,6 +444,7 @@ namespace MonitorSystem
                 return;
             }
             _CurrentScreen = v.First();
+            MainPage = _CurrentScreen;
         }
 
         /// <summary>
@@ -536,6 +552,22 @@ namespace MonitorSystem
         /// <param name="_Screen"></param>
         private void LoadScreenData(t_Screen _Screen)
         {
+            if (ReturnScreen != null)
+            {
+                if (_Screen.ScreenID != ReturnScreen.ScreenID)
+                {
+                    if (!IsPop)
+                    {
+                        LoadScreenList.Push(ReturnScreen);
+                    }
+                    ReturnScreen = _Screen;
+                }
+            }
+            else
+            {
+                ReturnScreen = _Screen;
+            }
+
             tbWait.Visibility = Visibility.Visible;
             ScreenAllElement.Clear();
 
@@ -1317,11 +1349,21 @@ namespace MonitorSystem
         private void Home_Click(object sender, RoutedEventArgs e)
         {
             // 首页
+            if (MainPage != null)
+            {
+                LoadScreenData(MainPage);
+            }
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             // 后退
+            if (LoadScreenList != null && LoadScreenList.Count > 0)
+            {
+                t_Screen mscreen = LoadScreenList.Pop();
+                IsPop = true;
+                LoadScreenData(mscreen);
+            }
         }
 
     }

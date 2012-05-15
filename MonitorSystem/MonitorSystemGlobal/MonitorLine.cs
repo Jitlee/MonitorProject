@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Linq;
 using MonitorSystem.Web.Moldes;
+using System.ComponentModel;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
@@ -28,7 +29,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public override event EventHandler Selected;
 
-        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Translate", "Foreground","Transparent",
+        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Translate", "ForeColor","Transparent",
             "LineType","LineWidth"};
 
         public override string[] BrowsableProperties
@@ -49,17 +50,27 @@ namespace MonitorSystem.MonitorSystemGlobal
                 _Transparent = value;
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
-                //PainLine();
-                if (_Transparent == 1)
-                {
-                    _mCanvas.Background = new SolidColorBrush();
-                }
-                else
-                {
-                    _mCanvas.Background = new SolidColorBrush(Colors.White);
-                }
+                PainLine();
             }
         }
+
+
+        private static readonly DependencyProperty ForeColorProperty = DependencyProperty.Register("ForeColor",
+   typeof(int), typeof(MonitorLine), new PropertyMetadata(0));
+        private Color _ForeColor = Colors.Black;
+        [DefaultValue(""), Description("字体颜色"), Category("外观")]
+        public Color ForeColor
+        {
+            get { return _ForeColor; }
+            set
+            {
+                _ForeColor = value;
+                if (ScreenElement != null)
+                    ScreenElement.ForeColor = value.ToString();
+                PainLine();
+            }
+        }
+
 
         private static readonly DependencyProperty LineWidthProperty =
             DependencyProperty.Register("LineWidth",
@@ -85,7 +96,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private void PainLine()
         {
-            Color ForColor=Colors.Green;
+           // Color ForColor=Colors.Green;
             _mCanvas.Child = null;
             if (_Transparent == 1)
             {
@@ -98,7 +109,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
             if (_LineType == 0)
             {
-                _mCanvas.Background = new SolidColorBrush(Colors.Black);
+                _mCanvas.Background = new SolidColorBrush(_ForeColor);
             }
             else if (_LineType == 1)
             {
@@ -109,24 +120,8 @@ namespace MonitorSystem.MonitorSystemGlobal
                 _grid.ColumnDefinitions.Add(cd1);
 
                 Border mbor = new Border();
-                mbor.Background = new SolidColorBrush(ForColor);
+                mbor.Background = new SolidColorBrush(_ForeColor);
                 _grid.Children.Add(mbor);
-
-                //if (_Transparent == 1)
-                //{
-                //    Border mbor1 = new Border();
-                //    mbor1.SetValue(Grid.ColumnProperty, 1);
-                //    mbor1.Background = new SolidColorBrush();
-                //    _grid.Children.Add(mbor1);
-                //}
-                //else
-                //{
-                //    Border mbor1 = new Border();
-                //    mbor1.SetValue(Grid.ColumnProperty, 1);
-                //    mbor1.Background = new SolidColorBrush(Colors.White);
-                //    _grid.Children.Add(mbor1);
-                //}
-               // _mCanvas.Children.Clear();
                 _mCanvas.Child=_grid;
             }
             else if (_LineType == 2)
@@ -139,14 +134,14 @@ namespace MonitorSystem.MonitorSystemGlobal
                 l.Y2 = this.Height;
                 l.Width = this.Width;
                 l.Height = this.Height;
-                l.Stroke = new SolidColorBrush(Colors.Red);
+                l.Stroke = new SolidColorBrush(_ForeColor);
                 l.StrokeThickness = (double)_LineWidth;
                 _mCanvas.Child = l;
             }
             else
             {
                 //_mCanvas.Children.Clear();
-                _mCanvas.Background = new SolidColorBrush(Colors.White);
+                _mCanvas.Background = new SolidColorBrush();
             }
 
         }
@@ -202,6 +197,8 @@ namespace MonitorSystem.MonitorSystemGlobal
             _Transparent = ScreenElement.Transparent.Value;
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+
+             ForeColor = Common.StringToColor(ScreenElement.ForeColor);
         }
 
         public override object GetRootControl()

@@ -36,6 +36,13 @@ namespace MonitorSystem.ZTControls
         {
             _Canv.Width = e.NewSize.Width;
             _Canv.Height = e.NewSize.Height;
+            RectangleGeometry r = new RectangleGeometry();
+
+            Rect rect = new Rect();
+            rect.Width = e.NewSize.Width;
+            rect.Height = e.NewSize.Height;
+            r.Rect = rect;
+            _Canv.Clip = r;
             DrawLine_Paint();
         }
 
@@ -276,7 +283,6 @@ namespace MonitorSystem.ZTControls
             set
             {
                 _BackColor = value;
-                _Canv.Background = new SolidColorBrush(_BackColor);
                 if (ScreenElement != null)
                     ScreenElement.BackColor = value.ToString();
             }
@@ -327,7 +333,7 @@ namespace MonitorSystem.ZTControls
         }
 
         // 2009-6-29
-        bool isRightDirect;  // 正相还是反相？若是正相，则1用红色表示，否则用绿色表示。
+        bool isRightDirect=false;  // 正相还是反相？若是正相，则1用红色表示，否则用绿色表示。
         /// <summary>
         /// 正相还是反相 // 2009-6-29
         /// </summary>

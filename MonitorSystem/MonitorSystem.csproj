@@ -341,9 +341,9 @@
     <Resource Include="Images\Common\统计报表.JPG" />
     <Resource Include="Images\Common\网络状态_状态栏.JPG" />
     <Resource Include="Images\Common\网络状态_状态栏1.JPG" />
-    <Resource Include="Images\Common\网络连接.JPG" />
     <Resource Include="Images\Common\退出.JPG" />
     <Resource Include="Images\Common\首页_工具条.jpg" />
+    <Resource Include="Images\Common\网络连接.JPG" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\MyDataService\GetData.wsdl" />
     <None Include="Service References\MyDataService\GetData.xsd">

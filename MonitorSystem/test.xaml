@@ -4,4 +4,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="708" d:DesignWidth="624" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" IsHitTestVisible="False" xmlns:my="clr-namespace:MonitorSystem.MonitorSystemGlobal" xmlns:my1="clr-namespace:System;assembly=mscorlib" xmlns:my2="clr-namespace:MonitorSystem.ZTControls"></UserControl>
+    d:DesignHeight="708" d:DesignWidth="624" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" IsHitTestVisible="False" xmlns:my="clr-namespace:MonitorSystem.MonitorSystemGlobal" xmlns:my1="clr-namespace:System;assembly=mscorlib" xmlns:my2="clr-namespace:MonitorSystem.ZTControls">
+    <Canvas>
+        <my2:DrawLine Height="40"  x:Name="drawLine1" Width="413" Margin="45,222,167,446" />
+        <Button Content="Button" Height="24" HorizontalAlignment="Left" Margin="86,80,0,0" Name="button1"
+                VerticalAlignment="Top" Width="100" Click="button1_Click" />
+    </Canvas>
+</UserControl>

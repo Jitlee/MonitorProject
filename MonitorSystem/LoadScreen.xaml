@@ -35,7 +35,7 @@
                     <ctrls:MenuScriptItem x:Name="HelpMenuScriptItem" Header="帮助"/>
                 </ctrls:MenuScript>
             </Border>
-            <Grid  Background="#e5eff8" Name="wrapPanel1"  Grid.Row="1" >
+            <Grid  Background="#e5eff8" Name="wrapPanel1"  Grid.Row="1">
                 <!--<StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <CheckBox   Canvas.Left="13" Canvas.Top="10" Content="组态" Height="21" Name="CBIsztControl" Checked="zt_Checked" Unchecked="zt_Unchecked"  IsEnabled="False" />
                 </StackPanel>-->

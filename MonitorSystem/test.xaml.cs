@@ -22,33 +22,15 @@ namespace MonitorSystem
         {
             InitializeComponent();
 
-            //bod.BorderBrush = new SolidColorBrush(Colors.Red);
-            //Thickness thi = new Thickness();
-            //thi.Left = 3;
-            //thi.Top = 2;
-            //thi.Right = 2;
-            //thi.Bottom = 0;
-            //bod.BorderThickness = thi;
-//            this.chart1.Series.x
-           // ddd.
-
-            //定时更新值
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 4);
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Start();
-
-
-        }
-        protected void timer_Tick(object sender, EventArgs e)
-        {
-            Random r = new Random();
-           int x= r.Next(500);
           
-        }
-        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
-        {
 
+        }
+      
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+           // MessageBox.Show("");
+            drawLine1.SetChannelValue(0f, 25);
         }
     }
 
