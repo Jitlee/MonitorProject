@@ -213,15 +213,15 @@ namespace MonitorSystem
                 return;
             }
             miDelete.Visibility = Visibility.Visible;
-            miOpen.Visibility = Visibility.Visible;
-            miSetDeftult.Visibility = Visibility.Visible;
+            //miOpen.Visibility = Visibility.Visible;
+            //miSetDeftult.Visibility = Visibility.Visible;
             if (SelectItem.Items.Count >0)
             {
                 //mymenu.IsOpen = false;
                 //TreeItemRightItem = null;
                 miDelete.Visibility = Visibility.Collapsed;
-                miOpen.Visibility = Visibility.Collapsed;
-                miSetDeftult.Visibility = Visibility.Collapsed;
+                //miOpen.Visibility = Visibility.Collapsed;
+                //miSetDeftult.Visibility = Visibility.Collapsed;
                 //return;
             }
             t_Screen m_obj = (t_Screen)TreeItemRightItem.Tag;

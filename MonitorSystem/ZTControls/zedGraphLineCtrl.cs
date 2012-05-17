@@ -273,7 +273,7 @@ namespace MonitorSystem.ZTControls
             GetData(strSql, "Data");
         }
 
-        ObservableCollection<MyDataService.DataTableInfo> _tables;
+       // ObservableCollection<MyDataService.DataTableInfo> _tables;
         private void GetData(string sql, object userState)
         {
             var ws = WCF.GetService();

@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Threading;
 using System.Diagnostics;
-using System.Windows.Interactivity;
+//using System.Windows.Interactivity;
 
 namespace MonitorSystem.Controls.ImagesManager
 {
