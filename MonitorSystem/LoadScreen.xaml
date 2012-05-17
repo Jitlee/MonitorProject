@@ -28,11 +28,11 @@
                     </ctrls:MenuScriptItem>
                     <ctrls:MenuScriptItem x:Name="OpartionMenuScriptItem" Header="操作" Visibility="Collapsed">
                         <ctrls:MenuScriptItem x:Name="SaveCurrentSenceMenuScriptItem" Image="/MonitorSystem;component/Images/Common/保存场景.jpg" Header="保存当前场景" Click="SaveCurrentSence_Click"/>
-                        <ctrls:MenuScriptItem x:Name="SaveAllSencesMenuScriptItem" Header="保存所有场景" Image="/MonitorSystem;component/Images/Common/保存所有场景.jpg" Click="SaveAllSences_Click"/>
+                        <!--<ctrls:MenuScriptItem x:Name="SaveAllSencesMenuScriptItem" Header="保存所有场景" Image="/MonitorSystem;component/Images/Common/保存所有场景.jpg" Click="SaveAllSences_Click"/>-->
                         <ctrls:MenuScriptItem x:Name="ZTExitMenuScriptItem" Header="退出组态" Image="/MonitorSystem;component/Images/Common/退出.JPG" Click="ZTExit_Click"/>
                     </ctrls:MenuScriptItem>
                     <ctrls:MenuScriptItem x:Name="AllSencesMenuScriptItem" Header="所有场景"/>
-                    <ctrls:MenuScriptItem x:Name="HelpMenuScriptItem" Header="帮助"/>
+                    <!--<ctrls:MenuScriptItem x:Name="HelpMenuScriptItem" Header="帮助"/>-->
                 </ctrls:MenuScript>
             </Border>
             <Grid  Background="#e5eff8" Name="wrapPanel1"  Grid.Row="1">

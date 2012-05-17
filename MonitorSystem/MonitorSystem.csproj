@@ -100,6 +100,8 @@
     <Compile Include="Controls\MenuScript\MainMenu.cs" />
     <Compile Include="Controls\MenuScript\MainMenuItem.cs" />
     <Compile Include="Controls\PropertyGrid\Converters\ColorConverter.cs" />
+    <Compile Include="Controls\PropertyGrid\Converters\FontFamilyConverter.cs" />
+    <Compile Include="Controls\PropertyGrid\FontFamilyValueEditor.cs" />
     <Compile Include="Converters\ImagePathConverter.cs" />
     <Compile Include="GetData\DataObject.cs" />
     <Compile Include="GetData\DynamicDataBuilder.cs" />

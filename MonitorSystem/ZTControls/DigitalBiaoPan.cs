@@ -137,7 +137,8 @@ namespace MonitorSystem.ZTControls
             BackColor = Common.StringToColor(ScreenElement.BackColor); 
         }
 
-        private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "RadixLen", "IntLen", "MyNum" };
+        private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
+            "BackColor", "ForeColor", "RadixLen", "IntLen", "MyNum" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -378,7 +379,6 @@ namespace MonitorSystem.ZTControls
             }
 
             //float fScale = Math.Min(ClientSize.Width / sizef.Width, ClientSize.Height / sizef.Height);
-            //Font font = new Font(new FontFamily("宋体"), fScale * Font.SizeInPoints);
             //sizef = ssd.MeasureString(formatNum, font);
             //SolidBrush sbrush1 = new SolidBrush(this.ForeColor);
             //ssd.DrawString(formatNum, font, sbrush1, (ClientSize.Width - sizef.Width) / 2, (ClientSize.Height - sizef.Height) / 2);

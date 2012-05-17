@@ -143,7 +143,8 @@ namespace MonitorSystem.ZTControls
             this.Height = (double)ScreenElement.Height;
         }
 
-        private string[] _browsableProperties = new[] { "Location", "Size", "Font", "OpenOrNot", "style", "TrueColor", "FalseColor", "IsFlash", "FlashLogic", "Transparent" };
+        private string[] _browsableProperties = new[] {"Width", "Height", "Left", "Top", "FontFamily", "FontSize",
+            "Location", "Size", "Font", "OpenOrNot", "style", "TrueColor", "FalseColor", "IsFlash", "FlashLogic", "Transparent" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }

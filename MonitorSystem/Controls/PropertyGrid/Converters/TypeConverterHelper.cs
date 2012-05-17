@@ -27,6 +27,10 @@ namespace MonitorSystem.Controls.Converters
 			{
 				return new Int16Converter();
 			}
+            if(type == typeof(FontFamily))
+            {
+                return new FontFamilyConverter();
+            }
 			if (type == typeof(long))
 			{
 				return new Int64Converter();

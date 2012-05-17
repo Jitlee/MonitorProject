@@ -30,7 +30,7 @@ namespace MonitorSystem
         private void button1_Click(object sender, RoutedEventArgs e)
         {
            // MessageBox.Show("");
-            drawLine1.SetChannelValue(0f, 25);
+            //drawLine1.SetChannelValue(0f, 25);
         }
     }
 

@@ -121,7 +121,7 @@ namespace MonitorSystem.ZTControls
             ForeColor = Common.StringToColor(ScreenElement.ForeColor); 
         }
 
-        private string[] _browsableProperties = new[] { "Location", "Size", "Font", "ForeColor", 
+        private string[] _browsableProperties = new[] {"Width", "Height", "Left", "Top", "FontFamily", "FontSize", "Location", "Size", "Font", "ForeColor", 
             "OpenOrNot", "IsRightDirect", "Transparent" };
         public override string[] BrowsableProperties
         {

@@ -350,6 +350,8 @@ namespace MonitorSystem.MonitorSystemGlobal
         public ColorText()
         {
             this.Content = _text;
+            
+
         }
 
         private void ShowText()

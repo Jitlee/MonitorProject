@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows;
 
 namespace MonitorSystem.Controls
 {
@@ -50,9 +51,14 @@ namespace MonitorSystem.Controls
             if (typeof(Color).IsAssignableFrom(propertyType))
                 return new ColorValueEditor(label, property);
 
+            if (typeof(FontFamily).IsAssignableFrom(propertyType))
+                return new FontFamilyValueEditor(label, property);
+
             if (typeof(ValueType).IsAssignableFrom(propertyType))
                 return new StringValueEditor(label, property);
 
+           
+            
 			//if (typeof(Object).IsAssignableFrom(propertyType))
 			//    return new PropertyGrid(label, property);
 

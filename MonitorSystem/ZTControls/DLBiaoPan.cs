@@ -140,7 +140,8 @@ namespace MonitorSystem.ZTControls
             BackColor = Common.StringToColor(ScreenElement.BackColor); 
         }
 
-        private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "MinValue", "MaxValue", "CurrenValue", "Title","MyScale"};
+        private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
+            "BackColor", "ForeColor", "MinValue", "MaxValue", "CurrenValue", "Title","MyScale"};
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }

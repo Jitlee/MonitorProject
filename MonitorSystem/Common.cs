@@ -70,16 +70,7 @@ namespace MonitorSystem
             return false;
         }
 
-        //public struct Font
-        //{
-        //    public double FontSize { get; set; }
-        //    public FontWeight Font
-        //    public FontFamily FontFamily { get; set; }
-        //    public override string ToString()
-        //    {
-        //        return base.ToString();
-        //    }
-        //}
+       
 
         //public Font GetFontFromStr(string strFont)
         //{

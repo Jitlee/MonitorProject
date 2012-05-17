@@ -32,8 +32,77 @@ namespace MonitorSystem.MonitorSystemGlobal
         }
 
         public abstract event EventHandler Selected;
-        public t_Element ScreenElement { get; set; }
 
+        private t_Element _ScreenElement;
+        public t_Element ScreenElement
+        {
+            get
+            {
+
+                SetFont();
+                return _ScreenElement;
+            }
+            set
+            {
+                _ScreenElement = value;
+                GetFont(value.Font);
+            }
+        }
+        #region 字体处理
+        private void SetFont()
+        {
+            //[Font: Name=宋体, Size=15.75, Units=3, GdiCharSet=134, GdiVerticalFont=False]
+            string s = string.Format("[Font: Name={0}, Size={1}, Units=3, GdiCharSet=134, GdiVerticalFont=False]",
+                                    this.FontFamily.Source,
+                                  this.FontSize.ToString());
+            if (_ScreenElement != null)
+                _ScreenElement.Font = s;
+        }
+
+        private void GetFont(string strFont)
+        {
+            if (strFont == null)
+            {
+                this.FontSize = 12f;
+                //this.FontFamily = new FontFamily("Simsun");
+            }
+            else
+            {
+                // 设置字体
+                string Name = "黑体";// "宋体";
+                //Name = "Microsoft YaHei";// "楷体";
+                //Name = "SimHei";// "黑体";
+                //Name = "黑体";
+                //Name = "楷体";
+                
+
+                double fontSize = 12f;
+
+                int idx = strFont.IndexOf("Font:");
+                if (idx != -1)
+                {
+                    strFont = strFont.Substring(idx + 5);
+                    strFont = strFont.Remove(strFont.Length - 1);
+                    char[] slip = new char[] { ',' };
+                    string[] arrStr = strFont.Split(slip);
+                    foreach (string str in arrStr)
+                    {
+                        char[] slipKey = new char[] { '=' };
+                        string[] keyVal = str.Split(slipKey);
+                        int LEN = keyVal[0].Length;
+                        string tmp = "Name";
+                        int LEN2 = tmp.Length;
+                        if (keyVal[0].Equals(" Name", StringComparison.OrdinalIgnoreCase))
+                            Name = keyVal[1];
+                        if (keyVal[0].Equals(" Size", StringComparison.OrdinalIgnoreCase))
+                            fontSize = (double)(Convert.ToDouble(keyVal[1]));
+                    }
+                }
+                this.FontSize =fontSize;
+                this.FontFamily = new FontFamily(Name);
+            }
+        }
+        #endregion
         /// <summary>
         /// 控件自定义属性列表,控件值
         /// </summary>
@@ -45,6 +114,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public abstract void SetCommonPropertyValue();
 
+        
         /// <summary>
         /// 控件状态，新添加的，或以保存的
         /// </summary>
@@ -67,14 +137,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         private  string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Translate", "Foreground" };
 
         public abstract string[] BrowsableProperties { set; get; }
-        //{
-        //    get { return m_BrowsableProperties; }
-        //    set { m_BrowsableProperties = value; }
-        //}
-
-        
-
-
+     
         public double Translate
         {
             get { return (double)GetValue(OpacityProperty) * 100d; }
@@ -95,7 +158,6 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public MonitorControl()
         {
-            SetValue(FontFamilyProperty, new FontFamily("宋体"));
             SetValue(ForegroundProperty, new SolidColorBrush(Colors.Black));
         }
 
@@ -1018,6 +1080,5 @@ namespace MonitorSystem.MonitorSystemGlobal
     }
     #endregion
 
-    #region 公共实用函数
-    #endregion
+   
 }

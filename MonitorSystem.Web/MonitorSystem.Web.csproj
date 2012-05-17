@@ -62,7 +62,6 @@
     <Content Include="ClientBin\MonitorSystem.xap" />
     <Content Include="GetData\GetData.svc" />
     <Content Include="ImageMap\11.jpg" />
-    <Content Include="ImageMap\22.JPG" />
     <Content Include="MonitorSystemTestPage.aspx" />
     <Content Include="MonitorSystemTestPage.html" />
     <Content Include="Pic\bg1.jpg" />

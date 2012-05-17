@@ -146,9 +146,12 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+
+            
         }
 
-        private string[] _browsableProperties = new[] { "BackColor", "ForeColor", "MyText", "MyScrollBars" };
+        private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
+            "Width", "Height", "Left", "Top", "FontFamily", "FontSize", "BackColor", "ForeColor", "MyText", "MyScrollBars" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
