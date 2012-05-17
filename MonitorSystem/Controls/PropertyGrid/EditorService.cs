@@ -33,6 +33,11 @@ namespace MonitorSystem.Controls
 		}
 		public static ValueEditorBase GetEditor(Type propertyType, PropertyGridLabel label, PropertyItem property)
 		{
+            if (property.GetAttribute<ImageAttribute>() != null)
+            {
+                return new ImageVaueEditor(label, property);
+            }
+
 			if (typeof(Boolean).IsAssignableFrom(propertyType))
 				return new BooleanValueEditor(label, property);
 
@@ -56,8 +61,6 @@ namespace MonitorSystem.Controls
 
             if (typeof(ValueType).IsAssignableFrom(propertyType))
                 return new StringValueEditor(label, property);
-
-           
             
 			//if (typeof(Object).IsAssignableFrom(propertyType))
 			//    return new PropertyGrid(label, property);

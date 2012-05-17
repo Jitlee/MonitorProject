@@ -3,14 +3,15 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace MonitorSystem.Controls.ImagesManager
 {
     public class ImagePathConverter : IValueConverter
     {
         private static readonly string _root = (System.Windows.Browser.HtmlPage.IsEnabled == true) ? Application.Current.Host.Source.AbsoluteUri.Remove(Application.Current.Host.Source.AbsoluteUri.IndexOf(Application.Current.Host.Source.AbsolutePath)) : string.Empty;
-        private static readonly ImageSource _defaultFileImage = new BitmapImage(new Uri("/SilverlightApplication2;component/ImagesManager/Images/file.jpg", UriKind.RelativeOrAbsolute));
-        private static readonly ImageSource _defaultDirectoryImage = new BitmapImage(new Uri("/SilverlightApplication2;component/ImagesManager/Images/drectory.png", UriKind.RelativeOrAbsolute));
+        private static readonly ImageSource _defaultFileImage = new BitmapImage(new Uri("/MonitorSystem;component/Controls/ImagesManager/Images/file.jpg", UriKind.RelativeOrAbsolute));
+        private static readonly ImageSource _defaultDirectoryImage = new BitmapImage(new Uri("/MonitorSystem;component/Controls/ImagesManager/Images/drectory.png", UriKind.RelativeOrAbsolute));
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return Convert(value);
@@ -33,7 +34,7 @@ namespace MonitorSystem.Controls.ImagesManager
                     }
                     else
                     {
-                        return new BitmapImage(new Uri(string.Concat(_root, "/", value.ToString().Trim('/'))));
+                        return new BitmapImage(new Uri(string.Concat(_root, "/Upload/", value.ToString().Replace("\\", "/").Trim('/'))));
                     }
                 }
                 catch { };

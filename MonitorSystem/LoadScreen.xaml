@@ -9,7 +9,7 @@
              xmlns:ctrls="clr-namespace:MonitorSystem.Controls">
     <!--xmlns:menu="clr-namespace:SL4PopupMenu"-->
     <Grid x:Name="LayoutRoot">
-        <Grid x:Name="gdContent"  Background="#A0A0A0" ShowGridLines="False" Margin="0">
+        <Grid x:Name="gdContent" Background="Beige" ShowGridLines="False" Margin="0">
             <Grid.RowDefinitions >
                 <RowDefinition Height="Auto"  />
                 <RowDefinition Height="35"  />
@@ -57,8 +57,8 @@
                            Stretch="None" MouseLeftButtonUp="Image_MouseLeftButtonUp" />
                 </StackPanel>
             </Grid>
-            <Canvas Grid.Row="2" x:Name="csScreen" Background="Beige">                
-            </Canvas>
+            <ctrls:SceneBackgroundPanel x:Name="BackgroundPanel" Grid.Row="2"/>
+            <Canvas Grid.Row="2" x:Name="csScreen" Background="Transparent"/>
             <Canvas Grid.Row="2"
                     x:Name="AddElementCanvas"
                     Background="Transparent"

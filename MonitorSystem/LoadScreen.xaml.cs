@@ -88,6 +88,7 @@ namespace MonitorSystem
 
             AddElementCanvas.MouseLeftButtonDown += AddElementCanvas_MouseLeftButtonDown;
             AddElementCanvas.MouseLeftButtonUp += AddElementCanvas_MouseLeftButtonUp;
+            csScreen.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(CsScreen_MouseLeftButtonDown), false);
         }
 
         public static void Load(t_Screen screen)
@@ -95,6 +96,16 @@ namespace MonitorSystem
             if (screen == null)
                 return;
             _instance.LoadScreenData(screen);
+        }
+
+        private void CsScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Adorner.CancelSelected();
+
+            PropertyMain.Instance.ControlPropertyGrid.SelectedObject = null;
+            PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = new []{"BgImagePath"};
+            PropertyMain.Instance.ControlPropertyGrid.SelectedObject = BackgroundPanel; 
+
         }
 
         #region 绘制控件
@@ -575,15 +586,16 @@ namespace MonitorSystem
             csScreen.Children.Clear();
             lblShowMsg.Content = _Screen.ScreenName;
 
-            string url = string.Format("{0}/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
-            BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Absolute));
+            //string url = string.Format("{0}/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
+            //BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Absolute));
 
-            ImageBrush imgB = new ImageBrush();
-            imgB.ImageSource = bitmap;           
-            imgB.Stretch = Stretch.None;
-            imgB.AlignmentX = AlignmentX.Left;
-            imgB.AlignmentY = AlignmentY.Top;
-            csScreen.Background = imgB;
+            //ImageBrush imgB = new ImageBrush();
+            //imgB.ImageSource = bitmap;           
+            //imgB.Stretch = Stretch.None;
+            //imgB.AlignmentX = AlignmentX.Left;
+            //imgB.AlignmentY = AlignmentY.Top;
+            //csScreen.Background = imgB;
+            BackgroundPanel.BgImagePath = _Screen.ImageURL;
 
             //设置当前
             _CurrentScreen = _Screen;

@@ -119,6 +119,9 @@
     <Compile Include="Controls\PropertyGrid\Converters\ColorConverter.cs" />
     <Compile Include="Controls\PropertyGrid\Converters\FontFamilyConverter.cs" />
     <Compile Include="Controls\PropertyGrid\FontFamilyValueEditor.cs" />
+    <Compile Include="Controls\PropertyGrid\ImageVaueEditor.cs" />
+    <Compile Include="Controls\PropertyGrid\IsImageAttribute.cs" />
+    <Compile Include="Controls\SceneBackgroundBorder.cs" />
     <Compile Include="Converters\ImagePathConverter.cs" />
     <Compile Include="GetData\DataObject.cs" />
     <Compile Include="GetData\DynamicDataBuilder.cs" />

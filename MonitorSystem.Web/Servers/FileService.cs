@@ -16,16 +16,20 @@
     // TODO: Create methods containing your application logic.
     [EnableClientAccess()]
     public class FileService : DomainService
-    { 
+    {
         [Query]
-        public IEnumerable<FileModel> GetImages(string path)
+        public IEnumerable<FileModel> GetImages(string path, FileOption fileOption)
         {
-            var length = AppDomain.CurrentDomain.BaseDirectory.Length;
-            var physicalPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Upload", path.Trim('\\'));
-            if (Directory.Exists(physicalPath))
+            var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Upload");
+            var length = root.Length;
+            var physicalPath = Path.Combine(root, path.Trim('\\'));
+            if (!Directory.Exists(physicalPath))
             {
-                var rootDirectoryInfo = new DirectoryInfo(physicalPath);
-
+                Directory.CreateDirectory(physicalPath);
+            }
+            var rootDirectoryInfo = new DirectoryInfo(physicalPath);
+            if (fileOption != FileOption.File)
+            {
                 var directoryInfos = rootDirectoryInfo.GetDirectories();
                 foreach (var directoryInfo in directoryInfos)
                 {
@@ -40,7 +44,10 @@
                         DirectoryName = directoryInfo.Parent.FullName.Remove(0, length),
                     };
                 }
+            }
 
+            if (fileOption != FileOption.Directory)
+            {
                 var fileInfos = rootDirectoryInfo.GetFiles("*.jpg").Union(rootDirectoryInfo.GetFiles("*.png"));
                 foreach (var fileInfo in fileInfos)
                 {
@@ -48,7 +55,7 @@
                     {
                         yield return new FileModel()
                         {
-                            Url = fileInfo.FullName.Remove(0, length).Replace("\\", "/"),
+                            Url = fileInfo.FullName.Remove(0, length).Replace("\\", "/").Trim('/'),
                             Name = fileInfo.Name,
                             DisplayName = fileInfo.Name,
                             FileSize = fileInfo.Length,
@@ -59,17 +66,22 @@
                             DirectoryName = fileInfo.DirectoryName.Remove(0, length),
                         };
                     }
-                }                
+                }
             }
         }
 
-        public IEnumerable<FileModel> SearchFiles(string searchPattern)
+        public IEnumerable<FileModel> SearchFiles(string searchPattern, FileOption fileOption)
         {
-            var length = AppDomain.CurrentDomain.BaseDirectory.Length;
-            var physicalPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Upload");
-            if (Directory.Exists(physicalPath))
+            var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Upload");
+            var length = root.Length;
+            var physicalPath = root;
+            if (!Directory.Exists(physicalPath))
             {
-                var rootDirectoryInfo = new DirectoryInfo(physicalPath);
+                Directory.CreateDirectory(physicalPath);
+            }
+
+            var rootDirectoryInfo = new DirectoryInfo(physicalPath); if (fileOption != FileOption.File)
+            {
                 var directoryInfos = rootDirectoryInfo.GetDirectories(searchPattern, SearchOption.AllDirectories);
                 foreach (var directoryInfo in directoryInfos)
                 {
@@ -84,8 +96,11 @@
                         DirectoryName = directoryInfo.Parent.FullName.Remove(0, length),
                     };
                 }
+            }
 
-                var fileInfos = rootDirectoryInfo.GetFiles(searchPattern, SearchOption.AllDirectories).Where(
+            if (fileOption != FileOption.Directory)
+            {
+                var fileInfos = rootDirectoryInfo.GetFiles(searchPattern, fileOption != FileOption.File ?  SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).Where(
                     file => string.Compare("*.jpg", file.Extension, true) == 0 || string.Compare("*.png", file.Extension, true) == 0
                     );
                 foreach (var fileInfo in fileInfos)
@@ -94,7 +109,7 @@
                     {
                         yield return new FileModel()
                         {
-                            Url = fileInfo.FullName.Remove(0, length).Replace("\\", "/"),
+                            Url = fileInfo.FullName.Remove(0, length).Replace("\\", "/").Trim('/'),
                             Name = fileInfo.Name,
                             DisplayName = fileInfo.Name,
                             FileSize = fileInfo.Length,
@@ -111,11 +126,15 @@
 
         public int UploadFile(string path, string fileName, byte[] buffer, bool createNew)
         {
-            var length = AppDomain.CurrentDomain.BaseDirectory.Length;
-            var physicalPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Upload", path.Trim('\\'));
-            var physicalFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Upload", path.Trim('\\'), fileName);
-            if (Directory.Exists(physicalPath))
+            try
             {
+                var length = AppDomain.CurrentDomain.BaseDirectory.Length;
+                var physicalPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Upload", path.Trim('\\'));
+                var physicalFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Upload", path.Trim('\\'), fileName);
+                if (!Directory.Exists(physicalPath))
+                {
+                    Directory.CreateDirectory(physicalPath);
+                }
                 if (createNew)
                 {
                     File.Delete(physicalFileName);
@@ -143,7 +162,10 @@
                     }
                 }
             }
-            return -1;
+            catch
+            {
+                return -1;
+            }
         }
 
         public int DeleteFile(string path, string name)
@@ -265,6 +287,13 @@
             }
             return -1;
         }
+    }
+
+    public enum FileOption
+    {
+        All = 0,
+        File = 1,
+        Directory = 2,
     }
 
     [Serializable()]

@@ -8,9 +8,11 @@ namespace MonitorSystem.Controls.ImagesManager
     public partial class ImagesBrowseWindow : ChildWindow
     {
         private Action<FileModel> _callback;
-        public ImagesBrowseWindow(Action<FileModel> callback)
+        private string _path;
+        public ImagesBrowseWindow(Action<FileModel> callback, string path = "")
         {
             _callback = callback;
+            _path = path;
             InitializeComponent();
             this.Loaded += OnLoaded;
         }
@@ -18,7 +20,7 @@ namespace MonitorSystem.Controls.ImagesManager
         private void OnLoaded(object sender, EventArgs e)
         {
             this.Loaded -= OnLoaded;
-            this.DataContext = new ImagesBrowseViewModel() { Callback = _callback };
+            this.DataContext = new ImagesBrowseViewModel(_callback, _path);
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)

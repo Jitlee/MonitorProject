@@ -15,8 +15,6 @@ namespace MonitorSystem.Controls.ImagesManager
 {
     public class ImagesBrowseViewModel : EntiyObject
     {
-        public Action<FileModel> Callback { get; set; }
-
         private readonly DelegateCommand _okCommand;
 
         public ICommand OKCommand
@@ -114,13 +112,25 @@ namespace MonitorSystem.Controls.ImagesManager
             private set { _busyTitle = value;  RaisePropertyChanged("BusyTitle"); }
         }
 
+        private FileOption _fileOption = FileOption.All;
+
+
 
         private readonly FileContext _context = new FileContext();
 
         private string _path = string.Empty;
 
-        public ImagesBrowseViewModel()
+        public Action<FileModel> _callback;
+
+        public ImagesBrowseViewModel(Action<FileModel> callback, string path = "")
         {
+            _callback = callback;
+            _path = path;
+
+            if (!string.IsNullOrEmpty(path)) // 固定文件夹，将不能创建和 显示 删除 文件夹
+            {
+                _fileOption = FileOption.File;
+            }
             _okCommand = new DelegateCommand(OK, CanOK);
             _uploadCommand = new DelegateCommand(Upload);
             _createDirectoryCommand = new DelegateCommand(CreateDirectory, CanCreateDirectory);
@@ -184,7 +194,7 @@ namespace MonitorSystem.Controls.ImagesManager
 
         private bool CanCreateDirectory()
         {
-            return string.IsNullOrWhiteSpace(_keywords);
+            return string.IsNullOrWhiteSpace(_keywords) && _fileOption != FileOption.File;
         }
 
         private void Back()
@@ -200,10 +210,11 @@ namespace MonitorSystem.Controls.ImagesManager
 
         private bool CanBack()
         {
-            return !string.IsNullOrEmpty(_path);
+            return !string.IsNullOrEmpty(_path) && _fileOption != FileOption.File;
         }
 
         private int _count = 0;
+
         private void Delete()
         {
             BusyTitle = "正在删除文件，请稍后...";
@@ -250,12 +261,12 @@ namespace MonitorSystem.Controls.ImagesManager
                 IsBusy = true;
                 if (string.IsNullOrWhiteSpace(Keywords))
                 {
-                    _context.Load<FileModel>(_context.GetImagesQuery(_path), GetImagesQueryCallback, Keywords);
+                    _context.Load<FileModel>(_context.GetImagesQuery(_path, _fileOption), GetImagesQueryCallback, Keywords);
                     _refreshCommand.RaiseCanExecuteChanged();
                 }
                 else
                 {
-                    _context.Load<FileModel>(_context.SearchFilesQuery(_keywords), GetImagesQueryCallback, Keywords);
+                    _context.Load<FileModel>(_context.SearchFilesQuery(_keywords, _fileOption), GetImagesQueryCallback, Keywords);
                     _refreshCommand.RaiseCanExecuteChanged();
                 }
             }
@@ -356,9 +367,9 @@ namespace MonitorSystem.Controls.ImagesManager
 
         private void OK()
         {
-            if (null != Callback)
+            if (null != _callback)
             {
-                Callback(_selectedItems.First());
+                _callback(_selectedItems.First());
             }
         }
 

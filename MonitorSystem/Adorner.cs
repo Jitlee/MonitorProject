@@ -775,5 +775,14 @@ namespace MonitorSystem
             this._associatedElement.SetValue(Canvas.TopProperty, (double)this.GetValue(Canvas.TopProperty) + _offsetTop);
             OnSelected();
         }
+
+        public static void CancelSelected()
+        {
+            if (null != _lastFocusObject)
+            {
+                _lastFocusObject.SetUnselect();
+                _lastFocusObject = null;
+            }
+        }
     }
 }
