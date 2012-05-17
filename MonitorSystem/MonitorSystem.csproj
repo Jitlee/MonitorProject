@@ -80,6 +80,7 @@
     <Reference Include="System.Windows.Controls.Navigation, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
     <Reference Include="System.Xml.Linq, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -97,6 +98,23 @@
     <Compile Include="Common.cs" />
     <Compile Include="Controls\CustomCursor.cs" />
     <Compile Include="Controls\ImageButton.cs" />
+    <Compile Include="Controls\ImagesManager\Converters\FileSizeConverter.cs" />
+    <Compile Include="Controls\ImagesManager\Converters\ImagePathConverter.cs" />
+    <Compile Include="Controls\ImagesManager\EntiyObject.cs" />
+    <Compile Include="Controls\ImagesManager\ImagesBrowseViewModel.cs" />
+    <Compile Include="Controls\ImagesManager\ImagesBrowseWindow.xaml.cs">
+      <DependentUpon>ImagesBrowseWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ImagesManager\ImagesUploadViewModel.cs" />
+    <Compile Include="Controls\ImagesManager\ImagesUploadWindow.xaml.cs">
+      <DependentUpon>ImagesUploadWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ImagesManager\ImageUploadModel.cs" />
+    <Compile Include="Controls\ImagesManager\InputNameWindow.xaml.cs">
+      <DependentUpon>InputNameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ImagesManager\MouseDoubleClick.cs" />
+    <Compile Include="Controls\ImagesManager\MutiListBox.cs" />
     <Compile Include="Controls\MenuScript\MainMenu.cs" />
     <Compile Include="Controls\MenuScript\MainMenuItem.cs" />
     <Compile Include="Controls\PropertyGrid\Converters\ColorConverter.cs" />
@@ -233,6 +251,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\ImagesManager\ImagesBrowseWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ImagesManager\ImagesUploadWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ImagesManager\InputNameWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="LoadScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -329,6 +359,9 @@
     <Resource Include="Images\Common\保存场景.jpg" />
     <Resource Include="Images\Common\保存所有场景.jpg" />
     <Resource Include="Images\Common\报警_工具条.jpg" />
+    <Resource Include="Controls\ImagesManager\Images\drectory.png" />
+    <Resource Include="Controls\ImagesManager\Images\file.jpg" />
+    <Resource Include="Controls\ImagesManager\Images\img.png" />
     <Content Include="Images\Common\用户管理.ico" />
     <Resource Include="Images\Common\用户管理.jpg" />
     <Resource Include="Images\Common\用户管理1.jpg" />
