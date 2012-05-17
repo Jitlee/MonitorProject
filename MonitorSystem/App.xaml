@@ -130,11 +130,7 @@
                                                 <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.BorderBrush).(SolidColorBrush.Color)" To="#FF3399FF"/>
                                             </Storyboard>
                                         </vsm:VisualState>
-                                        <vsm:VisualState x:Name="Disabled">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0" Storyboard.TargetName="DisabledVisualElement" Storyboard.TargetProperty="Opacity" To=".55"/>
-                                            </Storyboard>
-                                        </vsm:VisualState>
+                                        <vsm:VisualState x:Name="Disabled"/>
                                     </vsm:VisualStateGroup>
                                     <vsm:VisualStateGroup x:Name="CheckStates">
                                         <vsm:VisualState x:Name="Checked">
@@ -199,11 +195,7 @@
                                                 <ColorAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.BorderBrush).(SolidColorBrush.Color)" To="#FF3399FF"/>
                                             </Storyboard>
                                         </vsm:VisualState>
-                                        <vsm:VisualState x:Name="Disabled">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0" Storyboard.TargetName="DisabledVisualElement" Storyboard.TargetProperty="Opacity" To=".55"/>
-                                            </Storyboard>
-                                        </vsm:VisualState>
+                                        <vsm:VisualState x:Name="Disabled"/>
                                     </vsm:VisualStateGroup>
                                     <vsm:VisualStateGroup x:Name="CheckStates">
                                         <vsm:VisualState x:Name="Checked">
