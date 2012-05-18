@@ -62,12 +62,8 @@
   <ItemGroup>
     <Content Include="ClientBin\MonitorSystem.xap" />
     <Content Include="GetData\GetData.svc" />
-    <Content Include="ImageMap\11.jpg" />
     <Content Include="MonitorSystemTestPage.aspx" />
     <Content Include="MonitorSystemTestPage.html" />
-    <Content Include="Pic\bg1.jpg" />
-    <Content Include="Pic\jump.jpg" />
-    <Content Include="Pic\Near2.jpg" />
     <Content Include="Silverlight.js" />
     <Content Include="test1.aspx" />
     <Content Include="Web.config">
@@ -115,6 +111,7 @@
       <LastGenOutput>Monitor.Designer.cs</LastGenOutput>
     </EntityDeploy>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>
