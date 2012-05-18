@@ -67,7 +67,7 @@
                     Visibility="Collapsed">
                 <Rectangle x:Name="AddElementRectangle" Stroke="Black" StrokeThickness="1" StrokeDashArray="5,5" Visibility="Collapsed"/>
             </Canvas>
-            <TextBlock x:Name="tbWait" Text="数据加载中，请稍候 ..."  Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
+        <toolkit:BusyIndicator x:Name="tbWait" BusyContent="数据加载中，请稍候 ..."/>
     </Grid>
 </UserControl>

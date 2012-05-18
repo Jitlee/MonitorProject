@@ -601,10 +601,11 @@ namespace MonitorSystem
             }
             
 
-            tbWait.Visibility = Visibility.Visible;
-            ScreenAllElement.Clear();
+            tbWait.IsBusy = true;
 
-            csScreen.Children.OfType<MonitorControl>().ToList().ForEach(mc => mc.UnDesignMode()); ;
+            csScreen.Children.OfType<MonitorControl>().ToList().ForEach(mc => mc.UnDesignMode());
+
+            ScreenAllElement.Clear();
             csScreen.Children.Clear();
             lblShowMsg.Content = _Screen.ScreenName;
 
@@ -625,6 +626,7 @@ namespace MonitorSystem
         {
             if (result.HasError)
             {
+                tbWait.IsBusy = false;
                 MessageBox.Show(result.Error.Message);
                 return;
             }
@@ -640,6 +642,7 @@ namespace MonitorSystem
         {
             if (result.HasError)
             {
+                tbWait.IsBusy = false;
                 MessageBox.Show(result.Error.Message);
                 return;
             }
@@ -650,13 +653,13 @@ namespace MonitorSystem
                 ShowElement(el, ElementSate.Save, list.ToList());
                 ScreenAllElement.Add(el);
             }
-            tbWait.Visibility = Visibility.Collapsed;
             //如果不是组态，打开定时器
             //if (CBIsztControl.IsChecked == false)
             if(IsZT)
             {
                 timerRefrshValue.Start();
             }
+            tbWait.IsBusy = false;
         }
         #endregion
 
