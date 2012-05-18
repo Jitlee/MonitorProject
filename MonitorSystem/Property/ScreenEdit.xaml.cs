@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using MonitorSystem.Web.Moldes;
 using MonitorSystem.Web.Servers;
 using System.ServiceModel.DomainServices.Client;
+using MonitorSystem.Controls.ImagesManager;
 
 namespace MonitorSystem.Property
 {
@@ -171,6 +172,16 @@ namespace MonitorSystem.Property
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
+        }
+
+        private void BrowseImage_Click(object sender, RoutedEventArgs e)
+        {
+            new ImagesBrowseWindow(ImageSelection_Changed, "ImageMap", true).Show();
+        }
+
+        private void ImageSelection_Changed(FileModel file)
+        {
+            txtImage.Text = file.Name;
         }
     }
 }
