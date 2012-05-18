@@ -14,6 +14,7 @@ using MonitorSystem.MonitorSystemGlobal;
 using System.Windows.Browser;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
+using MonitorSystem.Controls;
 
 namespace MonitorSystem.ZTControls
 {
@@ -129,6 +130,8 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty BackImageNameProperty = DependencyProperty.Register("BackImageName",
           typeof(string), typeof(MonitorText), new PropertyMetadata(""));
         private string _BackImageName ="";
+        [ImageAttribute("PIC")]
+        [DefaultValue(""), Description("背景图片名字\r\n注意：\r\n背景图片一定要放在程序\r\n所在目录的\\Upload\\PIC下\r\n必须带后缀名"), Category("我的属性")]        
         public string BackImageName
         {
             get { return _BackImageName; }
@@ -218,7 +221,7 @@ namespace MonitorSystem.ZTControls
                 return;
             }
             //显示背景
-            string gbUrl = string.Format("{0}/Pic/{1}", Common.TopUrl(), _BackImageName);
+            string gbUrl = string.Format("{0}/Upload/Pic/{1}", Common.TopUrl(), _BackImageName);
             BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
             ImageBrush img = new ImageBrush();
             img.ImageSource = bitmap;
