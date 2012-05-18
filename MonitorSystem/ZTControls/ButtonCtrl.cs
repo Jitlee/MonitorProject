@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using MonitorSystem.MonitorSystemGlobal;
 using MonitorSystem.Web.Moldes;
 using MonitorSystem.Controls;
+using System.Windows.Input;
 
 namespace MonitorSystem.ZTControls
 {
@@ -404,11 +405,11 @@ namespace MonitorSystem.ZTControls
         private Image _image = new Image();
         private Button _button = new Button();
         private Grid _grid = new Grid();
-        private ContextMenu _menu = new ContextMenu();
         private readonly DelegateCommand<t_Screen> _command;
 
         public ButtonCtrl()
         {
+            var grid = new Grid();
             this.Content = _button;
 
             _grid.Children.Add(_image);
@@ -422,22 +423,59 @@ namespace MonitorSystem.ZTControls
 
             SetTextImageRelation();
 
-            _button.Click += Button_Click;
-
+            //_button.Click += Button_Click;
+            //_button.MouseLeftButtonDown += Button_MouseLeftButtonDown;
+            _button.MouseRightButtonDown += Button_MouseRightButtonDown;
+            this.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(Button_MouseLeftButtonDown), true);
             _command = new DelegateCommand<t_Screen>(ShowName);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var list = GetChildScreenObj();
+        //    if (list == null)
+        //        return;
+        //    _menu.Items.Clear();
+        //    foreach (var screen in list)
+        //    {
+        //        _menu.Items.Add(new MenuItem() { Header = screen.ScreenName, Command = _command, CommandParameter = screen.Screen, });
+        //    }
+            
+        //    //_menu.VerticalAlignment = VerticalAlignment.Top;
+        //    //_menu.HorizontalAlignment = HorizontalAlignment.Left;
+        //    //_menu.HorizontalOffset = point.X;
+        //    //_menu.VerticalOffset = point.Y;
+        //    _menu.IsOpen = true;
+        //}
+
+        private void Button_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ShowMenu(e);
+        }
+
+        private void Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ShowMenu(e);
+            e.Handled = true;
+        }
+
+        private void ShowMenu(MouseButtonEventArgs e)
         {
             var list = GetChildScreenObj();
             if (list == null)
                 return;
-            _menu.Items.Clear();
+            var menu = new ContextMenu();
+            menu.Items.Clear();
             foreach (var screen in list)
             {
-                _menu.Items.Add(new MenuItem() { Header = screen.ScreenName, Command = _command, CommandParameter = screen.Screen, });
+                menu.Items.Add(new MenuItem() { Header = screen.ScreenName, Command = _command, CommandParameter = screen.Screen, });
             }
-            _menu.IsOpen = true;
+            menu.VerticalAlignment = VerticalAlignment.Top;
+            menu.HorizontalAlignment = HorizontalAlignment.Left;
+            var point = e.GetPosition(null);
+            menu.HorizontalOffset = point.X;
+            menu.VerticalOffset = point.Y;
+            menu.IsOpen = true;
         }
 
         private void ShowName(t_Screen screen)
