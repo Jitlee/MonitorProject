@@ -14,6 +14,7 @@ using MonitorSystem.Web.Moldes;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
+using MonitorSystem.Controls;
 
 namespace MonitorSystem.ZTControls
 {
@@ -135,6 +136,7 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty BackImageName1Property =DependencyProperty.Register("BackImageName1",
          typeof(string), typeof(DimorphismGraphCtrl), new PropertyMetadata(""));
         private string _BackImageName1 = "";
+        [ImageAttribute("PIC")]
         [DefaultValue(""), Description("背景图片名字1"), Category("我的属性")]
         public string BackImageName1
         {
@@ -153,6 +155,7 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty BackImageName2Property = DependencyProperty.Register("BackImageName2",
          typeof(string), typeof(DimorphismGraphCtrl), new PropertyMetadata(""));
         private string _BackImageName2 = "";
+        [ImageAttribute("PIC")]
         [DefaultValue(""), Description("背景图片名字1"), Category("我的属性")]
         public string BackImageName2
         {
@@ -225,7 +228,7 @@ namespace MonitorSystem.ZTControls
             {
                 if (!string.IsNullOrEmpty(_BackImageName1))
                 {
-                    gbUrl = string.Format("{0}/Pic/{1}", Common.TopUrl(), _BackImageName1);
+                    gbUrl = string.Format("{0}/Upload/Pic/{1}", Common.TopUrl(), _BackImageName1);
                 }
                 _WhichBackImage = false;
             }
@@ -233,7 +236,7 @@ namespace MonitorSystem.ZTControls
             {
                 if (!string.IsNullOrEmpty(_BackImageName2))
                 {
-                    gbUrl = string.Format("{0}/Pic/{1}", Common.TopUrl(), _BackImageName2);
+                    gbUrl = string.Format("{0}/Upload/Pic/{1}", Common.TopUrl(), _BackImageName2);
                 }
                 _WhichBackImage = true;
             }

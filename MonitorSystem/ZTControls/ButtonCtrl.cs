@@ -381,7 +381,7 @@ namespace MonitorSystem.ZTControls
            DependencyProperty.Register("BackImageName", typeof(string), typeof(ButtonCtrl), new PropertyMetadata("", new PropertyChangedCallback(BackImageName_Changed)));
 
         [ImageAttribute("PIC")]
-        [DefaultValue(""), Description("背景图片名字\r\n注意：\r\n背景图片一定要放在程序\r\n所在目录的\\PIC\\ButtonImage下\r\n必须带后缀名"), Category("我的属性")]
+        [DefaultValue(""), Description("背景图片名字\r\n注意：\r\n背景图片一定要放在程序\r\n所在目录的\\Upload\\PIC\\下\r\n必须带后缀名"), Category("我的属性")]
         public string BackImageName
         {
             get { return (string)this.GetValue(BackImageNameProperty); }
