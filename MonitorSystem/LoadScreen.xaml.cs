@@ -98,6 +98,18 @@ namespace MonitorSystem
             _instance.LoadScreenData(screen);
         }
 
+        public static void LoadScreenImg(t_Screen screen)
+        {
+            if (screen == null)
+                return;
+            _instance.LoadScreenImgChange(screen);
+        }
+
+        public void LoadScreenImgChange(t_Screen screen)
+        {
+            BackgroundPanel.BgImagePath = screen.ImageURL;
+        }
+
         private void CsScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Adorner.CancelSelected();

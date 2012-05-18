@@ -27,8 +27,6 @@ namespace MonitorSystem
             InitializeComponent();
             LoadScrent();
             Instance = this;
-            
-            
         }
 
         #region 事件
@@ -259,6 +257,7 @@ namespace MonitorSystem
                         ScreenEditArgs mobj = (ScreenEditArgs)eargs;
                         editItem.Header = mobj.Screen.ScreenName;
                         editItem.Tag = mobj.Screen;
+                        
                     };
                     msadEdit.Show();
                     break;
