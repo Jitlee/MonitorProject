@@ -34,7 +34,7 @@ namespace MonitorSystem.Controls.ImagesManager
                     }
                     else
                     {
-                        return new BitmapImage(new Uri(string.Concat(_root, "/Upload/", value.ToString().Replace("\\", "/").Trim('/'))));
+                        return new BitmapImage(new Uri(Application.Current.Host.Source, string.Concat("../Upload/", value.ToString().Replace("\\", "/").Trim('/'))));
                     }
                 }
                 catch { };
