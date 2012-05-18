@@ -1027,6 +1027,14 @@ namespace MonitorSystem
         int AddElementNumber = 0;
         private void SaveElement()
         {
+            //保存背景图片
+            var vScreen = _DataContext.t_Screens.Where(a => a.ScreenID == _CurrentScreen.ScreenID);
+            if (vScreen.Count() > 0)
+            {
+                t_Screen m_screen = vScreen.First();
+                m_screen.ImageURL = BackgroundPanel.BgImagePath;
+            }
+
             //循环所有存在元素
             listMonitorAddElement.Clear();
             for (int i = 0; i < csScreen.Children.Count; i++)
