@@ -622,8 +622,14 @@ namespace MonitorSystem.ZTControls
 
         protected override Size MeasureOverride(Size availableSize)
         {
-            //if (availableSize.Height == 0 && availableSize.Width == 0)
-            //    return new Size(40, 20);
+            if (availableSize.Width / availableSize.Height != 2d)
+            {
+                availableSize.Width = availableSize.Height * 2d;
+                this.Width = this.Height * 2d;
+                this.AdornerLayer.SynchroHost();
+                //OnSelected(this, EventArgs.Empty);
+            }
+
             Paint(availableSize);
             return base.MeasureOverride(availableSize);
         }

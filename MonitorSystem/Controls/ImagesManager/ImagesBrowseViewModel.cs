@@ -120,14 +120,19 @@ namespace MonitorSystem.Controls.ImagesManager
 
         private string _path = string.Empty;
 
-        public Action<FileModel> _callback;
+        private Action<FileModel> _callback;
 
-        public ImagesBrowseViewModel(Action<FileModel> callback, string path = "")
+        //private ChildWindow _window;
+
+        private string _rootPath;
+
+        public ImagesBrowseViewModel( Action<FileModel> callback, string path = "", bool onlyImage = false)
         {
+            //_window = window;
             _callback = callback;
-            _path = path;
+            _rootPath = _path = path;
 
-            if (!string.IsNullOrEmpty(path)) // 固定文件夹，将不能创建和 显示 删除 文件夹
+            if (onlyImage) // 将不能创建和 显示 删除 文件夹
             {
                 _fileOption = FileOption.File;
             }
@@ -202,7 +207,7 @@ namespace MonitorSystem.Controls.ImagesManager
             var index = _path.LastIndexOf("\\");
             if (index > -1)
             {
-                _path = _path.Remove(index);
+                _path = _path.Remove(index).Trim('\\');
             }
             _backCommand.RaiseCanExecuteChanged();
             Refresh();
@@ -210,7 +215,7 @@ namespace MonitorSystem.Controls.ImagesManager
 
         private bool CanBack()
         {
-            return !string.IsNullOrEmpty(_path) && _fileOption != FileOption.File;
+            return string.Compare(_rootPath, _path, StringComparison.OrdinalIgnoreCase) != 0 && _fileOption != FileOption.File;
         }
 
         private int _count = 0;
@@ -302,13 +307,19 @@ namespace MonitorSystem.Controls.ImagesManager
         {
             if (file.IsDirectory)
             {
-                _path = "\\" + file.DirectoryName;
+                _path += "\\" + file.Name.Trim('\\');
                 _backCommand.RaiseCanExecuteChanged();
                 Refresh();
             }
             else
             {
-                System.Windows.Browser.HtmlPage.Window.Navigate(new Uri(file.Url, UriKind.RelativeOrAbsolute), "_blank");
+                //System.Windows.Browser.HtmlPage.Window.Navigate(new Uri(file.Url, UriKind.RelativeOrAbsolute), "_blank");
+                if (null != _callback)
+                {
+                    _callback(file);
+                    //_window.DialogResult = true;
+                    //_window.Close();
+                }
             }
         }
 

@@ -19,6 +19,11 @@ namespace MonitorSystem.Controls
         /// </summary>
         public string Path = string.Empty;
 
+        /// <summary>
+        /// 是否只包含图片
+        /// </summary>
+        public bool OnlyImage = false;
+
 		// Methods
         public ImageAttribute(string path = "")
 		{

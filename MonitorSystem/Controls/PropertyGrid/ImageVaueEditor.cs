@@ -36,6 +36,7 @@ namespace MonitorSystem.Controls
             if(null == _attribute)
             {
                 _attribute = new ImageAttribute();
+                _attribute.OnlyImage = false;
             }
             _grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1d, GridUnitType.Auto) });
             _grid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -89,6 +90,7 @@ namespace MonitorSystem.Controls
         {
             MessageBox.Show(e.EventException.Message);
         }
+
         void property_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Value")
@@ -99,13 +101,20 @@ namespace MonitorSystem.Controls
 
         void Button_Click(object sender, RoutedEventArgs e)
         {
-            new ImagesBrowseWindow(ImageSelection_Changed, _attribute.Path).Show();
+            new ImagesBrowseWindow(ImageSelection_Changed, _attribute.Path, _attribute.OnlyImage).Show();
         }
 
         private void ImageSelection_Changed(FileModel file)
         {
             // 固定文件夹,只需要图片名称，否则需要整个Url
-            Property.Value = string.IsNullOrEmpty(_attribute.Path) ? file.Url : file.Name;
+            if (_attribute.OnlyImage)
+            {
+                Property.Value = file.Name;
+            }
+            else
+            {
+                Property.Value = file.Url.Remove(0, _attribute.Path.Length).Trim('/');
+            }
         }
     }
 }

@@ -48,27 +48,37 @@ namespace MonitorSystem.Controls
         {
             if (newValue)
             {
-                element.SetValue(CustomCursorProperty, this);
-                originalCursor = element.Cursor;
-                element.Cursor = Cursors.None;
-                element.MouseEnter += element_MouseEnter;
-                element.MouseLeave += element_MouseLeave;
-                element.MouseMove += element_MouseMove;
-                cursorContainer = new System.Windows.Controls.Primitives.Popup()
+                if (null == cursorContainer)
                 {
-                    IsOpen = false,
-                    Child = new ContentControl()
+                    element.SetValue(CustomCursorProperty, this);
+                    originalCursor = element.Cursor;
+                    element.Cursor = Cursors.None;
+                    element.MouseEnter += element_MouseEnter;
+                    element.MouseLeave += element_MouseLeave;
+                    element.MouseMove += element_MouseMove;
+                    cursorContainer = new System.Windows.Controls.Primitives.Popup()
                     {
-                        ContentTemplate = template,
-                        IsHitTestVisible = false,
-                        RenderTransform = new TranslateTransform()
-                    }
-                };
-                cursorContainer.IsHitTestVisible = false;
+                        IsOpen = false,
+                        Child = new ContentControl()
+                        {
+                            ContentTemplate = template,
+                            IsHitTestVisible = false,
+                            RenderTransform = new TranslateTransform()
+                        }
+                    };
+                    cursorContainer.IsHitTestVisible = false;
+                }
+                else
+                {
+                    //cursorContainer.IsOpen = true;
+                }
             }
             else
             {
-                Dispose();
+                if (null != cursorContainer)
+                {
+                    cursorContainer.IsOpen = false;
+                }
             }
         }
 
@@ -125,7 +135,7 @@ namespace MonitorSystem.Controls
 
         private void Dispose()
         {
-            element.MouseEnter += element_MouseEnter;
+            element.MouseEnter -= element_MouseEnter;
             element.MouseLeave -= element_MouseLeave;
             element.MouseMove -= element_MouseMove;
             element.ClearValue(CustomCursorProperty);

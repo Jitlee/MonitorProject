@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonitorSystem.MonitorSystemGlobal;
 using MonitorSystem.Web.Moldes;
+using MonitorSystem.Controls;
 
 namespace MonitorSystem.ZTControls
 {
@@ -378,6 +379,7 @@ namespace MonitorSystem.ZTControls
         public static readonly DependencyProperty BackImageNameProperty =
            DependencyProperty.Register("BackImageName", typeof(string), typeof(ButtonCtrl), new PropertyMetadata("", new PropertyChangedCallback(BackImageName_Changed)));
 
+        [ImageAttribute("PIC")]
         [DefaultValue(""), Description("背景图片名字\r\n注意：\r\n背景图片一定要放在程序\r\n所在目录的\\PIC\\ButtonImage下\r\n必须带后缀名"), Category("我的属性")]
         public string BackImageName
         {
@@ -393,8 +395,9 @@ namespace MonitorSystem.ZTControls
 
         public void OnBackImageNameChanged(string oldValue, string newValue)
         {
-            _image.Source = new BitmapImage(new Uri(Application.Current.Host.Source, string.Concat("../Pic/", newValue)));
+            _image.Source = new BitmapImage(new Uri(Application.Current.Host.Source, string.Concat("../Upload/Pic/", newValue.Trim('/'))));
         }
+
         #endregion
 
         private TextBlock _text = new TextBlock() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, };

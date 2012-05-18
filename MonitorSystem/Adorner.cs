@@ -195,6 +195,13 @@ namespace MonitorSystem
             //_popup.Child = this;
             //_popup.IsOpen = true;
             //_popup.LayoutUpdated += PopupLayoutUpdated;
+
+            associatedElement.SizeChanged += associatedElement_SizeChanged;
+        }
+
+        private void associatedElement_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            SynchroHost();
         }
 
         protected override void OnGotFocus(RoutedEventArgs e)
@@ -774,6 +781,14 @@ namespace MonitorSystem
             this._associatedElement.SetValue(Canvas.LeftProperty, (double)this.GetValue(Canvas.LeftProperty) + _offsetLeft);
             this._associatedElement.SetValue(Canvas.TopProperty, (double)this.GetValue(Canvas.TopProperty) + _offsetTop);
             OnSelected();
+        }
+
+        public void SynchroHost()
+        {
+            _contentAdorner.SetValue(FrameworkElement.WidthProperty, _associatedElement.ActualWidth);
+            _contentAdorner.SetValue(FrameworkElement.HeightProperty, _associatedElement.ActualHeight);
+            this.SetValue(Canvas.LeftProperty, (double)_associatedElement.GetValue(Canvas.LeftProperty) - _offsetLeft);
+            this.SetValue(Canvas.TopProperty, (double)_associatedElement.GetValue(Canvas.TopProperty) - _offsetTop);
         }
 
         public static void CancelSelected()

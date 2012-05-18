@@ -415,5 +415,14 @@ namespace MonitorSystem.ZTControls
                 _text.Text = CloseText;
             }
         }
+
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            if (availableSize.Width / availableSize.Height != 2d)
+            {
+                availableSize.Width = availableSize.Height * 2d;
+            }
+            return base.MeasureOverride(availableSize);
+        }
     }
 }

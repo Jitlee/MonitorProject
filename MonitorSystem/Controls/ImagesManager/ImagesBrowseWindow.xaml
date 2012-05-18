@@ -125,7 +125,7 @@
         </toolkit:DockPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"/>
         <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="2" />
-        <Button x:Name="OKButton" Content="确定" Command="{Binding OKCommand}" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="2" />
+        <Button x:Name="OKButton" Content="确定" Command="{Binding OKCommand}" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="2" />
         <ListBox x:Name="FilesListBox"
                  ItemsSource="{Binding View}"
 				 Grid.Row="1"

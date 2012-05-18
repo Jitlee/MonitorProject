@@ -42,6 +42,7 @@ namespace MonitorSystem.ZTControls
            this.Width= _Chart.Width = e.NewSize.Width;
            this.Height= _Chart.Height = e.NewSize.Height;
         }
+
         #region 控件公共属性
         public override event EventHandler Selected;
         public override void DesignMode()

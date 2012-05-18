@@ -12,7 +12,7 @@ namespace MonitorSystem.Controls
         public static DependencyProperty BgImagePathProperty =
            DependencyProperty.Register("BgImagePath", typeof(string), typeof(SceneBackgroundPanel), new PropertyMetadata(null, OnBgImagePathPropertyChanged));
 
-        [Image(PATH)]
+        [Image(PATH, OnlyImage=true)]
         public string BgImagePath
         {
             get { return (string)GetValue(BgImagePathProperty); }
