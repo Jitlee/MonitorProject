@@ -44,7 +44,7 @@ namespace MonitorSystem
         /// </summary>
         t_Screen _CurrentScreen;
 
-        static LoadScreen _instance = null;
+        public  static LoadScreen _instance = null;
 
         /// <summary>
         /// 系统参数
@@ -98,15 +98,12 @@ namespace MonitorSystem
             _instance.LoadScreenData(screen);
         }
 
-        public static void LoadScreenImg(t_Screen screen)
+        public void SetScreenImg(t_Screen screen)
         {
-            if (screen == null)
+            if (_CurrentScreen == null || screen == null)
                 return;
-            _instance.LoadScreenImgChange(screen);
-        }
-
-        public void LoadScreenImgChange(t_Screen screen)
-        {
+            if (_CurrentScreen.ScreenID != screen.ScreenID)
+                return;
             BackgroundPanel.BgImagePath = screen.ImageURL;
         }
 
@@ -575,6 +572,18 @@ namespace MonitorSystem
         /// <param name="_Screen"></param>
         private void LoadScreenData(t_Screen _Screen)
         {
+            //每次在数据库中去查询次
+            var v = LoadScreen._DataContext.t_Screens.Where(a => a.ScreenID == _Screen.ScreenID);
+
+            if (v.Count() > 0)
+            {
+                _Screen = v.First();
+            }
+            else
+            {
+                MessageBox.Show("场景不存在！", "温馨提示", MessageBoxButton.OK);
+            }
+
             if (ReturnScreen != null)
             {
                 if (_Screen.ScreenID != ReturnScreen.ScreenID)
@@ -590,6 +599,7 @@ namespace MonitorSystem
             {
                 ReturnScreen = _Screen;
             }
+            
 
             tbWait.Visibility = Visibility.Visible;
             ScreenAllElement.Clear();
@@ -598,15 +608,6 @@ namespace MonitorSystem
             csScreen.Children.Clear();
             lblShowMsg.Content = _Screen.ScreenName;
 
-            //string url = string.Format("{0}/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
-            //BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Absolute));
-
-            //ImageBrush imgB = new ImageBrush();
-            //imgB.ImageSource = bitmap;           
-            //imgB.Stretch = Stretch.None;
-            //imgB.AlignmentX = AlignmentX.Left;
-            //imgB.AlignmentY = AlignmentY.Top;
-            //csScreen.Background = imgB;
             BackgroundPanel.BgImagePath = _Screen.ImageURL;
 
             //设置当前
@@ -1375,6 +1376,11 @@ namespace MonitorSystem
             // 首页
             if (MainPage != null)
             {
+                if(_CurrentScreen != null)
+                {
+                    if(MainPage.ScreenID== _CurrentScreen.ScreenID)
+                        return;
+                }
                 LoadScreenData(MainPage);
             }
         }

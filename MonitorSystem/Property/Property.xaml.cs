@@ -257,7 +257,20 @@ namespace MonitorSystem
                         ScreenEditArgs mobj = (ScreenEditArgs)eargs;
                         editItem.Header = mobj.Screen.ScreenName;
                         editItem.Tag = mobj.Screen;
-                        
+
+                        LoadScreen._instance.SetScreenImg(mobj.Screen);
+                        //修改DataContext
+                       var v= LoadScreen._DataContext.t_Screens.Where(a => a.ScreenID== mobj.Screen.ScreenID);
+
+                       if (v.Count() > 0)
+                       {
+                           t_Screen m_screen = v.First();
+                           m_screen.ImageURL = mobj.Screen.ImageURL;
+                           m_screen.ScreenID = mobj.Screen.ScreenID;
+                           m_screen.ScreenName = mobj.Screen.ScreenName;
+                       }
+
+
                     };
                     msadEdit.Show();
                     break;
