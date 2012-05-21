@@ -609,12 +609,18 @@ namespace MonitorSystem.ZTControls
                 txtValue.Text = CurrentValue1.ToString();
                 txtValue.Foreground = new SolidColorBrush(this.gridForeColor);
                 txtValue.SetValue(Canvas.LeftProperty, this.coordinate);
-                txtValue.SetValue(Canvas.TopProperty, CurrentPx - this.FontSize / 2);
+                
                 txtValue.SetValue(Canvas.ZIndexProperty, 500);
-                if (CurrentValue1 == _YminValue)
+                double mTopPro=CurrentPx - this.FontSize / 2;
+                if (k == zongvalue)
                 {
-                    txtValue.SetValue(Canvas.TopProperty, CurrentPx-12);
+                    mTopPro = CurrentPx;
                 }
+                else if (CurrentValue1 == _YminValue)
+                {
+                    mTopPro = CurrentPx - this.FontSize-1;
+                }
+               txtValue.SetValue(Canvas.TopProperty, mTopPro);
                 picCurveShow.Children.Add(txtValue);
                 value++;
             }
@@ -751,7 +757,7 @@ namespace MonitorSystem.ZTControls
             txtMin.Text = this.yMinString;
             txtMin.Foreground = new SolidColorBrush(Colors.Red);
             txtMin.SetValue(Canvas.LeftProperty, douooo);
-            txtMin.SetValue(Canvas.TopProperty, this.picCurveShow.Height - 12);
+            txtMin.SetValue(Canvas.TopProperty, this.picCurveShow.Height - this.FontSize-3);
             picCurveShow.Children.Add(txtMin);
 
 
@@ -779,18 +785,12 @@ namespace MonitorSystem.ZTControls
        
         #endregion
 
+        string _ReGuid = System.Guid.NewGuid().ToString();
         /// <summary>
         /// 刷新背景网格线，显示曲线
         /// </summary>
         public void ShowCurve()
         {
-            //窗体高度发生变化，先刷新数组Y坐标值
-            //if ((this.picCurveShow.Height != this.lastTimeSystemWindowHeight) || 
-            //    (this.picCurveShow.Width != this.lastTimeSystemWindowWidth))
-            //{
-            //    this.RefurbishArray();
-                
-            //}
             //绘制曲线
             //判断数组中是否有两个以上的数值
             //绘制直线
@@ -813,12 +813,22 @@ namespace MonitorSystem.ZTControls
                 pl.Stroke = new SolidColorBrush(Colors.Yellow);
                 pl.StrokeThickness = 2;
                 pl.Points = pc;
-                if (this.ScreenElement.ElementID != 0)
+                if (this.ScreenElement != null)
                 {
-                    pl.Name = "ShowLinePolyline" + this.ScreenElement.ElementID;
-                    var v = picCurveShow.FindName("ShowLinePolyline" + this.ScreenElement.ElementID);
+                    if (this.ScreenElement.ElementID != 0)
+                    {
+                        pl.Name = "ShowLinePolyline" + this.ScreenElement.ElementID;
+                        var v = picCurveShow.FindName("ShowLinePolyline" + this.ScreenElement.ElementID);
+                        picCurveShow.Children.Remove((Polyline)v);
+                    }
+                }
+                else
+                {
+                    pl.Name = _ReGuid;
+                    var v = picCurveShow.FindName(_ReGuid);
                     picCurveShow.Children.Remove((Polyline)v);
                 }
+                pl.SetValue(Canvas.ZIndexProperty, 999);
                 picCurveShow.Children.Add(pl);
             }
 
