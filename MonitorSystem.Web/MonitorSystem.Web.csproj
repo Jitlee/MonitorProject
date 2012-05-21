@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientBin\MonitorSystem.xap" />
+    <Content Include="fullScreen.js" />
     <Content Include="GetData\GetData.svc" />
     <Content Include="MonitorSystemTestPage.aspx" />
     <Content Include="MonitorSystemTestPage.html" />

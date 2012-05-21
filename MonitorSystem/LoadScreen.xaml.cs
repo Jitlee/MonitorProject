@@ -21,6 +21,7 @@ using MonitorSystem.ZTControls;
 using System.Threading;
 using System.Windows.Threading;
 using MonitorSystem.Controls;
+using System.Windows.Browser;
 
 namespace MonitorSystem
 {
@@ -1287,9 +1288,11 @@ namespace MonitorSystem
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Application.Current.Host.Content.IsFullScreen =
-                !System.Windows.Application.Current.Host.Content.IsFullScreen;
-            
+            if (null == HtmlPage.Window.Invoke("fullScreen"))
+            {
+                System.Windows.Application.Current.Host.Content.IsFullScreen =
+                    !System.Windows.Application.Current.Host.Content.IsFullScreen;
+            }
         }
 
         private void TP_Click(object sender, RoutedEventArgs e)
