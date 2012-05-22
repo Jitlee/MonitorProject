@@ -105,16 +105,52 @@ namespace MonitorSystem
                 return;
             if (_CurrentScreen.ScreenID != screen.ScreenID)
                 return;
-            BackgroundPanel.BgImagePath = screen.ImageURL;
+
+
+            string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), screen.ImageURL);
+            BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
+            bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
+            ImageBrush imgB = new ImageBrush();
+            imgB.ImageSource = bitmap;
+            csScreen.Background = imgB;
         }
 
+        public void SetScreenImg(string strImg)
+        {
+            string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), strImg);
+            BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
+            bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
+            ImageBrush imgB = new ImageBrush();
+            imgB.ImageSource = bitmap;
+            csScreen.Background = imgB;
+        }
+
+        private string _BgImagePath;
+        private const string PATH = "ImageMap";
+        [Image(PATH, OnlyImage = true)]
+        public string BgImagePath
+        {
+            set
+            {
+                _BgImagePath = value;
+                _CurrentScreen.ImageURL = value;
+                SetScreenImg(value);
+            }
+            get
+            {
+                return _BgImagePath;
+            }
+        }
+
+        //SceneBackgroundPanel b = new SceneBackgroundPanel();
         private void CsScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Adorner.CancelSelected();
 
             PropertyMain.Instance.ControlPropertyGrid.SelectedObject = null;
             PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = new []{"BgImagePath"};
-            PropertyMain.Instance.ControlPropertyGrid.SelectedObject = BackgroundPanel; 
+            _BgImagePath = _CurrentScreen.ImageURL;
+            PropertyMain.Instance.ControlPropertyGrid.SelectedObject =this; 
 
         }
 
@@ -228,11 +264,13 @@ namespace MonitorSystem
             fwProperty = new FloatableWindow();
             fwProperty.ParentLayoutRoot = LayoutRoot;
             fwProperty.Content = prop;
-            prop.Height = 600d;
+            prop.Height = 550d;
             fwProperty.Width = 300d;
             fwProperty.Height = 600d;
             fwProperty.Title = "场景";
             fwProperty.SetValue(Canvas.ZIndexProperty, 900);
+
+            AddElementCanvas.SetValue(Canvas.ZIndexProperty, 800);
             //fwProperty.MaxHeight = 600;
             //fwProperty.MaxWidth = 400;
            // fwProperty.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
@@ -612,8 +650,13 @@ namespace MonitorSystem
             csScreen.Children.Clear();
             lblShowMsg.Content = _Screen.ScreenName;
 
-            BackgroundPanel.BgImagePath = _Screen.ImageURL;
-
+           // BackgroundPanel.BgImagePath = _Screen.ImageURL;
+            string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
+            BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
+            bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
+            ImageBrush imgB = new ImageBrush();
+            imgB.ImageSource = bitmap;
+            csScreen.Background = imgB;
             //设置当前
             _CurrentScreen = _Screen;
             //加载元素
@@ -621,6 +664,17 @@ namespace MonitorSystem
                 LoadElementCompleted, _Screen.ScreenID);
         }
 
+        private void bitmap_ImageOpened<TEventArgs>(object sender, TEventArgs e)
+        {
+            BitmapImage bi = (BitmapImage)sender;
+            if (bi.PixelWidth > 500 && bi.PixelHeight > 500)
+            {
+                csScreen.Width = bi.PixelWidth;
+                csScreen.Height = bi.PixelHeight;
+            }
+            //double h = bi.PixelHeight;
+            //double w = bi.PixelWidth;
+        }
         /// <summary>
         /// 加载元素
         /// </summary>
@@ -1031,12 +1085,12 @@ namespace MonitorSystem
         private void SaveElement()
         {
             //保存背景图片
-            var vScreen = _DataContext.t_Screens.Where(a => a.ScreenID == _CurrentScreen.ScreenID);
-            if (vScreen.Count() > 0)
-            {
-                t_Screen m_screen = vScreen.First();
-                m_screen.ImageURL = BackgroundPanel.BgImagePath;
-            }
+            //var vScreen = _DataContext.t_Screens.Where(a => a.ScreenID == _CurrentScreen.ScreenID);
+            //if (vScreen.Count() > 0)
+            //{
+            //    t_Screen m_screen = vScreen.First();
+            //    m_screen.ImageURL = BackgroundPanel.BgImagePath;
+            //}
 
             //循环所有存在元素
             listMonitorAddElement.Clear();

@@ -4,9 +4,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="708" d:DesignWidth="624" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" IsHitTestVisible="False" xmlns:my="clr-namespace:MonitorSystem.MonitorSystemGlobal" xmlns:my1="clr-namespace:System;assembly=mscorlib" xmlns:my2="clr-namespace:MonitorSystem.ZTControls">
+    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" IsHitTestVisible="False" xmlns:my="clr-namespace:MonitorSystem.MonitorSystemGlobal" xmlns:my1="clr-namespace:System;assembly=mscorlib" xmlns:my2="clr-namespace:MonitorSystem.ZTControls">
     <Canvas>
-        <TextBox Canvas.Left="52" Canvas.Top="58" Height="60" Name="textBox1" Width="239" FontFamily="Lucida Sans Unicode"  
-                 Text="字体测试"   />
+        <Image  Name="image1" Stretch="Fill"  />
     </Canvas>
 </UserControl>
