@@ -57,8 +57,10 @@
                            Stretch="None" MouseLeftButtonUp="Image_MouseLeftButtonUp" />
                 </StackPanel>
             </Grid>
-            <ctrls:SceneBackgroundPanel x:Name="BackgroundPanel" Grid.Row="2"/>
-            <Canvas Grid.Row="2" x:Name="csScreen" Background="Transparent"/>
+           
+            <ScrollViewer     Grid.Row="2" HorizontalScrollBarVisibility="Auto">
+            <Canvas  x:Name="csScreen" Width="1500" Height="1500" Background="Transparent"/>
+            </ScrollViewer>
             <Canvas Grid.Row="2"
                     x:Name="AddElementCanvas"
                     Background="Transparent"
@@ -69,5 +71,6 @@
             </Canvas>
         </Grid>
         <toolkit:BusyIndicator x:Name="tbWait" BusyContent="数据加载中，请稍候 ..."/>
+        <ctrls:SceneBackgroundPanel x:Name="BackgroundPanel" Visibility="Collapsed"/>
     </Grid>
 </UserControl>

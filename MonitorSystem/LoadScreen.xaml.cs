@@ -148,7 +148,7 @@ namespace MonitorSystem
         private void AddElementCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             AddElementCanvas.CaptureMouse();
-            _originPoint = e.GetPosition(AddElementCanvas);
+            _originPoint = e.GetPosition(csScreen);
             AddElementRectangle.SetValue(Canvas.LeftProperty, _originPoint.X);
             AddElementRectangle.SetValue(Canvas.TopProperty, _originPoint.Y);
             AddElementRectangle.SetValue(HeightProperty, 0d);
@@ -167,7 +167,7 @@ namespace MonitorSystem
             AddElementRectangle.Visibility = Visibility.Collapsed;
 
 
-            var point = e.GetPosition(AddElementCanvas);
+            var point = e.GetPosition(csScreen);
             var offsetX = point.X - _originPoint.X;
             var offsetY = point.Y - _originPoint.Y;
             var left = offsetX < 0 ? point.X : _originPoint.X;
@@ -185,7 +185,7 @@ namespace MonitorSystem
 
         private void AddElementCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            var point = e.GetPosition(AddElementCanvas);
+            var point = e.GetPosition(csScreen);
             var offsetX = point.X - _originPoint.X;
             var offsetY = point.Y - _originPoint.Y;
             AddElementRectangle.SetValue(Canvas.LeftProperty, offsetX < 0 ? point.X : _originPoint.X);
@@ -228,10 +228,11 @@ namespace MonitorSystem
             fwProperty = new FloatableWindow();
             fwProperty.ParentLayoutRoot = LayoutRoot;
             fwProperty.Content = prop;
-           
+            prop.Height = 600d;
             fwProperty.Width = 300d;
-            //fwProperty.Height = 600;
+            fwProperty.Height = 600d;
             fwProperty.Title = "场景";
+            fwProperty.SetValue(Canvas.ZIndexProperty, 900);
             //fwProperty.MaxHeight = 600;
             //fwProperty.MaxWidth = 400;
            // fwProperty.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
@@ -246,7 +247,7 @@ namespace MonitorSystem
             //fwProperty.HorizontalAlignment = HorizontalAlignment.Right;
             //CBIsztControl.IsEnabled = true;
             this.SizeChanged += (o, e) => {
-                    fwProperty.Height = csScreen.ActualHeight * 0.95d;
+                   // fwProperty.Height = csScreen.ActualHeight * 0.95d;
                     fwProperty.RenderTransform = new CompositeTransform() { TranslateX = (e.NewSize.Width - fwProperty.Width) / 2d - 15d, TranslateY = (e.NewSize .Height - fwProperty.Height) / 2d - 15d };
             };
             fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
@@ -583,6 +584,7 @@ namespace MonitorSystem
             else
             {
                 MessageBox.Show("场景不存在！", "温馨提示", MessageBoxButton.OK);
+                return;
             }
 
             if (ReturnScreen != null)
@@ -1408,6 +1410,18 @@ namespace MonitorSystem
                 IsPop = true;
                 LoadScreenData(mscreen);
             }
+        }
+
+        Size mBackSize;
+        Size mcsScreenSize;
+        private void BackgroundPanel_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            mBackSize = e.NewSize;
+        }
+
+        private void csScreen_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            mcsScreenSize = e.NewSize;
         }
 
     }
