@@ -90,6 +90,8 @@ namespace MonitorSystem
             AddElementCanvas.MouseLeftButtonDown += AddElementCanvas_MouseLeftButtonDown;
             AddElementCanvas.MouseLeftButtonUp += AddElementCanvas_MouseLeftButtonUp;
             csScreen.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(CsScreen_MouseLeftButtonDown), false);
+            csScreen.VerticalAlignment = VerticalAlignment.Top;
+            csScreen.HorizontalAlignment = HorizontalAlignment.Left;
         }
 
         public static void Load(t_Screen screen)
@@ -113,6 +115,7 @@ namespace MonitorSystem
             ImageBrush imgB = new ImageBrush();
             imgB.ImageSource = bitmap;
             csScreen.Background = imgB;
+          
         }
 
         public void SetScreenImg(string strImg)
@@ -120,8 +123,11 @@ namespace MonitorSystem
             string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), strImg);
             BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
             bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
+            
             ImageBrush imgB = new ImageBrush();
             imgB.ImageSource = bitmap;
+            
+
             csScreen.Background = imgB;
         }
 
@@ -154,7 +160,7 @@ namespace MonitorSystem
 
         }
 
-        #region 绘制控件
+        #region 绘制控件 
 
         /// <summary>
         /// 表示添加新控件模式
