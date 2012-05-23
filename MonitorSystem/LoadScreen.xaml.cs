@@ -669,8 +669,8 @@ namespace MonitorSystem
             BitmapImage bi = (BitmapImage)sender;
             if (bi.PixelWidth > 500 && bi.PixelHeight > 500)
             {
-                csScreen.Width = bi.PixelWidth;
-                csScreen.Height = bi.PixelHeight;
+                AddElementCanvas.Width = csScreen.Width = bi.PixelWidth;
+                AddElementCanvas.Height = csScreen.Height = bi.PixelHeight;
             }
             //double h = bi.PixelHeight;
             //double w = bi.PixelWidth;
