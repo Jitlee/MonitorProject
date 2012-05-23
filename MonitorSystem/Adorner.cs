@@ -291,7 +291,7 @@ namespace MonitorSystem
 
         public void Dispose()
         {
-            _backgroundAdorner.SetValue(CustomCursor.CustomProperty, false);
+            //_backgroundAdorner.SetValue(CustomCursor.CustomProperty, false);
             if (_associatedElement is ButtonBase)
             {
                 var button = _associatedElement as ButtonBase;
@@ -309,7 +309,7 @@ namespace MonitorSystem
         {
             _backgroundAdorner = base.GetTemplateChild("BackgroundAdorner") as FrameworkElement;
             OnEditabledChanged(false, Editabled);
-            _backgroundAdorner.SetValue(CustomCursor.CustomProperty, true);
+            //_backgroundAdorner.SetValue(CustomCursor.CustomProperty, true);
 
             _contentAdorner = base.GetTemplateChild("ContentAdorner") as FrameworkElement;
             _contentAdorner.Opacity = 0;
