@@ -82,6 +82,7 @@ namespace MonitorSystem
         {
             InitializeComponent();
             wrapPanel1.SetValue(Canvas.ZIndexProperty, 999);
+            tbWait.IsBusy = true;
             //实例化
             Init();
             _SenceCommand = new DelegateCommand<t_Screen>(LoadSence);
@@ -277,22 +278,10 @@ namespace MonitorSystem
             fwProperty.SetValue(Canvas.ZIndexProperty, 900);
 
             AddElementCanvas.SetValue(Canvas.ZIndexProperty, 800);
-            //fwProperty.MaxHeight = 600;
-            //fwProperty.MaxWidth = 400;
-           // fwProperty.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-           // double d = Convert.ToDouble(gdContent.GetValue(Canvas.WidthProperty));
-           //MessageBox.Show(d.ToString());
-            //double mtop = 100;
-            //double mLeft = 800;
-            //fwProperty.SetValue(Canvas.TopProperty, mtop);
-            //fwProperty.SetValue(Canvas.LeftProperty, mLeft);
-            //fwProperty.SetValue(MarginProperty, new Thickness(0,60,30,0));
-            //fwProperty.VerticalAlignment = VerticalAlignment.Stretch;
-            //fwProperty.HorizontalAlignment = HorizontalAlignment.Right;
-            //CBIsztControl.IsEnabled = true;
+          
             this.SizeChanged += (o, e) => {
-                   // fwProperty.Height = csScreen.ActualHeight * 0.95d;
-                    fwProperty.RenderTransform = new CompositeTransform() { TranslateX = (e.NewSize.Width - fwProperty.Width) / 2d - 15d, TranslateY = (e.NewSize .Height - fwProperty.Height) / 2d - 15d };
+                    fwProperty.RenderTransform = new CompositeTransform() { TranslateX = (e.NewSize.Width - fwProperty.Width) / 2d - 25d, 
+                        TranslateY = (e.NewSize .Height - fwProperty.Height) / 2d +30d };
             };
             fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
         }
@@ -310,6 +299,7 @@ namespace MonitorSystem
             {
                 if (!string.IsNullOrEmpty(ErrorMsg))
                 {
+                    tbWait.IsBusy = false;
                     MessageBox.Show(ErrorMsg.Replace("\"", ""));
                     return;
                 }

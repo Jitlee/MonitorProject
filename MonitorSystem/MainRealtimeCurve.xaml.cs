@@ -34,7 +34,6 @@ namespace MonitorSystem
             
         }
 
-
         private void LoadSysSetCompleted(LoadOperation<t_Sys_MainRealTimeSet> result)
         {
             if (result.HasError)
@@ -64,9 +63,6 @@ namespace MonitorSystem
             //ShowCurve(RealtimeValue);
             if (SysSetReal == null)
                 return;
-
-
-
             InvokeOperation<double> result = _DataContext.SelectNewValue(
                 SysSetReal.StationID, SysSetReal.DeviceID
                , SysSetReal.ChannelNO);

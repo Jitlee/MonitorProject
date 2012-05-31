@@ -4,10 +4,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="271" d:DesignWidth="525" xmlns:my="clr-namespace:MonitorSystem.ZTControls">
-    
-    <Grid x:Name="LayoutRoot" Background="White" Height="308" Width="540">
-        <my:RealTimeCurve Height="270" HorizontalAlignment="Left"  x:Name="realTime"
+    d:DesignHeight="271" xmlns:my="clr-namespace:MonitorSystem.ZTControls">
+
+    <Grid x:Name="LayoutRoot" Background="White" Height="271">
+        <my:RealTimeCurve Height="271" HorizontalAlignment="Left"  x:Name="realTime"
                           VerticalAlignment="Top" Width="525" />
     </Grid>
 </UserControl>

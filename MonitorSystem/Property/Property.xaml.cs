@@ -123,8 +123,7 @@ namespace MonitorSystem
         private void DataLoadComplet(LoadOperation<t_Screen> results)
         {
             if (results.HasError)
-            {
-                MessageBox.Show(results.Error.Message);
+            {                
                 return;
             }
             listScreen.Clear();

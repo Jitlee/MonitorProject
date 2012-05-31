@@ -571,7 +571,7 @@ namespace MonitorSystem.ZTControls
         {
             noteNow = 0;
 
-            double douooo = 0;
+            double douooo = 1;
               //  SolidColorBrush
             if (this.picCurveShow.Height < 1 || this.picCurveShow.Width < 1)
             {
@@ -757,7 +757,7 @@ namespace MonitorSystem.ZTControls
             txtMin.Text = this.yMinString;
             txtMin.Foreground = new SolidColorBrush(Colors.Red);
             txtMin.SetValue(Canvas.LeftProperty, douooo);
-            txtMin.SetValue(Canvas.TopProperty, this.picCurveShow.Height - this.FontSize-3);
+            txtMin.SetValue(Canvas.TopProperty, this.picCurveShow.Height - this.FontSize-4);
             picCurveShow.Children.Add(txtMin);
 
 
