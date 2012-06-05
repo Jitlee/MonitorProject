@@ -93,6 +93,13 @@ namespace MonitorSystem
             csScreen.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(CsScreen_MouseLeftButtonDown), false);
             csScreen.VerticalAlignment = VerticalAlignment.Top;
             csScreen.HorizontalAlignment = HorizontalAlignment.Left;
+
+            //this.SizeChanged += (o, e) =>
+            //{
+            //    //var point = SceenViewBox.TransformToVisual(LayoutRoot).Transform(new Point());
+            //    AddElementCanvas.Width = csScreen.Width = e.NewSize.Width;
+            //    AddElementCanvas.Height = csScreen.Height = e.NewSize.Height - 59;
+            //};
         }
 
         public static void Load(t_Screen screen)
@@ -127,7 +134,6 @@ namespace MonitorSystem
             
             ImageBrush imgB = new ImageBrush();
             imgB.ImageSource = bitmap;
-            
 
             csScreen.Background = imgB;
         }
@@ -1473,6 +1479,5 @@ namespace MonitorSystem
         {
             mcsScreenSize = e.NewSize;
         }
-
     }
 }

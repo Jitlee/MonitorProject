@@ -365,8 +365,8 @@ namespace MonitorSystem
 
         private void Layout()
         {
-            var beginPoint = _associatedElement.TransformToVisual(Application.Current.RootVisual).Transform(new Point(0.0, 0.0));
-            var endPoint = _associatedElement.TransformToVisual(Application.Current.RootVisual).Transform(new Point(_associatedElement.ActualWidth, this._associatedElement.ActualHeight));
+            var beginPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(0.0, 0.0));
+            var endPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(_associatedElement.ActualWidth, this._associatedElement.ActualHeight));
             this._contentAdorner.SetValue(FrameworkElement.WidthProperty, endPoint.X - beginPoint.X);
             this._contentAdorner.SetValue(FrameworkElement.HeightProperty, endPoint.Y - beginPoint.Y);
             var margin = (Thickness)_contentAdorner.GetValue(FrameworkElement.MarginProperty);
