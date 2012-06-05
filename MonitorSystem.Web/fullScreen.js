@@ -62,7 +62,9 @@ function getClientSize() {
 }
 
 var originStyle = {};
+var _obj;
 function setFullScreen(obj) {
+    _obj = obj;
     var htmls = document.getElementsByTagName('html');
     if (htmls.length > 0) {
         h = htmls[0];
@@ -99,6 +101,6 @@ function setFullScreen(obj) {
 
 function onSizeChanged() {
     var clientSize = getClientSize();
-    obj.style.height = clientSize.height + "px";
-    obj.style.width = clientSize.width + "px";
+    _obj.style.height = clientSize.height + "px";
+    _obj.style.width = clientSize.width + "px";
 }
