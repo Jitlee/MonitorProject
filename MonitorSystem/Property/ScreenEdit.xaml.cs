@@ -45,7 +45,7 @@ namespace MonitorSystem.Property
     public partial class ScreenEdit : ChildWindow, IEditBase
     {
 
-        MonitorServers _DataContext = new MonitorServers();
+        MonitorServers _DataContext = LoadScreen._DataContext;
 
         #region 事件
         /// <summary>
