@@ -93,13 +93,6 @@ namespace MonitorSystem
             csScreen.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(CsScreen_MouseLeftButtonDown), false);
             csScreen.VerticalAlignment = VerticalAlignment.Top;
             csScreen.HorizontalAlignment = HorizontalAlignment.Left;
-
-            //this.SizeChanged += (o, e) =>
-            //{
-            //    //var point = SceenViewBox.TransformToVisual(LayoutRoot).Transform(new Point());
-            //    AddElementCanvas.Width = csScreen.Width = e.NewSize.Width;
-            //    AddElementCanvas.Height = csScreen.Height = e.NewSize.Height - 59;
-            //};
         }
 
         public static void Load(t_Screen screen)
@@ -275,19 +268,23 @@ namespace MonitorSystem
 
             //实例化属性窗口
             fwProperty = new FloatableWindow();
-            fwProperty.ParentLayoutRoot = LayoutRoot;
+            fwProperty.ParentLayoutRoot = LayoutRoot;//LayoutRoot;
             fwProperty.Content = prop;
-            prop.Height = 550d;
+            prop.Height = 420d;
             fwProperty.Width = 300d;
-            fwProperty.Height = 600d;
+            fwProperty.Height = 450d;
             fwProperty.Title = "场景";
             fwProperty.SetValue(Canvas.ZIndexProperty, 900);
-
+            fwProperty.SetValue(Canvas.TopProperty,80d);
             AddElementCanvas.SetValue(Canvas.ZIndexProperty, 800);
           
             this.SizeChanged += (o, e) => {
-                    fwProperty.RenderTransform = new CompositeTransform() { TranslateX = (e.NewSize.Width - fwProperty.Width) / 2d - 25d, 
-                        TranslateY = (e.NewSize .Height - fwProperty.Height) / 2d +30d };
+               
+                fwProperty.RenderTransform = new CompositeTransform()
+                {
+                    TranslateX = (e.NewSize.Width - fwProperty.Width)/2d  - 25d,
+                    TranslateY = (e.NewSize.Height - fwProperty.Height)/2d + 120d
+                };
             };
             fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
         }
@@ -411,49 +408,12 @@ namespace MonitorSystem
 
         private void InitMenuScript()
         {
-            //SenceMenuButton.IsEnabled = false;
-            //SenceMenuButton.IsHitTestVisible = false;
-            //var itemsControl = new ListBox();
-            //SencePopupMenu.Content = itemsControl;
-            //var roots = listScreen.Where(s => s.ParentScreenID == 0);
-            //foreach (var s in roots)
-            //{
-            //    itemsControl.Items.Add(InitMenuItem(s));
-            //}
-            //SenceMenuButton.IsEnabled = true;
-            //SenceMenuButton.IsHitTestVisible = true;
-
             var roots = listScreen.Where(s => s.ParentScreenID == 0);
             foreach (var s in roots)
             {
                 AllSencesMenuScriptItem.Items.Add(InitMenuScriptItem(s));
             }
         }
-
-
-
-        //public PopupMenuItem InitMenuItem(t_Screen screen)
-        //{
-        //    var itemsControl = new ListBox();
-        //    var menuItem = new PopupMenuItem();
-        //    menuItem.Header = screen.ScreenName;
-        //    var children = listScreen.Where(s => s.ParentScreenID == screen.ScreenID);
-        //    if (children.Count() > 0)
-        //    {
-        //        menuItem.ImagePathForRightMargin = "Images/Common/arrow.png";
-        //        menuItem.Items.Add(new PopupMenu() { Content = itemsControl });
-        //        foreach (var s in children)
-        //        {
-        //            itemsControl.Items.Add(InitMenuItem(s));
-        //        }
-        //    }
-        //    else
-        //    {
-        //        menuItem.Command = _SenceCommand;
-        //        menuItem.CommandParameter = screen;
-        //    }
-        //    return menuItem;
-        //}
 
         public MenuScriptItem InitMenuScriptItem(t_Screen screen)
         {
@@ -1346,10 +1306,17 @@ namespace MonitorSystem
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (null == HtmlPage.Window.Invoke("fullScreen"))
+            try
             {
-                System.Windows.Application.Current.Host.Content.IsFullScreen =
-                    !System.Windows.Application.Current.Host.Content.IsFullScreen;
+                if (null == HtmlPage.Window.Invoke("fullScreen"))
+                {
+                    System.Windows.Application.Current.Host.Content.IsFullScreen =
+                        !System.Windows.Application.Current.Host.Content.IsFullScreen;
+                }
+            }
+            catch (InvalidOperationException ie)
+            {
+                MessageBox.Show(ie.Message);
             }
         }
 

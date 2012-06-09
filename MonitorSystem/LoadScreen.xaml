@@ -9,9 +9,10 @@
              xmlns:ctrls="clr-namespace:MonitorSystem.Controls">
     <!--xmlns:menu="clr-namespace:SL4PopupMenu"-->
     <Grid x:Name="LayoutRoot">
-        <Grid x:Name="gdContent" Background="Beige" ShowGridLines="False" Margin="0">
+        
+            <Grid x:Name="gdContent" Background="Beige" ShowGridLines="False" Margin="0">
             <Grid.RowDefinitions >
-                <RowDefinition Height="Auto"  />
+                <RowDefinition Height="30"  />
                 <RowDefinition Height="35"  />
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -35,18 +36,11 @@
                     <!--<ctrls:MenuScriptItem x:Name="HelpMenuScriptItem" Header="帮助"/>-->
                 </ctrls:MenuScript>
             </Border>
-            <Grid  Background="#e5eff8" Name="wrapPanel1"  Grid.Row="1">
-                <!--<StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <CheckBox   Canvas.Left="13" Canvas.Top="10" Content="组态" Height="21" Name="CBIsztControl" Checked="zt_Checked" Unchecked="zt_Unchecked"  IsEnabled="False" />
-                </StackPanel>-->
+            <Grid  Background="#e5eff8" Name="wrapPanel1"  Grid.Row="1">                
                 <StackPanel  HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
                     <ctrls:ImageButton Height="23" Width="75" Content="首页" Margin="5,0" Image="/MonitorSystem;component/Images/Common/首页_工具条.jpg" Click="Home_Click"/>
                     <ctrls:ImageButton Height="23" Width="75" Content="后退" Margin="5,0" Image="/MonitorSystem;component/Images/Common/prev.JPG" Click="Back_Click"/>
-                </StackPanel>
-                <!--<Button HorizontalAlignment="Left"  Grid.Column="2" Content="保存" Height="28"   Visibility="Collapsed" Name="btnSave" Width="75" Click="btnSave_Click" />
-                <Button HorizontalAlignment="Left"  Grid.Column="2" Content="所有场景" Height="28"  Visibility="Visible"  x:Name="SenceMenuButton"  Width="75"/>-->
-                    <!--<menu:PopupMenu LeftClickElements="SenceMenuButton" x:Name="SencePopupMenu"/>-->
-
+                </StackPanel>               
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <sdk:Label Margin="5,5"
                                VerticalAlignment="Center"
@@ -58,9 +52,8 @@
                 </StackPanel>
             </Grid>
            
-            <!--<ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">-->
-            <Viewbox  Grid.Row="2" Stretch="Fill" x:Name="SceenViewBox">
-                <Grid>
+             <Viewbox Grid.Row="2"    Stretch="Fill" x:Name="SceenViewBox">
+                <Grid Name="GridScreen">
                     <Canvas x:Name="csScreen" Background="Transparent"/>
                     <Canvas
                         x:Name="AddElementCanvas"
@@ -72,10 +65,9 @@
                     </Canvas>
                 </Grid>
             </Viewbox>
-            <!--</ScrollViewer>-->
-            
+           
         </Grid>
+       
         <toolkit:BusyIndicator x:Name="tbWait" BusyContent="数据加载中，请稍候 ..."/>
-        <!--<ctrls:SceneBackgroundPanel x:Name="BackgroundPanel" Visibility="Collapsed"/>-->
     </Grid>
 </UserControl>
