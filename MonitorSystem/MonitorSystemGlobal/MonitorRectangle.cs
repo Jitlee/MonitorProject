@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.Web.Moldes;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
@@ -41,6 +42,7 @@ namespace MonitorSystem.MonitorSystemGlobal
           DependencyProperty.Register("Transparent",
           typeof(int), typeof(MonitorText), new PropertyMetadata(0));
         private int _Transparent;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
         {
             get { return _Transparent; }

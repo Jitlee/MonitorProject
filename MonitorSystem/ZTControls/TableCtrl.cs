@@ -18,6 +18,7 @@ using MonitorSystem.Web.Moldes;
 
 using MonitorSystem.Web.Servers;
 using MonitorSystem.GetData;
+using System.ComponentModel;
 
 namespace MonitorSystem.ZTControls
 {
@@ -135,6 +136,7 @@ namespace MonitorSystem.ZTControls
          DependencyProperty.Register("Transparent",
          typeof(int), typeof(TableCtrl), new PropertyMetadata(0));
         private int _Transparent;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
         {
             get { return _Transparent; }

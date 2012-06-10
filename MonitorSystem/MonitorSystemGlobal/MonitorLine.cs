@@ -42,6 +42,7 @@ namespace MonitorSystem.MonitorSystemGlobal
          DependencyProperty.Register("Transparent",
          typeof(int), typeof(MonitorGrid), new PropertyMetadata(0));
         private int _Transparent;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
         {
             get { return _Transparent; }

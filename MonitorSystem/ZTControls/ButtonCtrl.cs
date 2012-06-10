@@ -146,15 +146,9 @@ namespace MonitorSystem.ZTControls
                     {
                         if (name == "Font".ToUpper())
                         {
-
-                            //SetMyFont(value);
-                            //Font = GetFontFromStr(value);
-
-                            //Font = value;
                         }
                         else
                         {
-
                             if (name == "ForeColor".ToUpper())
                             {
                                 //this.button1.ForeColor = GetColorFromStr(value);
@@ -176,9 +170,6 @@ namespace MonitorSystem.ZTControls
                                 if (value != null && value.Trim() != "")
                                     myTextImageRelation = GetTextImageRelationFromStr(value.Trim());
                             }
-
-
-
                         }
                     }
                     //this.Invalidate();
@@ -197,10 +188,11 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+            _Transparent = ScreenElement.Transparent.Value;
         }
 
         private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
-            "BackColor", "ForeColor", "MyText", "myTextImageRelation", "BackImageName" };
+            "BackColor", "ForeColor", "MyText", "myTextImageRelation", "BackImageName","Transparent" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -208,6 +200,22 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
+        private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
+        typeof(int), typeof(MyLine), new PropertyMetadata(0));
+        private int _Transparent = 0;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                PaintBackground();
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
+
 
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
@@ -418,9 +426,7 @@ namespace MonitorSystem.ZTControls
             _button.Content = _grid;
 
             SetForeground();
-
             PaintBackground();
-
             SetTextImageRelation();
 
             //_button.Click += Button_Click;
@@ -531,11 +537,27 @@ namespace MonitorSystem.ZTControls
 
         private void SetForeground()
         {
-            _text.Foreground = new SolidColorBrush(ForeColor);
+            //if (_Transparent == 1)
+            //{
+            //    _text.Foreground = new SolidColorBrush();
+            //}
+            //else
+            //{
+                _text.Foreground = new SolidColorBrush(ForeColor);
+            //}
         }
 
         private void PaintBackground()
         {
+            //if (_Transparent == 1)
+            //{
+            //    _button.Background = new SolidColorBrush();
+                
+            //}
+            //else
+            //{
+            //    _button.Background = new SolidColorBrush(BackColor);
+            //}
             _button.Background = new SolidColorBrush(BackColor);
         }
     }

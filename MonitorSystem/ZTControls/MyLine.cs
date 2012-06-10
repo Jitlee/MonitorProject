@@ -181,7 +181,7 @@ namespace MonitorSystem.ZTControls
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
          typeof(int), typeof(MyLine), new PropertyMetadata(0));
         private int _Transparent=0;
-        [DefaultValue(""), Description("透明属性"), Category("我的属性")]
+        [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
         {
             get { return _Transparent; }

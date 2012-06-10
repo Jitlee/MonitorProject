@@ -131,17 +131,17 @@ namespace MonitorSystem.ZTControls
         {
             this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
-
             
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
 
             BackColor = Common.StringToColor(ScreenElement.BackColor);
-            ForeColor = Common.StringToColor(ScreenElement.ForeColor); 
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor);
+            Transparent = ScreenElement.Transparent.Value;
         }
 
         private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
-            "BackColor", "ForeColor", "BlankColor", "DataZoneColor", "MinValue", "MaxValue", "MyTemp", "Range" };
+            "BackColor", "ForeColor", "BlankColor", "DataZoneColor", "MinValue", "MaxValue", "MyTemp", "Range","Transparent" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -149,6 +149,21 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
+        private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
+       typeof(int), typeof(Temprary), new PropertyMetadata(0));
+        private int _Transparent = 0;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                PaintBackground();
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
 
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
@@ -378,11 +393,18 @@ namespace MonitorSystem.ZTControls
 
         private void PaintBackground()
         {
-            LinearGradientBrush brush = new LinearGradientBrush();
-            brush.EndPoint = new Point(0, 1);
-            brush.GradientStops.Add(new GradientStop() { Offset = 0, Color = BackColor });
-            brush.GradientStops.Add(new GradientStop() { Offset = 1, Color = GetEndColor() });
-            _canvas.Background = brush;
+            if (_Transparent == 1)
+            {
+                _canvas.Background = new SolidColorBrush();
+            }
+            else
+            {
+                LinearGradientBrush brush = new LinearGradientBrush();
+                brush.EndPoint = new Point(0, 1);
+                brush.GradientStops.Add(new GradientStop() { Offset = 0, Color = BackColor });
+                brush.GradientStops.Add(new GradientStop() { Offset = 1, Color = GetEndColor() });
+                _canvas.Background = brush;
+            }
         }
 
         private Color GetEndColor()

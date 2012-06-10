@@ -113,13 +113,14 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+            _Transparent = ScreenElement.Transparent.Value;
 
             BackColor = Common.StringToColor(ScreenElement.BackColor);
             ForeColor = Common.StringToColor(ScreenElement.ForeColor); 
         }
 
         private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
-            "BackColor", "ForeColor", "OpenOrNot" };
+            "BackColor", "ForeColor", "OpenOrNot","Transparent" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -127,7 +128,21 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
-
+        private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
+         typeof(int), typeof(MyLine), new PropertyMetadata(0));
+        private int _Transparent = 0;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                PaintBackground();
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
             typeof(Color), typeof(Switch), new PropertyMetadata(Colors.White, new PropertyChangedCallback(BackColor_Changed)));
@@ -236,7 +251,14 @@ namespace MonitorSystem.ZTControls
 
         private void PaintBackground()
         {
-            _canvas.Background = new SolidColorBrush(BackColor);
+            if (_Transparent == 1)
+            {
+                _canvas.Background = new SolidColorBrush();
+            }
+            else
+            {
+                _canvas.Background = new SolidColorBrush(BackColor);
+            }
         }
 
         private void Paint(Size finalSize)

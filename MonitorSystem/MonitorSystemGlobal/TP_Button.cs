@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MonitorSystem.Web.Moldes;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
@@ -52,6 +53,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             DependencyProperty.Register("Transparent",
             typeof(int), typeof(MonitorText), new PropertyMetadata(0));
         private int _Transparent;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
         {
             get { return _Transparent; }

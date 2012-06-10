@@ -113,11 +113,6 @@ namespace MonitorSystem.ZTControls
                     }
                     else if (string.Compare(name, "Font", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        //this.textBox1.Font = GetFontFromStr(value);
-                        ////SetMyFont(value);
-                        //Font = GetFontFromStr(value);
-
-                        //Font = value;
                     }
                     else if (string.Compare(name, "ForeColor", StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -146,12 +141,12 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
-
-            
+            Transparent = ScreenElement.Transparent.Value;
         }
 
         private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
-            "Width", "Height", "Left", "Top", "FontFamily", "FontSize", "BackColor", "ForeColor", "MyText", "MyScrollBars" };
+            "Width", "Height", "Left", "Top", "FontFamily", "FontSize", "BackColor", "ForeColor", "MyText",
+            "MyScrollBars","Transparent" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -159,7 +154,21 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
-        
+        private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
+       typeof(int), typeof(Temprary), new PropertyMetadata(0));
+        private int _Transparent = 0;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                PaintBackground();
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
 
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
@@ -282,7 +291,16 @@ namespace MonitorSystem.ZTControls
 
         private void PaintBackground()
         {
-            _textBox.Background = new SolidColorBrush(BackColor);
+            if (_Transparent == 1)
+            {
+                _textBox.Background = new SolidColorBrush();
+                _textBox.BorderBrush = new SolidColorBrush();
+            }
+            else
+            {
+                _textBox.Background = new SolidColorBrush(BackColor);
+                
+            }
         }
 
         public void SetScrollBar(string value)
