@@ -141,7 +141,7 @@ namespace MonitorSystem.ZTControls
         }
 
         private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
-            "BackColor", "ForeColor", "MinValue", "MaxValue", "CurrenValue", "Title","MyScale"};
+            "BackColor", "ForeColor", "MinValue", "MaxValue", "CurrenValue", "Title","MyScale","Transparent"};
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -149,6 +149,24 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
+        private static readonly DependencyProperty TransparentProperty =
+          DependencyProperty.Register("Transparent",
+          typeof(int), typeof(DLBiaoPan), new PropertyMetadata(0));
+        private int _Transparent;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                PaintBackground();
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+
+        }
+
         private string myScale;
         [DefaultValue("1"), Description("显示比例"), Category("我的属性")]
         public String MyScale
@@ -265,6 +283,7 @@ namespace MonitorSystem.ZTControls
             get { return (int)this.GetValue(CurrenValueProperty); }
             set { this.SetValue(CurrenValueProperty, value);
                     SetAttrByName("CurrenValue", value);
+                    SetText();
             }
         }
 
@@ -332,9 +351,6 @@ namespace MonitorSystem.ZTControls
 
             SetValue(MinHeightProperty, 50d);
             SetValue(MinWidthProperty, 100d);
-
-            //this.Width = 40;
-            //this.Height = 20;
         }
 
         private void SetText()
@@ -354,7 +370,14 @@ namespace MonitorSystem.ZTControls
 
         private void PaintBackground()
         {
-            _background.Fill = new SolidColorBrush(BackColor);
+            if (_Transparent == 1)
+            {
+                _background.Fill = new SolidColorBrush();
+            }
+            else
+            {
+                _background.Fill = new SolidColorBrush(BackColor);
+            }
         }
 
         private void Paint(Size finalSize)

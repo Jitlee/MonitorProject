@@ -129,7 +129,7 @@ namespace MonitorSystem.ZTControls
             set
             {
                 _Transparent = value;
-
+                PaintBackground();
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
@@ -220,27 +220,35 @@ namespace MonitorSystem.ZTControls
 
         private void FullRect()
         {
-            LinearGradientBrush lg = new LinearGradientBrush();
-            lg.StartPoint = new Point(0, 0);
-            lg.EndPoint = new Point(1,1);
-
-            GradientStop gstart = new GradientStop();
-            gstart.Offset =0;
-            gstart.Color = _FromColor;
-
-            GradientStop gEnd = new GradientStop();
-            gEnd.Offset = 1.0;
-            gEnd.Color = _ToColor;
-
-            lg.GradientStops.Clear();
-            lg.GradientStops.Add(gstart);
-            lg.GradientStops.Add(gEnd);
-
-            mRect.Fill = lg;
-
+            PaintBackground();
             mRect.RadiusX = mRect.RadiusY = _Degrees;
         }
-        
+        private void PaintBackground()
+        {
+            if (_Transparent == 1)
+            {
+                mRect.Fill = new SolidColorBrush();
+            }
+            else
+            {
+                LinearGradientBrush lg = new LinearGradientBrush();
+                lg.StartPoint = new Point(0, 0);
+                lg.EndPoint = new Point(1, 1);
+
+                GradientStop gstart = new GradientStop();
+                gstart.Offset = 0;
+                gstart.Color = _FromColor;
+
+                GradientStop gEnd = new GradientStop();
+                gEnd.Offset = 1.0;
+                gEnd.Color = _ToColor;
+
+                lg.GradientStops.Clear();
+                lg.GradientStops.Add(gstart);
+                lg.GradientStops.Add(gEnd);
+                mRect.Fill = lg;
+            }
+        }
 
        
     }
