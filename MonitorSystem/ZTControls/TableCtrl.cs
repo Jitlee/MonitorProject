@@ -143,12 +143,7 @@ namespace MonitorSystem.ZTControls
             set
             {
                 _Transparent = value;
-                if (value == 1)
-                {
-                }
-                else
-                {
-                }
+                PaintBackground();
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
@@ -239,7 +234,17 @@ namespace MonitorSystem.ZTControls
          }
 
         #endregion
-
+         private void PaintBackground()
+         {
+             if (_Transparent == 1)
+             {
+                 theGrid.Background = new SolidColorBrush();
+             }
+             else
+             {
+                 theGrid.Background = new SolidColorBrush(Colors.White);
+             }
+         }
       #region 从wcf中加载数据
         private void GetData(string sql, object userState)
         {

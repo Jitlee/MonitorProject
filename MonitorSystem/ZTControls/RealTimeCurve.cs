@@ -143,7 +143,7 @@ namespace MonitorSystem.ZTControls
             Transparent = ScreenElement.Transparent.Value;
             picCurveShow.Width = this.Width = (double)ScreenElement.Width;
             picCurveShow.Height=this.Height = (double)ScreenElement.Height;
-
+            
             ForeColor = Common.StringToColor(ScreenElement.ForeColor);
             BackColor = Common.StringToColor(ScreenElement.BackColor); 
         }
@@ -276,12 +276,7 @@ namespace MonitorSystem.ZTControls
             set
             {
                 _Transparent = value;
-                if (value == 1)
-                {
-                }
-                else
-                {
-                }
+                PaintBackground();
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
@@ -471,7 +466,7 @@ namespace MonitorSystem.ZTControls
         /// <summary>
         /// 定义曲线正常值上下限线段宽度
         /// </summary>
-        private double yUpperAndLowerPenWidth = 1F;
+        //private double yUpperAndLowerPenWidth = 1F;
         /// <summary>
         /// 定义背景颜色
         /// </summary>
@@ -480,7 +475,7 @@ namespace MonitorSystem.ZTControls
         /// <summary>
         /// 定义是否滚动网格线
         /// </summary>
-        private bool removeGrid = true;
+        //private bool removeGrid = true;
         /// <summary>
         /// 定义背景网格线颜色
         /// </summary>
@@ -492,7 +487,7 @@ namespace MonitorSystem.ZTControls
         /// <summary>
         /// 定义背景网格（分隔线）宽度
         /// </summary>
-        private double gridCompart = 1F;
+        //private double gridCompart = 1F;
         /// <summary>
         /// 定义背景网格文字大小
         /// </summary>
@@ -500,7 +495,7 @@ namespace MonitorSystem.ZTControls
         /// <summary>
         /// 定义背景网格线画笔宽度
         /// </summary>
-        private double gridPenWidth = 1F;
+        //private double gridPenWidth = 1F;
         /// <summary>
         /// 定义背景网格线单元格宽度
         /// </summary>
@@ -513,7 +508,7 @@ namespace MonitorSystem.ZTControls
         /// <summary>
         /// 定义曲线画笔宽度
         /// </summary>
-        private double curvePenWidth = 1;
+        //private double curvePenWidth = 1;
         /// <summary>
         /// 定义曲线移动距离
         /// </summary>
@@ -521,7 +516,7 @@ namespace MonitorSystem.ZTControls
         /// <summary>
         /// 定义数值节点正方形宽度
         /// </summary>
-        private double rectangleWidth = 1F;
+        //private double rectangleWidth = 1F;
         /// <summary>
         /// 定义正方形颜色
         /// </summary>
@@ -530,7 +525,7 @@ namespace MonitorSystem.ZTControls
         /// <summary>
         /// 定义显示节点数值鼠标X，Y轴容差精度
         /// </summary>
-        private double xYPrecision = 4F;
+        //private double xYPrecision = 4F;
         /// <summary>
         /// 曲线节点数据最大存储量
         /// </summary>
@@ -555,15 +550,27 @@ namespace MonitorSystem.ZTControls
         /// <summary>
         /// 系统窗体高度临时值，用于窗体变形时刷新数组坐标。
         /// </summary>
-        private double lastTimeSystemWindowHeight = 0;
+        //private double lastTimeSystemWindowHeight = 0;
         /// <summary>
         /// 系统窗体宽度临时值，用于窗体变形时刷新数组坐标。
         /// </summary>
-        private double lastTimeSystemWindowWidth = 0;
+        //private double lastTimeSystemWindowWidth = 0;
         #endregion
         #region 曲线数据显示
 
         #region 绘制背景网格
+        private void PaintBackground()
+        {
+            if (_Transparent == 1)
+            {
+                picCurveShow.Background = new SolidColorBrush();
+            }
+            else
+            {
+                picCurveShow.Background = new SolidColorBrush(BackColor);
+            }
+        }
+
         /// <summary>
         /// 刷新背景网格线，并返回背景图片（背景不判断是否滚动）
         /// </summary>
@@ -581,8 +588,8 @@ namespace MonitorSystem.ZTControls
             picCurveShow.Children.Clear();
 
            // picCurveShow.Background = new SolidColorBrush(_BackColor);
-            picCurveShow.Background = new SolidColorBrush(Colors.Black);
-                        
+            //picCurveShow.Background = new SolidColorBrush(Colors.Black);
+            PaintBackground();          
             //绘制表格背景线
             //绘制背景横轴线
             //this.picCurveShow.Height = 300;

@@ -138,7 +138,7 @@ namespace MonitorSystem.ZTControls
         }
 
         private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
-            "BackColor", "ForeColor", "RadixLen", "IntLen", "MyNum" };
+            "BackColor", "ForeColor", "RadixLen", "IntLen", "MyNum","Transparent" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -146,6 +146,22 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
+        private static readonly DependencyProperty TransparentProperty =
+          DependencyProperty.Register("Transparent",
+          typeof(int), typeof(DLBiaoPan), new PropertyMetadata(0));
+        private int _Transparent;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                PaintBackground();
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
 
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
@@ -314,8 +330,14 @@ namespace MonitorSystem.ZTControls
         }
 
         private void PaintBackground()
-        {
+        {if (_Transparent == 1)
+            {
+                _canvas.Background = new SolidColorBrush();
+            }
+            else
+            {
             _canvas.Background = new SolidColorBrush(BackColor);
+            }
         }
 
         private void Paint(Size finalSize)

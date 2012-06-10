@@ -360,7 +360,7 @@ namespace MonitorSystem.ZTControls
         private Image _image = new Image();
         private Button _button = new Button();
         private Grid _grid = new Grid();
-        private readonly DelegateCommand<t_Screen> _command;
+       //private readonly DelegateCommand<t_Screen> _command;
 
         public ExtProControl()
         {
@@ -398,22 +398,7 @@ namespace MonitorSystem.ZTControls
             //
             //System.Windows.Browser.HtmlPage.Window.NavigateToBookmark(ExtPath);
         }
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        System.Windows.Browser.HtmlPage.Window.Navigate(new Uri(ExtPath, UriKind.Absolute), "_blank");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return;
-        //    }
-        //}
-
-        //private void ShowName(t_Screen screen)
-        //{
-        //    LoadScreen.Load(screen);
-        //}
+       
 
         private void SetTextImageRelation()
         {

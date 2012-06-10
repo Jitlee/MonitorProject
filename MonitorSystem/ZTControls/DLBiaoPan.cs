@@ -164,7 +164,6 @@ namespace MonitorSystem.ZTControls
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
-
         }
 
         private string myScale;
