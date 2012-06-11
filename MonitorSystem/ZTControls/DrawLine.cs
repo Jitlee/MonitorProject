@@ -200,7 +200,7 @@ namespace MonitorSystem.ZTControls
 
         private static readonly DependencyProperty TransparentProperty =
          DependencyProperty.Register("Transparent",
-         typeof(int), typeof(zedGraphCtrl), new PropertyMetadata(0));
+         typeof(int), typeof(DrawLine), new PropertyMetadata(0));
         private int _Transparent;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent

@@ -135,7 +135,7 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
-
+            Transparent = ScreenElement.Transparent.Value;
             ForeColor = Common.StringToColor(ScreenElement.ForeColor);
             BackColor = Common.StringToColor(ScreenElement.BackColor); 
         }

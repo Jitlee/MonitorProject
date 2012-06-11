@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Linq;
 using MonitorSystem.Web.Moldes;
+using System.ComponentModel;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
@@ -36,6 +37,23 @@ namespace MonitorSystem.MonitorSystemGlobal
         #region 属性
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Translate", "Foreground",
             "Transparent"};
+        private static readonly DependencyProperty TransparentProperty =
+       
+            DependencyProperty.Register("Transparent",
+        typeof(int), typeof(TP), new PropertyMetadata(0));
+        private int _Transparent;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
+
 
         public override string[] BrowsableProperties
         {
@@ -154,7 +172,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
-            //Transparent = ScreenElement.Transparent.Value;
+            Transparent = ScreenElement.Transparent.Value;
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
         }

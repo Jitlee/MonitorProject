@@ -155,7 +155,7 @@ namespace MonitorSystem.ZTControls
 
         #region 属性
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-       typeof(int), typeof(Temprary), new PropertyMetadata(0));
+       typeof(int), typeof(InputTextBox), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent

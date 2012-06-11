@@ -40,7 +40,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty TransparentProperty =
          DependencyProperty.Register("Transparent",
-         typeof(int), typeof(MonitorGrid), new PropertyMetadata(0));
+         typeof(int), typeof(MonitorLine), new PropertyMetadata(0));
         private int _Transparent;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
@@ -195,11 +195,12 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
-            _Transparent = ScreenElement.Transparent.Value;
+            
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
 
              ForeColor = Common.StringToColor(ScreenElement.ForeColor);
+             Transparent = ScreenElement.Transparent.Value;
         }
 
         public override object GetRootControl()

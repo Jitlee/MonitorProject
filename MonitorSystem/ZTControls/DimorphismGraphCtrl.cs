@@ -90,7 +90,7 @@ namespace MonitorSystem.ZTControls
         {
             this.SetValue(Canvas.LeftProperty, (double)ScreenElement.ScreenX);
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
-            
+            Transparent = ScreenElement.Transparent.Value;
             this.Width = this.Width = (double)ScreenElement.Width;
             this.Height = this.Height = (double)ScreenElement.Height;
         }
@@ -133,6 +133,23 @@ namespace MonitorSystem.ZTControls
         #endregion
 
         #region 属性
+        private static readonly DependencyProperty TransparentProperty =
+          DependencyProperty.Register("Transparent",
+          typeof(int), typeof(DimorphismGraphCtrl), new PropertyMetadata(0));
+        private int _Transparent;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                PaintBackground();
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
+
         private static readonly DependencyProperty BackImageName1Property =DependencyProperty.Register("BackImageName1",
          typeof(string), typeof(DimorphismGraphCtrl), new PropertyMetadata(""));
         private string _BackImageName1 = "";
@@ -243,7 +260,7 @@ namespace MonitorSystem.ZTControls
             //显示背景
             if (gbUrl == "")
             {
-                mRect.Background = new SolidColorBrush(Colors.White);
+                PaintBackground();
             }
             else
             {
@@ -253,6 +270,20 @@ namespace MonitorSystem.ZTControls
                 img.Stretch = Stretch.Fill;
                 mRect.Background = img;
             }
+
         }
+
+        private void PaintBackground()
+        {
+            if (_Transparent == 1)
+            {
+                mRect.Background = new SolidColorBrush();
+            }
+            else
+            {
+                mRect.Background = new SolidColorBrush(Colors.White);
+            }
+        }
+
     }
 }

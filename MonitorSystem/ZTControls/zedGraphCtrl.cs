@@ -150,14 +150,7 @@ namespace MonitorSystem.ZTControls
             set
             {
                 _Transparent = value;
-                if (value == 1)
-                {
-                   
-                }
-                else
-                {
-
-                }
+                PaintBackground();
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
@@ -317,5 +310,16 @@ namespace MonitorSystem.ZTControls
             _Chart.Series.Add(_ColumnSeri);
         }
         #endregion
+        private void PaintBackground()
+        {
+            if (_Transparent == 1)
+            {
+                _Chart.Background = new SolidColorBrush();
+            }
+            else
+            {
+                _Chart.Background = new SolidColorBrush(Colors.White);
+            }
+        }
     }
 }

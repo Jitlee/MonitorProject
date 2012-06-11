@@ -239,6 +239,7 @@ namespace MonitorSystem.ZTControls
              if (_Transparent == 1)
              {
                  theGrid.Background = new SolidColorBrush();
+                 theGrid.BorderBrush = new SolidColorBrush();
              }
              else
              {

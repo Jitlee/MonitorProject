@@ -188,7 +188,8 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
-            _Transparent = ScreenElement.Transparent.Value;
+           
+            Transparent = ScreenElement.Transparent.Value;
         }
 
         private string[] _browsableProperties = new[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
@@ -201,7 +202,7 @@ namespace MonitorSystem.ZTControls
 
         #region 属性
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-        typeof(int), typeof(MyLine), new PropertyMetadata(0));
+        typeof(int), typeof(ButtonCtrl), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
@@ -224,7 +225,10 @@ namespace MonitorSystem.ZTControls
         public Color BackColor
         {
             get { return (Color)this.GetValue(BackColorProperty); }
-            set { this.SetValue(BackColorProperty, value); SetAttrByName("BackColor", value); }
+            set { this.SetValue(BackColorProperty, value);
+                SetAttrByName("BackColor", value); 
+                PaintBackground(); 
+            }
         }
 
         private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -411,7 +415,7 @@ namespace MonitorSystem.ZTControls
 
         private TextBlock _text = new TextBlock() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, };
         private Image _image = new Image();
-        private Button _button = new Button();
+        private Border _button = new Border();
         private Grid _grid = new Grid();
         private readonly DelegateCommand<t_Screen> _command;
 
@@ -423,36 +427,18 @@ namespace MonitorSystem.ZTControls
             _grid.Children.Add(_image);
             _grid.Children.Add(_text);
 
-            _button.Content = _grid;
+            _button.Child = _grid;
 
             SetForeground();
             PaintBackground();
             SetTextImageRelation();
 
-            //_button.Click += Button_Click;
-            //_button.MouseLeftButtonDown += Button_MouseLeftButtonDown;
             _button.MouseRightButtonDown += Button_MouseRightButtonDown;
             this.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(Button_MouseLeftButtonDown), true);
             _command = new DelegateCommand<t_Screen>(ShowName);
         }
 
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var list = GetChildScreenObj();
-        //    if (list == null)
-        //        return;
-        //    _menu.Items.Clear();
-        //    foreach (var screen in list)
-        //    {
-        //        _menu.Items.Add(new MenuItem() { Header = screen.ScreenName, Command = _command, CommandParameter = screen.Screen, });
-        //    }
-            
-        //    //_menu.VerticalAlignment = VerticalAlignment.Top;
-        //    //_menu.HorizontalAlignment = HorizontalAlignment.Left;
-        //    //_menu.HorizontalOffset = point.X;
-        //    //_menu.VerticalOffset = point.Y;
-        //    _menu.IsOpen = true;
-        //}
+     
 
         private void Button_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -537,28 +523,22 @@ namespace MonitorSystem.ZTControls
 
         private void SetForeground()
         {
-            //if (_Transparent == 1)
-            //{
-            //    _text.Foreground = new SolidColorBrush();
-            //}
-            //else
-            //{
                 _text.Foreground = new SolidColorBrush(ForeColor);
-            //}
+         
         }
 
         private void PaintBackground()
         {
-            //if (_Transparent == 1)
-            //{
-            //    _button.Background = new SolidColorBrush();
-                
-            //}
-            //else
-            //{
-            //    _button.Background = new SolidColorBrush(BackColor);
-            //}
-            _button.Background = new SolidColorBrush(BackColor);
+            if (_Transparent == 1)
+            {
+                _grid.Background = new SolidColorBrush();
+                _button.Background = new SolidColorBrush();
+            }
+            else
+            {
+                _grid.Background = new SolidColorBrush(BackColor);
+                _button.Background = new SolidColorBrush(BackColor);
+            }
         }
     }
 }

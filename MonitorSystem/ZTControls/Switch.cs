@@ -113,7 +113,7 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
-            _Transparent = ScreenElement.Transparent.Value;
+            Transparent = ScreenElement.Transparent.Value;
 
             BackColor = Common.StringToColor(ScreenElement.BackColor);
             ForeColor = Common.StringToColor(ScreenElement.ForeColor); 
@@ -129,7 +129,7 @@ namespace MonitorSystem.ZTControls
 
         #region 属性
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-         typeof(int), typeof(MyLine), new PropertyMetadata(0));
+         typeof(int), typeof(Switch), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent

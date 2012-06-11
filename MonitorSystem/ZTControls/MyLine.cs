@@ -26,7 +26,7 @@ namespace MonitorSystem.ZTControls
             this.Content = picCurveShow;
             this.Width = 300;
             this.Height = 400;
-            picCurveShow.Background = new SolidColorBrush(Colors.Black);
+            
             this.SizeChanged += new SizeChangedEventHandler(MyLine_SizeChanged);
 
             //MyLine_Paint();
@@ -188,14 +188,7 @@ namespace MonitorSystem.ZTControls
             set
             {
                 _Transparent = value;
-                if (value == 1)
-                {
-                    picCurveShow.Background = new SolidColorBrush();
-                }
-                else
-                {
-                    picCurveShow.Background = new SolidColorBrush(_BackColor);
-                }
+                PaintBackground();
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
@@ -211,7 +204,7 @@ namespace MonitorSystem.ZTControls
             set
             {
                 _BackColor = value;
-                picCurveShow.Background = new SolidColorBrush(_BackColor);
+                PaintBackground();
                 if (ScreenElement != null)
                     ScreenElement.BackColor = value.ToString(); 
             }
@@ -443,14 +436,7 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
         private void MyLine_Paint()
         {
 
-            if (_Transparent == 1)
-            {
-                picCurveShow.Background = new SolidColorBrush();
-            }
-            else
-            {
-                picCurveShow.Background = new SolidColorBrush(_BackColor);
-            }
+            PaintBackground();
 
             picCurveShow.Children.Clear();
             if (maxValue - minValue >= -0.0000001 && maxValue - minValue <= 0.0000001)
@@ -652,6 +638,18 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
                         }
                         picCurveShow.Children.Add(pl);
                     }
+            }
+        }
+
+        private void PaintBackground()
+        {
+            if (_Transparent == 1)
+            {
+                picCurveShow.Background = new SolidColorBrush();
+            }
+            else
+            {
+                picCurveShow.Background = new SolidColorBrush(_BackColor);
             }
         }
 

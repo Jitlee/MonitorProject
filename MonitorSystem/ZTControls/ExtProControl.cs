@@ -113,6 +113,7 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
+            Transparent = ScreenElement.Transparent.Value;
         }
 
         private string[] _browsableProperties = new string[] { "Width", "Height", "Left", "Top", "FontFamily", "FontSize",
@@ -124,6 +125,22 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
+        private static readonly DependencyProperty TransparentProperty =
+          DependencyProperty.Register("Transparent",
+          typeof(int), typeof(ExtProControl), new PropertyMetadata(0));
+        private int _Transparent;
+        [DefaultValue(""), Description("透明"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                PaintBackground();
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
 
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
@@ -358,7 +375,7 @@ namespace MonitorSystem.ZTControls
 
         private TextBlock _text = new TextBlock() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, };
         private Image _image = new Image();
-        private Button _button = new Button();
+        private Border _button = new Border();
         private Grid _grid = new Grid();
        //private readonly DelegateCommand<t_Screen> _command;
 
@@ -369,19 +386,14 @@ namespace MonitorSystem.ZTControls
             _grid.Children.Add(_image);
             _grid.Children.Add(_text);
 
-            _button.Content = _grid;
+            _button.Child = _grid;
 
             SetForeground();
 
             PaintBackground();
 
             SetTextImageRelation();
-
-            //_button.Click += Button_Click;
-
-            //_command = new DelegateCommand<t_Screen>(ShowName);
-
-            _button.Click +=_button_Click;
+            _button.MouseLeftButtonUp +=_button_Click;
         }
         public void _button_Click(object sender, RoutedEventArgs e)
         {
@@ -395,8 +407,6 @@ namespace MonitorSystem.ZTControls
             if (!(mUrl.IndexOf("http") == 0))
                 mUrl = "http://" + mUrl;
             System.Windows.Browser.HtmlPage.Window.Navigate(new Uri(mUrl, UriKind.RelativeOrAbsolute), "_blank");
-            //
-            //System.Windows.Browser.HtmlPage.Window.NavigateToBookmark(ExtPath);
         }
        
 
@@ -450,10 +460,19 @@ namespace MonitorSystem.ZTControls
         {
             _text.Foreground = new SolidColorBrush(ForeColor);
         }
-
         private void PaintBackground()
         {
-            _button.Background = new SolidColorBrush(BackColor);
+            if (_Transparent == 1)
+            {
+                _grid.Background = new SolidColorBrush();
+                _button.Background = new SolidColorBrush();
+            }
+            else
+            {
+                _grid.Background = new SolidColorBrush(BackColor);
+                _button.Background = new SolidColorBrush(BackColor);
+            }
         }
+       
     }
 }

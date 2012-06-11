@@ -51,7 +51,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty TransparentProperty =
             DependencyProperty.Register("Transparent",
-            typeof(int), typeof(MonitorText), new PropertyMetadata(0));
+            typeof(int), typeof(TP_Button), new PropertyMetadata(0));
         private int _Transparent;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent

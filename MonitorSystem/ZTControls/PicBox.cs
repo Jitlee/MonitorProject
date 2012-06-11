@@ -125,11 +125,10 @@ namespace MonitorSystem.ZTControls
                 if (ScreenElement != null)
                     ScreenElement.Transparent = value;
             }
-
         }
 
         private static readonly DependencyProperty BackImageNameProperty = DependencyProperty.Register("BackImageName",
-          typeof(string), typeof(MonitorText), new PropertyMetadata(""));
+          typeof(string), typeof(PicBox), new PropertyMetadata(""));
         private string _BackImageName ="";
         [ImageAttribute("PIC")]
         [DefaultValue(""), Description("背景图片名字\r\n注意：\r\n背景图片一定要放在程序\r\n所在目录的\\Upload\\PIC下\r\n必须带后缀名"), Category("我的属性")]        
@@ -145,7 +144,7 @@ namespace MonitorSystem.ZTControls
         }
 
          private static readonly DependencyProperty OpenOrNotProperty =DependencyProperty.Register("OpenOrNot",
-          typeof(bool), typeof(MonitorText), new PropertyMetadata(false));
+          typeof(bool), typeof(PicBox), new PropertyMetadata(false));
          private bool _OpenOrNot =false;
         [DefaultValue(""), Description("打开或关闭"), Category("我的属性")]
          public bool OpenOrNot
@@ -160,7 +159,7 @@ namespace MonitorSystem.ZTControls
          }
 
          private static readonly DependencyProperty PicInBackProperty =DependencyProperty.Register("PicInBack",
-          typeof(bool), typeof(MonitorText), new PropertyMetadata(false));
+          typeof(bool), typeof(PicBox), new PropertyMetadata(false));
          private bool _PicInBack = false;
         [DefaultValue(""), Description("置于底层"), Category("我的属性")]
          public bool PicInBack

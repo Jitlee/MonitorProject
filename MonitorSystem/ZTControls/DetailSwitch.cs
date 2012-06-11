@@ -117,7 +117,7 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
-
+            Transparent = ScreenElement.Transparent.Value;
             ForeColor = Common.StringToColor(ScreenElement.ForeColor); 
         }
 
@@ -130,6 +130,21 @@ namespace MonitorSystem.ZTControls
         }
 
         #region 属性
+        private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
+        typeof(int), typeof(DetailSwitch), new PropertyMetadata(0));
+        private int _Transparent = 0;
+        [DefaultValue(""), Description("透明属性"), Category("杂项")]
+        public int Transparent
+        {
+            get { return _Transparent; }
+            set
+            {
+                _Transparent = value;
+                PaintBackground();
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = value;
+            }
+        }
 
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
@@ -245,7 +260,14 @@ namespace MonitorSystem.ZTControls
 
         private void PaintBackground()
         {
-
+            if (_Transparent == 1)
+            {
+                this.Background = new SolidColorBrush();
+            }
+            else
+            {
+                this.Background = new SolidColorBrush(BackColor);
+            }
         }
 
         private void Paint()
