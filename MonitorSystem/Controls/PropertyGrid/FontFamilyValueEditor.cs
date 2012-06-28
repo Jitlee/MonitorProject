@@ -13,7 +13,8 @@ namespace MonitorSystem.Controls
         }
         public override void InitializeCombo()
         {
-            this.LoadItems(new object[] { "宋体", "楷体", "黑体", "仿宋", "微软正黑体", "细明体", "微软雅黑" });
+            this.LoadItems(new object[] { "隶书", "幼圆", "舒体", "姚体", 
+            "楷体", "宋体", "中宋", "仿宋", "彩云", "琥珀", "行楷", "新魏", "细黑"});
         }
     }
 }

@@ -17,7 +17,10 @@ namespace MonitorSystem.Controls.Converters
 		{
 			if (value is string)
 			{
+               
+
 				string str = ((string)value).Trim();
+                str = Common.GetFontEn(str);
 				try
 				{
                     return new FontFamily(str);

@@ -70,48 +70,117 @@ namespace MonitorSystem
             return false;
         }
 
-       
 
-        //public Font GetFontFromStr(string strFont)
-        //{
-        //    if (strFont == null)
-        //        return new Font("宋体", 12);
-        //    // 设置字体
-        //    string Name = "宋体";
-        //    float fontSize = 12;
-        //    FontStyle style = FontStyle.Regular;
-        //    GraphicsUnit units = 0;
-        //    byte gdiCharSet = 1;
-        //    bool gdiVerti = false;
 
-        //    int idx = strFont.IndexOf("Font:");
-        //    if (idx != -1)
-        //    {
-        //        strFont = strFont.Substring(idx + 5);
-        //        strFont = strFont.Remove(strFont.Length - 1);
-        //        char[] slip = new char[] { ',' };
-        //        string[] arrStr = strFont.Split(slip);
-        //        foreach (string str in arrStr)
-        //        {
-        //            char[] slipKey = new char[] { '=' };
-        //            string[] keyVal = str.Split(slipKey);
-        //            int LEN = keyVal[0].Length;
-        //            string tmp = "Name";
-        //            int LEN2 = tmp.Length;
-        //            if (keyVal[0].Equals(" Name", StringComparison.OrdinalIgnoreCase))
-        //                Name = keyVal[1];
-        //            if (keyVal[0].Equals(" Size", StringComparison.OrdinalIgnoreCase))
-        //                fontSize = (float)(Convert.ToDouble(keyVal[1]));
-        //            if (keyVal[0] == " Units")
-        //                units = (GraphicsUnit)Convert.ToInt32(keyVal[1]);
-        //            if (keyVal[0] == " GdiCharSet")
-        //                gdiCharSet = Convert.ToByte(keyVal[1]);
-        //            if (keyVal[0] == " GdiVerticalFont")
-        //                gdiVerti = Common.ConvertToBool(keyVal[1]);
-        //        }
-        //    }
-        //    Font tmpfont = new Font(Name, fontSize, style, units, gdiCharSet, gdiVerti);
-        //    return tmpfont;
-        //}
+        #region Font
+        /// <summary>
+        /// 中文转英文
+        /// </summary>
+        /// <returns></returns>
+        public static string GetFontEn(string str)
+        {
+            switch (str.Trim())
+            {
+                case "隶书":
+                    str = "LiSu";
+                    break;
+                case "幼圆":
+                    str = "YouYuan";
+                    break;
+                case "舒体":
+                    str = "FZShuTi";
+                    break;
+                case "姚体":
+                    str = "FZYaoti";
+                    break;
+                case "楷体":
+                    str = "STKaiti";
+                    break;
+                case "宋体":
+                    str = "STSong";
+                    break;
+                case "中宋":
+                    str = "STZhongsong";
+                    break;
+                case "仿宋":
+                    str = "STFangsong";
+                    break;
+                case "彩云":
+                    str = "STCaiyun";
+                    break;
+                case "琥珀":
+                    str = "STHupo";
+                    break;
+                case "行楷":
+                    str = "STXingkai";
+                    break;
+                case "新魏":
+                    str = "STXinwei";
+                    break;
+                case "细黑":
+                    str = "STXihei";
+                    break;
+                default:
+                    str = "STSong";
+                    break;
+            }
+            return str;
+        }
+
+        /// <summary>
+        /// 英文转中文
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string GetFontCN(string str)
+        {
+            switch (str.Trim())
+            {
+                case "LiSu":
+                    str = "隶书";
+                    break;
+                case "YouYuan":
+                    str = "幼圆";
+                    break;
+                case "FZShuTi":
+                    str = "舒体";
+                    break;
+                case "FZYaoti":
+                    str = "姚体";
+                    break;
+                case "STKaiti":
+                    str = "楷体";
+                    break;
+                case "STSong":
+                    str = "宋体";
+                    break;
+                case "STZhongsong":
+                    str = "中宋";
+                    break;
+                case "STFangsong":
+                    str = "仿宋";
+                    break;
+                case "STCaiyun":
+                    str = "彩云";
+                    break;
+                case "STHupo":
+                    str = "琥珀";
+                    break;
+                case "STXingkai":
+                    str = "行楷";
+                    break;
+                case "STXinwei":
+                    str = "新魏";
+                    break;
+                case "STXihei":
+                    str = "细黑";
+                    break;
+                default:
+                    str = "宋体";
+                    break;
+            }
+            return str;
+        }
+        #endregion
     }
 }

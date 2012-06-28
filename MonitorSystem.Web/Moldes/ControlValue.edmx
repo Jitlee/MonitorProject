@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GDK_BCMModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="GDK_BCMModelStoreContainer">
+          <EntitySet Name="t_Channel" EntityType="GDK_BCMModel.Store.t_Channel" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="t_Device" EntityType="GDK_BCMModel.Store.t_Device" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="t_Station" EntityType="GDK_BCMModel.Store.t_Station" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="t_TmpValue" EntityType="GDK_BCMModel.Store.t_TmpValue" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="t_Channel">
+          <Key>
+            <PropertyRef Name="DeviceID" />
+            <PropertyRef Name="ChannelNo" />
+          </Key>
+          <Property Name="DeviceID" Type="int" Nullable="false" />
+          <Property Name="ChannelNo" Type="int" Nullable="false" />
+          <Property Name="ChannelName" Type="nvarchar" MaxLength="256" />
+          <Property Name="Value0_Name" Type="nvarchar" MaxLength="128" />
+          <Property Name="Value1_Name" Type="nvarchar" MaxLength="128" />
+          <Property Name="CurrentValue" Type="float" />
+          <Property Name="ChannelParam" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="t_Device">
+          <Key>
+            <PropertyRef Name="DeviceID" />
+          </Key>
+          <Property Name="DeviceID" Type="int" Nullable="false" />
+          <Property Name="DeviceName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CommunicateType" Type="int" />
+          <Property Name="CommunicateID" Type="int" />
+          <Property Name="SubAddr" Type="nvarchar" MaxLength="50" />
+          <Property Name="DeviceTypeID" Type="int" />
+          <Property Name="StationID" Type="int" />
+          <Property Name="StationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IP" Type="varchar" MaxLength="50" />
+          <Property Name="UserId" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+          <Property Name="Enable" Type="int" />
+          <Property Name="Port" Type="int" />
+        </EntityType>
+        <EntityType Name="t_Station">
+          <Key>
+            <PropertyRef Name="StationID" />
+          </Key>
+          <Property Name="StationID" Type="int" Nullable="false" />
+          <Property Name="StationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IP" Type="nvarchar" MaxLength="50" />
+          <Property Name="Port" Type="int" />
+          <Property Name="HistoryPort" Type="int" />
+        </EntityType>
+        <EntityType Name="t_TmpValue">
+          <Key>
+            <PropertyRef Name="StationID" />
+            <PropertyRef Name="DeviceID" />
+            <PropertyRef Name="ChannelNO" />
+          </Key>
+          <Property Name="StationID" Type="int" Nullable="false" />
+          <Property Name="DeviceID" Type="int" Nullable="false" />
+          <Property Name="ChannelNO" Type="int" Nullable="false" />
+          <Property Name="ChanenlSubNo" Type="int" />
+          <Property Name="MonitorValue" Type="float" />
+          <Property Name="Flag" Type="int" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GDK_BCMModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="ControlValue" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="t_TmpValue" EntityType="GDK_BCMModel.t_TmpValue" />
+          <EntitySet Name="t_Channel" EntityType="GDK_BCMModel.t_Channel" />
+          <EntitySet Name="t_Device" EntityType="GDK_BCMModel.t_Device" />
+          <EntitySet Name="t_Station" EntityType="GDK_BCMModel.t_Station" />
+          </EntityContainer>
+        <EntityType Name="t_TmpValue">
+          <Key>
+            <PropertyRef Name="StationID" />
+            <PropertyRef Name="DeviceID" />
+            <PropertyRef Name="ChannelNO" />
+          </Key>
+          <Property Name="StationID" Type="Int32" Nullable="false" />
+          <Property Name="DeviceID" Type="Int32" Nullable="false" />
+          <Property Name="ChannelNO" Type="Int32" Nullable="false" />
+          <Property Name="ChanenlSubNo" Type="Int32" />
+          <Property Name="MonitorValue" Type="Double" />
+          <Property Name="Flag" Type="Int32" />
+        </EntityType>
+        <EntityType Name="t_Channel">
+          <Key>
+            <PropertyRef Name="DeviceID" />
+            <PropertyRef Name="ChannelNo" />
+          </Key>
+          <Property Type="Int32" Name="DeviceID" Nullable="false" />
+          <Property Type="Int32" Name="ChannelNo" Nullable="false" />
+          <Property Type="String" Name="ChannelName" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Value0_Name" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Value1_Name" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="CurrentValue" />
+          <Property Type="String" Name="ChannelParam" MaxLength="128" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="t_Device">
+          <Key>
+            <PropertyRef Name="DeviceID" />
+          </Key>
+          <Property Type="Int32" Name="DeviceID" Nullable="false" />
+          <Property Type="String" Name="DeviceName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="CommunicateType" />
+          <Property Type="Int32" Name="CommunicateID" />
+          <Property Type="String" Name="SubAddr" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="DeviceTypeID" />
+          <Property Type="Int32" Name="StationID" />
+          <Property Type="String" Name="StationName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="IP" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UserId" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Password" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Enable" />
+          <Property Type="Int32" Name="Port" />
+        </EntityType>
+        <EntityType Name="t_Station">
+          <Key>
+            <PropertyRef Name="StationID" />
+          </Key>
+          <Property Type="Int32" Name="StationID" Nullable="false" />
+          <Property Type="String" Name="StationName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="IP" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Port" />
+          <Property Type="Int32" Name="HistoryPort" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GDK_BCMModelStoreContainer" CdmEntityContainer="ControlValue">
+          <EntitySetMapping Name="t_TmpValue"><EntityTypeMapping TypeName="GDK_BCMModel.t_TmpValue"><MappingFragment StoreEntitySet="t_TmpValue">
+            <ScalarProperty Name="StationID" ColumnName="StationID" />
+            <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+            <ScalarProperty Name="ChannelNO" ColumnName="ChannelNO" />
+            <ScalarProperty Name="ChanenlSubNo" ColumnName="ChanenlSubNo" />
+            <ScalarProperty Name="MonitorValue" ColumnName="MonitorValue" />
+            <ScalarProperty Name="Flag" ColumnName="Flag" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="t_Channel">
+            <EntityTypeMapping TypeName="GDK_BCMModel.t_Channel">
+              <MappingFragment StoreEntitySet="t_Channel">
+                <ScalarProperty Name="ChannelParam" ColumnName="ChannelParam" />
+                <ScalarProperty Name="CurrentValue" ColumnName="CurrentValue" />
+                <ScalarProperty Name="Value1_Name" ColumnName="Value1_Name" />
+                <ScalarProperty Name="Value0_Name" ColumnName="Value0_Name" />
+                <ScalarProperty Name="ChannelName" ColumnName="ChannelName" />
+                <ScalarProperty Name="ChannelNo" ColumnName="ChannelNo" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_Device">
+            <EntityTypeMapping TypeName="GDK_BCMModel.t_Device">
+              <MappingFragment StoreEntitySet="t_Device">
+                <ScalarProperty Name="Port" ColumnName="Port" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="StationName" ColumnName="StationName" />
+                <ScalarProperty Name="StationID" ColumnName="StationID" />
+                <ScalarProperty Name="DeviceTypeID" ColumnName="DeviceTypeID" />
+                <ScalarProperty Name="SubAddr" ColumnName="SubAddr" />
+                <ScalarProperty Name="CommunicateID" ColumnName="CommunicateID" />
+                <ScalarProperty Name="CommunicateType" ColumnName="CommunicateType" />
+                <ScalarProperty Name="DeviceName" ColumnName="DeviceName" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_Station">
+            <EntityTypeMapping TypeName="GDK_BCMModel.t_Station">
+              <MappingFragment StoreEntitySet="t_Station">
+                <ScalarProperty Name="HistoryPort" ColumnName="HistoryPort" />
+                <ScalarProperty Name="Port" ColumnName="Port" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="StationName" ColumnName="StationName" />
+                <ScalarProperty Name="StationID" ColumnName="StationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="ControlValue">
+        <EntityTypeShape EntityType="GDK_BCMModel.t_TmpValue" Width="1.5" PointX="0.625" PointY="0.75" Height="1.959453125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GDK_BCMModel.t_Channel" Width="1.5" PointX="3.75" PointY="0.75" Height="2.1280729166666674" />
+        <EntityTypeShape EntityType="GDK_BCMModel.t_Device" Width="1.5" PointX="0.75" PointY="3.75" Height="3.1397916666666656" />
+        <EntityTypeShape EntityType="GDK_BCMModel.t_Station" Width="1.5" PointX="2.75" PointY="3.75" Height="1.7908333333333335" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -23,7 +23,7 @@ namespace MonitorSystem.GetData
             {
                 return new MyDataService.GetDataClient(binding, address);
             }
-            catch (Exception e)
+            catch
             {
 
             }

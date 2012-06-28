@@ -35,6 +35,8 @@ namespace MonitorSystem
         public static bool IsZT { get; private set; }
 
         public static MonitorServers _DataContext = new MonitorServers();
+        public static CV _DataCV = new CV();
+        
         /// <summary>
         /// 场景列表
         /// </summary>
@@ -87,7 +89,7 @@ namespace MonitorSystem
             Init();
             _SenceCommand = new DelegateCommand<t_Screen>(LoadSence);
             _instance = this;
-
+            //SceenViewBox.Stretch = Stretch.;
             AddElementCanvas.MouseLeftButtonDown += AddElementCanvas_MouseLeftButtonDown;
             AddElementCanvas.MouseLeftButtonUp += AddElementCanvas_MouseLeftButtonUp;
             csScreen.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(CsScreen_MouseLeftButtonDown), false);
@@ -551,7 +553,8 @@ namespace MonitorSystem
         
         private void InitOther()
         {
-            _DataContext.Load(_DataContext.GetT_DeviceQuery().Where(a => a.StationID == this._CurrentScreen.StationID.Value), LoadDeviceListComplete, null);
+            _DataCV.Load(_DataCV.GetT_DeviceQuery().Where(a => a.StationID == this._CurrentScreen.StationID.Value), LoadDeviceListComplete, null);
+        
         }
 
 

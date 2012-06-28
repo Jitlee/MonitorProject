@@ -99,6 +99,10 @@ namespace MonitorSystem.Controls.Converters
             {
                 return new ColorConverter();
             }
+            if (type == typeof(FontFamily))
+            {
+                return new FontFamilyConverter();
+            }
 			//if (type == typeof(CultureInfo))
 			//{
 			//    return new CultureInfoConverter();

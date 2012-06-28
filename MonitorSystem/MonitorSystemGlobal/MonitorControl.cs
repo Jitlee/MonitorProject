@@ -53,7 +53,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             //[Font: Name=宋体, Size=15.75, Units=3, GdiCharSet=134, GdiVerticalFont=False]
             string s = string.Format("[Font: Name={0}, Size={1}, Units=3, GdiCharSet=134, GdiVerticalFont=False]",
-                                    this.FontFamily.Source,
+                                   Common.GetFontCN(this.FontFamily.Source),
                                   this.FontSize.ToString());
             if (_ScreenElement != null)
                 _ScreenElement.Font = s;
@@ -69,12 +69,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             else
             {
                 // 设置字体
-                string Name = "黑体";// "宋体";
-                //Name = "Microsoft YaHei";// "楷体";
-                //Name = "SimHei";// "黑体";
-                //Name = "黑体";
-                //Name = "楷体";
-                
+                string Name = "STSong";
 
                 double fontSize = 12f;
 
@@ -99,7 +94,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                     }
                 }
                 this.FontSize =fontSize;
-                this.FontFamily = new FontFamily(Name);
+                this.FontFamily = new FontFamily(Common.GetFontEn(Name));
             }
         }
         #endregion

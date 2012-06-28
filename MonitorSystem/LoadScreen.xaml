@@ -51,8 +51,8 @@
                            Stretch="None" MouseLeftButtonUp="Image_MouseLeftButtonUp" />
                 </StackPanel>
             </Grid>
-           
-             <Viewbox Grid.Row="2"    Stretch="Fill" x:Name="SceenViewBox">
+
+            <Viewbox Grid.Row="2"    Stretch="Uniform"  x:Name="SceenViewBox">
                 <Grid Name="GridScreen">
                     <Canvas x:Name="csScreen" Background="Transparent"/>
                     <Canvas

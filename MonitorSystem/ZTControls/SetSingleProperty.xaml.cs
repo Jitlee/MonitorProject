@@ -71,13 +71,14 @@ namespace MonitorSystem.ZTControls
         }
         #endregion
         MonitorServers _dataContext = new MonitorServers();
+        CV _DataCV = new CV();
         public SetSingleProperty()
         {
             InitializeComponent();
             _dataContext = LoadScreen._DataContext;
-            
+            _DataCV = LoadScreen._DataCV;
             //cbDeviceID.ItemsSource = _dataContext.t_Devices;
-            Devices = new ObservableCollection<t_Device>(_dataContext.t_Devices);
+            Devices = new ObservableCollection<t_Device>(_DataCV.t_Devices);
             cbDeviceID.DisplayMemberPath = "DeviceName";
             //查询
 
@@ -152,7 +153,7 @@ namespace MonitorSystem.ZTControls
 
         private void LoadChanncel(int deviceid)
         {
-            _dataContext.Load(_dataContext.GetT_ChannelQuery().Where(a => a.DeviceID == deviceid),
+            _DataCV.Load(_DataCV.GetT_ChannelQuery().Where(a => a.DeviceID == deviceid),
                 LoadChanncelCommplete, deviceid);
         }
 

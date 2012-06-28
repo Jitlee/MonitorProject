@@ -46,6 +46,7 @@ namespace MonitorSystem.Property
     {
 
         MonitorServers _DataContext = LoadScreen._DataContext;
+        CV _DataCV = LoadScreen._DataCV;
 
         #region 事件
         /// <summary>
@@ -87,7 +88,7 @@ namespace MonitorSystem.Property
 
         private void BindSite()
         {
-            _DataContext.Load(_DataContext.GetT_StationQuery(), LoadStationCompleted 
+            _DataCV.Load(_DataCV.GetT_StationQuery(), LoadStationCompleted 
                 , null);
             
         }

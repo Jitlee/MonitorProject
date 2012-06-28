@@ -103,18 +103,19 @@ namespace MonitorSystem.ZTControls
 
         #endregion
         MonitorServers _dataContext = new MonitorServers();
+        CV _DataCV = new CV();
         public SetSinglePropertyDrawLine()
         {
             InitializeComponent();
             _dataContext = LoadScreen._DataContext;
-            
-            cbDeviceID.ItemsSource = _dataContext.t_Devices;
+
+            cbDeviceID.ItemsSource = _DataCV.t_Devices;
             cbDeviceID.DisplayMemberPath = "DeviceName";
         }
 
         public void Init()
         {
-            var v = LoadScreen._DataContext.t_Devices.Where(a => a.DeviceID == _DeviceID);
+            var v = LoadScreen._DataCV.t_Devices.Where(a => a.DeviceID == _DeviceID);
             if (v.Count() > 0)
             {
                 cbDeviceID.SelectedItem = v.First();
@@ -144,7 +145,7 @@ namespace MonitorSystem.ZTControls
 
         private void LoadChanncel(int deviceid)
         {
-            _dataContext.Load(_dataContext.GetT_ChannelQuery().Where(a => a.DeviceID == deviceid),
+            _DataCV.Load(_DataCV.GetT_ChannelQuery().Where(a => a.DeviceID == deviceid),
                 LoadChanncelCommplete, deviceid);
         }
 

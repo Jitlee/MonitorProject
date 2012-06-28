@@ -16,27 +16,12 @@ namespace MonitorSystem.Web.Servers
     public partial class MonitorServers
     {
 
-       
-
         public IEnumerable<t_ElementProperty> GetScreenElementProperty(int ScreenID)
         {
           var v=  from f in ObjectContext.t_ElementProperty from c in ObjectContext.t_Element 
                   where  c.ElementID==f.ElementID && c.ScreenID ==ScreenID select f;
           return v;
         }
-
-        public double SelectNewValue(int SatationID, int DeiceID, int ChancelID)
-        {
-            var v = from f in ObjectContext.t_TmpValue
-                    where f.StationID == SatationID
-                        && f.DeviceID == DeiceID && f.ChannelNO == ChancelID
-                    select f.MonitorValue;
-
-            if (v.Count() > 0)
-                return v.First().Value;
-            return -999;
-        }
-
         
         /// <summary>
         /// 根据Screenid查询当前场景下元素的值
@@ -76,21 +61,7 @@ namespace MonitorSystem.Web.Servers
             return eValue;
         }
 
-        /// <summary>
-        /// 获取指定站点、设备、通道的值
-        /// </summary>
-        /// <param name="iP1"></param>
-        /// <param name="iP2"></param>
-        /// <param name="iP3"></param>
-        /// <param name="fResult"></param>
-        public void GetChanncelValue(int iP1, int iP2, int iP3, out float fResult)
-        {
-            var v = from f in ObjectContext.t_TmpValue where f.StationID == iP1 && f.DeviceID == iP2 && f.ChannelNO == iP3 select f;
-            if (v.Count() > 0)
-                fResult =float.Parse( v.First().MonitorValue.Value.ToString());
-            else
-                fResult = -1.0f;
-        }
+       
 
         /// <summary>
         /// 列新TextBox Change事件值
@@ -101,34 +72,34 @@ namespace MonitorSystem.Web.Servers
         /// <param name="mChannelNo"></param>
         /// <param name="mElemetID"></param>
         /// <returns></returns>
-        public bool ChangeInputTextBoxValue(string mMonitorValue, int mStationID, int mDeviceID, int mChannelNo
-            ,int mElemetID)
-        {
-            //更新t_ChannelHistoryValue
-            var v = from f in ObjectContext.t_ChannelHistoryValue
-                    where f.StationID == mStationID
-                        && f.DeviceID == mDeviceID && f.ChannelNo == mChannelNo
-                    select f;
+        //public bool ChangeInputTextBoxValue(string mMonitorValue, int mStationID, int mDeviceID, int mChannelNo
+        //    ,int mElemetID)
+        //{
+        //    //更新t_ChannelHistoryValue
+        //    var v = from f in ObjectContext.t_ChannelHistoryValue
+        //            where f.StationID == mStationID
+        //                && f.DeviceID == mDeviceID && f.ChannelNo == mChannelNo
+        //            select f;
 
-            if (v.Count() > 0)
-            {
-                foreach (var vobj in v)
-                {
-                    vobj.MonitorValue = Convert.ToDouble(mMonitorValue);
-                }
-            }
+        //    if (v.Count() > 0)
+        //    {
+        //        foreach (var vobj in v)
+        //        {
+        //            vobj.MonitorValue = Convert.ToDouble(mMonitorValue);
+        //        }
+        //    }
             
-            //更新t_ElementProperty
-            var vp= from fp in ObjectContext.t_ElementProperty where fp.ElementID== mElemetID select fp;
-            if (vp.Count() > 0)
-            {
-                var vpObj = vp.First();
-                vpObj.PropertyValue = mMonitorValue;
-            }
+        //    //更新t_ElementProperty
+        //    var vp= from fp in ObjectContext.t_ElementProperty where fp.ElementID== mElemetID select fp;
+        //    if (vp.Count() > 0)
+        //    {
+        //        var vpObj = vp.First();
+        //        vpObj.PropertyValue = mMonitorValue;
+        //    }
 
-            ObjectContext.SaveChanges();
-            return true;
-        }
+        //    ObjectContext.SaveChanges();
+        //    return true;
+        //}
      
     }
 

@@ -628,7 +628,7 @@ namespace MonitorSystem.Web.Servers
         public float CHN(int iP1, int iP2, int iP3)
         {
             float fResult = -1.0f;
-            new MonitorServers().GetChanncelValue(iP1, iP2, iP3, out fResult);
+            new CV().GetChanncelValue(iP1, iP2, iP3, out fResult);
             return fResult;
         }
 

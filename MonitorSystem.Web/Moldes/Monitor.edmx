@@ -6,24 +6,6 @@
     <edmx:StorageModels>
     <Schema Namespace="MonitorDemo2Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="MonitorDemo2ModelStoreContainer">
-          <EntitySet Name="t_AlarmAction" EntityType="MonitorDemo2Model.Store.t_AlarmAction" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_AlarmGroup" EntityType="MonitorDemo2Model.Store.t_AlarmGroup" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_AlarmLevel" EntityType="MonitorDemo2Model.Store.t_AlarmLevel" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_Channel" EntityType="MonitorDemo2Model.Store.t_Channel" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_ChannelHistoryValue" EntityType="MonitorDemo2Model.Store.t_ChannelHistoryValue" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_ChannelHistoryValuetemp" EntityType="MonitorDemo2Model.Store.t_ChannelHistoryValuetemp" store:Type="Tables" store:Schema="dbo" store:Name="t_ChannelHistoryValuetemp">
-            <DefiningQuery>SELECT 
-      [t_ChannelHistoryValuetemp].[DataID] AS [DataID], 
-      [t_ChannelHistoryValuetemp].[DeviceID] AS [DeviceID], 
-      [t_ChannelHistoryValuetemp].[ChannelNo] AS [ChannelNo], 
-      [t_ChannelHistoryValuetemp].[ChanenlSubNo] AS [ChanenlSubNo], 
-      [t_ChannelHistoryValuetemp].[MonitorValue] AS [MonitorValue], 
-      [t_ChannelHistoryValuetemp].[MonitorTime] AS [MonitorTime], 
-      [t_ChannelHistoryValuetemp].[StationID] AS [StationID], 
-      [t_ChannelHistoryValuetemp].[Info] AS [Info]
-      FROM [dbo].[t_ChannelHistoryValuetemp] AS [t_ChannelHistoryValuetemp]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="t_ChannelType" EntityType="MonitorDemo2Model.Store.t_ChannelType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_Control" EntityType="MonitorDemo2Model.Store.t_Control" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_ControlProperty" EntityType="MonitorDemo2Model.Store.t_ControlProperty" store:Type="Tables" store:Schema="dbo" store:Name="t_ControlProperty">
             <DefiningQuery>SELECT 
@@ -34,20 +16,14 @@
       [t_ControlProperty].[Caption] AS [Caption]
       FROM [dbo].[t_ControlProperty] AS [t_ControlProperty]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="t_Device" EntityType="MonitorDemo2Model.Store.t_Device" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_Element" EntityType="MonitorDemo2Model.Store.t_Element" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_Element_Library" EntityType="MonitorDemo2Model.Store.t_Element_Library" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_ElementProperty" EntityType="MonitorDemo2Model.Store.t_ElementProperty" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_ElementProperty_Library" EntityType="MonitorDemo2Model.Store.t_ElementProperty_Library" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_KeyWord" EntityType="MonitorDemo2Model.Store.t_KeyWord" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_Mainte" EntityType="MonitorDemo2Model.Store.t_Mainte" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_MonitorServerParam" EntityType="MonitorDemo2Model.Store.t_MonitorServerParam" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_MonitorSystemParam" EntityType="MonitorDemo2Model.Store.t_MonitorSystemParam" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="t_MonitorSystemParam" EntityType="MonitorDemo2Model.Store.t_MonitorSystemParam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_Screen" EntityType="MonitorDemo2Model.Store.t_Screen" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_Screen_Library" EntityType="MonitorDemo2Model.Store.t_Screen_Library" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_Station" EntityType="MonitorDemo2Model.Store.t_Station" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_Sys_MainRealTimeSet" EntityType="MonitorDemo2Model.Store.t_Sys_MainRealTimeSet" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="t_TmpValue" EntityType="MonitorDemo2Model.Store.t_TmpValue" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="V_ScreenMonitorValue" EntityType="MonitorDemo2Model.Store.V_ScreenMonitorValue" store:Type="Views" store:Schema="dbo" store:Name="V_ScreenMonitorValue">
             <DefiningQuery>SELECT 
       [V_ScreenMonitorValue].[ElementID] AS [ElementID], 
@@ -62,90 +38,9 @@
       FROM [dbo].[V_ScreenMonitorValue] AS [V_ScreenMonitorValue]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-        <EntityType Name="t_AlarmAction">
-          <Key>
-            <PropertyRef Name="ActionID" />
-          </Key>
-          <Property Name="ActionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="ActionModule" Type="nvarchar" MaxLength="50" />
-          <Property Name="ActionCommand" Type="nvarchar" MaxLength="50" />
-          <Property Name="ActionParam" Type="nvarchar" MaxLength="256" />
-          <Property Name="ActionName" Type="nvarchar" MaxLength="64" />
-        </EntityType>
-        <EntityType Name="t_AlarmGroup">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="nvarchar" MaxLength="100" />
-          <Property Name="MethodId" Type="nvarchar" MaxLength="500" />
-          <Property Name="MethodName" Type="nvarchar" MaxLength="500" />
-        </EntityType>
-        <EntityType Name="t_AlarmLevel">
-          <Key>
-            <PropertyRef Name="AlarmLevelID" />
-          </Key>
-          <Property Name="AlarmLevelID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="AlarmInteval" Type="int" />
-          <Property Name="LevelName" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="t_Channel">
-          <Key>
-            <PropertyRef Name="DeviceID" />
-            <PropertyRef Name="ChannelNo" />
-          </Key>
-          <Property Name="DeviceID" Type="int" Nullable="false" />
-          <Property Name="ChannelNo" Type="int" Nullable="false" />
-          <Property Name="ChannelName" Type="nvarchar" MaxLength="256" />
-          <Property Name="Value0_Name" Type="nvarchar" MaxLength="128" />
-          <Property Name="Value1_Name" Type="nvarchar" MaxLength="128" />
-          <Property Name="CurrentValue" Type="float" />
-          <Property Name="ChannelParam" Type="nvarchar" MaxLength="128" />
-        </EntityType>
-        <EntityType Name="t_ChannelHistoryValue">
-          <Key>
-            <PropertyRef Name="DataID" />
-          </Key>
-          <Property Name="DataID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="DeviceID" Type="int" Nullable="false" />
-          <Property Name="ChannelNo" Type="int" Nullable="false" />
-          <Property Name="MonitorValue" Type="float" />
-          <Property Name="MonitorTime" Type="datetime" />
-          <Property Name="StationID" Type="int" />
-        </EntityType>
         <!--生成过程中发现错误:
       警告 6002: 表/视图“GDK_BCM.dbo.t_ChannelHistoryValuetemp”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
       -->
-        <EntityType Name="t_ChannelHistoryValuetemp">
-          <Key>
-            <PropertyRef Name="DataID" />
-            <PropertyRef Name="DeviceID" />
-            <PropertyRef Name="ChannelNo" />
-          </Key>
-          <Property Name="DataID" Type="int" Nullable="false" />
-          <Property Name="DeviceID" Type="int" Nullable="false" />
-          <Property Name="ChannelNo" Type="int" Nullable="false" />
-          <Property Name="ChanenlSubNo" Type="int" />
-          <Property Name="MonitorValue" Type="float" />
-          <Property Name="MonitorTime" Type="datetime" />
-          <Property Name="StationID" Type="int" />
-          <Property Name="Info" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="t_ChannelType">
-          <Key>
-            <PropertyRef Name="DeviceTypeID" />
-            <PropertyRef Name="ChannelNo" />
-          </Key>
-          <Property Name="DeviceTypeID" Type="int" Nullable="false" />
-          <Property Name="ChannelNo" Type="int" Nullable="false" />
-          <Property Name="ChannelTypeName" Type="nvarchar" MaxLength="128" />
-          <Property Name="OperateCommand" Type="nvarchar" MaxLength="50" />
-          <Property Name="OperateParam" Type="nvarchar" MaxLength="50" />
-          <Property Name="ValueType" Type="int" />
-          <Property Name="Value0_Name" Type="nvarchar" MaxLength="128" />
-          <Property Name="Value1_Name" Type="nvarchar" MaxLength="128" />
-          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
-        </EntityType>
         <EntityType Name="t_Control">
           <Key>
             <PropertyRef Name="ControlID" />
@@ -170,24 +65,6 @@
           <Property Name="PropertyName" Type="varchar" MaxLength="50" />
           <Property Name="DefaultValue" Type="varchar" MaxLength="128" />
           <Property Name="Caption" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="t_Device">
-          <Key>
-            <PropertyRef Name="DeviceID" />
-          </Key>
-          <Property Name="DeviceID" Type="int" Nullable="false" />
-          <Property Name="DeviceName" Type="nvarchar" MaxLength="50" />
-          <Property Name="CommunicateType" Type="int" />
-          <Property Name="CommunicateID" Type="int" />
-          <Property Name="SubAddr" Type="nvarchar" MaxLength="50" />
-          <Property Name="DeviceTypeID" Type="int" />
-          <Property Name="StationID" Type="int" />
-          <Property Name="StationName" Type="nvarchar" MaxLength="50" />
-          <Property Name="IP" Type="varchar" MaxLength="50" />
-          <Property Name="UserId" Type="varchar" MaxLength="50" />
-          <Property Name="Password" Type="varchar" MaxLength="50" />
-          <Property Name="Enable" Type="int" />
-          <Property Name="Port" Type="int" />
         </EntityType>
         <EntityType Name="t_Element">
           <Key>
@@ -271,55 +148,19 @@
           <Property Name="Caption" Type="varchar" MaxLength="50" />
           <Property Name="PropertyName" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="t_KeyWord">
-          <Key>
-            <PropertyRef Name="KeyWordID" />
-          </Key>
-          <Property Name="KeyWordID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="KeyWord" Type="varchar" MaxLength="50" />
-          <Property Name="KeyWordName" Type="char" MaxLength="10" />
-          <Property Name="Replace" Type="varchar" MaxLength="4000" />
-          <Property Name="IsCustomize" Type="int" />
-        </EntityType>
-        <EntityType Name="t_Mainte">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="DeviceID" Type="int" />
-          <Property Name="StationID" Type="int" />
-          <Property Name="ContentMainte" Type="varchar" MaxLength="200" />
-          <Property Name="ValueType" Type="int" />
-          <Property Name="MainteName" Type="nvarchar" MaxLength="50" />
-          <Property Name="MainteTime" Type="datetime" />
-          <Property Name="Duty" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="t_MonitorServerParam">
-          <Key>
-            <PropertyRef Name="ParamID" />
-          </Key>
-          <Property Name="ParamID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="ParamName" Type="varchar" MaxLength="50" />
-          <Property Name="ParamAddr" Type="varchar" MaxLength="50" />
-          <Property Name="Param" Type="varchar" MaxLength="50" />
-          <Property Name="StationID" Type="int" />
-          <Property Name="StationName" Type="nvarchar" MaxLength="50" />
-          <Property Name="IsCheck" Type="int" />
-          <Property Name="IsSmsCheck" Type="int" />
-        </EntityType>
         <EntityType Name="t_MonitorSystemParam">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="MonitorRefreshTime" Type="int" />
-          <Property Name="StartScreenID" Type="int" Nullable="false" />
+          <Property Name="StartScreenID" Nullable="false" Type="int" />
           <Property Name="AlarmLogTime" Type="int" />
-          <Property Name="ServerIP" Type="nvarchar" MaxLength="50" />
+          <Property Name="ServerIP" MaxLength="50" Type="nvarchar" />
           <Property Name="ServerPort" Type="int" />
-          <Property Name="Door_Sysid" Type="varchar" MaxLength="50" />
+          <Property Name="Door_Sysid" MaxLength="50" Type="varchar" />
           <Property Name="Door_Com" Type="int" />
           <Property Name="HaveDoor" Type="int" />
-          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
         </EntityType>
         <EntityType Name="t_Screen">
           <Key>
@@ -342,16 +183,6 @@
           <Property Name="ParentScreenID" Type="int" />
           <Property Name="StationID" Type="int" />
         </EntityType>
-        <EntityType Name="t_Station">
-          <Key>
-            <PropertyRef Name="StationID" />
-          </Key>
-          <Property Name="StationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="StationName" Type="nvarchar" MaxLength="50" />
-          <Property Name="IP" Type="nvarchar" MaxLength="50" />
-          <Property Name="Port" Type="int" />
-          <Property Name="HistoryPort" Type="int" />
-        </EntityType>
         <EntityType Name="t_Sys_MainRealTimeSet">
           <Key>
             <PropertyRef Name="ID" />
@@ -367,19 +198,6 @@
           <Property Name="Ylower" Type="float" Nullable="false" />
           <Property Name="GridHeight" Type="float" Nullable="false" />
         </EntityType>
-        <EntityType Name="t_TmpValue">
-          <Key>
-            <PropertyRef Name="StationID" />
-            <PropertyRef Name="DeviceID" />
-            <PropertyRef Name="ChannelNO" />
-          </Key>
-          <Property Name="StationID" Type="int" Nullable="false" />
-          <Property Name="DeviceID" Type="int" Nullable="false" />
-          <Property Name="ChannelNO" Type="int" Nullable="false" />
-          <Property Name="ChanenlSubNo" Type="int" />
-          <Property Name="MonitorValue" Type="float" />
-          <Property Name="Flag" Type="int" />
-        </EntityType>
         <!--生成过程中发现错误:
       警告 6002: 表/视图“GDK_BCM.dbo.V_ScreenMonitorValue”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
       -->
@@ -387,12 +205,12 @@
           <Key>
             <PropertyRef Name="ElementID" />
           </Key>
-          <Property Name="ElementID" Type="int" Nullable="false" />
+          <Property Name="ElementID" Nullable="false" Type="int" />
           <Property Name="ScreenID" Type="int" />
           <Property Name="DeviceID" Type="int" />
           <Property Name="ChannelNo" Type="int" />
-          <Property Name="ComputeStr" Type="varchar" MaxLength="100" />
-          <Property Name="StationID" Type="int" Nullable="false" />
+          <Property Name="ComputeStr" MaxLength="100" Type="varchar" />
+          <Property Name="StationID" Nullable="false" Type="int" />
           <Property Name="ChanenlSubNo" Type="int" />
           <Property Name="MonitorValue" Type="float" />
           <Property Name="flag" Type="int" />
@@ -402,112 +220,18 @@
     <edmx:ConceptualModels>
       <Schema Namespace="MonitorDemo2Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="MS" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="t_AlarmAction" EntityType="MonitorDemo2Model.t_AlarmAction" />
-          <EntitySet Name="t_AlarmGroup" EntityType="MonitorDemo2Model.t_AlarmGroup" />
-          <EntitySet Name="t_AlarmLevel" EntityType="MonitorDemo2Model.t_AlarmLevel" />
-          <EntitySet Name="t_Channel" EntityType="MonitorDemo2Model.t_Channel" />
-          <EntitySet Name="t_ChannelHistoryValue" EntityType="MonitorDemo2Model.t_ChannelHistoryValue" />
-          <EntitySet Name="t_ChannelHistoryValuetemp" EntityType="MonitorDemo2Model.t_ChannelHistoryValuetemp" />
-          <EntitySet Name="t_ChannelType" EntityType="MonitorDemo2Model.t_ChannelType" />
           <EntitySet Name="t_Control" EntityType="MonitorDemo2Model.t_Control" />
           <EntitySet Name="t_ControlProperty" EntityType="MonitorDemo2Model.t_ControlProperty" />
-          <EntitySet Name="t_Device" EntityType="MonitorDemo2Model.t_Device" />
           <EntitySet Name="t_Element" EntityType="MonitorDemo2Model.t_Element" />
           <EntitySet Name="t_Element_Library" EntityType="MonitorDemo2Model.t_Element_Library" />
           <EntitySet Name="t_ElementProperty" EntityType="MonitorDemo2Model.t_ElementProperty" />
           <EntitySet Name="t_ElementProperty_Library" EntityType="MonitorDemo2Model.t_ElementProperty_Library" />
-          <EntitySet Name="t_KeyWord" EntityType="MonitorDemo2Model.t_KeyWord" />
-          <EntitySet Name="t_Mainte" EntityType="MonitorDemo2Model.t_Mainte" />
-          <EntitySet Name="t_MonitorServerParam" EntityType="MonitorDemo2Model.t_MonitorServerParam" />
           <EntitySet Name="t_MonitorSystemParam" EntityType="MonitorDemo2Model.t_MonitorSystemParam" />
           <EntitySet Name="t_Screen" EntityType="MonitorDemo2Model.t_Screen" />
           <EntitySet Name="t_Screen_Library" EntityType="MonitorDemo2Model.t_Screen_Library" />
-          <EntitySet Name="t_Station" EntityType="MonitorDemo2Model.t_Station" />
-          <EntitySet Name="t_TmpValue" EntityType="MonitorDemo2Model.t_TmpValue" />
           <EntitySet Name="t_Sys_MainRealTimeSet" EntityType="MonitorDemo2Model.t_Sys_MainRealTimeSet" />
           <EntitySet Name="V_ScreenMonitorValue" EntityType="MonitorDemo2Model.V_ScreenMonitorValue" />
         </EntityContainer>
-        <EntityType Name="t_AlarmAction">
-          <Key>
-            <PropertyRef Name="ActionID" />
-          </Key>
-          <Property Type="Int32" Name="ActionID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="ActionModule" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ActionCommand" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ActionParam" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ActionName" MaxLength="64" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="t_AlarmGroup">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="MethodId" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="MethodName" MaxLength="500" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="t_AlarmLevel">
-          <Key>
-            <PropertyRef Name="AlarmLevelID" />
-          </Key>
-          <Property Type="Int32" Name="AlarmLevelID" Nullable="false" />
-          <Property Type="Int32" Name="AlarmInteval" />
-          <Property Type="String" Name="LevelName" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="t_Channel">
-          <Key>
-            <PropertyRef Name="DeviceID" />
-            <PropertyRef Name="ChannelNo" />
-          </Key>
-          <Property Type="Int32" Name="DeviceID" Nullable="false" />
-          <Property Type="Int32" Name="ChannelNo" Nullable="false" />
-          <Property Type="String" Name="ChannelName" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Value0_Name" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Value1_Name" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Type="Double" Name="CurrentValue" />
-          <Property Type="String" Name="ChannelParam" MaxLength="128" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="t_ChannelHistoryValue">
-          <Key>
-            <PropertyRef Name="DataID" />
-          </Key>
-          <Property Type="Int32" Name="DataID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="DeviceID" Nullable="false" />
-          <Property Type="Int32" Name="ChannelNo" Nullable="false" />
-          <Property Type="Double" Name="MonitorValue" />
-          <Property Type="DateTime" Name="MonitorTime" />
-          <Property Type="Int32" Name="StationID" />
-        </EntityType>
-        <EntityType Name="t_ChannelHistoryValuetemp">
-          <Key>
-            <PropertyRef Name="DataID" />
-            <PropertyRef Name="DeviceID" />
-            <PropertyRef Name="ChannelNo" />
-          </Key>
-          <Property Type="Int32" Name="DataID" Nullable="false" />
-          <Property Type="Int32" Name="DeviceID" Nullable="false" />
-          <Property Type="Int32" Name="ChannelNo" Nullable="false" />
-          <Property Type="Int32" Name="ChanenlSubNo" />
-          <Property Type="Double" Name="MonitorValue" />
-          <Property Type="DateTime" Name="MonitorTime" />
-          <Property Type="Int32" Name="StationID" />
-          <Property Type="String" Name="Info" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="t_ChannelType">
-          <Key>
-            <PropertyRef Name="DeviceTypeID" />
-            <PropertyRef Name="ChannelNo" />
-          </Key>
-          <Property Type="Int32" Name="DeviceTypeID" Nullable="false" />
-          <Property Type="Int32" Name="ChannelNo" Nullable="false" />
-          <Property Type="String" Name="ChannelTypeName" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="OperateCommand" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="OperateParam" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="ValueType" />
-          <Property Type="String" Name="Value0_Name" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Value1_Name" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Unit" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="t_Control">
           <Key>
             <PropertyRef Name="ControlID" />
@@ -529,24 +253,6 @@
           <Property Type="String" Name="PropertyName" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DefaultValue" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Caption" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="t_Device">
-          <Key>
-            <PropertyRef Name="DeviceID" />
-          </Key>
-          <Property Type="Int32" Name="DeviceID" Nullable="false" />
-          <Property Type="String" Name="DeviceName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="CommunicateType" />
-          <Property Type="Int32" Name="CommunicateID" />
-          <Property Type="String" Name="SubAddr" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="DeviceTypeID" />
-          <Property Type="Int32" Name="StationID" />
-          <Property Type="String" Name="StationName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="IP" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="UserId" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Password" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="Enable" />
-          <Property Type="Int32" Name="Port" />
         </EntityType>
         <EntityType Name="t_Element">
           <Key>
@@ -630,55 +336,19 @@
           <Property Type="String" Name="Caption" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="PropertyName" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="t_KeyWord">
-          <Key>
-            <PropertyRef Name="KeyWordID" />
-          </Key>
-          <Property Type="Int32" Name="KeyWordID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="KeyWord" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="KeyWordName" MaxLength="10" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="Replace" MaxLength="4000" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="IsCustomize" />
-        </EntityType>
-        <EntityType Name="t_Mainte">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="DeviceID" />
-          <Property Type="Int32" Name="StationID" />
-          <Property Type="String" Name="ContentMainte" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="ValueType" />
-          <Property Type="String" Name="MainteName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="MainteTime" />
-          <Property Type="String" Name="Duty" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="t_MonitorServerParam">
-          <Key>
-            <PropertyRef Name="ParamID" />
-          </Key>
-          <Property Type="Int32" Name="ParamID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="ParamName" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ParamAddr" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Param" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="StationID" />
-          <Property Type="String" Name="StationName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="IsCheck" />
-          <Property Type="Int32" Name="IsSmsCheck" />
-        </EntityType>
         <EntityType Name="t_MonitorSystemParam">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Type="Int32" Name="MonitorRefreshTime" />
-          <Property Type="Int32" Name="StartScreenID" Nullable="false" />
-          <Property Type="Int32" Name="AlarmLogTime" />
-          <Property Type="String" Name="ServerIP" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="ServerPort" />
-          <Property Type="String" Name="Door_Sysid" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="Door_Com" />
-          <Property Type="Int32" Name="HaveDoor" />
-          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MonitorRefreshTime" Type="Int32" />
+          <Property Name="StartScreenID" Nullable="false" Type="Int32" />
+          <Property Name="AlarmLogTime" Type="Int32" />
+          <Property Name="ServerIP" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="ServerPort" Type="Int32" />
+          <Property Name="Door_Sysid" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="Door_Com" Type="Int32" />
+          <Property Name="HaveDoor" Type="Int32" />
+          <Property Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
         </EntityType>
         <EntityType Name="t_Screen">
           <Key>
@@ -701,29 +371,6 @@
           <Property Type="Int32" Name="ParentScreenID" />
           <Property Type="Int32" Name="StationID" />
         </EntityType>
-        <EntityType Name="t_Station">
-          <Key>
-            <PropertyRef Name="StationID" />
-          </Key>
-          <Property Type="Int32" Name="StationID" Nullable="false" />
-          <Property Type="String" Name="StationName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="IP" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="Port" />
-          <Property Type="Int32" Name="HistoryPort" />
-        </EntityType>
-        <EntityType Name="t_TmpValue">
-          <Key>
-            <PropertyRef Name="StationID" />
-            <PropertyRef Name="DeviceID" />
-            <PropertyRef Name="ChannelNO" />
-          </Key>
-          <Property Type="Int32" Name="StationID" Nullable="false" />
-          <Property Type="Int32" Name="DeviceID" Nullable="false" />
-          <Property Type="Int32" Name="ChannelNO" Nullable="false" />
-          <Property Type="Int32" Name="ChanenlSubNo" />
-          <Property Type="Double" Name="MonitorValue" />
-          <Property Type="Int32" Name="Flag" />
-        </EntityType>
         <EntityType Name="t_Sys_MainRealTimeSet">
           <Key>
             <PropertyRef Name="ID" />
@@ -743,15 +390,15 @@
           <Key>
             <PropertyRef Name="ElementID" />
           </Key>
-          <Property Type="Int32" Name="ElementID" Nullable="false" />
-          <Property Type="Int32" Name="ScreenID" />
-          <Property Type="Int32" Name="DeviceID" />
-          <Property Type="Int32" Name="ChannelNo" />
-          <Property Type="String" Name="ComputeStr" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="StationID" Nullable="false" />
-          <Property Type="Int32" Name="ChanenlSubNo" />
-          <Property Type="Double" Name="MonitorValue" />
-          <Property Type="Int32" Name="flag" />
+          <Property Name="ElementID" Nullable="false" Type="Int32" />
+          <Property Name="ScreenID" Type="Int32" />
+          <Property Name="DeviceID" Type="Int32" />
+          <Property Name="ChannelNo" Type="Int32" />
+          <Property Name="ComputeStr" MaxLength="100" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="StationID" Nullable="false" Type="Int32" />
+          <Property Name="ChanenlSubNo" Type="Int32" />
+          <Property Name="MonitorValue" Type="Double" />
+          <Property Name="flag" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -759,90 +406,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MonitorDemo2ModelStoreContainer" CdmEntityContainer="MS">
-          <EntitySetMapping Name="t_AlarmAction">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_AlarmAction">
-              <MappingFragment StoreEntitySet="t_AlarmAction">
-                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
-                <ScalarProperty Name="ActionParam" ColumnName="ActionParam" />
-                <ScalarProperty Name="ActionCommand" ColumnName="ActionCommand" />
-                <ScalarProperty Name="ActionModule" ColumnName="ActionModule" />
-                <ScalarProperty Name="ActionID" ColumnName="ActionID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_AlarmGroup">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_AlarmGroup">
-              <MappingFragment StoreEntitySet="t_AlarmGroup">
-                <ScalarProperty Name="MethodName" ColumnName="MethodName" />
-                <ScalarProperty Name="MethodId" ColumnName="MethodId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_AlarmLevel">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_AlarmLevel">
-              <MappingFragment StoreEntitySet="t_AlarmLevel">
-                <ScalarProperty Name="LevelName" ColumnName="LevelName" />
-                <ScalarProperty Name="AlarmInteval" ColumnName="AlarmInteval" />
-                <ScalarProperty Name="AlarmLevelID" ColumnName="AlarmLevelID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_Channel">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_Channel">
-              <MappingFragment StoreEntitySet="t_Channel">
-                <ScalarProperty Name="ChannelParam" ColumnName="ChannelParam" />
-                <ScalarProperty Name="CurrentValue" ColumnName="CurrentValue" />
-                <ScalarProperty Name="Value1_Name" ColumnName="Value1_Name" />
-                <ScalarProperty Name="Value0_Name" ColumnName="Value0_Name" />
-                <ScalarProperty Name="ChannelName" ColumnName="ChannelName" />
-                <ScalarProperty Name="ChannelNo" ColumnName="ChannelNo" />
-                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_ChannelHistoryValue">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_ChannelHistoryValue">
-              <MappingFragment StoreEntitySet="t_ChannelHistoryValue">
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
-                <ScalarProperty Name="MonitorTime" ColumnName="MonitorTime" />
-                <ScalarProperty Name="MonitorValue" ColumnName="MonitorValue" />
-                <ScalarProperty Name="ChannelNo" ColumnName="ChannelNo" />
-                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
-                <ScalarProperty Name="DataID" ColumnName="DataID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_ChannelHistoryValuetemp">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_ChannelHistoryValuetemp">
-              <MappingFragment StoreEntitySet="t_ChannelHistoryValuetemp">
-                <ScalarProperty Name="Info" ColumnName="Info" />
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
-                <ScalarProperty Name="MonitorTime" ColumnName="MonitorTime" />
-                <ScalarProperty Name="MonitorValue" ColumnName="MonitorValue" />
-                <ScalarProperty Name="ChanenlSubNo" ColumnName="ChanenlSubNo" />
-                <ScalarProperty Name="ChannelNo" ColumnName="ChannelNo" />
-                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
-                <ScalarProperty Name="DataID" ColumnName="DataID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_ChannelType">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_ChannelType">
-              <MappingFragment StoreEntitySet="t_ChannelType">
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="Value1_Name" ColumnName="Value1_Name" />
-                <ScalarProperty Name="Value0_Name" ColumnName="Value0_Name" />
-                <ScalarProperty Name="ValueType" ColumnName="ValueType" />
-                <ScalarProperty Name="OperateParam" ColumnName="OperateParam" />
-                <ScalarProperty Name="OperateCommand" ColumnName="OperateCommand" />
-                <ScalarProperty Name="ChannelTypeName" ColumnName="ChannelTypeName" />
-                <ScalarProperty Name="ChannelNo" ColumnName="ChannelNo" />
-                <ScalarProperty Name="DeviceTypeID" ColumnName="DeviceTypeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="t_Control">
             <EntityTypeMapping TypeName="MonitorDemo2Model.t_Control">
               <MappingFragment StoreEntitySet="t_Control">
@@ -863,25 +426,6 @@
                 <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
                 <ScalarProperty Name="PropertyNo" ColumnName="PropertyNo" />
                 <ScalarProperty Name="ControlID" ColumnName="ControlID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_Device">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_Device">
-              <MappingFragment StoreEntitySet="t_Device">
-                <ScalarProperty Name="Port" ColumnName="Port" />
-                <ScalarProperty Name="Enable" ColumnName="Enable" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="StationName" ColumnName="StationName" />
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
-                <ScalarProperty Name="DeviceTypeID" ColumnName="DeviceTypeID" />
-                <ScalarProperty Name="SubAddr" ColumnName="SubAddr" />
-                <ScalarProperty Name="CommunicateID" ColumnName="CommunicateID" />
-                <ScalarProperty Name="CommunicateType" ColumnName="CommunicateType" />
-                <ScalarProperty Name="DeviceName" ColumnName="DeviceName" />
-                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -969,45 +513,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="t_KeyWord">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_KeyWord">
-              <MappingFragment StoreEntitySet="t_KeyWord">
-                <ScalarProperty Name="IsCustomize" ColumnName="IsCustomize" />
-                <ScalarProperty Name="Replace" ColumnName="Replace" />
-                <ScalarProperty Name="KeyWordName" ColumnName="KeyWordName" />
-                <ScalarProperty Name="KeyWord" ColumnName="KeyWord" />
-                <ScalarProperty Name="KeyWordID" ColumnName="KeyWordID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_Mainte">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_Mainte">
-              <MappingFragment StoreEntitySet="t_Mainte">
-                <ScalarProperty Name="Duty" ColumnName="Duty" />
-                <ScalarProperty Name="MainteTime" ColumnName="MainteTime" />
-                <ScalarProperty Name="MainteName" ColumnName="MainteName" />
-                <ScalarProperty Name="ValueType" ColumnName="ValueType" />
-                <ScalarProperty Name="ContentMainte" ColumnName="ContentMainte" />
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
-                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_MonitorServerParam">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_MonitorServerParam">
-              <MappingFragment StoreEntitySet="t_MonitorServerParam">
-                <ScalarProperty Name="IsSmsCheck" ColumnName="IsSmsCheck" />
-                <ScalarProperty Name="IsCheck" ColumnName="IsCheck" />
-                <ScalarProperty Name="StationName" ColumnName="StationName" />
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
-                <ScalarProperty Name="Param" ColumnName="Param" />
-                <ScalarProperty Name="ParamAddr" ColumnName="ParamAddr" />
-                <ScalarProperty Name="ParamName" ColumnName="ParamName" />
-                <ScalarProperty Name="ParamID" ColumnName="ParamID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="t_MonitorSystemParam">
             <EntityTypeMapping TypeName="MonitorDemo2Model.t_MonitorSystemParam">
               <MappingFragment StoreEntitySet="t_MonitorSystemParam">
@@ -1043,29 +548,6 @@
                 <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
                 <ScalarProperty Name="ScreenName" ColumnName="ScreenName" />
                 <ScalarProperty Name="ScreenID" ColumnName="ScreenID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_Station">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_Station">
-              <MappingFragment StoreEntitySet="t_Station">
-                <ScalarProperty Name="HistoryPort" ColumnName="HistoryPort" />
-                <ScalarProperty Name="Port" ColumnName="Port" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="StationName" ColumnName="StationName" />
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_TmpValue">
-            <EntityTypeMapping TypeName="MonitorDemo2Model.t_TmpValue">
-              <MappingFragment StoreEntitySet="t_TmpValue">
-                <ScalarProperty Name="Flag" ColumnName="Flag" />
-                <ScalarProperty Name="MonitorValue" ColumnName="MonitorValue" />
-                <ScalarProperty Name="ChanenlSubNo" ColumnName="ChanenlSubNo" />
-                <ScalarProperty Name="ChannelNO" ColumnName="ChannelNO" />
-                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1121,30 +603,17 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="Monitor" ZoomLevel="104">
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_AlarmAction" Width="1.5" PointX="0.75" PointY="0.75" Height="1.7908333333333246" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_AlarmGroup" Width="1.5" PointX="2.75" PointY="0.75" Height="1.6222135416666674" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_AlarmLevel" Width="1.5" PointX="4.75" PointY="0.75" Height="1.4535937499999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Channel" Width="1.5" PointX="6.625" PointY="0.75" Height="2.1280729166666674" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ChannelHistoryValue" Width="1.875" PointX="3.75" PointY="5.625" Height="1.9594531249999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ChannelHistoryValuetemp" Width="2.625" PointX="0.75" PointY="2.875" Height="2.296692708333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ChannelType" Width="1.5" PointX="7.5" PointY="4.125" Height="2.4653124999999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Control" Width="1.5" PointX="2.875" PointY="8.125" Height="1.9594531249999996" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ControlProperty" Width="2.125" PointX="0.5" PointY="8.375" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Device" Width="1.5" PointX="8.25" PointY="0.625" Height="3.1397916666666674" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Element" Width="1.5" PointX="5.75" PointY="3" Height="5.331848958333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Element_Library" Width="2.125" PointX="9.375" PointY="4.5" Height="4.9946093749999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty" Width="1.75" PointX="10.125" PointY="0.5" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty_Library" Width="1.75" PointX="2.5" PointY="10.5" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_KeyWord" Width="1.5" PointX="0.625" PointY="10.375" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Mainte" Width="1.5" PointX="3.625" PointY="2.875" Height="2.296692708333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_MonitorServerParam" Width="1.5" PointX="0.5" PointY="5.5" Height="2.296692708333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_MonitorSystemParam" Width="2.25" PointX="4.625" PointY="8.75" Height="2.4653125000000031" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Screen" Width="1.5" PointX="0.625" PointY="12.625" Height="1.9594531249999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Screen_Library" Width="2.125" PointX="9.875" PointY="2.5" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Station" Width="1.5" PointX="2.125" PointY="5.5" Height="1.790833333333353" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_TmpValue" Width="1.5" PointX="2.75" PointY="12.5" Height="1.9594531249999818" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.t_Sys_MainRealTimeSet" Width="1.5" PointX="7.5" PointY="7.875" Height="2.6339322916666674" />
-        <EntityTypeShape EntityType="MonitorDemo2Model.V_ScreenMonitorValue" Width="2" PointX="4.625" PointY="11.625" Height="2.4653125000000102" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Control" Width="1.5" PointX="0.5" PointY="3.875" Height="1.9594531249999996" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_ControlProperty" Width="2.125" PointX="3.75" PointY="4.75" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Element" Width="1.5" PointX="2.125" PointY="4.625" Height="5.331848958333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Element_Library" Width="2.125" PointX="2.75" PointY="10.125" Height="4.9946093749999818" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty" Width="1.75" PointX="5.375" PointY="0.625" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_ElementProperty_Library" Width="1.75" PointX="0.5" PointY="9.5" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_MonitorSystemParam" PointX="3.75" PointY="6.625" Width="2.25" Height="2.4653125000000031" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Screen" Width="1.5" PointX="0.625" PointY="7.25" Height="1.9594531249999818" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Screen_Library" Width="2.125" PointX="5.125" PointY="2.5" Height="1.790833333333353" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Sys_MainRealTimeSet" Width="2" PointX="5.25" PointY="9.5" Height="2.6339322916666674" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.V_ScreenMonitorValue" PointX="0.625" PointY="11.5" Width="2" Height="2.4653125000000102" />
       </Diagram>
     </Diagrams>
   </Designer>

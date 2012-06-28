@@ -63,7 +63,7 @@ namespace MonitorSystem
             //ShowCurve(RealtimeValue);
             if (SysSetReal == null)
                 return;
-            InvokeOperation<double> result = _DataContext.SelectNewValue(
+            InvokeOperation<double> result = new CV().SelectNewValue(
                 SysSetReal.StationID, SysSetReal.DeviceID
                , SysSetReal.ChannelNO);
 

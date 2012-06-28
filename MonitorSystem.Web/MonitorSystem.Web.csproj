@@ -88,12 +88,20 @@
     <Compile Include="GetData\DataSetData.cs" />
     <Compile Include="GetData\DataTableInfo.cs" />
     <Compile Include="GetData\GetData.cs" />
+    <Compile Include="Moldes\ControlValue.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ControlValue.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Moldes\Monitor.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Monitor.edmx</DependentUpon>
     </Compile>
     <Compile Include="Servers\Analysis.cs" />
+    <Compile Include="Servers\CV.cs" />
+    <Compile Include="Servers\CV.metadata.cs" />
+    <Compile Include="Servers\CVC.cs" />
     <Compile Include="Servers\FileService.cs" />
     <Compile Include="Servers\Paser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,6 +123,12 @@
     <EntityDeploy Include="Moldes\Monitor.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Monitor.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Moldes\ControlValue.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ControlValue.Designer.cs</LastGenOutput>
     </EntityDeploy>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
