@@ -299,6 +299,7 @@ namespace MonitorSystem.ZTControls
          DependencyProperty.Register("RealtimeValue",
          typeof(double), typeof(RealTimeCurve), new PropertyMetadata((double)30));
         private double _RealtimeValue=30;
+         [DefaultValue(""), Description("当前值"), Category("杂项")]
         public double RealtimeValue
         {
             get { return _RealtimeValue; }
@@ -313,6 +314,7 @@ namespace MonitorSystem.ZTControls
          DependencyProperty.Register("YmaxValue",
          typeof(double), typeof(RealTimeCurve), new PropertyMetadata((double)50));
         private double _YmaxValue = 50;
+         [DefaultValue(""), Description("Y轴最大值"), Category("杂项")]
         public double YmaxValue
         {
             get
@@ -331,6 +333,7 @@ namespace MonitorSystem.ZTControls
         DependencyProperty.Register("YminValue",
         typeof(double), typeof(RealTimeCurve), new PropertyMetadata((double)-20));
         private double _YminValue = -20;
+         [DefaultValue(""), Description("Y轴最小值"), Category("杂项")]
         public double YminValue
         {
             get
@@ -349,6 +352,7 @@ namespace MonitorSystem.ZTControls
         DependencyProperty.Register("Yupper",
        typeof(double), typeof(RealTimeCurve), new PropertyMetadata((double)30));
         private double _Yupper = 30;
+         [DefaultValue(""), Description("上限值"), Category("杂项")]
         public double Yupper
         {
             get
@@ -367,6 +371,7 @@ namespace MonitorSystem.ZTControls
        DependencyProperty.Register("Ylower",
       typeof(double), typeof(RealTimeCurve), new PropertyMetadata((double)15));
         private double _Ylower = 15;
+         [DefaultValue(""), Description("Y下限值"), Category("杂项")]
         public double Ylower
         {
             get

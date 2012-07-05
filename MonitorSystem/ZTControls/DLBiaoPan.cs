@@ -205,7 +205,7 @@ namespace MonitorSystem.ZTControls
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(DLBiaoPan), new PropertyMetadata(Colors.Black, new PropertyChangedCallback(ForeColor_Changed)));
+            typeof(Color), typeof(DLBiaoPan), new PropertyMetadata(Colors.Green, new PropertyChangedCallback(ForeColor_Changed)));
 
         public Color ForeColor
         {
@@ -219,12 +219,16 @@ namespace MonitorSystem.ZTControls
         private static void ForeColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
         {
             DLBiaoPan DLBiaoPan = (DLBiaoPan)element;
-            DLBiaoPan.OnForeColorChanged((Color)e.NewValue, (Color)e.OldValue);
+            DLBiaoPan.OnForeColorChanged((Color)e.OldValue, (Color)e.NewValue);
         }
 
         public void OnForeColorChanged(Color oldValue, Color newValue)
         {
-            PaintBackground();
+            this.Foreground = new SolidColorBrush(newValue);
+            if (this.ActualWidth > 10d && this.ActualWidth > 10d)
+            {
+                Paint(new Size(this.ActualWidth, this.ActualHeight));
+            }
         }
 
         private static readonly DependencyProperty MinValueProperty =
@@ -319,6 +323,52 @@ namespace MonitorSystem.ZTControls
             SetText();
         }
 
+        private static readonly new DependencyProperty FontFamilyProperty =
+          DependencyProperty.Register("FontFamily",
+          typeof(FontFamily), typeof(DLBiaoPan), new PropertyMetadata(new FontFamily(""), new PropertyChangedCallback(FontFamily_Changed)));
+        [Category("外观")]
+        public new FontFamily FontFamily
+        {
+            get { return (FontFamily)this.GetValue(FontFamilyProperty); }
+            set { this.SetValue(FontFamilyProperty, value); }
+        }
+
+        private static void FontFamily_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            DLBiaoPan DLBiaoPan = (DLBiaoPan)element;
+            DLBiaoPan.OnFontFamilyChanged((FontFamily)e.OldValue, (FontFamily)e.NewValue);
+        }
+
+        public void OnFontFamilyChanged(FontFamily oldValue, FontFamily newValue)
+        {
+            this.FontFamily = newValue;
+            SetText();
+            Paint(DesiredSize);
+        }
+
+        private static new readonly DependencyProperty FontSizeProperty =
+           DependencyProperty.Register("FontSize",
+           typeof(double), typeof(DLBiaoPan), new PropertyMetadata(12d, new PropertyChangedCallback(FontSize_Changed)));
+        [Category("外观")]
+        public new double FontSize
+        {
+            get { return (double)this.GetValue(FontSizeProperty); }
+            set { this.SetValue(FontSizeProperty, value); }
+        }
+
+        private static void FontSize_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            DLBiaoPan DLBiaoPan = (DLBiaoPan)element;
+            DLBiaoPan.OnFontSizeChanged((double)e.OldValue, (double)e.NewValue);
+        }
+
+        public void OnFontSizeChanged(double oldValue, double newValue)
+        {
+            this.FontSize = newValue;
+            SetText();
+            Paint(DesiredSize);
+        }
+
         #endregion
 
         private Canvas _canvas = new Canvas();
@@ -355,7 +405,8 @@ namespace MonitorSystem.ZTControls
         private void SetText()
         {
             _text.Text = string.Format("{0}{1}", CurrenValue, Title);
-
+            _text.FontSize = this.FontSize;
+            _text.FontFamily = this.FontFamily;
             var width = DesiredSize.Width;
             var height = DesiredSize.Height;
             var widthSpan = 40d;
@@ -506,7 +557,10 @@ namespace MonitorSystem.ZTControls
                 var grid = new Grid();
                 var label = new TextBlock();
                 label.Text = speed.ToString();
-                label.Foreground = calibrationBrush;
+                label.FontSize = this.FontSize;
+                label.FontFamily = this.FontFamily;
+                //label.Foreground = calibrationBrush;
+                label.Foreground = this.Foreground;
 
                 grid.SetValue(Canvas.LeftProperty, centerX - label.ActualWidth / 2d);
                 grid.SetValue(Canvas.TopProperty, labelTop);
