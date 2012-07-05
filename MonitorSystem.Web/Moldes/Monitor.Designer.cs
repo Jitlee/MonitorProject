@@ -3263,7 +3263,7 @@ namespace MonitorSystem.Web.Moldes
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 StationID
         {
@@ -3273,11 +3273,14 @@ namespace MonitorSystem.Web.Moldes
             }
             set
             {
-                OnStationIDChanging(value);
-                ReportPropertyChanging("StationID");
-                _StationID = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("StationID");
-                OnStationIDChanged();
+                if (_StationID != value)
+                {
+                    OnStationIDChanging(value);
+                    ReportPropertyChanging("StationID");
+                    _StationID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("StationID");
+                    OnStationIDChanged();
+                }
             }
         }
         private global::System.Int32 _StationID;

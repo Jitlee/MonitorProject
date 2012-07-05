@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.Web.Moldes;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
@@ -139,12 +140,14 @@ namespace MonitorSystem.MonitorSystemGlobal
             set { SetValue(OpacityProperty, value / 100d); }
         }
 
+
+         [DefaultValue(""), Description("距左边位置")]
         public double Left
         {
             get { return (double)GetValue(Canvas.LeftProperty); }
             set { SetValue(Canvas.LeftProperty, value); AdornerLayer.SetValue(Canvas.LeftProperty, value); }
         }
-
+        [DefaultValue(""), Description("距上面位置高度")]
         public double Top
         {
             get { return (double)GetValue(Canvas.TopProperty); }

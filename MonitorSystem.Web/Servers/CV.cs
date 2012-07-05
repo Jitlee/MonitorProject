@@ -161,6 +161,10 @@ namespace MonitorSystem.Web.Servers
             }
             this.ObjectContext.t_TmpValue.DeleteObject(t_TmpValue);
         }
+
+     
+
+      
     }
 }
 

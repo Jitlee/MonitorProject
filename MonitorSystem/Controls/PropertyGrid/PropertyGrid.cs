@@ -252,7 +252,25 @@ using System.Windows.Documents;
 			ValueEditorBase editor = EditorService.GetEditor(item, label);
             editor.Selected += (o, e) => {
                 this._propertyNameRun.Text = item.DisplayName;
-                this._propertyDescritpionRun.Text = item.Description;
+                string strDesc = item.Description.ToLower(); ;
+                if (strDesc == "fontsize")
+                {
+                    strDesc = "字体大小";
+                }
+                else if (strDesc == "fontfamily")
+                {
+                    strDesc = "字体";
+                }
+                else if (strDesc == "width")
+                {
+                    strDesc = "控件宽度";
+                }
+
+                else if (strDesc == "height")
+                {
+                    strDesc = "控件高度";
+                }
+                this._propertyDescritpionRun.Text = strDesc;
             };
 			if (null == editor)
 				return;

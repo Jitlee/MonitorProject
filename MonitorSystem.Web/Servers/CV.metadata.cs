@@ -134,4 +134,41 @@ namespace MonitorSystem.Web.Moldes
             public string StationName { get; set; }
         }
     }
+
+    // The MetadataTypeAttribute identifies t_TmpValueMetadata as the class
+    // that carries additional metadata for the t_TmpValue class.
+    [MetadataTypeAttribute(typeof(t_TmpValue.t_TmpValueMetadata))]
+    public partial class t_TmpValue
+    {
+
+        // This class allows you to attach custom attributes to properties
+        // of the t_TmpValue class.
+        //
+        // For example, the following marks the Xyz property as a
+        // required property and specifies the format for valid values:
+        //    [Required]
+        //    [RegularExpression("[A-Z][A-Za-z0-9]*")]
+        //    [StringLength(32)]
+        //    public string Xyz { get; set; }
+        internal sealed class t_TmpValueMetadata
+        {
+
+            // Metadata classes are not meant to be instantiated.
+            private t_TmpValueMetadata()
+            {
+            }
+
+            public Nullable<int> ChanenlSubNo { get; set; }
+
+            public int ChannelNO { get; set; }
+
+            public int DeviceID { get; set; }
+
+            public Nullable<int> Flag { get; set; }
+
+            public Nullable<double> MonitorValue { get; set; }
+
+            public int StationID { get; set; }
+        }
+    }
 }

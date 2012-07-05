@@ -22,7 +22,8 @@ namespace MonitorSystem.Web.Servers
                   where  c.ElementID==f.ElementID && c.ScreenID ==ScreenID select f;
           return v;
         }
-        
+
+
         /// <summary>
         /// 根据Screenid查询当前场景下元素的值
         /// </summary>
@@ -41,7 +42,7 @@ namespace MonitorSystem.Web.Servers
                     string s = p.Execute("", obj.ComputeStr.Trim());
                     if (!string.IsNullOrEmpty(s))
                     {
-                        float fValue ;
+                        float fValue;
                         if (float.TryParse(s, out fValue))
                         {
                             obj.MonitorValue = fValue;
@@ -60,7 +61,6 @@ namespace MonitorSystem.Web.Servers
 
             return eValue;
         }
-
        
 
         /// <summary>

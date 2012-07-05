@@ -291,6 +291,25 @@ namespace MonitorSystem
             fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
         }
 
+        #region 实例化其它参数
+        private void InitOther()
+        {
+            _DataCV.Load(_DataCV.GetT_DeviceQuery().Where(a => a.StationID == this._CurrentScreen.StationID.Value), LoadDeviceListComplete, null);
+        }
+
+        public void LoadDeviceListComplete(LoadOperation<t_Device> result)
+        {
+            if (result.HasError)
+            {
+                MessageBox.Show(result.Error.Message, "出错啦", MessageBoxButton.OK);
+                return;
+            }
+            timerRefrshValue.Start();
+        }
+        #endregion
+
+        #region 加载场景
+        
         #region 加载数据 完成处理 当前共五项 t_Element_Library、t_ElementProperty_Library、t_Screen、t_MonitorSystemParam、t_ControlProperty
 
         /// <summary>
@@ -512,7 +531,7 @@ namespace MonitorSystem
 
         private void LoadChanncelValue()
         {
-            EntityQuery<V_ScreenMonitorValue>  v=_DataContext.GetScreenMonitorValueQuery(_CurrentScreen.ScreenID) ;
+            EntityQuery<V_ScreenMonitorValue> v = _DataContext.GetScreenMonitorValueQuery(_CurrentScreen.ScreenID);
 
             _DataContext.Load(v, ValueLoadComplete, null);
         }
@@ -549,28 +568,6 @@ namespace MonitorSystem
         }
         #endregion
 
-        #region 实例化其它参数
-        
-        private void InitOther()
-        {
-            _DataCV.Load(_DataCV.GetT_DeviceQuery().Where(a => a.StationID == this._CurrentScreen.StationID.Value), LoadDeviceListComplete, null);
-        
-        }
-
-
-        public void LoadDeviceListComplete(LoadOperation<t_Device> result)
-        {
-            if (result.HasError)
-            {
-                MessageBox.Show(result.Error.Message, "出错啦", MessageBoxButton.OK);
-                return;
-            }
-        }
-
-        #endregion
-
-        #region 加载场景
-        
         /// <summary>
         /// 加载场景
         /// </summary>
