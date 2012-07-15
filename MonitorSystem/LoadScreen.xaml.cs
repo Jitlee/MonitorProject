@@ -36,7 +36,8 @@ namespace MonitorSystem
 
         public static MonitorServers _DataContext = new MonitorServers();
         public static CV _DataCV = new CV();
-        
+
+        public static ScreenElementObj CoptyObj=null;
         /// <summary>
         /// 场景列表
         /// </summary>
@@ -80,6 +81,7 @@ namespace MonitorSystem
         /// </summary>
         bool IsPop = false;
         #endregion
+
         public LoadScreen()
         {
             InitializeComponent();
@@ -104,6 +106,7 @@ namespace MonitorSystem
             _instance.LoadScreenData(screen);
         }
 
+        #region 背景
         public void SetScreenImg(t_Screen screen)
         {
             if (_CurrentScreen == null || screen == null)
@@ -149,7 +152,7 @@ namespace MonitorSystem
                 return _BgImagePath;
             }
         }
-
+        
         //SceneBackgroundPanel b = new SceneBackgroundPanel();
         private void CsScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -161,8 +164,9 @@ namespace MonitorSystem
             PropertyMain.Instance.ControlPropertyGrid.SelectedObject =this; 
 
         }
+        #endregion
 
-        #region 绘制控件 
+        #region 绘制控件
 
         /// <summary>
         /// 表示添加新控件模式
@@ -1244,65 +1248,7 @@ namespace MonitorSystem
                 saveEle.ComputeStr = mobj.ComputeStr;
         }
         #endregion
-
-        #region 组态控件
-        private void zt_Checked(object sender, RoutedEventArgs e)
-        {
-            //btnSave.Visibility = Visibility.Visible;
-            //SenceMenuButton.Visibility = Visibility.Collapsed;
-            //加截属性窗口
-            fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
-            prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
-            fwProperty.Show();
-
-            ////注册事件
-            //Content.MouseLeftButtonDown += new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-            //Content.MouseLeftButtonUp += new MouseButtonEventHandler(Content_MouseLeftButtonUp);
-
-            for (int i = 0; i < csScreen.Children.Count; i++)
-            {
-                var ui = csScreen.Children[i];
-                if (ui is MonitorControl)
-                {
-                    MonitorControl mControl = ui as MonitorControl;
-                    mControl.DesignMode();
-                }
-            }
-            //定时更新值关闭
-            timerRefrshValue.Stop();
-        }
-
-        private void zt_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("是否保存对场景的修改！\r\n确定：保存。\r\n取消：不保存，修改的内容将被取消。","",MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-            {
-                SaveElement();
-            }
-            else
-            {
-                LoadScreenData(_CurrentScreen);
-            }
-            //btnSave.Visibility = Visibility.Collapsed;
-            //SenceMenuButton.Visibility = Visibility.Visible;
-            //Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-            //Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
-            for (int i = 0; i < csScreen.Children.Count; i++)
-            {
-                var ui = csScreen.Children[i];
-                if (ui is MonitorControl)
-                {
-                    MonitorControl mControl = ui as MonitorControl;
-                    mControl.UnDesignMode();
-                }
-            }
-            fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
-            prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
-            fwProperty.Close();
-
-            //定时更新值开启
-            timerRefrshValue.Start();
-        }
-        #endregion
+     
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -1320,6 +1266,19 @@ namespace MonitorSystem
             }
         }
 
+        protected void Screen_KeyDown(object sender, KeyEventArgs e)
+        {
+            ModifierKeys keys = ModifierKeys.Control;
+            if (keys == ModifierKeys.Control && e.Key == Key.V)
+            {
+                if (CoptyObj != null)
+                {
+                    ShowElement(CoptyObj.Element, ElementSate.New, CoptyObj.ListElementProperty);
+                }              
+            }
+        }
+
+        #region 菜单事件
         private void TP_Click(object sender, RoutedEventArgs e)
         {
             // 组态设计
@@ -1327,19 +1286,14 @@ namespace MonitorSystem
             ZTMenuScriptItem.Visibility = Visibility.Collapsed;
             AllSencesMenuScriptItem.Visibility = Visibility.Collapsed;
             IsZT = true;
-
-            // TODO :
-            //btnSave.Visibility = Visibility.Visible;
-            //SenceMenuButton.Visibility = Visibility.Collapsed;
+                       
             //加截属性窗口
             fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
             prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
             fwProperty.Show();
-
-            ////注册事件
-            //Content.MouseLeftButtonDown += new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-            //Content.MouseLeftButtonUp += new MouseButtonEventHandler(Content_MouseLeftButtonUp);
-
+            //鼠标事件
+            this.KeyDown += new KeyEventHandler(Screen_KeyDown);
+           
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var ui = csScreen.Children[i];
@@ -1359,13 +1313,7 @@ namespace MonitorSystem
             IsShowSaveToot = true;//显示保存成功提示
             SaveElement();
         }
-
-        private void SaveAllSences_Click(object sender, RoutedEventArgs e)
-        {
-            // 保存所有场景
-
-        }
-
+        
         private void ZTExit_Click(object sender, RoutedEventArgs e)
         {
             // 退出组态
@@ -1373,8 +1321,8 @@ namespace MonitorSystem
             ZTMenuScriptItem.Visibility = Visibility.Visible;
             AllSencesMenuScriptItem.Visibility = Visibility.Visible;
             IsZT = false;
-            // TODO :
 
+            this.KeyDown -= new KeyEventHandler(Screen_KeyDown);
 
             if (MessageBox.Show("是否保存对场景的修改！\r\n确定：保存。\r\n取消：不保存，修改的内容将被取消。", "", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
@@ -1384,10 +1332,7 @@ namespace MonitorSystem
             {
                 LoadScreenData(_CurrentScreen);
             }
-            //btnSave.Visibility = Visibility.Collapsed;
-            //SenceMenuButton.Visibility = Visibility.Visible;
-            //Content.MouseLeftButtonDown -= new MouseButtonEventHandler(Content_MouseLeftButtonDown);
-            //Content.MouseLeftButtonUp -= new MouseButtonEventHandler(Content_MouseLeftButtonUp);
+          
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var ui = csScreen.Children[i];
@@ -1446,5 +1391,8 @@ namespace MonitorSystem
         {
             mcsScreenSize = e.NewSize;
         }
+
+        #endregion
     }
 }
+

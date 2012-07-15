@@ -81,7 +81,6 @@ namespace MonitorSystem.Property
             }
             optype = moptype;
             BindSite();
-            
         }
        
        

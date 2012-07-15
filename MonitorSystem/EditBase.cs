@@ -16,6 +16,8 @@ namespace MonitorSystem
         Add, Alert
     }
 
+
+
     public interface IEditBase
     {
         event EventHandler EditComplete;

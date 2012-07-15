@@ -23,6 +23,10 @@ namespace MonitorSystem.Web.Servers
           return v;
         }
 
+        public void CopyScreenElement(int newScreenID,int oldScreen)
+        {
+            ObjectContext.P_CopyScreen(newScreenID, oldScreen);
+        }
 
         /// <summary>
         /// 根据Screenid查询当前场景下元素的值

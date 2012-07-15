@@ -115,7 +115,7 @@ namespace MonitorSystem
         {
             _DataContext.Load(_DataContext.GetT_ScreenQuery(), DataLoadComplet, null);
         }
-        List<t_Screen> listScreen = new List<t_Screen>();
+        public static List<t_Screen> listScreen = new List<t_Screen>();
         /// <summary>
         /// 加载场景,完成后，加载控件
         /// </summary>
@@ -209,17 +209,10 @@ namespace MonitorSystem
                 TreeItemRightItem = null;
                 return;
             }
-            miDelete.Visibility = Visibility.Visible;
-            //miOpen.Visibility = Visibility.Visible;
-            //miSetDeftult.Visibility = Visibility.Visible;
+            miDelete.Visibility = Visibility.Visible;           
             if (SelectItem.Items.Count >0)
-            {
-                //mymenu.IsOpen = false;
-                //TreeItemRightItem = null;
-                miDelete.Visibility = Visibility.Collapsed;
-                //miOpen.Visibility = Visibility.Collapsed;
-                //miSetDeftult.Visibility = Visibility.Collapsed;
-                //return;
+            {                
+                miDelete.Visibility = Visibility.Collapsed;               
             }
             t_Screen m_obj = (t_Screen)TreeItemRightItem.Tag;
             EnableMenu(true);
@@ -268,8 +261,6 @@ namespace MonitorSystem
                            m_screen.ScreenID = mobj.Screen.ScreenID;
                            m_screen.ScreenName = mobj.Screen.ScreenName;
                        }
-
-
                     };
                     msadEdit.Show();
                     break;
@@ -281,6 +272,11 @@ namespace MonitorSystem
                     ScreenArgs args=new ScreenArgs();
                     args.Screen=m_obj;
                     OnChangeScreen(args);
+                    break;
+                case "miCopy":
+                    ScreenCopy m_Copy = new ScreenCopy();
+                    m_Copy.oldScreen = m_obj;
+                    m_Copy.Show();
                     break;
                 case "miSetDeftult":
                     LoadScreen._DataContext.t_MonitorSystemParams.First().StartScreenID = m_obj.ScreenID;

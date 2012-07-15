@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
 using MonitorSystem.Controls;
+using MonitorSystem.MonitorSystemGlobal;
 
 namespace MonitorSystem
 {
@@ -386,8 +387,23 @@ namespace MonitorSystem
                 _parent.Children.Remove(_associatedElement);
                 _parent.Children.Remove(this);
                 this.Dispose();
-            }
+            }            
             base.OnKeyUp(e);
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            ModifierKeys keys = ModifierKeys.Control;
+            if (keys== ModifierKeys.Control && e.Key == Key.C)
+            {
+                if((_associatedElement != null) && (_associatedElement is MonitorControl))
+                {
+                    ScreenElementObj mobj = new MonitorSystemGlobal.ScreenElementObj();
+                    mobj.ElementClone((MonitorControl)_associatedElement);
+                    LoadScreen.CoptyObj = mobj;
+                }
+            }
+            base.OnKeyDown(e);
         }
 
         #endregion

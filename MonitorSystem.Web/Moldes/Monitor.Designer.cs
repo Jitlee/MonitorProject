@@ -333,6 +333,39 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+        #region 函数导入
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        /// <param name="newScreenID">没有元数据文档可用。</param>
+        /// <param name="oldScreenID">没有元数据文档可用。</param>
+        public int P_CopyScreen(Nullable<global::System.Int32> newScreenID, Nullable<global::System.Int32> oldScreenID)
+        {
+            ObjectParameter newScreenIDParameter;
+            if (newScreenID.HasValue)
+            {
+                newScreenIDParameter = new ObjectParameter("newScreenID", newScreenID);
+            }
+            else
+            {
+                newScreenIDParameter = new ObjectParameter("newScreenID", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter oldScreenIDParameter;
+            if (oldScreenID.HasValue)
+            {
+                oldScreenIDParameter = new ObjectParameter("oldScreenID", oldScreenID);
+            }
+            else
+            {
+                oldScreenIDParameter = new ObjectParameter("oldScreenID", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction("P_CopyScreen", newScreenIDParameter, oldScreenIDParameter);
+        }
+
+        #endregion
     }
     
 

@@ -138,6 +138,9 @@
     <Compile Include="MonitorSystemGlobal\MonitorGrid.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorRectangle.cs" />
     <Compile Include="Controls\PropertyGrid\ColorValueEditor.cs" />
+    <Compile Include="Property\ScreenCopy.xaml.cs">
+      <DependentUpon>ScreenCopy.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Service References\MyDataService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -279,6 +282,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Property\ScreenCopy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ZTControls\SetSingleProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -363,6 +370,8 @@
     <Resource Include="Controls\ImagesManager\Images\drectory.png" />
     <Resource Include="Controls\ImagesManager\Images\file.jpg" />
     <Resource Include="Controls\ImagesManager\Images\img.png" />
+    <Resource Include="Images\Common\copy.png" />
+    <Resource Include="Images\Common\open.png" />
     <Content Include="Images\Common\用户管理.ico" />
     <Resource Include="Images\Common\用户管理.jpg" />
     <Resource Include="Images\Common\用户管理1.jpg" />
