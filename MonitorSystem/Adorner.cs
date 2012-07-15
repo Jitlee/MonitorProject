@@ -188,6 +188,7 @@ namespace MonitorSystem
             _parent = _associatedElement.Parent as Canvas;
             _parent.Children.Add(this);
             this.LayoutUpdated += PopupLayoutUpdated;
+            //this.SizeChanged += Adorner_SizeChanged;
 
             this.SetValue(MinHeightProperty, associatedElement.MinHeight + 5d);
             this.SetValue(MinWidthProperty, associatedElement.MinWidth + 5d);
@@ -360,23 +361,30 @@ namespace MonitorSystem
 
         private void PopupLayoutUpdated(object sender, EventArgs e)
         {
-            Layout();
             this.LayoutUpdated -= PopupLayoutUpdated;
+            Layout();
         }
 
         private void Layout()
         {
-            var beginPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(0.0, 0.0));
-            var endPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(_associatedElement.ActualWidth, this._associatedElement.ActualHeight));
-            this._contentAdorner.SetValue(FrameworkElement.WidthProperty, endPoint.X - beginPoint.X);
-            this._contentAdorner.SetValue(FrameworkElement.HeightProperty, endPoint.Y - beginPoint.Y);
-            var margin = (Thickness)_contentAdorner.GetValue(FrameworkElement.MarginProperty);
-            _offsetLeft = margin.Left;
-            _offsetTop = margin.Top;
-            var left = (double)_associatedElement.GetValue(Canvas.LeftProperty);
-            var top = (double)_associatedElement.GetValue(Canvas.TopProperty);
-            this.SetValue(Canvas.LeftProperty, left - _offsetLeft);
-            this.SetValue(Canvas.TopProperty, top - _offsetTop);
+            try
+            {
+                var beginPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(0.0, 0.0));
+                var endPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(_associatedElement.ActualWidth, this._associatedElement.ActualHeight));
+                this._contentAdorner.SetValue(FrameworkElement.WidthProperty, endPoint.X - beginPoint.X);
+                this._contentAdorner.SetValue(FrameworkElement.HeightProperty, endPoint.Y - beginPoint.Y);
+                var margin = (Thickness)_contentAdorner.GetValue(FrameworkElement.MarginProperty);
+                _offsetLeft = margin.Left;
+                _offsetTop = margin.Top;
+                var left = (double)_associatedElement.GetValue(Canvas.LeftProperty);
+                var top = (double)_associatedElement.GetValue(Canvas.TopProperty);
+                this.SetValue(Canvas.LeftProperty, left - _offsetLeft);
+                this.SetValue(Canvas.TopProperty, top - _offsetTop);
+            }
+            catch
+            {
+
+            }
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
