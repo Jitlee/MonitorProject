@@ -157,6 +157,7 @@ namespace MonitorSystem
         private void CsScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Adorner.CancelSelected();
+            HideFocusElement.Focus();
 
             PropertyMain.Instance.ControlPropertyGrid.SelectedObject = null;
             PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = new []{"BgImagePath"};

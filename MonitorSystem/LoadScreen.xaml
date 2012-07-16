@@ -65,7 +65,7 @@
                     </Canvas>
                 </Grid>
             </Viewbox>
-           
+            <TextBox Opacity="0" Height="0" Width="0" x:Name="HideFocusElement"/>
         </Grid>
        
         <toolkit:BusyIndicator x:Name="tbWait" BusyContent="数据加载中，请稍候 ..."/>
