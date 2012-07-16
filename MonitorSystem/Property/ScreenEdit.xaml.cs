@@ -114,7 +114,12 @@ namespace MonitorSystem.Property
         {
             if (cbScreen.SelectedItem == null)
             {
-                MessageBox.Show("请选择站点！");
+                MessageBox.Show("请选择站点！","温馨提示",MessageBoxButton.OK);
+                return;
+            }
+            if (txtImage.Text.Trim() == "")
+            {
+                MessageBox.Show("请选择场景背影图片！", "温馨提示", MessageBoxButton.OK);
                 return;
             }
             if (optype == OpType.Add)

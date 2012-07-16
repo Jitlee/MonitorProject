@@ -31,7 +31,7 @@ namespace MonitorSystem.ZTControls
         {
             this.picCurveShow = new Canvas();
             this.Content = picCurveShow;
-
+            this.FontSize = 11;
             this.noteMessages = new CoordinatesValue[this.maxNote];
             picCurveShow.Height = 400;
             picCurveShow.Width = 400;
@@ -55,10 +55,19 @@ namespace MonitorSystem.ZTControls
         }
 
 
+
         private void RealTimeCurve_SizeChanged(object sender, SizeChangedEventArgs e)
         {
            picCurveShow.Width= e.NewSize.Width;
            picCurveShow.Height= e.NewSize.Height;
+
+           RectangleGeometry r = new RectangleGeometry();
+           Rect rect = new Rect();
+           rect.Width = e.NewSize.Width;
+           rect.Height = e.NewSize.Height;
+           r.Rect = rect;
+           picCurveShow.Clip = r;
+
            RefBackground();
         }
 

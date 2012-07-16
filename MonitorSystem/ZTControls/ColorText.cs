@@ -38,7 +38,7 @@ namespace MonitorSystem.ZTControls
                 menuItem.Click += PropertyMenuItem_Click;
                 menu.Items.Add(menuItem);
                 AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
-                AdornerLayer.IsLockScale = true;
+                //AdornerLayer.IsLockScale = true;
             }
         }
 

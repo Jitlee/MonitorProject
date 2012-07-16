@@ -225,7 +225,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// 复制对象
         /// </summary>
         /// <param name="obj"></param>
-        public void ElementClone(MonitorControl obj)
+        public void ElementClone(MonitorControl obj, int mWidth, int mHeight)
         {
              m_Element = new t_Element();
            t_Element m_Older= obj.ScreenElement;
@@ -237,8 +237,8 @@ namespace MonitorSystem.MonitorSystemGlobal
            m_Element.ScreenY = m_Older.ScreenY;
            m_Element.ScreenY += Convert.ToInt16(obj.Height);
            m_Element.TxtInfo = m_Older.TxtInfo;
-           m_Element.Width = m_Older.Width;
-           m_Element.Height = m_Older.Height;
+           m_Element.Width = mWidth;
+           m_Element.Height = mHeight;
            m_Element.ImageURL = m_Older.ImageURL;
            m_Element.ForeColor = m_Older.ForeColor;
            m_Element.Font = m_Older.Font;

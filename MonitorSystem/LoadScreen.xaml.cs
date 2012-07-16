@@ -617,12 +617,18 @@ namespace MonitorSystem
             lblShowMsg.Content = _Screen.ScreenName;
 
            // BackgroundPanel.BgImagePath = _Screen.ImageURL;
+            
+            AddElementCanvas.Width = csScreen.Width = 500;
+            AddElementCanvas.Height = csScreen.Height = 500;
+
             string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
             BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
             bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
             ImageBrush imgB = new ImageBrush();
             imgB.ImageSource = bitmap;
             csScreen.Background = imgB;
+
+            
             //设置当前
             _CurrentScreen = _Screen;
             //加载元素
