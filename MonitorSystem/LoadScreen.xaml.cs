@@ -642,8 +642,25 @@ namespace MonitorSystem
             BitmapImage bi = (BitmapImage)sender;
             if (bi.PixelWidth > 500 && bi.PixelHeight > 500)
             {
-                AddElementCanvas.Width = csScreen.Width = bi.PixelWidth;
-                AddElementCanvas.Height = csScreen.Height = bi.PixelHeight;
+                var width = (double)bi.PixelWidth;
+                var height = (double)bi.PixelHeight;
+                if (width > 1024d || height > 768d)
+                {
+                    var scale = height / width;
+                    if (scale > 0.75d)
+                    {
+                        height = 768d;
+                        width = 768d / scale;
+                    }
+                    else
+                    {
+                        width = 1024d;
+                        height = 1024d * scale;
+                    }
+                }
+
+                AddElementCanvas.Width = csScreen.Width = width;
+                AddElementCanvas.Height = csScreen.Height = height;
             }
             //double h = bi.PixelHeight;
             //double w = bi.PixelWidth;
