@@ -232,9 +232,10 @@ namespace MonitorSystem.MonitorSystemGlobal
             //ElementID
            m_Element.ElementName = m_Older.ElementName;
            m_Element.ControlID = m_Older.ControlID;
-           m_Element.ScreenX = m_Older.ScreenX;
-           
-           m_Element.ScreenY = m_Older.ScreenY;
+           //m_Element.ScreenX = m_Older.ScreenX;
+           m_Element.ScreenX = Convert.ToInt32(obj.GetValue(Canvas.LeftProperty));
+           m_Element.ScreenY = Convert.ToInt32(obj.GetValue(Canvas.TopProperty));
+          // m_Element.ScreenY = m_Older.ScreenY;
            m_Element.ScreenY += Convert.ToInt16(obj.Height);
            m_Element.TxtInfo = m_Older.TxtInfo;
            m_Element.Width = mWidth;

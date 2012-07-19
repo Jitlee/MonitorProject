@@ -37,7 +37,7 @@ namespace MonitorSystem
         public static MonitorServers _DataContext = new MonitorServers();
         public static CV _DataCV = new CV();
 
-        public static ScreenElementObj CoptyObj=null;
+        public static MonitorControl CoptyObj=null;
         /// <summary>
         /// 场景列表
         /// </summary>
@@ -79,7 +79,7 @@ namespace MonitorSystem
         /// <summary>
         /// 是否Pop列表
         /// </summary>
-        bool IsPop = false;
+        //bool IsPop = false;
         #endregion
 
         public LoadScreen()
@@ -103,6 +103,7 @@ namespace MonitorSystem
         {
             if (screen == null)
                 return;
+            ISBack = false;
             _instance.LoadScreenData(screen);
         }
 
@@ -342,6 +343,7 @@ namespace MonitorSystem
             timerRefrshValue.Tick += new EventHandler(timer_Tick);
             if (_CurrentScreen != null)
             {
+                ISBack = false;
                 LoadScreenData(_CurrentScreen);
             }
             //实例化其它参数
@@ -463,6 +465,7 @@ namespace MonitorSystem
 
         private void LoadSence(t_Screen screen)
         {
+            ISBack = false;
             LoadScreenData(screen);
         }
         #endregion
@@ -519,6 +522,7 @@ namespace MonitorSystem
                 }
                 else
                 {
+                    ISBack = false;
                     LoadScreenData(_CurrentScreen);
                 }
             }
@@ -596,7 +600,7 @@ namespace MonitorSystem
             {
                 if (_Screen.ScreenID != ReturnScreen.ScreenID)
                 {
-                    if (!IsPop)
+                    if (!ISBack)
                     {
                         LoadScreenList.Push(ReturnScreen);
                     }
@@ -619,8 +623,8 @@ namespace MonitorSystem
 
            // BackgroundPanel.BgImagePath = _Screen.ImageURL;
             
-            AddElementCanvas.Width = csScreen.Width = 500;
-            AddElementCanvas.Height = csScreen.Height = 500;
+            AddElementCanvas.Width = csScreen.Width = 1000;
+            AddElementCanvas.Height = csScreen.Height =600;
 
             string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
             BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
@@ -1157,6 +1161,7 @@ namespace MonitorSystem
                    IsShowSaveToot = false;
                    MessageBox.Show("保存成功！", "温馨提示", MessageBoxButton.OK);
                }
+               ISBack = false;
                LoadScreenData(_CurrentScreen);
                return;
            }
@@ -1188,6 +1193,7 @@ namespace MonitorSystem
                     IsShowSaveToot = false;
                     MessageBox.Show("保存成功！", "温馨提示", MessageBoxButton.OK);
                 }
+                ISBack = false;
                 LoadScreenData(_CurrentScreen);
                 return;
             }
@@ -1280,7 +1286,11 @@ namespace MonitorSystem
             {
                 if (CoptyObj != null)
                 {
-                    ShowElement(CoptyObj.Element, ElementSate.New, CoptyObj.ListElementProperty);
+                    ScreenElementObj mobj = new MonitorSystemGlobal.ScreenElementObj();
+                    int mWidth = Convert.ToInt16(CoptyObj.Width);
+                    int mHeight = Convert.ToInt16(CoptyObj.Height);
+                    mobj.ElementClone((MonitorControl)CoptyObj, mWidth, mHeight);
+                    ShowElement(mobj.Element, ElementSate.New, mobj.ListElementProperty);
                 }              
             }
         }
@@ -1337,6 +1347,7 @@ namespace MonitorSystem
             }
             else
             {
+                ISBack = false;
                 LoadScreenData(_CurrentScreen);
             }
           
@@ -1372,17 +1383,22 @@ namespace MonitorSystem
                     if(MainPage.ScreenID== _CurrentScreen.ScreenID)
                         return;
                 }
+                ISBack = false;
                 LoadScreenData(MainPage);
             }
         }
-
+        /// <summary>
+        /// 是否为返回加载
+        /// </summary>
+        private static bool ISBack = false;
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            ISBack = true;
             // 后退
             if (LoadScreenList != null && LoadScreenList.Count > 0)
             {
                 t_Screen mscreen = LoadScreenList.Pop();
-                IsPop = true;
+                //IsPop = true;
                 LoadScreenData(mscreen);
             }
         }

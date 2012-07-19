@@ -406,12 +406,7 @@ namespace MonitorSystem
             {
                 if((_associatedElement != null) && (_associatedElement is MonitorControl))
                 {
-                    ScreenElementObj mobj = new MonitorSystemGlobal.ScreenElementObj();
-                    int mWidth= Convert.ToInt16(_contentAdorner.Width);
-                    int mHeight=Convert.ToInt16(_contentAdorner.Height);
-                    mobj.ElementClone((MonitorControl)_associatedElement, mWidth, mHeight);
-                 
-                    LoadScreen.CoptyObj = mobj;
+                    LoadScreen.CoptyObj = (MonitorControl)_associatedElement;
                 }
             }
             base.OnKeyDown(e);

@@ -26,19 +26,56 @@ namespace MonitorSystem.MonitorSystemGlobal
 
     public class TP_Button : MonitorControl
     {
-        TextBox _mRect = new TextBox();
+
+        Border _mRect = new Border();
+        TextBlock m_txt = new TextBlock();
+        private readonly DelegateCommand<t_Screen> _command;
         public TP_Button()
         {
             //_mRect.StrokeThickness = 1;
             //_mRect.Stroke = new SolidColorBrush(Colors.Black);
             //_mRect.Fill = new SolidColorBrush(Colors.White);
-            
+            _mRect.Child = m_txt;
             Content = _mRect;
-            _mRect.IsReadOnly = true;
+            //_mRect.IsReadOnly = true;
+            _mRect.MouseRightButtonDown += Button_MouseRightButtonDown;
+            this.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(Button_MouseLeftButtonDown), true);
+            _command = new DelegateCommand<t_Screen>(ShowName);
+        }
+        private void ShowName(t_Screen screen)
+        {
+            LoadScreen.Load(screen);
+        }
+        private void Button_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ShowMenu(e);
         }
 
+        private void Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ShowMenu(e);
+            e.Handled = true;
+        }
+        private void ShowMenu(MouseButtonEventArgs e)
+        {
+            var list = GetChildScreenObj();
+            if (list == null)
+                return;
+            var menu = new ContextMenu();
+            menu.Items.Clear();
+            foreach (var screen in list)
+            {
+                menu.Items.Add(new MenuItem() { Header = screen.ScreenName, Command = _command, CommandParameter = screen.Screen, });
+            }
+            menu.VerticalAlignment = VerticalAlignment.Top;
+            menu.HorizontalAlignment = HorizontalAlignment.Left;
+            var point = e.GetPosition(null);
+            menu.HorizontalOffset = point.X;
+            menu.VerticalOffset = point.Y;
+            menu.IsOpen = true;
+        }
         #region 属性
-        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Translate", "Foreground","Transparent",
+        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Foreground","Transparent",
             "HaveEdge","Title"};
 
         public override string[] BrowsableProperties
@@ -107,7 +144,7 @@ namespace MonitorSystem.MonitorSystemGlobal
              get { return _Title; }
              set
              {
-                 _mRect.Text = value;
+                 m_txt.Text = value;
                  _Title = value;
                  SetAttrByName("Title", value);
              }
