@@ -321,6 +321,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
+    <None Include="Properties\DataSources\MonitorSystem.Web.Servers.CV.datasource" />
     <None Include="Properties\DataSources\MonitorSystem.Web.Servers.FileContext.datasource" />
     <None Include="Properties\DataSources\MonitorSystem.Web.Servers.MonitorServers.datasource" />
     <None Include="Service References\MyDataService\GetData.disco" />

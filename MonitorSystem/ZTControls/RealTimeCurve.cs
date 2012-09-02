@@ -38,8 +38,7 @@ namespace MonitorSystem.ZTControls
             
             //显示背景和刷新值
             this.RefBackground();
-           // ShowCurve(RealtimeValue);
-
+           
             //定时更新值
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 5);
@@ -54,7 +53,14 @@ namespace MonitorSystem.ZTControls
             ShowCurve(RealtimeValue);
         }
 
-
+        //public   double FontSize
+        //{
+        //    get { return this.FontSize; }
+        //    set {
+        //        double fontsize = value;
+        //        this.FontSize = fontsize;
+        //    }
+        //}
 
         private void RealTimeCurve_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -137,7 +143,8 @@ namespace MonitorSystem.ZTControls
         }
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Transparent",
-            "Translate", "Location", "RealtimeValue", "YmaxValue", "YminValue", "MyScale", "Yupper", "Ylower", "GridHeight" };
+            "Translate", "Location", "RealtimeValue", "YmaxValue", "YminValue", "MyScale", 
+            "Yupper", "Ylower", "GridHeight","ForeColor","BackColor" };
 
         public override string[] BrowsableProperties
         {
@@ -247,26 +254,27 @@ namespace MonitorSystem.ZTControls
         #region 属性
         private static readonly DependencyProperty BackColorProperty =
             DependencyProperty.Register("BackColor",
-            typeof(Color), typeof(DLBiaoPan), new PropertyMetadata(Colors.Black));
+            typeof(Color), typeof(RealTimeCurve), new PropertyMetadata(Colors.Black));
         private Color _BackColor = Colors.Black;
         public Color BackColor
         {
-            get { return (Color)this.GetValue(BackColorProperty); }
+            get { return _BackColor; }
             set
             {
                 _BackColor = value;
                 if (ScreenElement != null)
                     ScreenElement.BackColor = value.ToString();
+                PaintBackground();
             }
         }
 
         private static readonly DependencyProperty ForeColorProperty =
            DependencyProperty.Register("ForeColor",
-           typeof(Color), typeof(DLBiaoPan), new PropertyMetadata(Colors.Red));
+           typeof(Color), typeof(RealTimeCurve), new PropertyMetadata(Colors.Red));
         private Color _ForeColor = Colors.Red;
         public Color ForeColor
         {
-            get { return (Color)this.GetValue(ForeColorProperty); }
+            get { return _ForeColor; }
             set
             {
                 _ForeColor = value;
@@ -581,7 +589,7 @@ namespace MonitorSystem.ZTControls
             }
             else
             {
-                picCurveShow.Background = new SolidColorBrush(BackColor);
+                picCurveShow.Background = new SolidColorBrush(_BackColor);
             }
         }
 
@@ -592,24 +600,20 @@ namespace MonitorSystem.ZTControls
         private void RefBackground()
         {
             noteNow = 0;
-
             double douooo = 1;
-              //  SolidColorBrush
+            SolidColorBrush ForeColorBrush = new SolidColorBrush(ForeColor);
+
             if (this.picCurveShow.Height < 1 || this.picCurveShow.Width < 1)
             {
                 return;
             }
             picCurveShow.Children.Clear();
-
-           // picCurveShow.Background = new SolidColorBrush(_BackColor);
-            //picCurveShow.Background = new SolidColorBrush(Colors.Black);
-            PaintBackground();          
             //绘制表格背景线
             //绘制背景横轴线
-            //this.picCurveShow.Height = 300;
-            //this.Background=new SolidColorBrush(this.backGroundColor());
             int value = 0; double zongvalue = 0, iHeight =(int) this.picCurveShow.Height;
-
+            coordinate = this.FontSize *2 *2.5;
+            if (coordinate < 55)
+                coordinate = 55;
             zongvalue = this._YmaxValue - this._YminValue;
             value = 0; double CurrentPx = 0, CurrentValue1 = this._YmaxValue;
             for (double k = zongvalue; k >= 0; k = k - _GridHeight) 
@@ -629,7 +633,7 @@ namespace MonitorSystem.ZTControls
                 CurrentValue1 = this._YmaxValue - value * this._GridHeight;
                 TextBlock txtValue = new TextBlock();
                 txtValue.Text = CurrentValue1.ToString();
-                txtValue.Foreground = new SolidColorBrush(this.gridForeColor);
+                txtValue.Foreground = ForeColorBrush;
                 txtValue.SetValue(Canvas.LeftProperty, this.coordinate);
                 
                 txtValue.SetValue(Canvas.ZIndexProperty, 500);
@@ -640,7 +644,7 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (CurrentValue1 == _YminValue)
                 {
-                    mTopPro = CurrentPx - this.FontSize-1;
+                    mTopPro = CurrentPx - this.FontSize-4;
                 }
                txtValue.SetValue(Canvas.TopProperty, mTopPro);
                 picCurveShow.Children.Add(txtValue);
@@ -648,10 +652,9 @@ namespace MonitorSystem.ZTControls
             }
 
             //绘制背景纵轴线
-           // picCurveShow.Width = 300;
-            SolidColorBrush brush = new SolidColorBrush(Colors.Blue);// (Color.FromArgb(0xff, 0x19, 0x72, 0xc9));
-            //SolidColorBrush redBrush = new SolidColorBrush(Colors.Red);
            
+          
+
             for (double i = this.picCurveShow.Width; i >= 0; i = i - this.gridWidth)
             {
                 if (i - gridRemoveX >= this.coordinate)
@@ -671,7 +674,6 @@ namespace MonitorSystem.ZTControls
             }
 
             //绘制分隔线。
-            //backGroundImage.DrawLine(gridCompartPen, 0, 0, 0, this.picCurveShow.Height);
             Line FbLine = new Line();
             FbLine.X1 = coordinate;
             FbLine.Y1 = 0;
@@ -682,18 +684,13 @@ namespace MonitorSystem.ZTControls
 
             //数值区间
             double my = 0;
-
             if (this._Ylower > 0)
             {
                 my = ((this._YmaxValue - this._Ylower) * this.picCurveShow.Height / zongvalue);
-                //backGroundImage.DrawLine(upperAndLowerPen, 0, my, this.picCurveShow.Width, my);
-                ////绘制下限文字
-                //backGroundImage.DrawString(this.yLowerString + this.yLower.ToString(), backGroundFont, brush, -this.coordinate, my - fontHight / 2);
-
                 Line line = new Line();
                 line.StrokeThickness = 1;
                 line.StrokeDashArray = new DoubleCollection() { 2.0, 2.0 };
-                line.Stroke = new SolidColorBrush(Colors.Red);
+                line.Stroke = new SolidColorBrush(ForeColor);
                 line.X1 =  this.coordinate;
                 line.X2 = this.picCurveShow.Width;
                 line.Y1 =my;
@@ -704,7 +701,7 @@ namespace MonitorSystem.ZTControls
                 
                 TextBlock txtValue = new TextBlock();
                 txtValue.Text = yLowerString +  _Ylower.ToString();
-                txtValue.Foreground = new SolidColorBrush(Colors.Red);
+                txtValue.Foreground = ForeColorBrush;
                 txtValue.SetValue(Canvas.LeftProperty, douooo);
                 txtValue.SetValue(Canvas.TopProperty, my - this.gridFontSize / 2);
                 picCurveShow.Children.Add(txtValue);
@@ -734,8 +731,8 @@ namespace MonitorSystem.ZTControls
 
                 TextBlock txt0 = new TextBlock();
                 txt0.Text = "0:";
-                txt0.Foreground = brush;
-                txt0.SetValue(Canvas.LeftProperty, this.coordinate - 18);
+                txt0.Foreground = ForeColorBrush;
+                txt0.SetValue(Canvas.LeftProperty, this.coordinate - this.FontSize-1);
                 txt0.SetValue(Canvas.TopProperty, my - this.gridFontSize / 2);
                 picCurveShow.Children.Add(txt0);
             }
@@ -743,13 +740,9 @@ namespace MonitorSystem.ZTControls
             if (this._Yupper > 0)
             {
                 my = ((this._YmaxValue - this._Yupper) * this.picCurveShow.Height / zongvalue);
-                //backGroundImage.DrawLine(upperAndLowerPen, 0, my, this.picCurveShow.Width, my);
-                ////绘制上限文字
-                //backGroundImage.DrawString(this.yUpperString + this.yUpper.ToString(), backGroundFont, brush, -this.coordinate, my - fontHight / 2);
-
                 Line upperAndLowerLine11 = new Line();
                 upperAndLowerLine11.StrokeThickness = 1;
-                upperAndLowerLine11.Stroke = new SolidColorBrush(Colors.Red);
+                upperAndLowerLine11.Stroke = ForeColorBrush;
                 upperAndLowerLine11.StrokeDashArray = new DoubleCollection() { 2.0, 2.0 };
                 upperAndLowerLine11.X1 = this.coordinate;
                 upperAndLowerLine11.X2 = this.picCurveShow.Width ;
@@ -759,7 +752,7 @@ namespace MonitorSystem.ZTControls
 
                 TextBlock txtupperAndLower11 = new TextBlock();
                 txtupperAndLower11.Text = this.yUpperString + this._Yupper.ToString();
-                txtupperAndLower11.Foreground = new SolidColorBrush(Colors.Red);
+                txtupperAndLower11.Foreground = ForeColorBrush;
                 txtupperAndLower11.SetValue(Canvas.LeftProperty, douooo);
                 txtupperAndLower11.SetValue(Canvas.TopProperty, my - this.gridFontSize / 2);
                 picCurveShow.Children.Add(txtupperAndLower11);
@@ -767,7 +760,7 @@ namespace MonitorSystem.ZTControls
             
             TextBlock txtMax = new TextBlock();
             txtMax.Text = this.yMaxString;
-            txtMax.Foreground = new SolidColorBrush(Colors.Red);
+            txtMax.Foreground = ForeColorBrush;
             txtMax.SetValue(Canvas.LeftProperty, douooo);
             txtMax.SetValue(Canvas.TopProperty, douooo);
             picCurveShow.Children.Add(txtMax);
@@ -777,30 +770,31 @@ namespace MonitorSystem.ZTControls
             //backGroundImage.DrawString(this.yMinString, backGroundFont, brush, -this.coordinate, (float)this.picCurveShow.Height - fontHight);
             TextBlock txtMin = new TextBlock();
             txtMin.Text = this.yMinString;
-            txtMin.Foreground = new SolidColorBrush(Colors.Red);
+            txtMin.Foreground = new SolidColorBrush(ForeColor);
             txtMin.SetValue(Canvas.LeftProperty, douooo);
-            txtMin.SetValue(Canvas.TopProperty, this.picCurveShow.Height - this.FontSize-4);
+            txtMin.SetValue(Canvas.TopProperty, this.picCurveShow.Height - this.FontSize-5);
             picCurveShow.Children.Add(txtMin);
 
 
             ////绘制曲线窗体标题
-            brush = new SolidColorBrush(this.showTimeColor);
             TextBlock txtTitle = new TextBlock();
             txtTitle.Text = this.title;
-            txtTitle.Foreground = brush;
+            txtTitle.Foreground = ForeColorBrush;
             txtTitle.SetValue(Canvas.LeftProperty, this.picCurveShow.Width / 2 - this.title.Length * this.gridFontSize);
             txtTitle.SetValue(Canvas.TopProperty, douooo);
+            txtTitle.SetValue(Canvas.ZIndexProperty, 999);
             picCurveShow.Children.Add(txtTitle);
 
             //绘制系统时间
             if (this.showTime)
             {
-                labShowTime.Foreground = new SolidColorBrush(Colors.Red);
+                labShowTime.Foreground = ForeColorBrush;
                 labShowTime.Text = DateTime.Now.ToString("hh:mm:ss");
                 picCurveShow.Children.Add(labShowTime);
 
-                labShowTime.SetValue(Canvas.LeftProperty, picCurveShow.Width - 80);
-                labShowTime.SetValue(Canvas.TopProperty, picCurveShow.Height - 20);
+                labShowTime.SetValue(Canvas.ZIndexProperty, 999);
+                labShowTime.SetValue(Canvas.LeftProperty, picCurveShow.Width - (FontSize* 5));
+                labShowTime.SetValue(Canvas.TopProperty, picCurveShow.Height - FontSize-5);
             }
             //return bitmap;
         }

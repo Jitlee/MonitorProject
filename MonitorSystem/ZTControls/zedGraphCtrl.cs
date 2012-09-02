@@ -296,7 +296,13 @@ namespace MonitorSystem.ZTControls
                         if (Number == 0)
                             _ColumnSeri.IndependentValuePath = column.ColumnName;
                         else if (Number == 1)
+                        {
+                            if (column.DataTypeName == "System.String")
+                            {
+                                return;
+                            }
                             _ColumnSeri.DependentValuePath = column.ColumnName;
+                        }
                         Number++;
                     }
                 }

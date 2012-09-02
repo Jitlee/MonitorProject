@@ -123,7 +123,7 @@ namespace MonitorSystem.ZTControls
                 }
                 else if (name == "TitleName".ToUpper())
                 {
-                    _TitleName = value;
+                    TitleName = value;
                 }
             }
             LoadData();
@@ -236,31 +236,45 @@ namespace MonitorSystem.ZTControls
             else if (e.ServiceError != null)
                 return;
             //添加Seri
-            var _ColumnSeri = new PieSeries();
-            _ColumnSeri.ItemsSource = DynamicDataBuilder.GetDataList(e.Result);
-           // _ColumnSeri.Title = _BarName;
-            if (e.Result.Tables.Count > 0)
+            try
             {
-                int Number = 0;
-                if (e.Result.Tables[0].Columns.Count >= 2)
+                var _ColumnSeri = new PieSeries();
+                _ColumnSeri.ItemsSource = DynamicDataBuilder.GetDataList(e.Result);
+                // _ColumnSeri.Title = _BarName;
+                if (e.Result.Tables.Count > 0)
                 {
-                    foreach (MyDataService.DataColumnInfo column in e.Result.Tables[0].Columns)
+                    int Number = 0;
+                    if (e.Result.Tables[0].Columns.Count >= 2)
                     {
-                        if (Number == 0)
-                            _ColumnSeri.IndependentValuePath = column.ColumnName;
-                        else if (Number == 1)
-                            _ColumnSeri.DependentValuePath = column.ColumnName;
-                        Number++;
+                        foreach (MyDataService.DataColumnInfo column in e.Result.Tables[0].Columns)
+                        {
+                            if (Number == 0)
+                                _ColumnSeri.IndependentValuePath = column.ColumnName;
+                            else if (Number == 1)
+                            {
+                                if (column.DataTypeName == "System.String")
+                                {
+                                    return;
+                                }
+                                _ColumnSeri.DependentValuePath = column.ColumnName;
+                            }
+                            Number++;
+                        }
                     }
                 }
+
+                _Chart.Title = _TitleName;
+                _Chart.Series.Clear();
+                //_Chart.Axes.Clear();
+                // _Chart.Axes.Add(new CategoryAxis() { Title=_XaxisName, Orientation= AxisOrientation.X });
+                //_Chart.Axes.Add(new LinearAxis(){Title = _YaxisName,Orientation = AxisOrientation.Y });
+                _Chart.Series.Add(_ColumnSeri);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
 
-            _Chart.Title = _TitleName;
-            _Chart.Series.Clear();
-            //_Chart.Axes.Clear();
-           // _Chart.Axes.Add(new CategoryAxis() { Title=_XaxisName, Orientation= AxisOrientation.X });
-            //_Chart.Axes.Add(new LinearAxis(){Title = _YaxisName,Orientation = AxisOrientation.Y });
-            _Chart.Series.Add(_ColumnSeri);
         }
         #endregion
     }

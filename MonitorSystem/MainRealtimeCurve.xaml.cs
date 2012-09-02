@@ -53,6 +53,8 @@ namespace MonitorSystem
             realTime.YmaxValue = SysSetReal.YmaxValue;
             realTime.YminValue = SysSetReal.YminValue;
             realTime.GridHeight = SysSetReal.GridHeight;
+            realTime.BackColor = Colors.Black;
+            realTime.ForeColor = Colors.Red;
             //先加载一个值
             timer_Tick(null,null);
             timer.Start();
