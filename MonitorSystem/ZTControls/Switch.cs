@@ -156,11 +156,11 @@ namespace MonitorSystem.ZTControls
             }
         }
 
-        private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
-        {
-            Switch Switch = (Switch)element;
-            Switch.OnBackColorChanged((Color)e.NewValue, (Color)e.OldValue);
-        }
+            private static void BackColor_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+            {
+                Switch Switch = (Switch)element;
+                Switch.OnBackColorChanged((Color)e.NewValue, (Color)e.OldValue);
+            }
 
         public void OnBackColorChanged(Color oldValue, Color newValue)
         {

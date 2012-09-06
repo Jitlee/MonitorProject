@@ -123,6 +123,7 @@
     <Compile Include="Controls\PropertyGrid\ImageAttribute.cs" />
     <Compile Include="Controls\SceneBackgroundBorder.cs" />
     <Compile Include="Controls\ImagePathConverter.cs" />
+    <Compile Include="Dlfh\dlfh01.cs" />
     <Compile Include="GetData\DataObject.cs" />
     <Compile Include="GetData\DynamicDataBuilder.cs" />
     <Compile Include="GetData\TemplateManager.cs" />
@@ -373,6 +374,7 @@
     <Resource Include="Controls\ImagesManager\Images\img.png" />
     <Resource Include="Images\Common\copy.png" />
     <Resource Include="Images\Common\open.png" />
+    <Content Include="Dlfh\Common.txt" />
     <Content Include="Images\Common\用户管理.ico" />
     <Resource Include="Images\Common\用户管理.jpg" />
     <Resource Include="Images\Common\用户管理1.jpg" />

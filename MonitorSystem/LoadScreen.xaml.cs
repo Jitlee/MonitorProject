@@ -22,6 +22,7 @@ using System.Threading;
 using System.Windows.Threading;
 using MonitorSystem.Controls;
 using System.Windows.Browser;
+using MonitorSystem.Dlfh;
 
 namespace MonitorSystem
 {
@@ -850,6 +851,10 @@ namespace MonitorSystem
                     DimorphismGraphCtrl mDimorphismGraphCtrl = new DimorphismGraphCtrl();
                     SetEletemt(mDimorphismGraphCtrl, obj, eleStae, listObj);
                     return mDimorphismGraphCtrl;
+                case "dlfh01"://电力符号
+                    dlfh01 dlfh01Ctrl = new dlfh01();
+                    SetEletemt(dlfh01Ctrl, obj, eleStae, listObj);
+                    return dlfh01Ctrl;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
@@ -858,6 +863,8 @@ namespace MonitorSystem
                     mtp.Source = mm;
                     SetEletemt(mtp, obj, eleStae, listObj);
                     return mtp;
+
+                    
                     //break;
             }
         }
