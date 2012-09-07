@@ -1326,6 +1326,7 @@ namespace MonitorSystem
             OpartionMenuScriptItem.Visibility = Visibility.Visible;
             ZTMenuScriptItem.Visibility = Visibility.Collapsed;
             AllSencesMenuScriptItem.Visibility = Visibility.Collapsed;
+            GalleryButton.Visibility = Visibility.Visible;
             IsZT = true;
                        
             //加截属性窗口
@@ -1361,6 +1362,7 @@ namespace MonitorSystem
             OpartionMenuScriptItem.Visibility = Visibility.Collapsed;
             ZTMenuScriptItem.Visibility = Visibility.Visible;
             AllSencesMenuScriptItem.Visibility = Visibility.Visible;
+            GalleryButton.Visibility = Visibility.Collapsed;
             IsZT = false;
 
             this.KeyDown -= new KeyEventHandler(Screen_KeyDown);
@@ -1440,6 +1442,11 @@ namespace MonitorSystem
         }
 
         #endregion
+
+        private void GalleryButton_Click(object sender, RoutedEventArgs e)
+        {
+            GalleryFloatPanel.IsOpened = !GalleryFloatPanel.IsOpened;
+        }
     }
 }
 
