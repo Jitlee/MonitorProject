@@ -372,8 +372,11 @@ namespace MonitorSystem.Web.Servers
             }
             this.ObjectContext.t_Sys_MainRealTimeSet.DeleteObject(t_Sys_MainRealTimeSet);
         }
-    
 
+        public IQueryable<t_GalleryClassification> GetT_GalleryClassification()
+        {
+            return this.ObjectContext.GalleryClassification;
+        }
        
     }
 }

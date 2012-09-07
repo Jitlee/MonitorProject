@@ -240,6 +240,22 @@ namespace MonitorSystem.Web.Moldes
             }
         }
         private ObjectSet<V_ScreenMonitorValue> _V_ScreenMonitorValue;
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        public ObjectSet<t_GalleryClassification> GalleryClassification
+        {
+            get
+            {
+                if ((_GalleryClassification == null))
+                {
+                    _GalleryClassification = base.CreateObjectSet<t_GalleryClassification>("GalleryClassification");
+                }
+                return _GalleryClassification;
+            }
+        }
+        private ObjectSet<t_GalleryClassification> _GalleryClassification;
 
         #endregion
         #region AddTo 方法
@@ -330,6 +346,14 @@ namespace MonitorSystem.Web.Moldes
         public void AddToV_ScreenMonitorValue(V_ScreenMonitorValue v_ScreenMonitorValue)
         {
             base.AddObject("V_ScreenMonitorValue", v_ScreenMonitorValue);
+        }
+    
+        /// <summary>
+        /// 用于向 GalleryClassification EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
+        /// </summary>
+        public void AddToGalleryClassification(t_GalleryClassification t_GalleryClassification)
+        {
+            base.AddObject("GalleryClassification", t_GalleryClassification);
         }
 
         #endregion
@@ -2275,6 +2299,140 @@ namespace MonitorSystem.Web.Moldes
         private global::System.String _PropertyName;
         partial void OnPropertyNameChanging(global::System.String value);
         partial void OnPropertyNameChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// 图库分类表
+    /// </summary>
+    /// <LongDescription>
+    /// 图库分类表（新增）
+    /// </LongDescription>
+    [EdmEntityTypeAttribute(NamespaceName="MonitorDemo2Model", Name="t_GalleryClassification")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class t_GalleryClassification : EntityObject
+    {
+        #region 工厂方法
+    
+        /// <summary>
+        /// 创建新的 t_GalleryClassification 对象。
+        /// </summary>
+        /// <param name="id">Id 属性的初始值。</param>
+        /// <param name="name">Name 属性的初始值。</param>
+        /// <param name="sort">Sort 属性的初始值。</param>
+        public static t_GalleryClassification Createt_GalleryClassification(global::System.Int32 id, global::System.String name, global::System.Int32 sort)
+        {
+            t_GalleryClassification t_GalleryClassification = new t_GalleryClassification();
+            t_GalleryClassification.Id = id;
+            t_GalleryClassification.Name = name;
+            t_GalleryClassification.Sort = sort;
+            return t_GalleryClassification;
+        }
+
+        #endregion
+        #region 基元属性
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                OnDescriptionChanging(value);
+                ReportPropertyChanging("Description");
+                _Description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Description");
+                OnDescriptionChanged();
+            }
+        }
+        private global::System.String _Description;
+        partial void OnDescriptionChanging(global::System.String value);
+        partial void OnDescriptionChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Sort
+        {
+            get
+            {
+                return _Sort;
+            }
+            set
+            {
+                OnSortChanging(value);
+                ReportPropertyChanging("Sort");
+                _Sort = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Sort");
+                OnSortChanged();
+            }
+        }
+        private global::System.Int32 _Sort;
+        partial void OnSortChanging(global::System.Int32 value);
+        partial void OnSortChanged();
 
         #endregion
     
