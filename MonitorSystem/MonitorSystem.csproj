@@ -96,6 +96,9 @@
     <Compile Include="Controls\ColorPicker\PredefinedColorItem.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Controls\CustomCursor.cs" />
+    <Compile Include="Controls\FloatPanel.xaml.cs">
+      <DependentUpon>FloatPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ImageButton.cs" />
     <Compile Include="Controls\ImagesManager\Converters\FileSizeConverter.cs" />
     <Compile Include="Controls\ImagesManager\Converters\ImagePathConverter.cs" />
@@ -252,6 +255,10 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Controls\ColorPicker\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\FloatPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
