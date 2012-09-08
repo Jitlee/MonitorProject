@@ -855,6 +855,10 @@ namespace MonitorSystem
                     dlfh01 dlfh01Ctrl = new dlfh01();
                     SetEletemt(dlfh01Ctrl, obj, eleStae, listObj);
                     return dlfh01Ctrl;
+                case "dlfh02"://电力符号
+                    dlfh02 dlfh02Ctrl = new dlfh02();
+                    SetEletemt(dlfh02Ctrl, obj, eleStae, listObj);
+                    return dlfh02Ctrl;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));

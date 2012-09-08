@@ -124,6 +124,7 @@
     <Compile Include="Controls\SceneBackgroundBorder.cs" />
     <Compile Include="Controls\ImagePathConverter.cs" />
     <Compile Include="Dlfh\dlfh01.cs" />
+    <Compile Include="Dlfh\dlfh02.cs" />
     <Compile Include="GetData\DataObject.cs" />
     <Compile Include="GetData\DynamicDataBuilder.cs" />
     <Compile Include="GetData\TemplateManager.cs" />
