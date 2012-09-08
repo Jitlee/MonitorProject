@@ -126,8 +126,12 @@
     <Compile Include="Controls\PropertyGrid\ImageAttribute.cs" />
     <Compile Include="Controls\SceneBackgroundBorder.cs" />
     <Compile Include="Controls\ImagePathConverter.cs" />
+    <Compile Include="Dldz\Dldz01.cs" />
+    <Compile Include="Dldz\Dldz02.cs" />
     <Compile Include="Dlfh\dlfh01.cs" />
     <Compile Include="Dlfh\dlfh02.cs" />
+    <Compile Include="Dqfh\Dqfh01.cs" />
+    <Compile Include="Dqfh\Dqfh02.cs" />
     <Compile Include="GetData\DataObject.cs" />
     <Compile Include="GetData\DynamicDataBuilder.cs" />
     <Compile Include="GetData\TemplateManager.cs" />

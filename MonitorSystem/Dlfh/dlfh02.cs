@@ -27,10 +27,11 @@ namespace MonitorSystem.Dlfh
         public dlfh02()
         {
             this.Content = _canvas;
-            _canvas.Children.Add(_LineX1);
-            _canvas.Children.Add(_LineX2);
             _canvas.Children.Add(_LineY1);
             _canvas.Children.Add(_LineY2);
+            _canvas.Children.Add(_LineX1);
+            _canvas.Children.Add(_LineX2);
+            
             this.Width = 40;
             this.Height = 30;
             Paint();

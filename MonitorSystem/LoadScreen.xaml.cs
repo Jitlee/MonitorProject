@@ -23,6 +23,8 @@ using System.Windows.Threading;
 using MonitorSystem.Controls;
 using System.Windows.Browser;
 using MonitorSystem.Dlfh;
+using MonitorSystem.Dqfh;
+using MonitorSystem.Dldz;
 
 namespace MonitorSystem
 {
@@ -859,6 +861,24 @@ namespace MonitorSystem
                     dlfh02 dlfh02Ctrl = new dlfh02();
                     SetEletemt(dlfh02Ctrl, obj, eleStae, listObj);
                     return dlfh02Ctrl;
+
+                case "Dldz01"://电力电子
+                    Dldz01 Dldz01Ctrl = new Dldz01();
+                    SetEletemt(Dldz01Ctrl, obj, eleStae, listObj);
+                    return Dldz01Ctrl;
+                case "Dldz02"://电力电子
+                    Dldz02 Dldz02Ctrl = new Dldz02();
+                    SetEletemt(Dldz02Ctrl, obj, eleStae, listObj);
+                    return Dldz02Ctrl;
+
+                case "Dqfh01"://电气符号
+                    Dqfh01 Dqfh01Ctrl = new Dqfh01();
+                    SetEletemt(Dqfh01Ctrl, obj, eleStae, listObj);
+                    return Dqfh01Ctrl;
+                case "Dqfh02"://电气符号
+                    Dqfh02 Dqfh02Ctrl = new Dqfh02();
+                    SetEletemt(Dqfh02Ctrl, obj, eleStae, listObj);
+                    return Dqfh02Ctrl;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
