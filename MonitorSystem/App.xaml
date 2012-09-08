@@ -424,6 +424,136 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="CloseButtonStyle" TargetType="Button">
+                <Setter Property="Width" Value="45"/>
+                <Setter Property="Height" Value="20"/>
+                <Setter Property="Background" Value="#FF1F3B53"/>
+                <Setter Property="Foreground" Value="#FF000000"/>
+                <Setter Property="Padding" Value="3"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFA3AEB9" Offset="0"/>
+                            <GradientStop Color="#FF8399A9" Offset="0.375"/>
+                            <GradientStop Color="#FF718597" Offset="0.375"/>
+                            <GradientStop Color="#FF617584" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal"/>
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" To="0.5" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MouseOverElement"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" To="0.4" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MousePressedElement"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" To=".55" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="DisabledVisualElement"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="FocusStates">
+                                        <VisualState x:Name="Focused"/>
+                                        <VisualState x:Name="Unfocused"/>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Border x:Name="Background" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0,0,3,3">
+                                    <Border.BorderBrush>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF976E65" Offset="0"/>
+                                            <GradientStop Color="#FF4B2E28" Offset="0.481"/>
+                                            <GradientStop Color="#FF522B23" Offset="1"/>
+                                            <GradientStop Color="#FF3B140C" Offset="0.498"/>
+                                        </LinearGradientBrush>
+                                    </Border.BorderBrush>
+                                    <Border.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFFCFCFC" Offset="0"/>
+                                            <GradientStop Color="#FFDBBEBC" Offset="0.966"/>
+                                            <GradientStop Color="#FFE9D4D2" Offset="0.038"/>
+                                            <GradientStop Color="#FFE7BBAF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Grid Margin="1">
+                                        <Border x:Name="BackgroundAnimation" Background="#FF448DCA" Opacity="0" CornerRadius="0,0,2,2"/>
+                                        <Border x:Name="BackgroundGradient" CornerRadius="0,0,2,2">
+                                            <Border.Background>
+                                                <LinearGradientBrush EndPoint=".7,1" StartPoint=".7,0">
+                                                    <GradientStop Color="#FFE1B0A9" Offset="0"/>
+                                                    <GradientStop Color="#FFCF847C" Offset="0.499"/>
+                                                    <GradientStop Color="#FFB1493D" Offset="0.5"/>
+                                                    <GradientStop Color="#FFC78174" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                                <Rectangle x:Name="MouseOverElement" RadiusY="3" RadiusX="3" Opacity="0">
+                                    <Rectangle.Effect>
+                                        <BlurEffect Radius="20"/>
+                                    </Rectangle.Effect>
+                                    <Rectangle.Fill>
+                                        <RadialGradientBrush RadiusY="1.034" RadiusX="1.034" GradientOrigin="0.297,0.218" Center="0.249,0.268">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <CompositeTransform CenterY="0.265" CenterX="0.191" Rotation="229.267" TranslateX="0.313" TranslateY="0.594"/>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FF8B0808" Offset="0.534"/>
+                                            <GradientStop Color="#FFFFD43D" Offset="0.153"/>
+                                        </RadialGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Rectangle x:Name="MousePressedElement" RadiusY="3" RadiusX="3" Opacity="0" >
+                                    <Rectangle.Effect>
+                                        <BlurEffect Radius="20"/>
+                                    </Rectangle.Effect>
+                                    <Rectangle.Fill>
+                                        <RadialGradientBrush RadiusY="0.76" RadiusX="0.76" GradientOrigin="0.2,0.255" Center="0.191,0.265">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <CompositeTransform CenterY="0.351" CenterX="0.13" Rotation="229.544" TranslateX="0.479" TranslateY="0.499"/>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FF290000" Offset="0.711"/>
+                                            <GradientStop Color="#FFB86C00"/>
+                                        </RadialGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Path Data="M11.298969,9.5074539 L13.806325,12.02071 L9.8914814,15.929654 L13.767262,19.79282 L11.259907,22.302212 L7.3788357,18.426838 L3.5115998,22.28919 L1.0050583,19.786921 L4.8708696,15.926399 L0.96599513,12.026 L3.4731472,9.5387859 L7.3731389,13.427385 z" Margin="15.966,4.007,16.194,5.198" RenderTransformOrigin="0.5,0.5" Stretch="Fill" UseLayoutRounding="False" Stroke="#FF4B4B4B">
+                                    <Path.Fill>
+                                        <SolidColorBrush Color="#FFFBFBFB">
+                                            <SolidColorBrush.RelativeTransform>
+                                                <MatrixTransform Matrix="Identity"/>
+                                            </SolidColorBrush.RelativeTransform>
+                                            <SolidColorBrush.Transform>
+                                                <MatrixTransform Matrix="Identity"/>
+                                            </SolidColorBrush.Transform>
+                                        </SolidColorBrush>
+                                    </Path.Fill>
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <Rectangle x:Name="DisabledVisualElement" Fill="#FFFFFFFF" IsHitTestVisible="false" Opacity="0" RadiusY="3" RadiusX="3" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

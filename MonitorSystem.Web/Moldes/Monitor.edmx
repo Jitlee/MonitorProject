@@ -20,6 +20,7 @@
           <EntitySet Name="t_Element_Library" EntityType="MonitorDemo2Model.Store.t_Element_Library" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_ElementProperty" EntityType="MonitorDemo2Model.Store.t_ElementProperty" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_ElementProperty_Library" EntityType="MonitorDemo2Model.Store.t_ElementProperty_Library" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="t_GalleryClassification" EntityType="MonitorDemo2Model.Store.t_GalleryClassification" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_MonitorSystemParam" EntityType="MonitorDemo2Model.Store.t_MonitorSystemParam" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_Screen" EntityType="MonitorDemo2Model.Store.t_Screen" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_Screen_Library" EntityType="MonitorDemo2Model.Store.t_Screen_Library" store:Type="Tables" Schema="dbo" />
@@ -145,6 +146,15 @@
           <Property Name="Caption" Type="varchar" MaxLength="50" />
           <Property Name="PropertyName" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="t_GalleryClassification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="16" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+          <Property Name="Sort" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="t_MonitorSystemParam">
           <Key>
             <PropertyRef Name="ID" />
@@ -237,6 +247,7 @@
             <Parameter Name="newScreenID" Mode="In" Type="Int32" />
             <Parameter Name="oldScreenID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="GalleryClassification" EntityType="MonitorDemo2Model.t_GalleryClassification" />
         </EntityContainer>
         <EntityType Name="t_Control">
           <Key>
@@ -406,6 +417,19 @@
           <Property Type="Int32" Name="ChanenlSubNo" />
           <Property Type="Double" Name="MonitorValue" />
           <Property Type="Int32" Name="flag" />
+        </EntityType>
+        <EntityType Name="t_GalleryClassification">
+          <Documentation>
+            <Summary>图库分类表</Summary>
+            <LongDescription>图库分类表（新增）</LongDescription>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Sort" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -590,6 +614,16 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="P_CopyScreen" FunctionName="MonitorDemo2Model.Store.P_CopyScreen" />
+          <EntitySetMapping Name="GalleryClassification">
+            <EntityTypeMapping TypeName="MonitorDemo2Model.t_GalleryClassification">
+              <MappingFragment StoreEntitySet="t_GalleryClassification">
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -622,6 +656,7 @@
         <EntityTypeShape EntityType="MonitorDemo2Model.t_Screen_Library" Width="2.125" PointX="4.375" PointY="0.5" Height="1.790833333333353" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_Sys_MainRealTimeSet" Width="2" PointX="5.125" PointY="8.25" Height="2.6339322916666674" />
         <EntityTypeShape EntityType="MonitorDemo2Model.V_ScreenMonitorValue" Width="1.5" PointX="0.5" PointY="0.5" Height="2.4653124999999996" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_GalleryClassification" Width="1.5" PointX="7" PointY="1.625" Height="1.7790128580729174" />
       </Diagram>
     </Diagrams>
   </Designer>

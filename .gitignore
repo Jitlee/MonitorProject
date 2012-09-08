@@ -1,0 +1,17 @@
+bin/
+obj/
+ClientBin/
+Generated_Code/
+*.csproj.user
+*.suo
+*.xap
+*.pdb
+*.vshost.exe
+*.vshost.exe.manifest
+Images/
+Thumbs.db
+Upload/
+Release/
+Debug/
+GDK_BCM.mdf
+GDK_BCM_log.ldf
