@@ -132,6 +132,11 @@
     <Compile Include="Dlfh\dlfh02.cs" />
     <Compile Include="Dqfh\Dqfh01.cs" />
     <Compile Include="Dqfh\Dqfh02.cs" />
+    <Compile Include="Controls\GalleryControl.xaml.cs">
+      <DependentUpon>GalleryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Gallery\Meter\Meter1.cs" />
+    <Compile Include="Gallery\Meter\Meter2.cs" />
     <Compile Include="GetData\DataObject.cs" />
     <Compile Include="GetData\DynamicDataBuilder.cs" />
     <Compile Include="GetData\TemplateManager.cs" />
@@ -278,6 +283,10 @@
     <Page Include="Controls\ImagesManager\InputNameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\GalleryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LoadScreen.xaml">
       <SubType>Designer</SubType>

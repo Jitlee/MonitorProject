@@ -76,12 +76,7 @@
             Width="200"
             Title="图库">
             <ctrls:FloatPanel.Child>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
+                <ctrls:GalleryControl x:Name="GalleryControl"/>
             </ctrls:FloatPanel.Child>
         </ctrls:FloatPanel>
         <toolkit:BusyIndicator x:Name="tbWait" BusyContent="数据加载中，请稍候 ..."/>

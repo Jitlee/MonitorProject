@@ -25,6 +25,7 @@ using System.Windows.Browser;
 using MonitorSystem.Dlfh;
 using MonitorSystem.Dqfh;
 using MonitorSystem.Dldz;
+using MonitorSystem.Gallery.Meter;
 
 namespace MonitorSystem
 {
@@ -879,6 +880,11 @@ namespace MonitorSystem
                     Dqfh02 Dqfh02Ctrl = new Dqfh02();
                     SetEletemt(Dqfh02Ctrl, obj, eleStae, listObj);
                     return Dqfh02Ctrl;
+
+                case "Meter1":  // 仪表1
+                    var meter1 = new Meter1();
+                    SetEletemt(meter1, obj, eleStae, listObj);
+                    return meter1;
                 default:
                     string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                     BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
@@ -937,19 +943,24 @@ namespace MonitorSystem
         private void AddSelectControlElement(double mWidth, double mHeight, double mMagrinX, double mMagrinY)
         {
             t_Control t = GetSelectControl();
+            CreateControl(t, mWidth, mHeight, mMagrinX, mMagrinY);
+        }
+
+        public void CreateControl(t_Control t, double width, double height, double x, double y)
+        {
             if (t != null && t.ControlID > 0)
             {
                 t_Element mElement = InitElement(t);
 
-                mElement.Width = (int)mWidth;
-                mElement.Height = (int)mHeight;
-                mElement.ScreenX = (int)mMagrinX;
-                mElement.ScreenY = (int)mMagrinY;
+                mElement.Width = (int)width;
+                mElement.Height = (int)height;
+                mElement.ScreenX = (int)x;
+                mElement.ScreenY = (int)y;
                 mElement.ScreenID = _CurrentScreen.ScreenID;
 
                 IEnumerable<t_ControlProperty> listObj = _DataContext.t_ControlProperties.
                     Where(a => a.ControlID == t.ControlID);
-                List<t_ElementProperty> listElementPro=new List<t_ElementProperty>();
+                List<t_ElementProperty> listElementPro = new List<t_ElementProperty>();
                 foreach (t_ControlProperty cp in listObj)
                 {
                     t_ElementProperty tt = new t_ElementProperty();
