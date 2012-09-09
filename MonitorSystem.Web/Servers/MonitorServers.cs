@@ -373,11 +373,24 @@ namespace MonitorSystem.Web.Servers
             this.ObjectContext.t_Sys_MainRealTimeSet.DeleteObject(t_Sys_MainRealTimeSet);
         }
 
+        /// <summary>
+        /// 获取图库分类
+        /// </summary>
+        /// <returns></returns>
         public IQueryable<t_GalleryClassification> GetT_GalleryClassification()
         {
             return this.ObjectContext.GalleryClassification;
         }
-       
+
+        /// <summary>
+        /// 根据 control type 查询控件 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public IQueryable<t_Control> GetT_ControlByType(int type)
+        {
+            return this.ObjectContext.t_Control.Where(t => t.ControlType == type);
+        }
     }
 }
 
