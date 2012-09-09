@@ -72,8 +72,10 @@
         <!-- 图库面板 -->
         <ctrls:FloatPanel
             x:Name="GalleryFloatPanel"
-            Height="400"
-            Width="200"
+            Height="200"
+            Width="500"
+            Left="50"
+            Top="150"
             Title="图库">
             <ctrls:FloatPanel.Child>
                 <ctrls:GalleryControl x:Name="GalleryControl"/>
