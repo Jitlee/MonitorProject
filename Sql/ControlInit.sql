@@ -8,7 +8,7 @@ begin
 		print '添加控件'
 		print @AddControl
 		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-		values(@AddControl,'2','DLBiaoPan.jpg','电力符号','电力符号001');
+		values(@AddControl,'5','MonitorSystem.Dlfh.Dlfh01','电力符号','电力符号001');
 
 
 		declare @ControlID int;
@@ -43,7 +43,7 @@ begin
 		print '添加控件'
 		print @AddControl
 		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-		values(@AddControl,'2','DLBiaoPan.jpg','电力符号','电力符号002');
+		values(@AddControl,'5','MonitorSystem.Dlfh.Dlfh02','电力符号','电力符号002');
 		set @ControlID=0;
 		select @ControlID=max(controlid)  from t_control
 		if @ControlID > 0
@@ -76,7 +76,7 @@ begin
 		print '添加控件'
 		print @AddControl
 		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-		values(@AddControl,'2','DLBiaoPan.jpg','电力电子','电力电子01');
+		values(@AddControl,'6','MonitorSystem.Dldz.Dldz01','电力电子','电力电子01');
 end
 --添加控件	电力电子02
 set @AddControl='Dldz02'
@@ -86,7 +86,7 @@ begin
 		print '添加控件'
 		print @AddControl
 		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-		values(@AddControl,'2','DLBiaoPan.jpg','电力电子','电力电子02');
+		values(@AddControl,'6','MonitorSystem.Dldz.Dldz02','电力电子','电力电子02');
 end
 
 --添加控件	电气符号01
@@ -97,7 +97,7 @@ begin
 		print '添加控件'
 		print @AddControl
 		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-		values(@AddControl,'2','DLBiaoPan.jpg','电气符号','电气符号01');
+		values(@AddControl,'7','MonitorSystem.Dqfh.Dqfh01','电气符号','电气符号01');
 end
 --添加控件	电气符号02
 set @AddControl='Dqfh02'
@@ -107,7 +107,7 @@ begin
 		print '添加控件'
 		print @AddControl
 		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-		values(@AddControl,'2','DLBiaoPan.jpg','电气符号','电气符号02');
+		values(@AddControl,'7','MonitorSystem.Dqfh.Dqfh02','电气符号','电气符号02');
 end
 
 --update t_control set controltypeName='电气符号',controlCaption='电气符号02' where controlname='Dqfh02';

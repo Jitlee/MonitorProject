@@ -34,7 +34,7 @@ namespace MonitorSystem.Dldz
         private void DldzSizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.Width = e.NewSize.Width;
-            this.Height = e.NewSize.Height;
+            this.Height = e.NewSize.Width*0.65;
             Paint();
         }
 

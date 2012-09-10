@@ -855,11 +855,11 @@ namespace MonitorSystem
                     SetEletemt(mDimorphismGraphCtrl, obj, eleStae, listObj);
                     return mDimorphismGraphCtrl;
                 case "dlfh01"://电力符号
-                    dlfh01 dlfh01Ctrl = new dlfh01();
+                    Dlfh01 dlfh01Ctrl = new Dlfh01();
                     SetEletemt(dlfh01Ctrl, obj, eleStae, listObj);
                     return dlfh01Ctrl;
                 case "dlfh02"://电力符号
-                    dlfh02 dlfh02Ctrl = new dlfh02();
+                    Dlfh02 dlfh02Ctrl = new Dlfh02();
                     SetEletemt(dlfh02Ctrl, obj, eleStae, listObj);
                     return dlfh02Ctrl;
 

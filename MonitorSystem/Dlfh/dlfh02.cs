@@ -17,14 +17,14 @@ namespace MonitorSystem.Dlfh
     /// <summary>
     /// 加力符号 002
     /// </summary>
-    public class dlfh02 : MonitorControl
+    public class Dlfh02 : MonitorControl
     {
         private Canvas _canvas = new Canvas();
         private Line _LineX1 = new Line();
         private Line _LineX2 = new Line();
         private Line _LineY1 = new Line();
         private Line _LineY2 = new Line();
-        public dlfh02()
+        public Dlfh02()
         {
             this.Content = _canvas;
             _canvas.Children.Add(_LineY1);
@@ -36,13 +36,14 @@ namespace MonitorSystem.Dlfh
             this.Height = 30;
             Paint();
 
-            this.SizeChanged += new SizeChangedEventHandler(dlfh02_SizeChanged);
+            this.SizeChanged += new SizeChangedEventHandler(Dlfh02_SizeChanged);
         }
 
-        private void dlfh02_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Dlfh02_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.Width = e.NewSize.Width;
+            
             this.Height = e.NewSize.Height;
+            this.Width = e.NewSize.Height / 2;
             Paint();
         }
 
@@ -159,7 +160,7 @@ namespace MonitorSystem.Dlfh
 
         private static readonly DependencyProperty BackColorProperty =
            DependencyProperty.Register("BackColor",
-           typeof(Color), typeof(dlfh02), new PropertyMetadata(Colors.White));
+           typeof(Color), typeof(Dlfh02), new PropertyMetadata(Colors.White));
         [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
@@ -174,7 +175,7 @@ namespace MonitorSystem.Dlfh
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(dlfh02), new PropertyMetadata(Colors.Black));
+            typeof(Color), typeof(Dlfh02), new PropertyMetadata(Colors.Black));
         [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
@@ -189,7 +190,7 @@ namespace MonitorSystem.Dlfh
 
 
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-        typeof(int), typeof(dlfh02), new PropertyMetadata(0));
+        typeof(int), typeof(Dlfh02), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
@@ -207,7 +208,7 @@ namespace MonitorSystem.Dlfh
         #endregion
         #region 自定义属性
         private static readonly DependencyProperty DeviceNameProperty = DependencyProperty.Register("DeviceName",
-        typeof(int), typeof(dlfh02), new PropertyMetadata(0));
+        typeof(int), typeof(Dlfh02), new PropertyMetadata(0));
         string _DeviceName;
         [DefaultValue("电容器"), Description("透明"), Category("我的属性")]
         public string DeviceName
@@ -221,7 +222,7 @@ namespace MonitorSystem.Dlfh
         }
 
         private static readonly DependencyProperty VoltagelevelProperty = DependencyProperty.Register("Voltagelevel",
-       typeof(int), typeof(dlfh02), new PropertyMetadata(0));
+       typeof(int), typeof(Dlfh02), new PropertyMetadata(0));
         int _Voltagelevel;
         [DefaultValue("10"), Description("电压等级"), Category("我的属性")]
         public int Voltagelevel
@@ -235,8 +236,8 @@ namespace MonitorSystem.Dlfh
         }
 
         private static readonly DependencyProperty CapacitiveColorProperty = DependencyProperty.Register("CapacitiveColor",
-      typeof(int), typeof(dlfh02), new PropertyMetadata(0));
-        Color _CapacitiveColor;
+      typeof(int), typeof(Dlfh02), new PropertyMetadata(0));
+        Color _CapacitiveColor=Common.StringToColor("#FFFA0000");
         [DefaultValue("#FFFA0000"), Description("电容颜色"), Category("我的属性")]
         public Color CapacitiveColor
         {
@@ -251,10 +252,10 @@ namespace MonitorSystem.Dlfh
 
 
         private static readonly DependencyProperty CapacitiveWidthProperty = DependencyProperty.Register("CapacitiveWidth",
-      typeof(int), typeof(dlfh02), new PropertyMetadata(0));
-        int _CapacitiveWidth;
+      typeof(int), typeof(Dlfh02), new PropertyMetadata(0));
+        double _CapacitiveWidth=1;
         [DefaultValue(2), Description("电容宽度"), Category("我的属性")]
-        public int CapacitiveWidth
+        public double CapacitiveWidth
         {
             get { return _CapacitiveWidth; }
             set
@@ -267,8 +268,8 @@ namespace MonitorSystem.Dlfh
 
 
         private static readonly DependencyProperty LineColorProperty = DependencyProperty.Register("LineColor",
-      typeof(int), typeof(dlfh02), new PropertyMetadata(0));
-        Color _LineColor;
+      typeof(int), typeof(Dlfh02), new PropertyMetadata(0));
+        Color _LineColor=Colors.Black;
         [DefaultValue(""), Description("线路颜色"), Category("我的属性")]
         public Color LineColor
         {
@@ -283,10 +284,10 @@ namespace MonitorSystem.Dlfh
 
 
         private static readonly DependencyProperty LineWithProperty = DependencyProperty.Register("LineWidth",
-      typeof(int), typeof(dlfh02), new PropertyMetadata(0));
-        int _LineWith;
+      typeof(int), typeof(Dlfh02), new PropertyMetadata(0));
+        double _LineWith=1;
         [DefaultValue(2), Description("线路宽度"), Category("我的属性")]
-        public int LineWidth
+        public double LineWidth
         {
             get { return _LineWith; }
             set
@@ -311,8 +312,6 @@ namespace MonitorSystem.Dlfh
 
             _LineX2.Stroke = _LineX1.Stroke = new SolidColorBrush(_CapacitiveColor);
             _LineX1.StrokeThickness = _LineX2.StrokeThickness = Convert.ToDouble(_CapacitiveWidth);
-
-           
 
             //线路
             //_LineY1.Y1 = _LineY2.Y1 = 0;
