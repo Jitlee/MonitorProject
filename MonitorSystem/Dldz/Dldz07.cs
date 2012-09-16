@@ -9,50 +9,34 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
-using System.ComponentModel;
 using MonitorSystem.Web.Moldes;
+using System.ComponentModel;
 
-namespace MonitorSystem.Dqfh
+
+namespace MonitorSystem.Dldz
 {
-    /// <summary>
-    /// 电气符号
-    /// </summary>
-    public class Dqfh01: MonitorControl
+    public class Dldz07: MonitorControl
     {
         private Canvas _canvas = new Canvas();
-        private Line _LineX1 = new Line();
-        private Line _LineX2 = new Line();
-        private Line _LineY1 = new Line();
-        private Line _LineY2 = new Line();
-        private Rectangle _Rect = new Rectangle();
-        public Dqfh01()
+        Polyline pl = new Polyline();
+        Line _SortLine = new Line();
+        Polygon py = new Polygon();
+        public Dldz07()
         {
             this.Content = _canvas;
-            _canvas.Children.Add(_Rect);
-            _canvas.Children.Add(_LineX1);
-            _canvas.Children.Add(_LineX2);
-            _canvas.Children.Add(_LineY1);
-            _canvas.Children.Add(_LineY2);
-            this.Width = 60;
-            this.Height = 60;
-            Paint();
 
-            this.SizeChanged += new SizeChangedEventHandler(Dqfh01_SizeChanged);
+            _canvas.Children.Add(pl);
+            _canvas.Children.Add(_SortLine);
+            _canvas.Children.Add(py);
+
+            this.SizeChanged += new SizeChangedEventHandler(DldzSizeChanged);
         }
 
-        private void Dqfh01_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void DldzSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.Height= this.Width = e.NewSize.Width;
-            //this.Height = e.NewSize.Height;
+            this.Width = e.NewSize.Width;
+            this.Height = e.NewSize.Width*0.65;
             Paint();
-        }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            this.Width = availableSize.Width;
-            this.Height = availableSize.Height;
-            Paint();
-            return base.MeasureOverride(availableSize);
         }
 
         #region 公共
@@ -104,15 +88,13 @@ namespace MonitorSystem.Dqfh
         {
             foreach (t_ElementProperty pro in ListElementProp)
             {
-                //string name = pro.PropertyName.ToUpper();
-                //string value = pro.PropertyValue;
-                //if (name == "DeviceName".ToUpper())
+                string name = pro.PropertyName.ToUpper();
+                string value = pro.PropertyValue;
+                //if (name == "LeftOrNot".ToUpper())
                 //{
-                //    _DeviceName = value;
+
                 //}
-                
             }
-            //Paint();
         }
 
         public override void SetCommonPropertyValue()
@@ -130,8 +112,7 @@ namespace MonitorSystem.Dqfh
 
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
-           "BackColor", "ForeColor", "Transparent","Translate"
-        ,"DeviceName","Voltagelevel","CapacitiveColor","CapacitiveWidth","LineColor","LineWidth"};
+           "BackColor", "ForeColor", "Transparent","Translate"};
         public override string[] BrowsableProperties
         {
             get { return m_BrowsableProperties; }
@@ -141,7 +122,7 @@ namespace MonitorSystem.Dqfh
 
         private static readonly DependencyProperty BackColorProperty =
            DependencyProperty.Register("BackColor",
-           typeof(Color), typeof(Dqfh01), new PropertyMetadata(Colors.White));
+           typeof(Color), typeof(Dldz07), new PropertyMetadata(Colors.White));
         [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
@@ -156,7 +137,7 @@ namespace MonitorSystem.Dqfh
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(Dqfh01), new PropertyMetadata(Colors.Black));
+            typeof(Color), typeof(Dldz07), new PropertyMetadata(Colors.Black));
         [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
@@ -171,7 +152,7 @@ namespace MonitorSystem.Dqfh
 
 
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-        typeof(int), typeof(Dqfh01), new PropertyMetadata(0));
+        typeof(int), typeof(Dldz07), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
@@ -185,42 +166,73 @@ namespace MonitorSystem.Dqfh
             }
         }
         #endregion
-
         #endregion
-       
 
         private void Paint()
         {
-            //中间10%;           
+
             double _LineWith = 0.5;//线宽度
-            SolidColorBrush _LineStyle = new SolidColorBrush(Colors.Black);           
-            //相隔距离
-            double _jl = 0.15;
 
-            _LineX1.X1 = _LineX2.X1 = this.Width * _jl;
-            _LineX1.X2 = _LineX2.X2 = this.Width * (1 - _jl);
+            double _aLinePer = 0.25;//两直线，分别占总长度比例
+            //线
+            double _LineY=this.Height / 2;//横线的Y轴位置
+            double _LineLength=this.Width * _aLinePer;
+            
+           
+            double dbPointNum = 3;//单边点数量
+            double dWidth = this.Width / 2;//弯曲长度            
+            double minWidth = dWidth / (dbPointNum * 4);//第一个点位置之间的宽度(点数*4分之一宽度)
+            double _shPointHeight = this.Height * 0.3 / 2; //横线到上下点的高度
+            
+            PointCollection pc = new PointCollection();
+            //前直线1
+            pc.Add(new Point(0, _LineY));
+            pc.Add(new Point(_LineLength, _LineY));
+            //上下三个点
+            for (int i = 0; i < dbPointNum * 2; i++)
+            {
+                if (i == 0)
+                {
+                    pc.Add(new Point(_LineLength + minWidth, _LineY - _shPointHeight));
+                }
+                int mod = i % 2;
+                if (mod== 1)
+                {
+                    pc.Add(new Point(_LineLength + minWidth*(i*2+1), _LineY + _shPointHeight));
+                }
+                else
+                {
+                    pc.Add(new Point(_LineLength + minWidth * (i * 2 + 1), _LineY - _shPointHeight));
+                }
+            }
+            //直线2
+            pc.Add(new Point(this.Width * 0.75, _LineY));
+            pc.Add(new Point(this.Width, _LineY));
 
-            _LineX1.Y1 = _LineX1.Y2 = this.Height * 0.4;
-            _LineX2.Y1 = _LineX2.Y2 = this.Height * 0.6;
-            _LineX2.Stroke = _LineX1.Stroke = _LineStyle;
-            _LineX1.StrokeThickness = _LineX2.StrokeThickness = _LineWith;
+            pl.Points = pc;
+            pl.Stroke = new SolidColorBrush(Colors.Black);
 
-            //线路                     
-            _LineY1.X1 = _LineY1.X2 = _LineY2.X1 = _LineY2.X2 = this.Width / 2;
-            _LineY1.Y1 = this.Height * _jl;
-            _LineY1.Y2 = this.Height * 0.4;
+            //箭头线
+            _SortLine.X1 = _LineLength;
+            _SortLine.Y1 = this.Height;
+            _SortLine.X2 = this.Width * (223d/325d);
+            _SortLine.Y2 = this.Height * (34d/200d);//35
+            _SortLine.Stroke = new SolidColorBrush(Colors.Black);
 
-            _LineY2.Y1 = this.Height * 0.6;
-            _LineY2.Y2 = this.Height * (1 - _jl);
-            _LineY1.Stroke = _LineY2.Stroke = _LineStyle;
-            _LineY1.StrokeThickness = _LineY2.StrokeThickness = _LineWith;
+            //箭头
+            PointCollection pyc = new PointCollection();
+            pyc.Add(new Point(this.Width * (250d / 324d), 0));
+            pyc.Add(new Point(this.Width * (217d / 324d), this.Height * (20d / 200d)));
+            pyc.Add(new Point(this.Width * (230d / 324d), this.Height * (50d / 200d)));
 
-            //圆
-            _Rect.Width = _Rect.Height = _Rect.RadiusX = _Rect.RadiusY = this.Width;
-            _Rect.Fill = new SolidColorBrush();
-            _Rect.StrokeThickness = _LineWith;
-            _Rect.Stroke = _LineStyle;
+            py.Points = pyc;
+            py.Stroke = new SolidColorBrush(Colors.Black);
+            py.Fill = new SolidColorBrush(Colors.Blue);
 
+            //设置线宽度
+            py.StrokeThickness = _SortLine.StrokeThickness = pl.StrokeThickness = _LineWith;
+            
         }
+
     }
 }

@@ -727,175 +727,184 @@ namespace MonitorSystem
         /// <param name="listObj"></param>
         /// <returns></returns>
         private MonitorControl ShowElement(t_Element obj, ElementSate eleStae, List<t_ElementProperty> listObj)
-        { 
-            
-            switch (obj.ElementName)
+        {
+            if (obj.ImageURL != null && obj.ImageURL.IndexOf("MonitorSystem") == 0)
             {
-                case "MyButton":
-                    TP_Button mtpButtom = new TP_Button();
-                    SetEletemt(mtpButtom, obj, eleStae, listObj);
-                    return mtpButtom;
+                MonitorControl instance = (MonitorControl)Activator.CreateInstance(Type.GetType(obj.ImageURL));
+                //var instance = Activator.CreateInstance(Type.GetType(t.ImageURL));
+                SetEletemt(instance, obj, eleStae, listObj);
+                return instance;
+            }
+            else
+            {
+                switch (obj.ElementName)
+                {
+                    case "MyButton":
+                        TP_Button mtpButtom = new TP_Button();
+                        SetEletemt(mtpButtom, obj, eleStae, listObj);
+                        return mtpButtom;
                     //break;
-                case "MonitorLine":
-                    MonitorLine mPubLine = new MonitorLine();
-                    SetEletemt(mPubLine, obj, eleStae, listObj);
-                    return mPubLine;
+                    case "MonitorLine":
+                        MonitorLine mPubLine = new MonitorLine();
+                        SetEletemt(mPubLine, obj, eleStae, listObj);
+                        return mPubLine;
                     //break;
-                case "MonitorText":
-                    MonitorText mPubText = new MonitorText();
-                    mPubText.MyText = obj.TxtInfo;
-                    SetEletemt(mPubText, obj, eleStae, listObj);
-                    return mPubText;
+                    case "MonitorText":
+                        MonitorText mPubText = new MonitorText();
+                        mPubText.MyText = obj.TxtInfo;
+                        SetEletemt(mPubText, obj, eleStae, listObj);
+                        return mPubText;
                     //break;
-                case "ColorText":
-                    ColorText mColorText = new ColorText();
-                    SetEletemt(mColorText, obj, eleStae, listObj);
-                    return mColorText;
+                    case "ColorText":
+                        ColorText mColorText = new ColorText();
+                        SetEletemt(mColorText, obj, eleStae, listObj);
+                        return mColorText;
                     //break;
-                case "InputTextBox":
-                    InputTextBox mInputTextBox = new InputTextBox();
-                    mInputTextBox.MyText = obj.TxtInfo;
-                    SetEletemt(mInputTextBox, obj, eleStae, listObj);
-                    return mInputTextBox;
+                    case "InputTextBox":
+                        InputTextBox mInputTextBox = new InputTextBox();
+                        mInputTextBox.MyText = obj.TxtInfo;
+                        SetEletemt(mInputTextBox, obj, eleStae, listObj);
+                        return mInputTextBox;
                     //break;
-                case "ButtonCtrl":
-                    ButtonCtrl mButtonCtrl = new ButtonCtrl();
-                    mButtonCtrl.MyText = obj.TxtInfo;
-                    SetEletemt(mButtonCtrl, obj, eleStae, listObj);
-                    return mButtonCtrl;
+                    case "ButtonCtrl":
+                        ButtonCtrl mButtonCtrl = new ButtonCtrl();
+                        mButtonCtrl.MyText = obj.TxtInfo;
+                        SetEletemt(mButtonCtrl, obj, eleStae, listObj);
+                        return mButtonCtrl;
                     //break;
-                case "MonitorCur":
-                    MonitorCur mPubCur = new MonitorCur();
-                    SetEletemt(mPubCur, obj, eleStae, listObj);
-                    return mPubCur;
+                    case "MonitorCur":
+                        MonitorCur mPubCur = new MonitorCur();
+                        SetEletemt(mPubCur, obj, eleStae, listObj);
+                        return mPubCur;
                     //break;
-                case "MonitorRectangle":
-                    MonitorRectangle mPubRec = new MonitorRectangle();
-                    SetEletemt(mPubRec, obj, eleStae, listObj);
-                    return mPubRec;
+                    case "MonitorRectangle":
+                        MonitorRectangle mPubRec = new MonitorRectangle();
+                        SetEletemt(mPubRec, obj, eleStae, listObj);
+                        return mPubRec;
                     //break;
-                case "MonitorGrid":
-                    MonitorGrid mPubGrid = new MonitorGrid();
-                    SetEletemt(mPubGrid, obj, eleStae, listObj);
-                    return mPubGrid;
+                    case "MonitorGrid":
+                        MonitorGrid mPubGrid = new MonitorGrid();
+                        SetEletemt(mPubGrid, obj, eleStae, listObj);
+                        return mPubGrid;
                     //break;
-                case "FoldLine":
-                    MonitorFoldLine mPubFoldLine = new MonitorFoldLine();
-                    SetEletemt(mPubFoldLine, obj, eleStae, listObj);
-                    return mPubFoldLine;
+                    case "FoldLine":
+                        MonitorFoldLine mPubFoldLine = new MonitorFoldLine();
+                        SetEletemt(mPubFoldLine, obj, eleStae, listObj);
+                        return mPubFoldLine;
                     //break;
-                case "Temprary":
-                    Temprary mTemprary = new Temprary();
-                    SetEletemt(mTemprary, obj, eleStae, listObj);
-                    return mTemprary;
-                case "DLBiaoPan":
-                    DLBiaoPan mDLBiaoPan = new DLBiaoPan();
-                    obj.Width = 2 * obj.Height.Value;
-                    SetEletemt(mDLBiaoPan, obj, eleStae, listObj);
-                    return mDLBiaoPan;
-                case "DigitalBiaoPan":
-                    DigitalBiaoPan mDigitalBiaoPan = new DigitalBiaoPan();
-                    SetEletemt(mDigitalBiaoPan, obj, eleStae, listObj);
-                    return mDigitalBiaoPan;
-                case "Switch":
-                    Switch mSwitch = new Switch();
-                    SetEletemt(mSwitch, obj, eleStae, listObj);
-                    return mSwitch;
-                case "SignalSwitch":
-                    SignalSwitch mSignalSwitch = new SignalSwitch();
-                    obj.Width = obj.Height;
-                    SetEletemt(mSignalSwitch, obj, eleStae, listObj);
-                    return mSignalSwitch;
-                case "DetailSwitch":
-                    DetailSwitch mDetailSwitch = new DetailSwitch();
-                    SetEletemt(mDetailSwitch, obj, eleStae, listObj);
-                    return mDetailSwitch;
-                case "RealTimeCurve":
-                    RealTimeCurve mRealTime = new RealTimeCurve();
-                    SetEletemt(mRealTime, obj, eleStae, listObj);
-                    return mRealTime;
-                case "TableCtrl":
-                    TableCtrl mTableCtrl = new TableCtrl();
-                    SetEletemt(mTableCtrl, obj, eleStae, listObj);
-                    return mTableCtrl;
-                case "zedGraphCtrl":
-                    zedGraphCtrl mzedGraphCtrl = new zedGraphCtrl();
-                    SetEletemt(mzedGraphCtrl, obj, eleStae, listObj);
-                    return mzedGraphCtrl;
-                case "zedGraphLineCtrl":
-                    zedGraphLineCtrl mzedGraphLineCtrl = new zedGraphLineCtrl();
-                    SetEletemt(mzedGraphLineCtrl, obj, eleStae, listObj);
-                    return mzedGraphLineCtrl;
-                case "zedGraphPieCtrl":
-                    zedGraphPieCtrl mzedGraphPieCtrl = new zedGraphPieCtrl();
-                    SetEletemt(mzedGraphPieCtrl, obj, eleStae, listObj);
-                    return mzedGraphPieCtrl;
-                case "MyLine"://曲线
-                    MyLine mMyLine = new MyLine();
-                    SetEletemt(mMyLine, obj, eleStae, listObj);
-                    return mMyLine;
-                case "BackgroundRect"://背景
-                    BackgroundRect mBackgroundRect = new BackgroundRect();
-                    SetEletemt(mBackgroundRect, obj, eleStae, listObj);
-                    return mBackgroundRect;
-                case "PicBox"://窗口式背景控件
-                    PicBox mPicBox = new PicBox();
-                    SetEletemt(mPicBox, obj, eleStae, listObj);
-                    return mPicBox;
-                case "DrawLine"://窗口式背景控件
-                    DrawLine mDrawLine = new DrawLine();
-                    SetEletemt(mDrawLine, obj, eleStae, listObj);
-                    return mDrawLine;
-                case "ExtProControl"://窗口式背景控件
-                    ExtProControl mExtProControl = new ExtProControl();
-                    SetEletemt(mExtProControl, obj, eleStae, listObj);
-                    return mExtProControl;
-                case "DimorphismGraphCtrl"://窗口式背景控件
-                    DimorphismGraphCtrl mDimorphismGraphCtrl = new DimorphismGraphCtrl();
-                    SetEletemt(mDimorphismGraphCtrl, obj, eleStae, listObj);
-                    return mDimorphismGraphCtrl;
-                case "dlfh01"://电力符号
-                    Dlfh01 dlfh01Ctrl = new Dlfh01();
-                    SetEletemt(dlfh01Ctrl, obj, eleStae, listObj);
-                    return dlfh01Ctrl;
-                case "dlfh02"://电力符号
-                    Dlfh02 dlfh02Ctrl = new Dlfh02();
-                    SetEletemt(dlfh02Ctrl, obj, eleStae, listObj);
-                    return dlfh02Ctrl;
+                    case "Temprary":
+                        Temprary mTemprary = new Temprary();
+                        SetEletemt(mTemprary, obj, eleStae, listObj);
+                        return mTemprary;
+                    case "DLBiaoPan":
+                        DLBiaoPan mDLBiaoPan = new DLBiaoPan();
+                        obj.Width = 2 * obj.Height.Value;
+                        SetEletemt(mDLBiaoPan, obj, eleStae, listObj);
+                        return mDLBiaoPan;
+                    case "DigitalBiaoPan":
+                        DigitalBiaoPan mDigitalBiaoPan = new DigitalBiaoPan();
+                        SetEletemt(mDigitalBiaoPan, obj, eleStae, listObj);
+                        return mDigitalBiaoPan;
+                    case "Switch":
+                        Switch mSwitch = new Switch();
+                        SetEletemt(mSwitch, obj, eleStae, listObj);
+                        return mSwitch;
+                    case "SignalSwitch":
+                        SignalSwitch mSignalSwitch = new SignalSwitch();
+                        obj.Width = obj.Height;
+                        SetEletemt(mSignalSwitch, obj, eleStae, listObj);
+                        return mSignalSwitch;
+                    case "DetailSwitch":
+                        DetailSwitch mDetailSwitch = new DetailSwitch();
+                        SetEletemt(mDetailSwitch, obj, eleStae, listObj);
+                        return mDetailSwitch;
+                    case "RealTimeCurve":
+                        RealTimeCurve mRealTime = new RealTimeCurve();
+                        SetEletemt(mRealTime, obj, eleStae, listObj);
+                        return mRealTime;
+                    case "TableCtrl":
+                        TableCtrl mTableCtrl = new TableCtrl();
+                        SetEletemt(mTableCtrl, obj, eleStae, listObj);
+                        return mTableCtrl;
+                    case "zedGraphCtrl":
+                        zedGraphCtrl mzedGraphCtrl = new zedGraphCtrl();
+                        SetEletemt(mzedGraphCtrl, obj, eleStae, listObj);
+                        return mzedGraphCtrl;
+                    case "zedGraphLineCtrl":
+                        zedGraphLineCtrl mzedGraphLineCtrl = new zedGraphLineCtrl();
+                        SetEletemt(mzedGraphLineCtrl, obj, eleStae, listObj);
+                        return mzedGraphLineCtrl;
+                    case "zedGraphPieCtrl":
+                        zedGraphPieCtrl mzedGraphPieCtrl = new zedGraphPieCtrl();
+                        SetEletemt(mzedGraphPieCtrl, obj, eleStae, listObj);
+                        return mzedGraphPieCtrl;
+                    case "MyLine"://曲线
+                        MyLine mMyLine = new MyLine();
+                        SetEletemt(mMyLine, obj, eleStae, listObj);
+                        return mMyLine;
+                    case "BackgroundRect"://背景
+                        BackgroundRect mBackgroundRect = new BackgroundRect();
+                        SetEletemt(mBackgroundRect, obj, eleStae, listObj);
+                        return mBackgroundRect;
+                    case "PicBox"://窗口式背景控件
+                        PicBox mPicBox = new PicBox();
+                        SetEletemt(mPicBox, obj, eleStae, listObj);
+                        return mPicBox;
+                    case "DrawLine"://窗口式背景控件
+                        DrawLine mDrawLine = new DrawLine();
+                        SetEletemt(mDrawLine, obj, eleStae, listObj);
+                        return mDrawLine;
+                    case "ExtProControl"://窗口式背景控件
+                        ExtProControl mExtProControl = new ExtProControl();
+                        SetEletemt(mExtProControl, obj, eleStae, listObj);
+                        return mExtProControl;
+                    case "DimorphismGraphCtrl"://窗口式背景控件
+                        DimorphismGraphCtrl mDimorphismGraphCtrl = new DimorphismGraphCtrl();
+                        SetEletemt(mDimorphismGraphCtrl, obj, eleStae, listObj);
+                        return mDimorphismGraphCtrl;
+                    //case "dlfh01"://电力符号
+                    //    Dlfh01 dlfh01Ctrl = new Dlfh01();
+                    //    SetEletemt(dlfh01Ctrl, obj, eleStae, listObj);
+                    //    return dlfh01Ctrl;
+                    //case "dlfh02"://电力符号
+                    //    Dlfh02 dlfh02Ctrl = new Dlfh02();
+                    //    SetEletemt(dlfh02Ctrl, obj, eleStae, listObj);
+                    //    return dlfh02Ctrl;
 
-                case "Dldz01"://电力电子
-                    Dldz01 Dldz01Ctrl = new Dldz01();
-                    SetEletemt(Dldz01Ctrl, obj, eleStae, listObj);
-                    return Dldz01Ctrl;
-                case "Dldz02"://电力电子
-                    Dldz02 Dldz02Ctrl = new Dldz02();
-                    SetEletemt(Dldz02Ctrl, obj, eleStae, listObj);
-                    return Dldz02Ctrl;
+                    //case "Dldz01"://电力电子
+                    //    Dldz01 Dldz01Ctrl = new Dldz01();
+                    //    SetEletemt(Dldz01Ctrl, obj, eleStae, listObj);
+                    //    return Dldz01Ctrl;
+                    //case "Dldz02"://电力电子
+                    //    Dldz02 Dldz02Ctrl = new Dldz02();
+                    //    SetEletemt(Dldz02Ctrl, obj, eleStae, listObj);
+                    //    return Dldz02Ctrl;
 
-                case "Dqfh01"://电气符号
-                    Dqfh01 Dqfh01Ctrl = new Dqfh01();
-                    SetEletemt(Dqfh01Ctrl, obj, eleStae, listObj);
-                    return Dqfh01Ctrl;
-                case "Dqfh02"://电气符号
-                    Dqfh02 Dqfh02Ctrl = new Dqfh02();
-                    SetEletemt(Dqfh02Ctrl, obj, eleStae, listObj);
-                    return Dqfh02Ctrl;
+                    //case "Dqfh01"://电气符号
+                    //    Dqfh01 Dqfh01Ctrl = new Dqfh01();
+                    //    SetEletemt(Dqfh01Ctrl, obj, eleStae, listObj);
+                    //    return Dqfh01Ctrl;
+                    //case "Dqfh02"://电气符号
+                    //    Dqfh02 Dqfh02Ctrl = new Dqfh02();
+                    //    SetEletemt(Dqfh02Ctrl, obj, eleStae, listObj);
+                    //    return Dqfh02Ctrl;
 
-                case "Meter1":  // 仪表1
-                    var meter1 = new Meter1();
-                    SetEletemt(meter1, obj, eleStae, listObj);
-                    return meter1;
-                default:
-                    string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
-                    BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
-                    ImageSource mm = bitmap;
-                    TP mtp = new TP();
-                    mtp.Source = mm;
-                    SetEletemt(mtp, obj, eleStae, listObj);
-                    return mtp;
+                    //case "Meter1":  // 仪表1
+                    //    var meter1 = new Meter1();
+                    //    SetEletemt(meter1, obj, eleStae, listObj);
+                    //    return meter1;
+                    default:
+                        string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
+                        BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
+                        ImageSource mm = bitmap;
+                        TP mtp = new TP();
+                        mtp.Source = mm;
+                        SetEletemt(mtp, obj, eleStae, listObj);
+                        return mtp;
 
-                    
+
                     //break;
+                }
             }
         }
 

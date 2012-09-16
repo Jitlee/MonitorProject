@@ -9,50 +9,35 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
-using System.ComponentModel;
 using MonitorSystem.Web.Moldes;
+using System.ComponentModel;
 
-namespace MonitorSystem.Dqfh
+namespace MonitorSystem.Dlfh
 {
-    /// <summary>
-    /// 电气符号
-    /// </summary>
-    public class Dqfh01: MonitorControl
+    public class Dlfh08: MonitorControl
     {
         private Canvas _canvas = new Canvas();
-        private Line _LineX1 = new Line();
-        private Line _LineX2 = new Line();
         private Line _LineY1 = new Line();
         private Line _LineY2 = new Line();
         private Rectangle _Rect = new Rectangle();
-        public Dqfh01()
+        public Dlfh08()
         {
             this.Content = _canvas;
             _canvas.Children.Add(_Rect);
-            _canvas.Children.Add(_LineX1);
-            _canvas.Children.Add(_LineX2);
+            
             _canvas.Children.Add(_LineY1);
             _canvas.Children.Add(_LineY2);
             this.Width = 60;
             this.Height = 60;
+            
             Paint();
-
-            this.SizeChanged += new SizeChangedEventHandler(Dqfh01_SizeChanged);
+            this.SizeChanged += new SizeChangedEventHandler(Dlfh08_SizeChanged);
         }
 
-        private void Dqfh01_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Dlfh08_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.Height= this.Width = e.NewSize.Width;
-            //this.Height = e.NewSize.Height;
+            this.Height = this.Width = e.NewSize.Width;
             Paint();
-        }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            this.Width = availableSize.Width;
-            this.Height = availableSize.Height;
-            Paint();
-            return base.MeasureOverride(availableSize);
         }
 
         #region 公共
@@ -104,15 +89,22 @@ namespace MonitorSystem.Dqfh
         {
             foreach (t_ElementProperty pro in ListElementProp)
             {
-                //string name = pro.PropertyName.ToUpper();
-                //string value = pro.PropertyValue;
-                //if (name == "DeviceName".ToUpper())
-                //{
-                //    _DeviceName = value;
-                //}
-                
+                string name = pro.PropertyName.ToUpper();
+                string value = pro.PropertyValue;
+                if (name == "DeviceName".ToUpper())
+                {
+                    _DeviceName = value;
+                }
+                else if (name == "LineColor".ToUpper())
+                {
+                    _LineColor = Common.StringToColor(value);
+                }
+                else if (name == "LineWidth".ToUpper())
+                {
+                    _LineWith = int.Parse(value);
+                }
             }
-            //Paint();
+            Paint();
         }
 
         public override void SetCommonPropertyValue()
@@ -131,7 +123,7 @@ namespace MonitorSystem.Dqfh
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
            "BackColor", "ForeColor", "Transparent","Translate"
-        ,"DeviceName","Voltagelevel","CapacitiveColor","CapacitiveWidth","LineColor","LineWidth"};
+        ,"DeviceName","GroundWireColor","GroundWireWidth","LineColor","LineWidth"};
         public override string[] BrowsableProperties
         {
             get { return m_BrowsableProperties; }
@@ -141,7 +133,7 @@ namespace MonitorSystem.Dqfh
 
         private static readonly DependencyProperty BackColorProperty =
            DependencyProperty.Register("BackColor",
-           typeof(Color), typeof(Dqfh01), new PropertyMetadata(Colors.White));
+           typeof(Color), typeof(Dlfh08), new PropertyMetadata(Colors.White));
         [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
@@ -156,7 +148,7 @@ namespace MonitorSystem.Dqfh
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(Dqfh01), new PropertyMetadata(Colors.Black));
+            typeof(Color), typeof(Dlfh08), new PropertyMetadata(Colors.Black));
         [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
@@ -171,7 +163,7 @@ namespace MonitorSystem.Dqfh
 
 
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-        typeof(int), typeof(Dqfh01), new PropertyMetadata(0));
+        typeof(int), typeof(Dlfh08), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
@@ -187,40 +179,75 @@ namespace MonitorSystem.Dqfh
         #endregion
 
         #endregion
-       
+        #region 自定义属性
+        private static readonly DependencyProperty DeviceNameProperty = DependencyProperty.Register("DeviceName",
+        typeof(int), typeof(Dlfh08), new PropertyMetadata(0));
+        string _DeviceName;
+        [DefaultValue(""), Description("透明"), Category("我的属性")]
+        public string DeviceName
+        {
+            get { return _DeviceName; }
+            set
+            {
+                _DeviceName = value;
+                SetAttrByName("DeviceName", value);
+            }
+        }
+
+
+        private static readonly DependencyProperty LineColorProperty = DependencyProperty.Register("LineColor",
+      typeof(int), typeof(Dlfh08), new PropertyMetadata(0));
+        Color _LineColor = Common.StringToColor("#FFED1212");
+        [DefaultValue(""), Description("线路颜色"), Category("我的属性")]
+        public Color LineColor
+        {
+            get { return _LineColor; }
+            set
+            {
+                _LineColor = value;
+                SetAttrByName("LineColor", value);
+                Paint();
+            }
+        }
+
+
+        private static readonly DependencyProperty LineWithProperty = DependencyProperty.Register("LineWidth",
+      typeof(int), typeof(Dlfh08), new PropertyMetadata(0));
+        double _LineWith = 2;
+        [DefaultValue(2), Description("线路宽度"), Category("我的属性")]
+        public double LineWidth
+        {
+            get { return _LineWith; }
+            set
+            {
+                _LineWith = value;
+                SetAttrByName("LineWidth", value);
+                Paint();
+            }
+        }
+        #endregion
 
         private void Paint()
         {
-            //中间10%;           
-            double _LineWith = 0.5;//线宽度
-            SolidColorBrush _LineStyle = new SolidColorBrush(Colors.Black);           
             //相隔距离
-            double _jl = 0.15;
+            double _jl = 0.23;
+            double topJL = 0.18;
 
-            _LineX1.X1 = _LineX2.X1 = this.Width * _jl;
-            _LineX1.X2 = _LineX2.X2 = this.Width * (1 - _jl);
+            _LineY1.X1 = _LineY1.X2 = this.Width * 0.38;
+            _LineY1.Y1 = this.Height * topJL;
+            _LineY1.Y2 = this.Height * 0.78;
 
-            _LineX1.Y1 = _LineX1.Y2 = this.Height * 0.4;
-            _LineX2.Y1 = _LineX2.Y2 = this.Height * 0.6;
-            _LineX2.Stroke = _LineX1.Stroke = _LineStyle;
-            _LineX1.StrokeThickness = _LineX2.StrokeThickness = _LineWith;
 
-            //线路                     
-            _LineY1.X1 = _LineY1.X2 = _LineY2.X1 = _LineY2.X2 = this.Width / 2;
-            _LineY1.Y1 = this.Height * _jl;
-            _LineY1.Y2 = this.Height * 0.4;
-
-            _LineY2.Y1 = this.Height * 0.6;
-            _LineY2.Y2 = this.Height * (1 - _jl);
-            _LineY1.Stroke = _LineY2.Stroke = _LineStyle;
-            _LineY1.StrokeThickness = _LineY2.StrokeThickness = _LineWith;
+            _LineY2.X1 = _LineY2.X2 = this.Width * (0.38+_jl);
+            _LineY2.Y1 = this.Height * topJL;
+            _LineY2.Y2 = this.Height * 0.78;
+            
 
             //圆
             _Rect.Width = _Rect.Height = _Rect.RadiusX = _Rect.RadiusY = this.Width;
             _Rect.Fill = new SolidColorBrush();
-            _Rect.StrokeThickness = _LineWith;
-            _Rect.Stroke = _LineStyle;
-
+            _LineY1.StrokeThickness = _LineY2.StrokeThickness = _Rect.StrokeThickness = _LineWith;
+            _LineY1.Stroke = _LineY2.Stroke = _Rect.Stroke = new SolidColorBrush(_LineColor); 
         }
     }
 }
