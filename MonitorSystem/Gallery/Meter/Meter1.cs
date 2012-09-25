@@ -235,7 +235,7 @@ namespace MonitorSystem.Gallery.Meter
             DependencyProperty.Register("Minimum", typeof(double), typeof(Meter1), new PropertyMetadata(0d, MinimumPropertyChanged));
 
 
-        [DefaultValue(0d), Description("最小值"), Category("里程范围")]
+        [DefaultValue(0d), Description("最小值"), Category("里程")]
         public double Minimum
         {
             get { return (double)GetValue(MinimumProperty); }
@@ -267,7 +267,7 @@ namespace MonitorSystem.Gallery.Meter
         private static DependencyProperty DecimalDigitsProperty =
             DependencyProperty.Register("DecimalDigits", typeof(int), typeof(Meter1), new PropertyMetadata(0, DecimalDigitsPropertyChanged));
 
-        [DefaultValue(0d), Description("最小值"), Category("里程范围")]
+        [DefaultValue(0d), Description("小数位数(范围0-7)"), Category("里程")]
         public int DecimalDigits
         {
             get { return (int)GetValue(DecimalDigitsProperty); }
@@ -502,6 +502,15 @@ namespace MonitorSystem.Gallery.Meter
                 var avg = (maximum - minimum) / (double)mainScale;
                 var fontSize = width * 0.0562913907284768d;
 
+                if (decimalDigits < 0)
+                {
+                    decimalDigits = 0;
+                }
+                else if (decimalDigits > 7)
+                {
+                    decimalDigits = 7;
+                }
+
                 _calibrationCanvas.Children.Clear();
 
                 var brush = new SolidColorBrush(Colors.Black);
@@ -576,14 +585,6 @@ namespace MonitorSystem.Gallery.Meter
                 pathGemometry.Figures.Add(pathFigure);
 
                 _pointPath.Data = pathGemometry;
-                //var line = new Line();
-                //line.Stroke = new SolidColorBrush(Colors.Red);
-                //line.StrokeThickness = 1d;
-                //line.X1 = width * 0.33d * Math.Sin(angle) + width * 0.5d;
-                //line.Y1 = width * 0.33d * Math.Cos(angle) + width * 0.5d;
-                //line.X2 = width * 0.5d;
-                //line.Y2 = width * 0.5d;
-                //_valueCanvas.Children.Add(line);
             }
             catch { }
         }
