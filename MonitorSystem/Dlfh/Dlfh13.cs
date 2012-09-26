@@ -14,35 +14,54 @@ using System.ComponentModel;
 
 namespace MonitorSystem.Dlfh
 {
-    public class Dlfh05 : MonitorControl
+    /// <summary>
+    /// 电力符号 13 电抗器2
+    /// </summary>
+    public class Dlfh13 : MonitorControl
     {
         private Canvas _canvas = new Canvas();
-        Line _LineXL = new Line();
-        Line _LineJD1 = new Line();
-        Line _LineJD2 = new Line();
-        Line _LineJD3 = new Line();
-        public Dlfh05()
+        private Line _Line = new Line();
+        Polyline plLeft = new Polyline();
+        Polyline plRight = new Polyline();
+
+        //3/4圆
+        Path py = new Path();
+        PathGeometry pg = new PathGeometry();
+        PathFigureCollection pfc = new PathFigureCollection();
+        PathFigure pf = new PathFigure();
+        PathSegmentCollection psc = new PathSegmentCollection();
+        public Dlfh13()
         {
+            this.Width = 99;
+            this.Height = 56;
+
             this.Content = _canvas;
-            _canvas.Children.Add(_LineXL);
-            _canvas.Children.Add(_LineJD1);
-            _canvas.Children.Add(_LineJD2);
-            _canvas.Children.Add(_LineJD3);
+            _canvas.Children.Add(_Line);
+            _canvas.Children.Add(plLeft);
+            _canvas.Children.Add(plRight);
+            _canvas.Children.Add(py);
 
-            this.Width = 30;
-            this.Height = 60;
+            //3/4圆
+            py.Data = pg;
+            pg.Figures = pfc;
+            pfc.Add(pf);
+            pf.Segments = psc;
+
+
+
             Paint();
-
-            this.SizeChanged += new SizeChangedEventHandler(Dlfh05_SizeChanged);
+            PaintNormal();
+            this.SizeChanged += new SizeChangedEventHandler(Dlfh13_SizeChanged);
         }
 
-        private void Dlfh05_SizeChanged(object sender, SizeChangedEventArgs e)
+
+
+        private void Dlfh13_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.Height = e.NewSize.Height;
-            this.Width = e.NewSize.Height / 2;
+            this.Width = e.NewSize.Width;
+            this.Height = e.NewSize.Width *0.56;
             Paint();
         }
-
 
         #region 公共
         #region 函数
@@ -99,13 +118,9 @@ namespace MonitorSystem.Dlfh
                 {
                     _DeviceName = value;
                 }
-                else if (name == "GroundWireColor".ToUpper())
+                else if (name == "Voltagelevel".ToUpper())
                 {
-                    _GroundWireColor = Common.StringToColor(value);
-                }
-                else if (name == "GroundWireWidth".ToUpper())
-                {
-                    _GroundWireWidth = Convert.ToDouble(value);
+                    _Voltagelevel = int.Parse(value);
                 }
                 else if (name == "LineColor".ToUpper())
                 {
@@ -117,6 +132,7 @@ namespace MonitorSystem.Dlfh
                 }
             }
             Paint();
+            PaintNormal();
         }
 
         public override void SetCommonPropertyValue()
@@ -135,7 +151,7 @@ namespace MonitorSystem.Dlfh
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
            "BackColor", "ForeColor", "Transparent","Translate"
-        ,"DeviceName","GroundWireColor","GroundWireWidth","LineColor","LineWidth"};
+        ,"DeviceName","Voltagelevel","LineColor","LineWidth"};
         public override string[] BrowsableProperties
         {
             get { return m_BrowsableProperties; }
@@ -143,9 +159,25 @@ namespace MonitorSystem.Dlfh
         }
 
 
+        private static readonly DependencyProperty VoltagelevelProperty = DependencyProperty.Register("Voltagelevel",
+     typeof(int), typeof(Dlfh13), new PropertyMetadata(0));
+        int _Voltagelevel = 10;
+        [DefaultValue("10"), Description("电压等级"), Category("我的属性")]
+        public int Voltagelevel
+        {
+            get { return _Voltagelevel; }
+            set
+            {
+                _Voltagelevel = value;
+                SetAttrByName("Voltagelevel", value);
+            }
+        }
+
+
+
         private static readonly DependencyProperty BackColorProperty =
            DependencyProperty.Register("BackColor",
-           typeof(Color), typeof(Dlfh05), new PropertyMetadata(Colors.White));
+           typeof(Color), typeof(Dlfh13), new PropertyMetadata(Colors.White));
         [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
@@ -160,7 +192,7 @@ namespace MonitorSystem.Dlfh
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(Dlfh05), new PropertyMetadata(Colors.Black));
+            typeof(Color), typeof(Dlfh13), new PropertyMetadata(Colors.Black));
         [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
@@ -175,7 +207,7 @@ namespace MonitorSystem.Dlfh
 
 
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-        typeof(int), typeof(Dlfh05), new PropertyMetadata(0));
+        typeof(int), typeof(Dlfh13), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
@@ -193,9 +225,9 @@ namespace MonitorSystem.Dlfh
         #endregion
         #region 自定义属性
         private static readonly DependencyProperty DeviceNameProperty = DependencyProperty.Register("DeviceName",
-        typeof(int), typeof(Dlfh05), new PropertyMetadata(0));
+        typeof(int), typeof(Dlfh13), new PropertyMetadata(0));
         string _DeviceName;
-        [DefaultValue("接地线"), Description("透明"), Category("我的属性")]
+        [DefaultValue(""), Description("透明"), Category("我的属性")]
         public string DeviceName
         {
             get { return _DeviceName; }
@@ -207,43 +239,10 @@ namespace MonitorSystem.Dlfh
         }
 
 
-
-        private static readonly DependencyProperty GroundWireColorProperty = DependencyProperty.Register("GroundWireColor",
-      typeof(int), typeof(Dlfh05), new PropertyMetadata(0));
-        Color _GroundWireColor = Common.StringToColor("#FFFA0000");
-        [DefaultValue("#FFFA0000"), Description("接地线颜色"), Category("我的属性")]
-        public Color GroundWireColor
-        {
-            get { return _GroundWireColor; }
-            set
-            {
-                _GroundWireColor = value;
-                SetAttrByName("GroundWireColor", value);
-                Paint();
-            }
-        }
-
-
-        private static readonly DependencyProperty GroundWireWidthProperty = DependencyProperty.Register("GroundWireWidth",
-      typeof(int), typeof(Dlfh05), new PropertyMetadata(0));
-        double _GroundWireWidth = 1;
-        [DefaultValue(2), Description("接地线宽度"), Category("我的属性")]
-        public double GroundWireWidth
-        {
-            get { return _GroundWireWidth; }
-            set
-            {
-                _GroundWireWidth = value;
-                SetAttrByName("GroundWireWidth", value);
-                Paint();
-            }
-        }
-
-
         private static readonly DependencyProperty LineColorProperty = DependencyProperty.Register("LineColor",
-      typeof(int), typeof(Dlfh05), new PropertyMetadata(0));
-        Color _LineColor = Colors.Black;
-        [DefaultValue(""), Description("线路颜色"), Category("我的属性")]
+      typeof(int), typeof(Dlfh13), new PropertyMetadata(0));
+        Color _LineColor = Common.StringToColor("#FFED1212");
+        [DefaultValue(""), Description("电抗器颜色"), Category("我的属性")]
         public Color LineColor
         {
             get { return _LineColor; }
@@ -251,15 +250,15 @@ namespace MonitorSystem.Dlfh
             {
                 _LineColor = value;
                 SetAttrByName("LineColor", value);
-                Paint();
+                PaintNormal();
             }
         }
 
 
         private static readonly DependencyProperty LineWithProperty = DependencyProperty.Register("LineWidth",
-      typeof(int), typeof(Dlfh05), new PropertyMetadata(0));
-        double _LineWith = 1;
-        [DefaultValue(2), Description("线路宽度"), Category("我的属性")]
+      typeof(int), typeof(Dlfh13), new PropertyMetadata(0));
+        double _LineWith = 2;
+        [DefaultValue(2), Description("电抗器宽度"), Category("我的属性")]
         public double LineWidth
         {
             get { return _LineWith; }
@@ -267,35 +266,70 @@ namespace MonitorSystem.Dlfh
             {
                 _LineWith = value;
                 SetAttrByName("LineWidth", value);
-                Paint();
+                PaintNormal();
             }
         }
         #endregion
 
+        /// <summary>
+        /// 设置线的宽度、颜色
+        /// </summary>
+        private void PaintNormal()
+        {
+            py.StrokeThickness = 
+            plLeft.StrokeThickness = _Line.StrokeThickness = plRight.StrokeThickness = _LineWith;
+            py.Stroke = 
+            plLeft.Stroke = plRight.Stroke = _Line.Stroke = new SolidColorBrush(_LineColor);
+        }
+
         private void Paint()
         {
-            
-            _LineXL.X1 = _LineXL.X2 = this.Width /2;
-            _LineXL.Y1 = this.Height * 0.33;
-            _LineXL.Y2 =this.Height;
-            _LineXL.StrokeThickness = Convert.ToDouble(_LineWith);
-            _LineXL.Stroke = new SolidColorBrush(_LineColor);
-            //40--50--60
-            _LineJD3.Y1 = _LineJD3.Y2 = 0;
-            _LineJD3.X1 = this.Width * 0.25;
-            _LineJD3.X2 = this.Width * 0.75;
+                        
+            _Line.X1 = _Line.X2 = this.Width / 2; ;
+            _Line.Y1 =0;
+            _Line.Y2 = this.Height *0.15;
 
-            _LineJD2.Y1 = _LineJD2.Y2 = this.Height * (1 - 5d / 6d);
-            _LineJD2.X1 = this.Width * 0.1;
-            _LineJD2.X2 = this.Width * 0.9;
+            double plY=this.Height * 0.59;
 
+            PointCollection pcLeft = new PointCollection();
+            pcLeft.Add(new Point(0, plY));
+            pcLeft.Add(new Point(this.Width * 0.4, plY));
+            pcLeft.Add(new Point(this.Width * 0.4, this.Height));
+            plLeft.Points = pcLeft;
 
-            _LineJD1.Y1 = _LineJD1.Y2 = this.Height*(1 - 0.67);
-            _LineJD1.X1 = 0;
-            _LineJD1.X2 = this.Width;
+            PointCollection pcRight = new PointCollection();
+            pcRight.Add(new Point(this.Width , plY));
+            pcRight.Add(new Point(this.Width * 0.61, plY));
+            pcRight.Add(new Point(this.Width * 0.61, this.Height));
+            plRight.Points = pcRight;
 
-            _LineJD3.StrokeThickness = _LineJD2.StrokeThickness = _LineJD1.StrokeThickness = Convert.ToDouble(_GroundWireWidth);
-            _LineJD2.Stroke = _LineJD3.Stroke = _LineJD1.Stroke = new SolidColorBrush(_GroundWireColor);
+            psc.Clear();
+            pf.StartPoint = new Point(this.Width * 0.61, this.Height);
+
+            Size topSize = new Size(this.Width * (0.75 - 0.5), this.Height * (0.59 - 0.15));
+            Size BouutomSize = new Size(this.Width * (0.75 - 0.61), this.Height * (1 - 0.59));
+
+            ArcSegment arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.75, plY);
+            arcs.Size = BouutomSize;
+            psc.Add(arcs);
+
+            //最上面的那个点
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.5, this.Height * 0.15);
+            arcs.Size = topSize;
+            psc.Add(arcs);
+
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.24, plY);
+            arcs.Size = topSize;
+            psc.Add(arcs);
+
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.4, this.Height);
+            arcs.Size = BouutomSize;
+            psc.Add(arcs);
+
         }
     }
 }

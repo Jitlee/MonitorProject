@@ -25,7 +25,7 @@ namespace MonitorSystem
 
             string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), "第七泡的状态.JPG");
             BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
-            image1.Source = bitmap;
+           // image1.Source = bitmap;
             bitmap.ImageOpened +=new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
 
         }

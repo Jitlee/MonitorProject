@@ -134,6 +134,7 @@
     <Compile Include="Dldz\Dldz06.cs" />
     <Compile Include="Dldz\Dldz07.cs" />
     <Compile Include="Dldz\Dldz08.cs" />
+    <Compile Include="Dldz\DLDZCommon.cs" />
     <Compile Include="Dlfh\Dlfh01.cs" />
     <Compile Include="Dlfh\Dlfh02.cs" />
     <Compile Include="Dlfh\Dlfh03.cs" />
@@ -144,6 +145,12 @@
     <Compile Include="Dlfh\Dlfh08.cs" />
     <Compile Include="Dlfh\Dlfh09.cs" />
     <Compile Include="Dlfh\Dlfh10.cs" />
+    <Compile Include="Dlfh\Dlfh11.cs" />
+    <Compile Include="Dlfh\Dlfh12.cs" />
+    <Compile Include="Dlfh\Dlfh13.cs" />
+    <Compile Include="Dlfh\Dlfh14.cs" />
+    <Compile Include="Dlfh\Dlfh15.cs" />
+    <Compile Include="Dlfh\Dlfh16.cs" />
     <Compile Include="Dqfh\Dqfh01.cs" />
     <Compile Include="Dqfh\Dqfh02.cs" />
     <Compile Include="Controls\GalleryControl.xaml.cs">

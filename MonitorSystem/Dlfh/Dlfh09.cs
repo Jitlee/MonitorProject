@@ -110,7 +110,7 @@ namespace MonitorSystem.Dlfh
                 }
                 else if (name == "LineWidth".ToUpper())
                 {
-                    _LineWith = int.Parse(value);
+                    _LineWith = Convert.ToDouble(value);
                 }
             }
             Paint();

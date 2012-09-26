@@ -26,7 +26,16 @@ namespace MonitorSystem.Dldz
 
             _canvas.Children.Add(pl);
             _canvas.Children.Add(_SortLine);
+
+            py.Fill = new SolidColorBrush(DLDZCommon.DLDZFilleColor);
             _canvas.Children.Add(py);
+
+            //设置线宽度
+            py.StrokeThickness = _SortLine.StrokeThickness = 
+                pl.StrokeThickness = DLDZCommon.DLDZLineWidth;
+
+            py.Stroke = _SortLine.Stroke =
+                pl.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
 
             this.SizeChanged += new SizeChangedEventHandler(DldzSizeChanged);
         }
@@ -170,7 +179,7 @@ namespace MonitorSystem.Dldz
         private void Paint()
         {
 
-            double _LineWith = 0.5;//线宽度
+           
 
             double _aLinePer = 0.25;//两直线，分别占总长度比例
             //线
@@ -207,16 +216,15 @@ namespace MonitorSystem.Dldz
             //直线2
             pc.Add(new Point(this.Width * 0.75, _LineY));
             pc.Add(new Point(this.Width, _LineY));
-
             pl.Points = pc;
-            pl.Stroke = new SolidColorBrush(Colors.Black);
+           
 
             //箭头线
             _SortLine.X1 = _LineLength;
             _SortLine.Y1 = this.Height;
             _SortLine.X2 = this.Width * (223d/325d);
             _SortLine.Y2 = this.Height * (34d/200d);//35
-            _SortLine.Stroke = new SolidColorBrush(Colors.Black);
+            
 
             //箭头
             PointCollection pyc = new PointCollection();
@@ -225,11 +233,11 @@ namespace MonitorSystem.Dldz
             pyc.Add(new Point(this.Width * (230d / 324d), this.Height * (50d / 200d)));
 
             py.Points = pyc;
-            py.Stroke = new SolidColorBrush(Colors.Black);
-            py.Fill = new SolidColorBrush(Colors.Blue);
+           
 
-            //设置线宽度
-            py.StrokeThickness = _SortLine.StrokeThickness = pl.StrokeThickness = _LineWith;
+            
+
+           
             
         }
 

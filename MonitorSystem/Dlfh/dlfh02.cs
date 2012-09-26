@@ -15,7 +15,7 @@ using System.ComponentModel;
 namespace MonitorSystem.Dlfh
 {
     /// <summary>
-    /// 加力符号 002
+    /// 电力符号 002
     /// </summary>
     public class Dlfh02 : MonitorControl
     {
@@ -120,7 +120,7 @@ namespace MonitorSystem.Dlfh
                 }
                 else if (name == "CapacitiveWidth".ToUpper())
                 {
-                    _CapacitiveWidth = int.Parse(value);
+                    _CapacitiveWidth = Convert.ToDouble(value);
                 }
                 else if (name == "LineColor".ToUpper())
                 {
@@ -128,7 +128,7 @@ namespace MonitorSystem.Dlfh
                 }
                 else if (name == "LineWidth".ToUpper())
                 {
-                    _LineWith = int.Parse(value);
+                    _LineWith = Convert.ToDouble(value);
                 }
             }
             Paint();

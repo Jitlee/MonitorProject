@@ -16,25 +16,40 @@ namespace MonitorSystem.Dldz
 {
     public class Dldz03: MonitorControl
     {
+        /// <summary>
+        /// 电力电子03
+        /// </summary>
         private Canvas _canvas = new Canvas();
-        Polyline pl = new Polyline();
-        Line _SortLine = new Line();
-        Polygon py = new Polygon();
+        Line _lineLeft = new Line();
+        Line _lineRight = new Line();
+        Line _lineY = new Line();
+        Polyline py = new Polyline();
+
         public Dldz03()
         {
             this.Content = _canvas;
 
-            _canvas.Children.Add(pl);
-            _canvas.Children.Add(_SortLine);
+            _canvas.Children.Add(_lineLeft);
+            _canvas.Children.Add(_lineRight);
+            _canvas.Children.Add(_lineY);
+
             _canvas.Children.Add(py);
 
+            _lineLeft.StrokeThickness = _lineRight.StrokeThickness
+                = _lineY.StrokeThickness = py.StrokeThickness = DLDZCommon.DLDZLineWidth;
+            _lineLeft.Stroke = _lineRight.Stroke = _lineY.Stroke
+                = py.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
+
+            this.Width = 100;
+            this.Height = 47;
             this.SizeChanged += new SizeChangedEventHandler(DldzSizeChanged);
+            Paint();
         }
 
         private void DldzSizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.Width = e.NewSize.Width;
-            this.Height = e.NewSize.Width*0.65;
+            this.Height = e.NewSize.Width * 0.47;
             Paint();
         }
 
@@ -167,70 +182,29 @@ namespace MonitorSystem.Dldz
         #endregion
         #endregion
 
-        private void Paint()
-        {
+        private void Paint(){
+            _lineLeft.Y1 = _lineLeft.Y2 = this.Height / 2;
+            _lineLeft.X1 = 0;
+            _lineLeft.X2 = this.Width * 0.45;
 
-            double _LineWith = 0.5;//线宽度
+            _lineRight.Y1 = _lineRight.Y2 = this.Height / 2;
+            _lineRight.X1 = this.Width * 0.55;
+            _lineRight.X2 = this.Width;
 
-            double _aLinePer = 0.25;//两直线，分别占总长度比例
-            //线
-            double _LineY=this.Height / 2;//横线的Y轴位置
-            double _LineLength=this.Width * _aLinePer;
-            
-           
-            double dbPointNum = 3;//单边点数量
-            double dWidth = this.Width / 2;//弯曲长度            
-            double minWidth = dWidth / (dbPointNum * 4);//第一个点位置之间的宽度(点数*4分之一宽度)
-            double _shPointHeight = this.Height * 0.3 / 2; //横线到上下点的高度
-            
-            PointCollection pc = new PointCollection();
-            //前直线1
-            pc.Add(new Point(0, _LineY));
-            pc.Add(new Point(_LineLength, _LineY));
-            //上下三个点
-            for (int i = 0; i < dbPointNum * 2; i++)
-            {
-                if (i == 0)
-                {
-                    pc.Add(new Point(_LineLength + minWidth, _LineY - _shPointHeight));
-                }
-                int mod = i % 2;
-                if (mod== 1)
-                {
-                    pc.Add(new Point(_LineLength + minWidth*(i*2+1), _LineY + _shPointHeight));
-                }
-                else
-                {
-                    pc.Add(new Point(_LineLength + minWidth * (i * 2 + 1), _LineY - _shPointHeight));
-                }
-            }
-            //直线2
-            pc.Add(new Point(this.Width * 0.75, _LineY));
-            pc.Add(new Point(this.Width, _LineY));
 
-            pl.Points = pc;
-            pl.Stroke = new SolidColorBrush(Colors.Black);
+            _lineY.X1 = _lineY.X2 = this.Width * 0.55;
+            _lineY.Y1 = 0;
+            _lineY.Y2 = this.Height;
 
-            //箭头线
-            _SortLine.X1 = _LineLength;
-            _SortLine.Y1 = this.Height;
-            _SortLine.X2 = this.Width * (223d/325d);
-            _SortLine.Y2 = this.Height * (34d/200d);//35
-            _SortLine.Stroke = new SolidColorBrush(Colors.Black);
+            //其它
+            py.Points.Clear();
+            py.Points.Add(new Point(this.Width * 0.39, this.Height * 0.1));
+            py.Points.Add(new Point(this.Width * 0.45, this.Height * 0.3));
+            py.Points.Add(new Point(this.Width * 0.45, this.Height * 0.7));
+            py.Points.Add(new Point(this.Width * 0.39, this.Height * 0.9));
 
-            //箭头
-            PointCollection pyc = new PointCollection();
-            pyc.Add(new Point(this.Width * (250d / 324d), 0));
-            pyc.Add(new Point(this.Width * (217d / 324d), this.Height * (20d / 200d)));
-            pyc.Add(new Point(this.Width * (230d / 324d), this.Height * (50d / 200d)));
 
-            py.Points = pyc;
-            py.Stroke = new SolidColorBrush(Colors.Black);
-            py.Fill = new SolidColorBrush(Colors.Blue);
 
-            //设置线宽度
-            py.StrokeThickness = _SortLine.StrokeThickness = pl.StrokeThickness = _LineWith;
-            
         }
 
     }

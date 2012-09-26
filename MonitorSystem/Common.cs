@@ -13,6 +13,11 @@ namespace MonitorSystem
 {
     public class Common
     {
+        #region 常量
+        
+
+        #endregion
+
         public static string TopUrl()
         {
             string strTopUrl = Application.Current.Host.Source.ToString()

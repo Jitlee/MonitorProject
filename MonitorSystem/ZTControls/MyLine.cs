@@ -559,8 +559,6 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
             double yvalue = minValue;
             double yPlace = Height - 40;
 
-            //g.DrawString(yvalue.ToString(), myFont, Brushes.Black, new PointF(15, yPlace - myFont.Height / 2));
-
             TextBlock txtyvalue = new TextBlock();
             txtyvalue.Text = yvalue.ToString();
             txtyvalue.Foreground = new SolidColorBrush(_ForeColor);
@@ -606,11 +604,9 @@ typeof(string), typeof(MyLine), new PropertyMetadata("横坐标"));
                 {
                     pp[i].X = (int)(Width - 10 - (this.Width - 50) * (pp.Length - i) / 300);
                     pp[i].Y = (int)(Height - 40 - (Height - 50) * (Double.Parse(myData[i].Y.ToString()) - minValue) / caY);
-                    //g.DrawEllipse(CurvePen, pp[i].X - 2, pp[i].Y - 2, 4, 4);
                 }
                 if (myData != null && myData.Count == 1)
-                {
-                    //g.DrawEllipse(CurvePen, pp[0].X - 2, pp[0].Y - 2, 4, 4);
+                {                    
                     Ellipse e = new Ellipse();
                     e.SetValue(Canvas.LeftProperty, pp[0].X - 2);
                     e.SetValue(Canvas.TopProperty, pp[0].Y - 2);

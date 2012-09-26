@@ -30,9 +30,15 @@ namespace MonitorSystem.Dldz
             _canvas.Children.Add(_Rect);
             _canvas.Children.Add(_LineX1);
             _canvas.Children.Add(_LineX2);
-            
-            this.Width = 40;
-            this.Height = 30;
+
+            _LineX1.StrokeThickness = _LineX2.StrokeThickness= _Rect.StrokeThickness = DLDZCommon.DLDZLineWidth;
+
+            _LineX1.Stroke = _LineX2.Stroke = _Rect.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
+
+            _Rect.Fill = new SolidColorBrush(DLDZCommon.DLDZFilleColor);
+
+            this.Width = 100;
+            this.Height = 20;
             Paint();
 
             this.SizeChanged += new SizeChangedEventHandler(Dldz001_SizeChanged);
@@ -44,15 +50,7 @@ namespace MonitorSystem.Dldz
             this.Height = e.NewSize.Width*0.2;
             Paint();
         }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            this.Width = availableSize.Width;
-            this.Height = availableSize.Height;
-            Paint();
-            return base.MeasureOverride(availableSize);
-        }
-
+        
         #region 公共
         #region 函数
         public override event EventHandler Selected;
@@ -188,9 +186,6 @@ namespace MonitorSystem.Dldz
 
         private void Paint()
         {
-            double _LineWith = 0.5;//线宽度
-            SolidColorBrush _LineStyle = new SolidColorBrush(Colors.Black);
-            SolidColorBrush _RectFull = new SolidColorBrush(Colors.Blue);
             double _LineLength = (this.Width - this.Height) / 2;
             
             
@@ -203,15 +198,10 @@ namespace MonitorSystem.Dldz
             double Y = this.Height / 2;
             _LineX1.Y1 = _LineX1.Y2 = _LineX2.Y1 = _LineX2.Y2 = Y;
 
-            _LineX1.Stroke = _LineX2.Stroke = _LineStyle;
-            _LineX1.StrokeThickness = _LineX2.StrokeThickness = _LineWith;
-
             //圆
             _Rect.Width = _Rect.Height = _Rect.RadiusX = _Rect.RadiusY = this.Height;
-            _Rect.Stroke =  _LineStyle;
-            _Rect.StrokeThickness = _LineWith;
             _Rect.SetValue(Canvas.LeftProperty, _LineLength);
-            _Rect.Fill = _RectFull;
+            
         }
 
     }

@@ -308,6 +308,176 @@ begin
 		end
 end
 
+--添加“电力符号011”
+set @AddControl='dlfh11'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'5','MonitorSystem.Dlfh.Dlfh11','电力符号','电抗器1');
+		
+		set @ControlID=0;
+		select @ControlID=max(controlid)  from t_control
+		if @ControlID > 0
+		begin
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 1,'DeviceName','电抗器','设备名称');
+			--电压等级
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 2,'Voltagelevel','10','电压等级');
+			
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 4,'LineColor','#FFED1212','电抗器颜色');
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 5,'LineWidth','1','电抗器宽度');
+		end
+end
+
+--添加“电力符号012”
+set @AddControl='dlfh12'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'5','MonitorSystem.Dlfh.Dlfh12','电力符号','电抗器2');
+		
+		set @ControlID=0;
+		select @ControlID=max(controlid)  from t_control
+		if @ControlID > 0
+		begin
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 1,'DeviceName','电抗器','设备名称');
+			--电压等级
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 2,'Voltagelevel','10','电压等级');
+			
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 4,'LineColor','#FFED1212','电抗器颜色');
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 5,'LineWidth','1','电抗器宽度');
+		end
+end
+
+--添加“电力符号013”
+set @AddControl='dlfh13'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'5','MonitorSystem.Dlfh.Dlfh13','电力符号','电抗器3');
+		
+		set @ControlID=0;
+		select @ControlID=max(controlid)  from t_control
+		if @ControlID > 0
+		begin
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 1,'DeviceName','电抗器','设备名称');
+			--电压等级
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 2,'Voltagelevel','10','电压等级');
+			
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 4,'LineColor','#FFED1212','电抗器颜色');
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 5,'LineWidth','1','电抗器宽度');
+		end
+end
+
+--添加“电力符号014”
+set @AddControl='dlfh14'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'5','MonitorSystem.Dlfh.Dlfh14','电力符号','电抗器4');
+		
+		set @ControlID=0;
+		select @ControlID=max(controlid)  from t_control
+		if @ControlID > 0
+		begin
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 1,'DeviceName','电抗器','设备名称');
+			--电压等级
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 2,'Voltagelevel','10','电压等级');
+			
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 4,'LineColor','#FFED1212','电抗器颜色');
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 5,'LineWidth','1','电抗器宽度');
+		end
+end
+
+--添加“电力符号015”
+set @AddControl='Dlfh15'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'5','MonitorSystem.Dlfh.'+@AddControl ,'电力符号','发电机1');
+		
+		set @ControlID=0;
+		select @ControlID=max(controlid)  from t_control
+		if @ControlID > 0
+		begin
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 1,'DeviceName','电抗器','设备名称');
+			--电压等级
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 2,'Voltagelevel','10','电压等级');
+			
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 4,'LineColor','#FFED1212','发电机颜色');
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 5,'LineWidth','1','发电机宽度');
+		end
+end
+--添加“电力符号016”
+set @AddControl='Dlfh16'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'5','MonitorSystem.Dlfh.'+@AddControl ,'电力符号','等值系统');
+		
+		set @ControlID=0;
+		select @ControlID=max(controlid)  from t_control
+		if @ControlID > 0
+		begin
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 1,'DeviceName','电抗器','设备名称');
+			--电压等级
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 2,'Voltagelevel','10','电压等级');
+			
+
+			INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+				 VALUES(@ControlID, 4,'LineColor','#FFED1212','系统颜色');
+			
+		end
+end
 
 /*****************************************
 控件	电力电子
@@ -331,6 +501,72 @@ begin
 		print @AddControl
 		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
 		values(@AddControl,'6','MonitorSystem.Dldz.Dldz02','电力电子','电力电子02');
+end
+
+--添加控件	电力电子03
+set @AddControl='Dldz03'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子03');
+end
+
+--添加控件	电力电子04
+set @AddControl='Dldz04'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子04');
+end
+
+--添加控件	电力电子05
+set @AddControl='Dldz05'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子05');
+end
+
+--添加控件	电力电子06
+set @AddControl='Dldz06'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子06');
+end
+
+--添加控件	电力电子07
+set @AddControl='Dldz07'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子07');
+end
+
+--添加控件	电力电子08
+set @AddControl='Dldz08'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子08');
 end
 
 /*****************************************

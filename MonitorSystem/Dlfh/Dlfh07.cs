@@ -101,7 +101,7 @@ namespace MonitorSystem.Dlfh
                 }
                 else if (name == "GroundWireWidth".ToUpper())
                 {
-                    _GroundWireWidth = int.Parse(value);
+                    _GroundWireWidth = Convert.ToDouble(value);
                 }
                 else if (name == "LineColor".ToUpper())
                 {
@@ -109,7 +109,7 @@ namespace MonitorSystem.Dlfh
                 }
                 else if (name == "LineWidth".ToUpper())
                 {
-                    _LineWith = int.Parse(value);
+                    _LineWith = Convert.ToDouble(value);
                 }
             }
             Paint();
