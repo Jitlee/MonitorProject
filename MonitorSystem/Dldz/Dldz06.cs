@@ -66,10 +66,10 @@ namespace MonitorSystem.Dldz
             this.Height = 30;
             Paint();
 
-            this.SizeChanged += new SizeChangedEventHandler(Dldz001_SizeChanged);
+            this.SizeChanged += new SizeChangedEventHandler(Control_SizeChanged);
         }
 
-        private void Dldz001_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Control_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.Width = e.NewSize.Width;
             this.Height = e.NewSize.Width * 0.3;

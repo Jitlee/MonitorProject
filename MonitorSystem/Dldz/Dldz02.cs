@@ -188,7 +188,7 @@ namespace MonitorSystem.Dldz
             
            
             double dbPointNum = 3;//单边点数量
-            double dWidth = this.Width / 2;//弯曲长度            
+            double dWidth = this.Width * (1 - _aLinePer * 2);//弯曲长度            
             double minWidth = dWidth / (dbPointNum * 4);//第一个点位置之间的宽度(点数*4分之一宽度)
             double _shPointHeight = this.Height * 0.3 / 2; //横线到上下点的高度
             
@@ -214,7 +214,7 @@ namespace MonitorSystem.Dldz
                 }
             }
             //直线2
-            pc.Add(new Point(this.Width * 0.75, _LineY));
+            pc.Add(new Point(this.Width * (1 - _aLinePer), _LineY));
             pc.Add(new Point(this.Width, _LineY));
             pl.Points = pc;
            
@@ -233,12 +233,6 @@ namespace MonitorSystem.Dldz
             pyc.Add(new Point(this.Width * (230d / 324d), this.Height * (50d / 200d)));
 
             py.Points = pyc;
-           
-
-            
-
-           
-            
         }
 
     }

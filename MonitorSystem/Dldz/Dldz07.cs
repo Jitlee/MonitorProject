@@ -25,6 +25,8 @@ namespace MonitorSystem.Dldz
         Polyline pyLeft = new Polyline();
         Polyline pyRight = new Polyline();
 
+        Ellipse _Elli = new Ellipse();
+
         public Dldz07()
         {
 
@@ -34,17 +36,17 @@ namespace MonitorSystem.Dldz
 
             _canvas.Children.Add(pyLeft);
             _canvas.Children.Add(pyRight);
+            _canvas.Children.Add(_Elli);
 
-
-            pyLeft.StrokeThickness = pyRight.StrokeThickness = DLDZCommon.DLDZLineWidth;
-            pyLeft.Stroke = pyRight.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
+            _Elli.StrokeThickness =pyLeft.StrokeThickness = pyRight.StrokeThickness = DLDZCommon.DLDZLineWidth;
+            _Elli.Stroke =pyLeft.Stroke = pyRight.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
             
             Paint();
 
-            this.SizeChanged += new SizeChangedEventHandler(Dldz001_SizeChanged);
+            this.SizeChanged += new SizeChangedEventHandler(Control_SizeChanged);
         }
 
-        private void Dldz001_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Control_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.Width = e.NewSize.Width;
             this.Height = e.NewSize.Width * 0.49;
@@ -199,6 +201,14 @@ namespace MonitorSystem.Dldz
             pyRight.Points.Add(new Point(this.Width, pyTopY));
             pyRight.Points.Add(new Point(this.Width, pyTopY + pyHeight));
             pyRight.Points.Add(new Point(this.Width - pyWidth, pyTopY + pyHeight));
+
+
+            //中间tu圆
+            double _ElliWidth=this.Width * 0.63;
+            _Elli.Width = _ElliWidth;
+            _Elli.Height = this.Height - DLDZCommon.DLDZLineWidth * 2;
+
+            _Elli.SetValue(Canvas.LeftProperty,(this.Width- _ElliWidth)/2);
 
         }
 

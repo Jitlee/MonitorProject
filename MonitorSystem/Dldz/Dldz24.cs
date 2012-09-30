@@ -9,67 +9,38 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
-using System.ComponentModel;
 using MonitorSystem.Web.Moldes;
+using System.ComponentModel;
 
 namespace MonitorSystem.Dldz
 {
-    /// <summary>
-    /// 电力电子
-    /// </summary>
-    public class Dldz08 : MonitorControl
+    public class Dldz24 : MonitorControl
     {
         private Canvas _canvas = new Canvas();
-
-        Line _line1 = new Line();
-        Line _line2 = new Line();
-        Line _line3 = new Line();//最中间的线
-        Path py = new Path();
-        GeometryGroup gg = new GeometryGroup();
-        //四边形和棱形
-        RectangleGeometry _rectG = new RectangleGeometry();
-        PathGeometry _pathG= new PathGeometry();
-        //棱形
-        PathFigureCollection pfc = new PathFigureCollection();
-        PathFigure pf = new PathFigure();
-        PathSegmentCollection psc = new PathSegmentCollection();
-
-        public Dldz08()
+        Polyline pl = new Polyline();
+        Line _SortLine = new Line();
+        Polygon py = new Polygon();
+        public Dldz24()
         {
             this.Content = _canvas;
             this.Width = 100;
-            this.Height = 53;
+            this.Height = 47;
 
-            _pathG.Figures = pfc;
-            pfc.Add(pf);
-            pf.Segments = psc;
-
-            gg.FillRule = FillRule.Nonzero;
-            gg.Children.Add(_rectG);
-            gg.Children.Add(_pathG);
-            py.Data = gg;
-
-            py.Fill = new SolidColorBrush(DLDZCommon.DLDZFilleColor2);
-            py.StrokeThickness = DLDZCommon.DLDZLineWidth;
-            py.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
+            _canvas.Children.Add(pl);
+            _canvas.Children.Add(_SortLine);
             _canvas.Children.Add(py);
 
-            _canvas.Children.Add(_line1);
-            _canvas.Children.Add(_line2);
-            _canvas.Children.Add(_line3);
+            py.Fill = new SolidColorBrush(DLDZCommon.DLDZFilleColor);
+            py.StrokeThickness = _SortLine.StrokeThickness = pl.StrokeThickness = DLDZCommon.DLDZLineWidth;
+            py.Stroke = _SortLine.Stroke =pl.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
 
-            _line3.Stroke = _line2.Stroke = _line1.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
-            _line2.StrokeThickness = _line1.StrokeThickness = DLDZCommon.DLDZLineWidth;
-            _line3.StrokeThickness = DLDZCommon.DLDZLineWidth * 2;
-
-            Paint();
-            this.SizeChanged += new SizeChangedEventHandler(Control_SizeChanged);
+            this.SizeChanged += new SizeChangedEventHandler(DldzSizeChanged);
         }
 
-        private void Control_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void DldzSizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.Width = e.NewSize.Width;
-            this.Height = e.NewSize.Width * 0.53;
+            this.Height = e.NewSize.Width * 0.47;
             Paint();
         }
 
@@ -124,8 +95,11 @@ namespace MonitorSystem.Dldz
             {
                 string name = pro.PropertyName.ToUpper();
                 string value = pro.PropertyValue;
+                //if (name == "LeftOrNot".ToUpper())
+                //{
+
+                //}
             }
-            //Paint();
         }
 
         public override void SetCommonPropertyValue()
@@ -144,7 +118,6 @@ namespace MonitorSystem.Dldz
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
            "BackColor", "ForeColor", "Transparent","Translate"};
-        // ,"DeviceName","Voltagelevel","CapacitiveColor","CapacitiveWidth","LineColor","LineWidth"};
         public override string[] BrowsableProperties
         {
             get { return m_BrowsableProperties; }
@@ -154,7 +127,7 @@ namespace MonitorSystem.Dldz
 
         private static readonly DependencyProperty BackColorProperty =
            DependencyProperty.Register("BackColor",
-           typeof(Color), typeof(Dldz08), new PropertyMetadata(Colors.White));
+           typeof(Color), typeof(Dldz24), new PropertyMetadata(Colors.White));
         [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
@@ -169,7 +142,7 @@ namespace MonitorSystem.Dldz
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(Dldz08), new PropertyMetadata(Colors.Black));
+            typeof(Color), typeof(Dldz24), new PropertyMetadata(Colors.Black));
         [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
@@ -184,7 +157,7 @@ namespace MonitorSystem.Dldz
 
 
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-        typeof(int), typeof(Dldz08), new PropertyMetadata(0));
+        typeof(int), typeof(Dldz24), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
@@ -198,72 +171,69 @@ namespace MonitorSystem.Dldz
             }
         }
         #endregion
-
         #endregion
-
 
         private void Paint()
         {
-            
-            //四边形最上面位置
-            double _rectTop=this.Height * 0.219;
-            //四边形宽
-            double _rectWidth = this.Width * 0.63;
-            //开始线长度
-            double _LineWidth = this.Width * 0.27;
-            //路径四边形高度
-            double _RectHeight = this.Height * 0.566;
-
-            //设置线
-            double _LineStrtY = this.Height * 0.36;
-
-            _line1.X1 = 0;
-            _line1.Y2 = _line1.Y1 = _LineStrtY;
-            _line1.X2 = _LineWidth;
-
-            //_Line2
-            _line2.X1 = 0;
-            _line2.X2 = _LineWidth;
-            _line2.Y1 = _line2.Y2 = _LineStrtY + _RectHeight / 2;
+            double _aLinePer = 0.2;//两直线，分别占总长度比例
+            //线
+            double _LineY = this.Height* 0.21;//横线的Y轴位置
+            double _LineLength = this.Width * _aLinePer;
 
 
-            //_line3
-            _line3.X1 = _LineWidth + this.Width * 0.01;
-            _line3.X2 = this.Width;
-            _line3.Y1 = _line3.Y2 = this.Height/2;
+            double dbPointNum = 3;//单边点数量
+            double dWidth = this.Width * (1- _aLinePer*2);//弯曲长度            
+            double minWidth = dWidth / (dbPointNum * 4);//第一个点位置之间的宽度(点数*4分之一宽度)
+            double _shPointHeight = this.Height * 0.21; //横线到上下点的高度
 
-
-            
-            _rectG.Rect = new Rect
+            PointCollection pc = new PointCollection();
+            //前直线1
+            pc.Add(new Point(0, _LineY));
+            pc.Add(new Point(_LineLength, _LineY));
+            double _bot2X = 0;
+            int index = 0;
+            //上下三个点
+            for (int i = 0; i < dbPointNum * 2; i++)
             {
-                Height= _RectHeight,
-                Width= _rectWidth,
-                X = _LineWidth,
-                Y= _rectTop
-            };
+                if (i == 0)
+                {
+                    pc.Add(new Point(_LineLength + minWidth, _LineY - _shPointHeight));
+                }
+                int mod = i % 2;
+                if (mod == 1)
+                {
+                    index++;
+                    if (index == 2)
+                    {
+                        _bot2X = _LineLength + minWidth * (i * 2 + 1);
+                    }
+                    pc.Add(new Point(_LineLength + minWidth * (i * 2 + 1), _LineY + _shPointHeight));
+                }
+                else
+                {
+                    pc.Add(new Point(_LineLength + minWidth * (i * 2 + 1), _LineY - _shPointHeight));
+                }
+            }
+            //直线2
+            pc.Add(new Point(this.Width * (1- _aLinePer), _LineY));
+            pc.Add(new Point(this.Width, _LineY));
+            pl.Points = pc;
 
-            double PathstartX=_LineWidth+ _rectWidth/2;
-            Point pStartP = new Point(PathstartX, _rectTop);
-            pf.StartPoint = pStartP;
+            //箭头线
+            _SortLine.X1 = _SortLine.X2 = _bot2X;
+            _SortLine.Y1 = this.Height * 0.54;
+            _SortLine.Y2 = this.Height;
 
-            psc.Clear();
-            ArcSegment arcs = new ArcSegment();
-            arcs.Point = new Point(this.Width,0);
-            psc.Add(arcs);
 
-            arcs = new ArcSegment();
-            arcs.Point = new Point(this.Width, this.Height);
-            psc.Add(arcs);
+            //箭头
+            double pyxLen = this.Width * 0.07;
+            PointCollection pyc = new PointCollection();
+            pyc.Add(new Point(_bot2X, this.Height * 0.42));
+            pyc.Add(new Point(_bot2X - pyxLen, this.Height * 0.67));
+            pyc.Add(new Point(_bot2X + pyxLen, this.Height * 0.67));
 
-            arcs = new ArcSegment();
-            arcs.Point = new Point(PathstartX, _rectTop + _RectHeight);
-            psc.Add(arcs);
-
-            arcs = new ArcSegment();
-            arcs.Point = pStartP;
-            psc.Add(arcs);
+            py.Points = pyc;
         }
 
     }
 }
-

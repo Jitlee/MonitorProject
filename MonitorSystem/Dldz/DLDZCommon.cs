@@ -27,5 +27,10 @@ namespace MonitorSystem.Dldz
         /// 电力电子，线条宽度
         /// </summary>
         public static double DLDZLineWidth = 0.5;
+
+        /// <summary>
+        /// 电力电子填充颜色
+        /// </summary>
+        public static Color DLDZFilleColor2 = Common.StringToColor("RGB(0,215,215)");
     }
 }

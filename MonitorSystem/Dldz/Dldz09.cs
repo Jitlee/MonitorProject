@@ -17,50 +17,50 @@ namespace MonitorSystem.Dldz
     /// <summary>
     /// 电力电子
     /// </summary>
-    public class Dldz08 : MonitorControl
+    public class Dldz09 : MonitorControl
     {
         private Canvas _canvas = new Canvas();
 
         Line _line1 = new Line();
         Line _line2 = new Line();
-        Line _line3 = new Line();//最中间的线
+
+        Ellipse _Elli = new Ellipse();
+
         Path py = new Path();
         GeometryGroup gg = new GeometryGroup();
-        //四边形和棱形
-        RectangleGeometry _rectG = new RectangleGeometry();
-        PathGeometry _pathG= new PathGeometry();
+        PathGeometry _pathG = new PathGeometry();
         //棱形
         PathFigureCollection pfc = new PathFigureCollection();
         PathFigure pf = new PathFigure();
         PathSegmentCollection psc = new PathSegmentCollection();
 
-        public Dldz08()
+        public Dldz09()
         {
             this.Content = _canvas;
             this.Width = 100;
             this.Height = 53;
 
+            _Elli.StrokeThickness = DLDZCommon.DLDZLineWidth;
+            _Elli.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
+            _Elli.Fill = new SolidColorBrush(DLDZCommon.DLDZFilleColor2);
+            _canvas.Children.Add(_Elli);
+
             _pathG.Figures = pfc;
             pfc.Add(pf);
             pf.Segments = psc;
-
             gg.FillRule = FillRule.Nonzero;
-            gg.Children.Add(_rectG);
             gg.Children.Add(_pathG);
             py.Data = gg;
-
-            py.Fill = new SolidColorBrush(DLDZCommon.DLDZFilleColor2);
             py.StrokeThickness = DLDZCommon.DLDZLineWidth;
             py.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
             _canvas.Children.Add(py);
-
             _canvas.Children.Add(_line1);
             _canvas.Children.Add(_line2);
-            _canvas.Children.Add(_line3);
 
-            _line3.Stroke = _line2.Stroke = _line1.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
-            _line2.StrokeThickness = _line1.StrokeThickness = DLDZCommon.DLDZLineWidth;
-            _line3.StrokeThickness = DLDZCommon.DLDZLineWidth * 2;
+
+            _line2.Stroke = _line1.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
+            _line2.StrokeThickness = _line1.StrokeThickness = DLDZCommon.DLDZLineWidth * 2;
+            
 
             Paint();
             this.SizeChanged += new SizeChangedEventHandler(Control_SizeChanged);
@@ -154,7 +154,7 @@ namespace MonitorSystem.Dldz
 
         private static readonly DependencyProperty BackColorProperty =
            DependencyProperty.Register("BackColor",
-           typeof(Color), typeof(Dldz08), new PropertyMetadata(Colors.White));
+           typeof(Color), typeof(Dldz09), new PropertyMetadata(Colors.White));
         [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
@@ -169,7 +169,7 @@ namespace MonitorSystem.Dldz
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(Dldz08), new PropertyMetadata(Colors.Black));
+            typeof(Color), typeof(Dldz09), new PropertyMetadata(Colors.Black));
         [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
@@ -184,7 +184,7 @@ namespace MonitorSystem.Dldz
 
 
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-        typeof(int), typeof(Dldz08), new PropertyMetadata(0));
+        typeof(int), typeof(Dldz09), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
@@ -204,64 +204,96 @@ namespace MonitorSystem.Dldz
 
         private void Paint()
         {
-            
-            //四边形最上面位置
-            double _rectTop=this.Height * 0.219;
-            //四边形宽
-            double _rectWidth = this.Width * 0.63;
-            //开始线长度
-            double _LineWidth = this.Width * 0.27;
-            //路径四边形高度
-            double _RectHeight = this.Height * 0.566;
 
-            //设置线
-            double _LineStrtY = this.Height * 0.36;
+
+
+            double _LineTop = this.Height / 2;
+
+            //曲线Y点坐标
+            double pyTopY=this.Height * (0.5 - 0.257);
 
             _line1.X1 = 0;
-            _line1.Y2 = _line1.Y1 = _LineStrtY;
-            _line1.X2 = _LineWidth;
+            _line1.X2 = this.Width * 0.17;
+            _line1.Y2 = _line1.Y1 = _LineTop;
+            
 
             //_Line2
-            _line2.X1 = 0;
-            _line2.X2 = _LineWidth;
-            _line2.Y1 = _line2.Y2 = _LineStrtY + _RectHeight / 2;
+            _line2.X1 = this.Width * (1 - 0.18);
+            _line2.X2 = this.Width;
+            _line2.Y1 = _line2.Y2 = _LineTop;
 
+            //—_Elli
+            _Elli.Height = this.Height;
+            _Elli.Width = this.Width * 0.8;
+            _Elli.SetValue(Canvas.LeftProperty, this.Width * 0.1);
 
-            //_line3
-            _line3.X1 = _LineWidth + this.Width * 0.01;
-            _line3.X2 = this.Width;
-            _line3.Y1 = _line3.Y2 = this.Height/2;
-
-
-            
-            _rectG.Rect = new Rect
-            {
-                Height= _RectHeight,
-                Width= _rectWidth,
-                X = _LineWidth,
-                Y= _rectTop
-            };
-
-            double PathstartX=_LineWidth+ _rectWidth/2;
-            Point pStartP = new Point(PathstartX, _rectTop);
-            pf.StartPoint = pStartP;
-
+            pf.StartPoint = new Point(this.Width * 0.17, _LineTop);
             psc.Clear();
             ArcSegment arcs = new ArcSegment();
-            arcs.Point = new Point(this.Width,0);
+            arcs.Point = new Point(this.Width * 0.31, pyTopY);
+            arcs.Size = new Size { Width= this.Width * 0.14,
+             Height= _LineTop - pyTopY  };
+            arcs.SweepDirection = SweepDirection.Clockwise;
             psc.Add(arcs);
 
             arcs = new ArcSegment();
-            arcs.Point = new Point(this.Width, this.Height);
+            arcs.Point = new Point(this.Width * 0.41, pyTopY);
+            psc.Add(arcs);
+
+            //0.554
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.554, this.Height*0.377 );
+            arcs.Size = new Size()
+            {
+                Height = this.Height * 0.377 - pyTopY,
+                Width = this.Width * 0.144
+            };
+            arcs.SweepDirection = SweepDirection.Clockwise;
+            psc.Add(arcs);
+            //中间最右边线
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.554, this.Height * 0.377);
             psc.Add(arcs);
 
             arcs = new ArcSegment();
-            arcs.Point = new Point(PathstartX, _rectTop + _RectHeight);
+            arcs.Point = new Point(this.Width * 0.554, this.Height * 0.528);
+            psc.Add(arcs);
+            //中间
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.512, this.Height * 0.589);
             psc.Add(arcs);
 
             arcs = new ArcSegment();
-            arcs.Point = pStartP;
+            arcs.Point = new Point(this.Width * 0.472, this.Height * 0.55);
             psc.Add(arcs);
+            //中间最左边线0.454   227  
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.452, this.Height * 0.494);
+            psc.Add(arcs);
+
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.452, this.Height * 0.407);
+            psc.Add(arcs);
+
+            //右边最上面的线
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.55, pyTopY);
+            arcs.Size = new Size(this.Width * 0.1, this.Height * 0.407 - pyTopY);
+            arcs.SweepDirection = SweepDirection.Clockwise;
+            psc.Add(arcs);
+
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.64, pyTopY);
+            psc.Add(arcs);
+
+            //最后弯
+            arcs = new ArcSegment();
+            arcs.Point = new Point(this.Width * 0.82, _LineTop);
+            arcs.Size = new Size() { Height=  _LineTop - pyTopY,
+            Width= this.Width * 0.2};
+            arcs.SweepDirection = SweepDirection.Clockwise;
+            psc.Add(arcs);
+
         }
 
     }

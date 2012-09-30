@@ -569,6 +569,203 @@ begin
 		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子08');
 end
 
+--添加控件	电力电子09
+set @AddControl='Dldz09'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子09');
+end
+
+--添加控件	电力电子10
+set @AddControl='Dldz10'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子10');
+end
+
+--添加控件	电力电子11
+set @AddControl='Dldz11'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子11');
+end
+
+--添加控件	电力电子12
+set @AddControl='Dldz12'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子12');
+end
+
+--添加控件	电力电子13
+set @AddControl='Dldz13'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子13');
+end
+
+--添加控件	电力电子14
+set @AddControl='Dldz14'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子14');
+end
+
+--添加控件	电力电子15
+set @AddControl='Dldz15'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子15');
+end
+
+--添加控件	电力电子16
+set @AddControl='Dldz16'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子16');
+end
+
+--添加控件	电力电子17
+set @AddControl='Dldz17'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子17');
+end
+
+--添加控件	电力电子18
+set @AddControl='Dldz18'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子18');
+end
+
+--添加控件	电力电子19
+set @AddControl='Dldz19'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子19');
+end
+
+--添加控件	电力电子20
+set @AddControl='Dldz20'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子20');
+end
+
+--添加控件	电力电子21
+set @AddControl='Dldz21'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子21');
+end
+
+--添加控件	电力电子22
+set @AddControl='Dldz22'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子22');
+end
+
+--添加控件	电力电子23
+set @AddControl='Dldz23'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子23');
+end
+
+--添加控件	电力电子24
+set @AddControl='Dldz24'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子24');
+end
+
+--添加控件	电力电子17
+set @AddControl='Dldz25'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子25');
+end
+
+--添加控件	电力电子26
+set @AddControl='Dldz26'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'6','MonitorSystem.Dldz.'+@AddControl,'电力电子','电力电子26');
+end
 /*****************************************
 添加控件	电气符号
 ******************************************/

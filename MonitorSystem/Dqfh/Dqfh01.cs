@@ -33,8 +33,8 @@ namespace MonitorSystem.Dqfh
             _canvas.Children.Add(_LineX2);
             _canvas.Children.Add(_LineY1);
             _canvas.Children.Add(_LineY2);
-            this.Width = 60;
-            this.Height = 60;
+            this.Width = 100;
+            this.Height = 100;
             Paint();
 
             this.SizeChanged += new SizeChangedEventHandler(Dqfh01_SizeChanged);

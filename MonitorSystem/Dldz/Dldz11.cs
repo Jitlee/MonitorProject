@@ -17,50 +17,40 @@ namespace MonitorSystem.Dldz
     /// <summary>
     /// 电力电子
     /// </summary>
-    public class Dldz08 : MonitorControl
+    public class Dldz11 : MonitorControl
     {
         private Canvas _canvas = new Canvas();
 
-        Line _line1 = new Line();
-        Line _line2 = new Line();
-        Line _line3 = new Line();//最中间的线
         Path py = new Path();
         GeometryGroup gg = new GeometryGroup();
-        //四边形和棱形
-        RectangleGeometry _rectG = new RectangleGeometry();
-        PathGeometry _pathG= new PathGeometry();
+        PathGeometry _pathG = new PathGeometry();
         //棱形
         PathFigureCollection pfc = new PathFigureCollection();
         PathFigure pf = new PathFigure();
         PathSegmentCollection psc = new PathSegmentCollection();
 
-        public Dldz08()
+        Rectangle _rect = new Rectangle();
+
+        public Dldz11()
         {
             this.Content = _canvas;
             this.Width = 100;
-            this.Height = 53;
+            this.Height = 96;
+
 
             _pathG.Figures = pfc;
             pfc.Add(pf);
             pf.Segments = psc;
-
             gg.FillRule = FillRule.Nonzero;
-            gg.Children.Add(_rectG);
             gg.Children.Add(_pathG);
             py.Data = gg;
 
-            py.Fill = new SolidColorBrush(DLDZCommon.DLDZFilleColor2);
-            py.StrokeThickness = DLDZCommon.DLDZLineWidth;
-            py.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
+            _rect.Fill = py.Fill = new SolidColorBrush(DLDZCommon.DLDZFilleColor2);
+            _rect.StrokeThickness = py.StrokeThickness = DLDZCommon.DLDZLineWidth;
+            _rect.Stroke = py.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
+
             _canvas.Children.Add(py);
-
-            _canvas.Children.Add(_line1);
-            _canvas.Children.Add(_line2);
-            _canvas.Children.Add(_line3);
-
-            _line3.Stroke = _line2.Stroke = _line1.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);
-            _line2.StrokeThickness = _line1.StrokeThickness = DLDZCommon.DLDZLineWidth;
-            _line3.StrokeThickness = DLDZCommon.DLDZLineWidth * 2;
+            _canvas.Children.Add(_rect);
 
             Paint();
             this.SizeChanged += new SizeChangedEventHandler(Control_SizeChanged);
@@ -69,7 +59,7 @@ namespace MonitorSystem.Dldz
         private void Control_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.Width = e.NewSize.Width;
-            this.Height = e.NewSize.Width * 0.53;
+            this.Height = e.NewSize.Width * 0.96;
             Paint();
         }
 
@@ -144,7 +134,6 @@ namespace MonitorSystem.Dldz
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
            "BackColor", "ForeColor", "Transparent","Translate"};
-        // ,"DeviceName","Voltagelevel","CapacitiveColor","CapacitiveWidth","LineColor","LineWidth"};
         public override string[] BrowsableProperties
         {
             get { return m_BrowsableProperties; }
@@ -154,7 +143,7 @@ namespace MonitorSystem.Dldz
 
         private static readonly DependencyProperty BackColorProperty =
            DependencyProperty.Register("BackColor",
-           typeof(Color), typeof(Dldz08), new PropertyMetadata(Colors.White));
+           typeof(Color), typeof(Dldz11), new PropertyMetadata(Colors.White));
         [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
@@ -169,7 +158,7 @@ namespace MonitorSystem.Dldz
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(Dldz08), new PropertyMetadata(Colors.Black));
+            typeof(Color), typeof(Dldz11), new PropertyMetadata(Colors.Black));
         [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
@@ -184,7 +173,7 @@ namespace MonitorSystem.Dldz
 
 
         private static readonly DependencyProperty TransparentProperty = DependencyProperty.Register("Transparent",
-        typeof(int), typeof(Dldz08), new PropertyMetadata(0));
+        typeof(int), typeof(Dldz11), new PropertyMetadata(0));
         private int _Transparent = 0;
         [DefaultValue(""), Description("透明"), Category("杂项")]
         public int Transparent
@@ -204,64 +193,29 @@ namespace MonitorSystem.Dldz
 
         private void Paint()
         {
-            
-            //四边形最上面位置
-            double _rectTop=this.Height * 0.219;
-            //四边形宽
-            double _rectWidth = this.Width * 0.63;
-            //开始线长度
-            double _LineWidth = this.Width * 0.27;
-            //路径四边形高度
-            double _RectHeight = this.Height * 0.566;
-
-            //设置线
-            double _LineStrtY = this.Height * 0.36;
-
-            _line1.X1 = 0;
-            _line1.Y2 = _line1.Y1 = _LineStrtY;
-            _line1.X2 = _LineWidth;
-
-            //_Line2
-            _line2.X1 = 0;
-            _line2.X2 = _LineWidth;
-            _line2.Y1 = _line2.Y2 = _LineStrtY + _RectHeight / 2;
-
-
-            //_line3
-            _line3.X1 = _LineWidth + this.Width * 0.01;
-            _line3.X2 = this.Width;
-            _line3.Y1 = _line3.Y2 = this.Height/2;
-
-
-            
-            _rectG.Rect = new Rect
-            {
-                Height= _RectHeight,
-                Width= _rectWidth,
-                X = _LineWidth,
-                Y= _rectTop
-            };
-
-            double PathstartX=_LineWidth+ _rectWidth/2;
-            Point pStartP = new Point(PathstartX, _rectTop);
-            pf.StartPoint = pStartP;
-
+            pf.StartPoint = new Point(0, 0);
             psc.Clear();
+            //直线
             ArcSegment arcs = new ArcSegment();
-            arcs.Point = new Point(this.Width,0);
+            arcs.Point = new Point(0, 0);
             psc.Add(arcs);
 
             arcs = new ArcSegment();
-            arcs.Point = new Point(this.Width, this.Height);
+            arcs.Point = new Point(this.Width * 0.86, this.Height/2 );
             psc.Add(arcs);
 
             arcs = new ArcSegment();
-            arcs.Point = new Point(PathstartX, _rectTop + _RectHeight);
+            arcs.Point = new Point(0, this.Height);
             psc.Add(arcs);
 
             arcs = new ArcSegment();
-            arcs.Point = pStartP;
+            arcs.Point = new Point(0, 0);
             psc.Add(arcs);
+
+            _rect.RadiusX = _rect.RadiusY = _rect.Height = _rect.Width = this.Width * 0.24;
+            _rect.SetValue(Canvas.LeftProperty, this.Width * 0.76);
+            _rect.SetValue(Canvas.TopProperty, this.Height* 0.38);// 0.5 - 0.12
+            
         }
 
     }
