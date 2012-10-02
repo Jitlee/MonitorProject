@@ -196,6 +196,8 @@
     <Compile Include="Dqfh\Dqfh22.cs" />
     <Compile Include="Gallery\Meter\Meter1.cs" />
     <Compile Include="Gallery\Meter\Meter2.cs" />
+    <Compile Include="Gallery\Meter\Meter3.cs" />
+    <Compile Include="Gallery\Meter\Meter4.cs" />
     <Compile Include="GetData\DataObject.cs" />
     <Compile Include="GetData\DynamicDataBuilder.cs" />
     <Compile Include="GetData\TemplateManager.cs" />
