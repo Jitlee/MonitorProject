@@ -505,7 +505,7 @@ namespace MonitorSystem.Gallery.Meter
                 var maximum = Maximum;
                 var minimum = Minimum;
                 var mainScale = MainScale;
-                var viceScale = ViceScale;
+                var viceScale = ViceScale + 1;
                 var decimalDigits = DecimalDigits;  // 小数点位
                 var beginAngle = 1.25d * Math.PI;
                 var avgMainAngle = 0.5d * Math.PI / mainScale;

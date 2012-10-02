@@ -1000,7 +1000,7 @@ begin
 	end
 end
 
---添加“仪表6”
+--添加“仪表7”
 set @AddControl='Meter7'
 select @ControlNum=count(*) from t_control where controlname=@AddControl
 if @ControlNum = 0
@@ -1029,6 +1029,41 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 5,'MainScale','3','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'ViceScale','4','副刻度');
+	end
+end
+
+--添加“仪表8”
+set @AddControl='Meter8'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter8','仪表','仪表8');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Maximum','60','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'MainScale','6','主刻度');
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 6,'ViceScale','4','副刻度');
