@@ -199,6 +199,7 @@
     <Compile Include="Gallery\Meter\Meter3.cs" />
     <Compile Include="Gallery\Meter\Meter4.cs" />
     <Compile Include="Gallery\Meter\Meter5.cs" />
+    <Compile Include="Gallery\Meter\Meter6.cs" />
     <Compile Include="GetData\DataObject.cs" />
     <Compile Include="GetData\DynamicDataBuilder.cs" />
     <Compile Include="GetData\TemplateManager.cs" />
