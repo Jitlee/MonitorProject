@@ -971,7 +971,7 @@ begin
 	print '添加控件'
 	print @AddControl
 	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter6','仪表','指示表6');
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter6','仪表','仪表6');
 
 	set @ControlID=0;
 	select @ControlID=max(controlid)  from t_control
@@ -1008,7 +1008,7 @@ begin
 	print '添加控件'
 	print @AddControl
 	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter7','仪表','指示表7');
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter7','仪表','仪表7');
 
 	set @ControlID=0;
 	select @ControlID=max(controlid)  from t_control

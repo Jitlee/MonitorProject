@@ -414,10 +414,10 @@ namespace MonitorSystem.Gallery.Meter
                 _canvas.Children.Add(border2);
 
                 var background1 = new Rectangle();
-                background1.Width = width - 8d;
-                background1.Height = border1.Height - 8d;
-                background1.SetValue(Canvas.LeftProperty, 4d);
-                background1.SetValue(Canvas.TopProperty, 4d);
+                background1.Width = width - 10d;
+                background1.Height = border1.Height - 10d;
+                background1.SetValue(Canvas.LeftProperty, 5d);
+                background1.SetValue(Canvas.TopProperty, 5d);
                 background1.Fill = new SolidColorBrush(Color.FromArgb(0xff, 0xc0, 0xc0, 0xc0));
                 _canvas.Children.Add(background1);
 
@@ -542,6 +542,16 @@ namespace MonitorSystem.Gallery.Meter
                 ellipse.SetValue(Canvas.TopProperty, width * 417d / 657d);
                 ellipse.Width = ellipse.Height = width * 104d / 657d;
                 _canvas.Children.Add(ellipse);
+
+                var line = new Line();
+                line.Stroke = new SolidColorBrush(Color.FromArgb(0xff, 0xBE, 0xB9, 0xB1));
+                line.StrokeThickness = 3d;
+                line.X1 = width * 300d / 644d;
+                line.X2 = width * 348d / 644d;
+                line.Y1 = width * 435d / 644d;
+                line.Y2 = width * 484d / 644d;
+                _canvas.Children.Add(line);
+
             }
             catch { }
         }
