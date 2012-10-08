@@ -202,6 +202,11 @@
     <Compile Include="Gallery\Meter\Meter6.cs" />
     <Compile Include="Gallery\Meter\Meter7.cs" />
     <Compile Include="Gallery\Meter\Meter8.cs" />
+	<Compile Include="Gallery\Meter\Meter9.cs" />
+    <Compile Include="Gallery\Meter\Meter10.cs" />
+    <Compile Include="Gallery\Meter\Meter11.cs" />
+    <Compile Include="Gallery\Meter\Meter12.cs" />
+    <Compile Include="Gallery\Meter\Meter13.cs" />
     <Compile Include="GetData\DataObject.cs" />
     <Compile Include="GetData\DynamicDataBuilder.cs" />
     <Compile Include="GetData\TemplateManager.cs" />
