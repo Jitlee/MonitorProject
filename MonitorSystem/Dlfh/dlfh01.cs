@@ -31,7 +31,7 @@ namespace MonitorSystem.Dlfh
             _canvas.Children.Add(_LineX2);
             _canvas.Children.Add(_LineY1);
             _canvas.Children.Add(_LineY2);
-            this.Width = 40;
+            this.Width = 60;
             this.Height = 30;
             Paint();
 
@@ -41,18 +41,11 @@ namespace MonitorSystem.Dlfh
         private void Dlfh01_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.Width = e.NewSize.Width;
-            this.Height = e.NewSize.Width/2;
+            this.Height = e.NewSize.Width * 0.5;
             Paint();
         }
 
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            this.Width = availableSize.Width;
-            this.Height = availableSize.Height;
-            Paint();
-            return base.MeasureOverride(availableSize);
-        }
-
+     
         #region 公共
         #region 函数
         public override event EventHandler Selected;

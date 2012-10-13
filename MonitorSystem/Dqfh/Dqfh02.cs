@@ -32,8 +32,8 @@ namespace MonitorSystem.Dqfh
 
             p.Data = gg;
 
-            this.Width = 400;
-            this.Height = 124;
+            this.Width = 100;
+            this.Height = 31;
 
             Paint();
             this.SizeChanged += new SizeChangedEventHandler(Dqfh02_SizeChanged);
@@ -42,19 +42,13 @@ namespace MonitorSystem.Dqfh
         private void Dqfh02_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.Width = e.NewSize.Width;
-            this.Height = 124 * (this.Width / 400d);
+            this.Height = e.NewSize.Width * 0.31; 
 
 
             Paint();
         }
 
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            this.Width = availableSize.Width;
-            this.Height = availableSize.Height;
-            Paint();
-            return base.MeasureOverride(availableSize);
-        }
+      
 
         #region 公共
         #region 函数
@@ -105,15 +99,7 @@ namespace MonitorSystem.Dqfh
         {
             foreach (t_ElementProperty pro in ListElementProp)
             {
-                //string name = pro.PropertyName.ToUpper();
-                //string value = pro.PropertyValue;
-                //if (name == "DeviceName".ToUpper())
-                //{
-                //    _DeviceName = value;
-                //}
-
             }
-            //Paint();
         }
 
         public override void SetCommonPropertyValue()

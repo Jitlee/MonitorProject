@@ -32,7 +32,6 @@ namespace MonitorSystem.Dlfh
             this.Width = 60;
             this.Height = 30;
             Paint();
-
             this.SizeChanged += new SizeChangedEventHandler(Dlfh04_SizeChanged);
         }
 
@@ -42,15 +41,6 @@ namespace MonitorSystem.Dlfh
             this.Height = e.NewSize.Width / 2;
             Paint();
         }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            this.Width = availableSize.Width;
-            this.Height = availableSize.Height;
-            Paint();
-            return base.MeasureOverride(availableSize);
-        }
-
         #region 公共
         #region 函数
         public override event EventHandler Selected;

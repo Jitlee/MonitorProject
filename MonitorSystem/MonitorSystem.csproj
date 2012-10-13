@@ -169,6 +169,7 @@
     <Compile Include="Dlfh\Dlfh14.cs" />
     <Compile Include="Dlfh\Dlfh15.cs" />
     <Compile Include="Dlfh\Dlfh16.cs" />
+    <Compile Include="Dlfh\Voltagelevel.cs" />
     <Compile Include="Dqfh\Dqfh01.cs" />
     <Compile Include="Dqfh\Dqfh02.cs" />
     <Compile Include="Controls\GalleryControl.xaml.cs">
@@ -194,6 +195,7 @@
     <Compile Include="Dqfh\Dqfh20.cs" />
     <Compile Include="Dqfh\Dqfh21.cs" />
     <Compile Include="Dqfh\Dqfh22.cs" />
+    <Compile Include="Dqfh\DQFHCommon.cs" />
     <Compile Include="Gallery\Meter\Meter1.cs" />
     <Compile Include="Gallery\Meter\Meter2.cs" />
     <Compile Include="GetData\DataObject.cs" />

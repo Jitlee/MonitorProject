@@ -14,6 +14,7 @@ using System.ComponentModel;
 
 namespace MonitorSystem.Dlfh
 {
+    
     public class Dlfh08: MonitorControl
     {
         private Canvas _canvas = new Canvas();

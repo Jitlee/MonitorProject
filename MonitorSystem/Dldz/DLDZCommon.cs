@@ -32,5 +32,7 @@ namespace MonitorSystem.Dldz
         /// 电力电子填充颜色
         /// </summary>
         public static Color DLDZFilleColor2 = Common.StringToColor("RGB(0,215,215)");
+        
+        
     }
 }

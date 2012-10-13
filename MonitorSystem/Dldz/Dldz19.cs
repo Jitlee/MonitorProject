@@ -31,12 +31,9 @@ namespace MonitorSystem.Dldz
         
         public Dldz19()
         {
-
-            this.Width = 100;
-            this.Height = 34;
-
             this.Content = _canvas;
-
+ this.Width = 100;
+            this.Height = 34;
             //线
             _Line1.Stroke = _Line2.Stroke = _Line3.Stroke = _Line4.Stroke = _Line5.Stroke =
                 _Line7.Stroke = _Line6.Stroke = new SolidColorBrush(DLDZCommon.DLDZLineColor);

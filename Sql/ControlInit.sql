@@ -778,7 +778,7 @@ begin
 		print '添加控件'
 		print @AddControl
 		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-		values(@AddControl,'7','MonitorSystem.Dqfh.Dqfh01','电气符号','电气符号01');
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号01');
 end
 --添加控件	电气符号02
 set @AddControl='Dqfh02'
@@ -788,7 +788,227 @@ begin
 		print '添加控件'
 		print @AddControl
 		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
-		values(@AddControl,'7','MonitorSystem.Dqfh.Dqfh02','电气符号','电气符号02');
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号02');
+end
+
+--添加控件	电气符号03
+set @AddControl='Dqfh03'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号03');
+end
+
+--添加控件	电气符号04
+set @AddControl='Dqfh04'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号04');
+end
+
+--添加控件	电气符号05
+set @AddControl='Dqfh05'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号05');
+end
+
+--添加控件	电气符号06
+set @AddControl='Dqfh06'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号06');
+end
+
+--添加控件	电气符号07
+set @AddControl='Dqfh07'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号07');
+end
+
+--添加控件	电气符号08
+set @AddControl='Dqfh08'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号08');
+end
+
+--添加控件	电气符号09
+set @AddControl='Dqfh09'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号09');
+end
+
+--添加控件	电气符号10
+set @AddControl='Dqfh10'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号10');
+end
+
+--添加控件	电气符号11
+set @AddControl='Dqfh11'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号11');
+end
+
+--添加控件	电气符号12
+set @AddControl='Dqfh12'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号12');
+end
+
+--添加控件	电气符号13
+set @AddControl='Dqfh13'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号13');
+end
+
+--添加控件	电气符号14
+set @AddControl='Dqfh14'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号14');
+end
+
+--添加控件	电气符号15
+set @AddControl='Dqfh15'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号15');
+end
+
+--添加控件	电气符号16
+set @AddControl='Dqfh16'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号16');
+end
+
+--添加控件	电气符号17
+set @AddControl='Dqfh17'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号17');
+end
+
+--添加控件	电气符号18
+set @AddControl='Dqfh18'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号18');
+end
+
+--添加控件	电气符号19
+set @AddControl='Dqfh19'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号19');
+end
+
+--添加控件	电气符号20
+set @AddControl='Dqfh20'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号20');
+end
+
+--添加控件	电气符号21
+set @AddControl='Dqfh21'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号21');
+end
+
+--添加控件	电气符号22
+set @AddControl='Dqfh22'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+		print '添加控件'
+		print @AddControl
+		insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+		values(@AddControl,'7','MonitorSystem.Dqfh.'+@AddControl,'电气符号','电气符号22');
 end
 
 --update t_control set controltypeName='电气符号',controlCaption='电气符号02' where controlname='Dqfh02';

@@ -42,18 +42,10 @@ namespace MonitorSystem.Dqfh
 
         private void Dqfh01_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.Height= this.Width = e.NewSize.Width;
-            //this.Height = e.NewSize.Height;
+            this.Height= this.Width = e.NewSize.Width;           
             Paint();
         }
 
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            this.Width = availableSize.Width;
-            this.Height = availableSize.Height;
-            Paint();
-            return base.MeasureOverride(availableSize);
-        }
 
         #region 公共
         #region 函数
@@ -104,15 +96,7 @@ namespace MonitorSystem.Dqfh
         {
             foreach (t_ElementProperty pro in ListElementProp)
             {
-                //string name = pro.PropertyName.ToUpper();
-                //string value = pro.PropertyValue;
-                //if (name == "DeviceName".ToUpper())
-                //{
-                //    _DeviceName = value;
-                //}
-                
             }
-            //Paint();
         }
 
         public override void SetCommonPropertyValue()
@@ -130,8 +114,7 @@ namespace MonitorSystem.Dqfh
 
 
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize",
-           "BackColor", "ForeColor", "Transparent","Translate"
-        ,"DeviceName","Voltagelevel","CapacitiveColor","CapacitiveWidth","LineColor","LineWidth"};
+           "BackColor", "ForeColor", "Transparent","Translate"};
         public override string[] BrowsableProperties
         {
             get { return m_BrowsableProperties; }

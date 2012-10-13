@@ -29,8 +29,8 @@ namespace MonitorSystem.Dlfh
             _canvas.Children.Add(_LineJD2);
             _canvas.Children.Add(_LineJD3);
 
-            this.Width = 100;
-            this.Height = 30;
+            this.Width = 30;
+            this.Height = 60;
             Paint();
 
             this.SizeChanged += new SizeChangedEventHandler(Dlfh06_SizeChanged);

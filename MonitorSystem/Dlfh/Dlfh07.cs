@@ -24,10 +24,10 @@ namespace MonitorSystem.Dlfh
             this.Content = _canvas;
             _canvas.Children.Add(_LineXL);
             _canvas.Children.Add(py);
-           
 
-            this.Width = 60;
-            this.Height = 30;
+
+            this.Width = 30;
+            this.Height = 60;
             Paint();
 
             this.SizeChanged += new SizeChangedEventHandler(Dlfh07_SizeChanged);

@@ -43,13 +43,7 @@ namespace MonitorSystem.Dlfh
             Paint();
         }
 
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            this.Width = availableSize.Width;
-            this.Height = availableSize.Height;
-            Paint();
-            return base.MeasureOverride(availableSize);
-        }
+      
 
         #region 公共
         #region 函数
