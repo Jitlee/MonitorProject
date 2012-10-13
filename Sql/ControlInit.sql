@@ -1,3 +1,5 @@
+use [GDK_BCM]
+
 declare @ControlNum int;--查询控件数量，用于判断是否已经添加
 set @ControlNum=0;
 declare @AddControl varchar(10);--添加控件名称
@@ -1052,7 +1054,7 @@ begin
 	end
 end
 
---添加“仪表1”
+--添加“仪表2”
 set @AddControl='Meter2'
 select @ControlNum=count(*) from t_control where controlname=@AddControl
 if @ControlNum = 0
@@ -1082,4 +1084,506 @@ begin
 			 VALUES(@ControlID, 6,'Scale','10','主刻度');
 	end
 end
+
+--添加“仪表3”
+set @AddControl='Meter3'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter3','仪表','指示表1');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Text','指示表','标签');
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Value','100','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Maximum','100','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'MainScale','5','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'ViceScale','3','副刻度');
+	end
+end
+
+--添加“仪表4”
+set @AddControl='Meter4'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter4','仪表','仪表4');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Maximum','60','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'MainScale','6','主刻度');
+	end
+end
+
+--添加“仪表5”
+set @AddControl='Meter5'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter5','仪表','仪表5');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Maximum','60','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'MainScale','6','主刻度');
+	end
+end
+
+--添加“仪表6”
+set @AddControl='Meter6'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter6','仪表','仪表6');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Text','仪表','标签');
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Maximum','60','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'MainScale','6','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'ViceScale','4','副刻度');
+	end
+end
+
+--添加“仪表7”
+set @AddControl='Meter7'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter7','仪表','仪表7');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Maximum','60','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'MainScale','3','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'ViceScale','4','副刻度');
+	end
+end
+
+--添加“仪表8”
+set @AddControl='Meter8'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter8','仪表','仪表8');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Maximum','60','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'MainScale','6','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'ViceScale','4','副刻度');
+	end
+end
+
+--添加“仪表9”
+set @AddControl='Meter9'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter9','仪表','仪表9');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Maximum','60','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'MainScale','6','主刻度');
+	end
+end
+
+--添加“仪表10”
+set @AddControl='Meter10'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter10','仪表','仪表10');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Text','Voltage','标签');
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Maximum','60','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'MainScale','6','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'ViceScale','4','副刻度');
+	end
+end
+
+--添加“仪表11”
+set @AddControl='Meter11'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter11','仪表','仪表11');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Text','仪表','标签');
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Maximum','100','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'MainScale','10','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'ViceScale','1','副刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 8,'NormalFrom','40','正常区间从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 9,'NormalTo','60','正常区间到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 10,'Warring1From','20','警告区间1从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 11,'Warring1To','40','警告区间1到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 12,'Warring2From','60','警告区间2从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 13,'Warring2To','80','警告区间2到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 14,'Exception1From','0','异常区间1从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 15,'Exception1To','20','异常区间1到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 16,'Exception2From','80','异常区间2从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 17,'Exception2To','100','异常区间2到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 18,'LabelColor','#FF000000','标签颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 19,'DialPlateBackColor','#FFFFFFFF','表盘颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 20,'CalibrationColor','#FF0000FF','刻度文本颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 21,'NormalColor','#FF00E700','正常区间颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 22,'WarringColor','#FFFFFF00','警告区间颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 23,'ExceptionColor','#FFFF0000','异常区间颜色');
+	end
+end
+
+--添加“仪表12”
+set @AddControl='Meter12'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter12','仪表','仪表12');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Text','仪表','标签');
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Maximum','100','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'MainScale','10','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'ViceScale','1','副刻度');
+		
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 8,'BackColor','#FFCECBC5','背景颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 9,'LabelColor','#FF000000','标签颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 10,'DialPlateBackColor','#FFFFFFFF','表盘颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 11,'DialPlateBorlderColor','#FF008040','表盘轮廓颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 12,'CalibrationColor','#FF0000FF','刻度文本颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 13,'CalibrationColor','#FF000000','刻度颜色');
+	end
+end
+
+--添加“仪表13”
+set @AddControl='Meter13'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'4','MonitorSystem.Gallery.Meter.Meter13','仪表','仪表13');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Text','仪表','标签');
+		--电压等级
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Value','0','当前值');
+		--电容颜色
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'Maximum','100','最大值');
+		--电容宽度
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'Minimum','0','最小值');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'DecimalDigits','0','小数位数');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'MainScale','10','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'ViceScale','1','副刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 8,'NormalFrom','40','正常区间从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 9,'NormalTo','60','正常区间到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 10,'Warring1From','20','警告区间1从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 11,'Warring1To','40','警告区间1到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 12,'Warring2From','60','警告区间2从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 13,'Warring2To','80','警告区间2到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 14,'Exception1From','0','异常区间1从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 15,'Exception1To','20','异常区间1到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 16,'Exception2From','80','异常区间2从');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 17,'Exception2To','100','异常区间2到');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 18,'LabelColor','#FF000000','标签颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 19,'DialPlateBackColor','#FFFFFFFF','表盘颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 20,'CalibrationColor','#FF0000FF','刻度文本颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 21,'NormalColor','#FF00E700','正常区间颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 22,'WarringColor','#FFFFFF00','警告区间颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 23,'ExceptionColor','#FFFF0000','异常区间颜色');
+	end
+end
+
+
+
 
