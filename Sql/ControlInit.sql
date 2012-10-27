@@ -1,4 +1,84 @@
-use [GDK_BCM]
+USE [GDK_BCM]
+
+-- 创建图库表
+IF NOT EXISTS (SELECT NULL FROM dbo.SysObjects WHERE ID = object_id(N't_GalleryClassification')) 
+BEGIN
+	CREATE TABLE [t_GalleryClassification](
+		[Id] [int] NOT NULL PRIMARY KEY,
+		[Name] [nvarchar](16) NOT NULL,
+		[Description] [nvarchar](100) NULL,
+		[Sort] [int] NOT NULL DEFAULT (99999))
+
+	EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分类Id' ,@level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N't_GalleryClassification', @level2type=N'COLUMN', @level2name=N'Id'
+
+	EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分类名称' ,@level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N't_GalleryClassification', @level2type=N'COLUMN', @level2name=N'Name'
+
+	EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分类说明' ,@level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N't_GalleryClassification', @level2type=N'COLUMN', @level2name=N'Description'
+
+	EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序字段' ,@level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N't_GalleryClassification', @level2type=N'COLUMN', @level2name=N'Sort'
+
+	EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'图库分类表' ,@level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N't_GalleryClassification'
+
+END
+GO
+IF NOT EXISTS(SELECT NULL FROM [t_GalleryClassification] WHERE [Id]=4)
+BEGIN
+	INSERT INTO [t_GalleryClassification]
+			   ([Id]
+			   ,[Name]
+			   ,[Description]
+			   ,[Sort])
+		 VALUES
+			   (4
+			   ,'仪表'
+			   ,NULL
+			   ,4)
+END
+
+GO
+IF NOT EXISTS(SELECT NULL FROM [t_GalleryClassification] WHERE [Id]=6)
+BEGIN
+	INSERT INTO [t_GalleryClassification]
+			   ([Id]
+			   ,[Name]
+			   ,[Description]
+			   ,[Sort])
+		 VALUES
+			   (6
+			   ,'电力符号'
+			   ,NULL
+			   ,6)
+END
+
+GO
+IF NOT EXISTS(SELECT NULL FROM [t_GalleryClassification] WHERE [Id]=6)
+BEGIN
+	INSERT INTO [t_GalleryClassification]
+			   ([Id]
+			   ,[Name]
+			   ,[Description]
+			   ,[Sort])
+		 VALUES
+			   (6
+			   ,'电子符号'
+			   ,NULL
+			   ,6)
+END
+
+GO
+IF NOT EXISTS(SELECT NULL FROM [t_GalleryClassification] WHERE [Id]=7)
+BEGIN
+	INSERT INTO [t_GalleryClassification]
+			   ([Id]
+			   ,[Name]
+			   ,[Description]
+			   ,[Sort])
+		 VALUES
+			   (7
+			   ,'电气符号'
+			   ,NULL
+			   ,7)
+END
 
 declare @ControlNum int;--查询控件数量，用于判断是否已经添加
 set @ControlNum=0;
@@ -1681,6 +1761,32 @@ begin
 --显示格式（年月日时分秒）、时间:
 --时间设置	时间长度	采样周期
 
+
+
+--添加“ToolTip”
+set @AddControl='ToolTip'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'-1','MonitorSystem.MonitorSystemGlobal.ToolTipControl','提示控件','ToolTip');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Fill','#FFFFFFFF','填充颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'Stroke','#FF000000','边线颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'StrokeThickness','1','边线粗细');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'CornerRadius','10','圆角度');
+	end
+end
 
 
 end

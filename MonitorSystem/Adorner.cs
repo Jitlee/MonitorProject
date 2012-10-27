@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
+using System.ServiceModel.DomainServices.Client;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using System.Windows.Controls.Primitives;
-using MonitorSystem.Controls;
+
 using MonitorSystem.MonitorSystemGlobal;
+using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem
 {
@@ -24,6 +29,7 @@ namespace MonitorSystem
     [TemplatePart(Name = "BottomLeftAdorner", Type = typeof(FrameworkElement))]
     [TemplatePart(Name = "BottomCenterAdorner", Type = typeof(FrameworkElement))]
     [TemplatePart(Name = "BottomRightAdorner", Type = typeof(FrameworkElement))]
+    [TemplatePart(Name = "ToolTipButton", Type = typeof(Button))]
     public class Adorner : ButtonBase, IDisposable
     {
         private static Adorner _lastFocusObject = null;
@@ -39,8 +45,8 @@ namespace MonitorSystem
         double _offsetTop;
         private bool _associatedIsTapStop;
         private readonly FrameworkElement _associatedElement;
-        private FrameworkElement _backgroundAdorner;
-        private FrameworkElement _contentAdorner;
+        private Rectangle _backgroundAdorner;
+        private Rectangle _contentAdorner;
         private FrameworkElement _topLeftAdorner;
         private FrameworkElement _topCenterAdorner;
         private FrameworkElement _topRightAdorner;
@@ -50,9 +56,50 @@ namespace MonitorSystem
         private FrameworkElement _bottomCenterAdorner;
         private FrameworkElement _bottomRightAdorner;
         private const double MIN_SIZE = 0;
+
+        private Button _toolTipButton;
+        public static ToolTipControl CurrenttoolTipControl { get; private set; }
         #endregion
 
         #region Properties
+
+        //private static readonly DependencyProperty AllowMoveProperty =
+        //  DependencyProperty.Register("AllowMove",
+        //  typeof(bool), typeof(Adorner), new PropertyMetadata(true));
+
+        //public bool AllowMove
+        //{
+        //    get { return (bool)this.GetValue(AllowMoveProperty); }
+        //    set { this.SetValue(AllowMoveProperty, value); }
+        //}
+
+        //private static void IsAllowMove_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        //{
+        //    Adorner adorner = (Adorner)element;
+        //    adorner.OnAllowMoveChanged((bool)e.OldValue, (bool)e.NewValue);
+        //}
+
+        //public void OnAllowMoveChanged(bool oldValue, bool newValue)
+        //{
+        //    if (null != _contentAdorner
+        //        && null != _backgroundAdorner)
+        //    {
+        //        if (newValue)
+        //        {
+        //            //_contentAdorner.IsHitTestVisible = false;
+        //            //_backgroundAdorner.IsHitTestVisible = false;
+        //            //_contentAdorner.Fill = null;
+        //            //_backgroundAdorner.Fill = null;
+        //        }
+        //        else
+        //        {
+        //            //_contentAdorner.IsHitTestVisible = true;
+        //            //_backgroundAdorner.IsHitTestVisible = true;
+        //            //_contentAdorner.Fill = new SolidColorBrush(Colors.Transparent);
+        //            //_backgroundAdorner.Fill = new SolidColorBrush(Colors.Transparent);
+        //        }
+        //    }
+        //}
 
         private static readonly DependencyProperty IsLockScaleProperty =
             DependencyProperty.Register("IsLockScale",
@@ -91,6 +138,30 @@ namespace MonitorSystem
                     _centerRightAdorner.Visibility = Visibility.Visible;
                     _bottomCenterAdorner.Visibility = Visibility.Visible;
                 }
+            }
+        }
+
+        private static readonly DependencyProperty AllToolTipProperty =
+          DependencyProperty.Register("AllToolTip",
+          typeof(bool), typeof(Adorner), new PropertyMetadata(true, new PropertyChangedCallback(AllToolTip_Changed)));
+
+        public bool AllToolTip
+        {
+            get { return (bool)this.GetValue(AllToolTipProperty); }
+            set { this.SetValue(AllToolTipProperty, value); }
+        }
+
+        private static void AllToolTip_Changed(DependencyObject element, DependencyPropertyChangedEventArgs e)
+        {
+            Adorner adorner = (Adorner)element;
+            adorner.OnAllToolTipChanged((bool)e.OldValue, (bool)e.NewValue);
+        }
+
+        public void OnAllToolTipChanged(bool oldValue, bool newValue)
+        {
+            if (null != _toolTipButton)
+            {
+                _toolTipButton.Visibility = newValue ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -234,13 +305,15 @@ namespace MonitorSystem
                    && null != _topCenterAdorner
                    && null != _centerLeftAdorner
                    && null != _centerRightAdorner
-                   && null != _bottomCenterAdorner)
+                   && null != _bottomCenterAdorner
+                && null != _toolTipButton)
             {
                 _contentAdorner.Opacity = 1;
                 _topLeftAdorner.Visibility = Visibility.Visible;
                 _topRightAdorner.Visibility = Visibility.Visible;
                 _bottomLeftAdorner.Visibility = Visibility.Visible;
                 _bottomRightAdorner.Visibility = Visibility.Visible;
+                _toolTipButton.Visibility = AllToolTip ? Visibility.Visible : Visibility.Collapsed;
                 if (!IsLockScale)
                 {
                     _topCenterAdorner.Visibility = Visibility.Visible;
@@ -274,13 +347,15 @@ namespace MonitorSystem
                 && null != _topCenterAdorner
                 && null != _centerLeftAdorner
                 && null != _centerRightAdorner
-                && null != _bottomCenterAdorner)
+                && null != _bottomCenterAdorner
+                && null != _toolTipButton)
             {
                 _contentAdorner.Opacity = 0;
                 _topLeftAdorner.Visibility = Visibility.Collapsed;
                 _topRightAdorner.Visibility = Visibility.Collapsed;
                 _bottomLeftAdorner.Visibility = Visibility.Collapsed;
                 _bottomRightAdorner.Visibility = Visibility.Collapsed;
+                _toolTipButton.Visibility = Visibility.Collapsed;
                 if (!IsLockScale)
                 {
                     _topCenterAdorner.Visibility = Visibility.Collapsed;
@@ -309,14 +384,16 @@ namespace MonitorSystem
 
         public override void OnApplyTemplate()
         {
-            _backgroundAdorner = base.GetTemplateChild("BackgroundAdorner") as FrameworkElement;
+            _backgroundAdorner = base.GetTemplateChild("BackgroundAdorner") as Rectangle;
+            //_backgroundAdorner.IsHitTestVisible = AllowMove;
             OnEditabledChanged(false, Editabled);
             //_backgroundAdorner.SetValue(CustomCursor.CustomProperty, true);
 
-            _contentAdorner = base.GetTemplateChild("ContentAdorner") as FrameworkElement;
+            _contentAdorner = base.GetTemplateChild("ContentAdorner") as Rectangle;
             _contentAdorner.Opacity = 0;
             _contentAdorner.SetValue(MinHeightProperty, _associatedElement.MinHeight);
             _contentAdorner.SetValue(MinWidthProperty, _associatedElement.MinWidth);
+            //_contentAdorner.IsHitTestVisible = AllowMove;
 
             _topLeftAdorner = base.GetTemplateChild("TopLeftAdorner") as FrameworkElement;
             _topLeftAdorner.MouseLeftButtonDown += TopLeftAdorner_MouseLeftButtonDown;
@@ -357,6 +434,183 @@ namespace MonitorSystem
             _bottomRightAdorner.MouseLeftButtonDown += BottomRightAdorner_MouseLeftButtonDown;
             _bottomRightAdorner.MouseLeftButtonUp += BottomRightAdorner_MouseLeftButtonUp;
             _bottomRightAdorner.Visibility = Visibility.Collapsed;
+
+            _toolTipButton = base.GetTemplateChild("ToolTipButton") as Button;
+            _toolTipButton.Click += new RoutedEventHandler(ToolTipButton_Click);
+            _toolTipButton.Visibility = AllToolTip ? Visibility.Visible : Visibility.Collapsed;
+
+            //if (!AllowMove)
+            //{
+            //    _contentAdorner.Fill = null;
+            //    _backgroundAdorner.Fill = new SolidColorBrush(Colors.Transparent);
+            //}
+        }
+
+        private void ToolTipButton_Click(object sender, EventArgs e)
+        {
+            var target = _associatedElement as MonitorControl;
+            if (null != target)
+            {
+                var toolTipControl = target.ToolTipControl;
+                if (null == toolTipControl)
+                {
+                    Debug.Assert(null != target.ScreenElement, "MonitorControl 的 ScreenElement 属性不能为null.");
+                    var screenID = target.ScreenElement.ElementID * -1;
+                    LoadScreen._DataContext.Load<t_Element>(LoadScreen._DataContext.GetT_ElementsByScreenIDQuery(screenID), LoadToolTipCallback, null);
+                }
+                else if (toolTipControl.Visibility == Visibility.Collapsed)
+                {
+                    toolTipControl.Visibility = Visibility.Visible;
+                    if (null != CurrenttoolTipControl)
+                    {
+                        CurrenttoolTipControl.Visibility = Visibility.Collapsed;
+                    }
+                    CurrenttoolTipControl = toolTipControl;
+
+                    ToolTipLayoutUpdate();
+                    toolTipControl.AdornerLayer._contentAdorner.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    toolTipControl.Visibility = Visibility.Collapsed;
+                    CurrenttoolTipControl = null;
+                    toolTipControl.AdornerLayer._contentAdorner.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        private static t_Control _t_toolTipControl = null;
+
+        /// <summary>
+        /// 加载ToolTip子元素
+        /// </summary>
+        /// <param name="result"></param>
+        private void LoadToolTipCallback(LoadOperation<t_Element> result)
+        {
+            var target = _associatedElement as MonitorControl;
+            if (null != target && !result.HasError)
+            {
+                if (result.Entities.Count() > 0)
+                {
+                    Debug.Assert(null != target.ScreenElement, "MonitorControl 的 ScreenElement 属性不能为null.");
+                    var screenID = target.ScreenElement.ElementID * -1;
+                    LoadScreen._DataContext.Load<t_ElementProperty>(LoadScreen._DataContext.GetScreenElementPropertyQuery(screenID), LoadToolTipPropertyCallback, result.Entities);
+                }
+                else// if (Common.TipControlID != null)
+                {
+                    //CreateToolTip(Common.TipControlID);
+                    LoadScreen._DataContext.Load(LoadScreen._DataContext.GetT_ControlByTypeQuery(-1), LoadControlsByTypeCallback, null);
+                }
+            }
+        }
+
+        private void LoadControlsByTypeCallback(LoadOperation<t_Control> result)
+        {
+            if (!result.HasError)
+            {
+                _t_toolTipControl = result.Entities.FirstOrDefault();
+                CreateToolTip(_t_toolTipControl);
+            }
+        }
+
+        private void CreateToolTip(t_Control t_control)
+        {
+            var target = _associatedElement as MonitorControl;
+            if (null != target)
+            {
+                if (t_control != null)
+                {
+                    target.IsToolTipLoaded = true;
+                    var toolTipControl = new ToolTipControl(target);
+                    toolTipControl.SetValue(Canvas.ZIndexProperty, 10000);
+                    var listElementProperties = new List<t_ElementProperty>();
+                    var toolTipControlElement = LoadScreen._instance.InitElement(t_control);
+                    toolTipControlElement.Transparent = 100;
+                    toolTipControlElement.ControlID = -9999;
+                    toolTipControlElement.ElementName = t_control.ControlName;
+                    toolTipControl.ScreenElement = toolTipControlElement;
+                    toolTipControlElement.Width = 300;
+                    toolTipControlElement.Height = 200;
+                    var elementProperties = LoadScreen._DataContext.t_ControlProperties.Where(t => t.ControlID == t_control.ControlID).ToList();
+                    foreach (t_ControlProperty property in elementProperties)
+                    {
+                        t_ElementProperty tt = new t_ElementProperty();
+                        tt.Caption = property.Caption;
+                        tt.ElementID = toolTipControlElement.ElementID;
+                        tt.PropertyNo = property.PropertyNo;
+                        tt.PropertyValue = property.DefaultValue;
+                        tt.PropertyName = property.PropertyName;
+                        listElementProperties.Add(tt);
+                    }
+                    toolTipControl.ScreenElement = toolTipControlElement;
+                    toolTipControl.ListElementProp = listElementProperties;
+                    toolTipControl.ElementState = ElementSate.New;
+                    toolTipControl.SetPropertyValue();
+                    toolTipControl.SetCommonPropertyValue();
+                    _parent.Children.Add(toolTipControl);
+                    toolTipControl.DesignMode();
+                    toolTipControl.SetPosition();
+                    target.ToolTipControl = toolTipControl;
+                    if (null != CurrenttoolTipControl)
+                    {
+                        CurrenttoolTipControl.Visibility = Visibility.Collapsed;
+                    }
+                    CurrenttoolTipControl = toolTipControl;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 加载ToolTip子元素属性
+        /// </summary>
+        /// <param name="result"></param>
+        private void LoadToolTipPropertyCallback(LoadOperation<t_ElementProperty> result)
+        {
+            var target = _associatedElement as MonitorControl;
+            if (null != target
+                && !result.HasError && result.UserState is IEnumerable<t_Element>)
+            {
+                target.IsToolTipLoaded = true;
+                var elements = result.UserState as IEnumerable<t_Element>;
+                var toolTipControlElement = elements.FirstOrDefault(t => t.ControlID == -9999);
+                if (null != toolTipControlElement)
+                {
+                    var toolTipControl = new ToolTipControl(target);
+                    toolTipControl.Width = toolTipControlElement.Width.HasValue ? toolTipControlElement.Width.Value : 300d;
+                    toolTipControl.Height = toolTipControlElement.Height.HasValue ? toolTipControlElement.Height.Value : 200d;
+                    toolTipControl.SetValue(Canvas.ZIndexProperty, 10000);
+                    toolTipControl.ScreenElement = toolTipControlElement;
+                    toolTipControl.ListElementProp = result.Entities.Where(p => p.ElementID == toolTipControlElement.ElementID).ToList();
+                    toolTipControl.ElementState = ElementSate.Save;
+                    toolTipControl.SetPropertyValue();
+                    toolTipControl.SetCommonPropertyValue();
+                    _parent.Children.Add(toolTipControl);
+                    toolTipControl.DesignMode();
+                    toolTipControl.SetPosition();
+                    target.ToolTipControl = toolTipControl;
+                    if (null != CurrenttoolTipControl)
+                    {
+                        CurrenttoolTipControl.Visibility = Visibility.Collapsed;
+                    }
+                    CurrenttoolTipControl = toolTipControl;
+                    var childElements = elements.Where(t => t.ControlID != -9999);
+                    foreach (var childElement in childElements)
+                    {
+                        var poperties = result.Entities.Where(p => p.ElementID == childElement.ElementID).ToList();
+                        var monitorControl = LoadScreen._instance.ShowElement(toolTipControl.ToolTipCanvas, childElement, ElementSate.Save, poperties);
+                        monitorControl.DesignMode();
+                    }
+                }
+            }
+        }
+
+        private void ToolTipLayoutUpdate()
+        {
+            var target = _associatedElement as MonitorControl;
+            if (null != target && null != target.ToolTipControl)
+            {
+                target.ToolTipControl.SetPosition();
+            }
         }
 
         private void PopupLayoutUpdated(object sender, EventArgs e)
@@ -793,6 +1047,7 @@ namespace MonitorSystem
             if (null != Selected)
             {
                 Selected(this, EventArgs.Empty);
+                ToolTipLayoutUpdate();
             }
         }
 
@@ -811,6 +1066,12 @@ namespace MonitorSystem
             _contentAdorner.SetValue(FrameworkElement.HeightProperty, _associatedElement.ActualHeight);
             this.SetValue(Canvas.LeftProperty, (double)_associatedElement.GetValue(Canvas.LeftProperty) - _offsetLeft);
             this.SetValue(Canvas.TopProperty, (double)_associatedElement.GetValue(Canvas.TopProperty) - _offsetTop);
+        }
+
+        public void SynchroHost(double x, double y)
+        {
+            this.SetValue(Canvas.LeftProperty, x - _offsetLeft);
+            this.SetValue(Canvas.TopProperty, y - _offsetTop);
         }
 
         public static void CancelSelected()

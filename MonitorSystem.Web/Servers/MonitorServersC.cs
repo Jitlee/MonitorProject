@@ -104,7 +104,16 @@ namespace MonitorSystem.Web.Servers
         //    ObjectContext.SaveChanges();
         //    return true;
         //}
-     
+
+        /// <summary>
+        /// 根据场景ID获取 元素列表
+        /// </summary>
+        /// <param name="screenID"></param>
+        /// <returns></returns>
+        public IQueryable<t_Element> GetT_ElementsByScreenID(int screenID)
+        {
+            return this.ObjectContext.t_Element.Where(t => t.ScreenID == screenID);
+        }
     }
 
     

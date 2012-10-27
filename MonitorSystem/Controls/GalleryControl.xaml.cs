@@ -104,7 +104,7 @@ namespace MonitorSystem.Controls
 
         private void Create(t_Control tControl)
         {
-            LoadScreen._instance.CreateControl(tControl, 150, 150, 0, 0);
+            LoadScreen._instance.CreateControl(LoadScreen._instance.csScreen, tControl, 150, 150, 0, 0);
         }
     }
 }

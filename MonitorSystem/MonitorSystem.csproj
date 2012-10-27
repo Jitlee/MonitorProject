@@ -126,6 +126,7 @@
     <Compile Include="Controls\PropertyGrid\ImageAttribute.cs" />
     <Compile Include="Controls\SceneBackgroundBorder.cs" />
     <Compile Include="Controls\ImagePathConverter.cs" />
+    <Compile Include="MonitorSystemGlobal\ToolTipControl.cs" />
     <Compile Include="Dldz\Dldz01.cs" />
     <Compile Include="Dldz\Dldz02.cs" />
     <Compile Include="Dldz\Dldz03.cs" />
@@ -515,6 +516,7 @@
     <Resource Include="Images\Common\退出.JPG" />
     <Resource Include="Images\Common\首页_工具条.jpg" />
     <Resource Include="Images\Common\网络连接.JPG" />
+    <Resource Include="Images\tip.png" />
     <Content Include="Ref\Microsoft.Expression.Interactions.xml" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\MyDataService\GetData.wsdl" />

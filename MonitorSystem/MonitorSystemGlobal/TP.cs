@@ -93,7 +93,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         private t_Screen GetChildScreenID()
         {
             string mScreenID = base.ScreenElement.ChildScreenID;
-            if (mScreenID == "0")
+            if (string.IsNullOrEmpty(mScreenID) || mScreenID == "0")
             {
                 return null;
             }

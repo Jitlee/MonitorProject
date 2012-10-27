@@ -26,6 +26,7 @@ using MonitorSystem.Dlfh;
 using MonitorSystem.Dqfh;
 using MonitorSystem.Dldz;
 using MonitorSystem.Gallery.Meter;
+using System.Diagnostics;
 
 namespace MonitorSystem
 {
@@ -220,7 +221,6 @@ namespace MonitorSystem
 
             AddElementRectangle.Visibility = Visibility.Collapsed;
 
-
             var point = e.GetPosition(csScreen);
             var offsetX = point.X - _originPoint.X;
             var offsetY = point.Y - _originPoint.Y;
@@ -231,7 +231,23 @@ namespace MonitorSystem
 
             if (width > 0 && height > 0)
             {
-                AddSelectControlElement(width, height, left, top);
+                if (null != Adorner.CurrenttoolTipControl
+                    && Adorner.CurrenttoolTipControl.Contains(left, top))
+                {
+                    var position = Adorner.CurrenttoolTipControl.GetPosition();
+                    // 添加到ToolTipControl区域
+                    var monitor = AddSelectControlElement(Adorner.CurrenttoolTipControl.ToolTipCanvas, width, height, left - position.X, top - position.Y);
+                    if (null != monitor
+                        && null != monitor.AdornerLayer)
+                    {
+                        monitor.AllowToolTip = false;
+                        monitor.AdornerLayer.AllToolTip = false;
+                    }
+                }
+                else
+                {
+                    AddSelectControlElement(this.csScreen, width, height, left, top);
+                }
             }
 
             PropertyMain.Instance.ResetSelected();
@@ -705,7 +721,7 @@ namespace MonitorSystem
             foreach (t_Element el in lsitElement)
             {
                 var list = _DataContext.t_ElementProperties.Where(a => a.ElementID == el.ElementID);
-                ShowElement(el, ElementSate.Save, list.ToList());
+                ShowElement(csScreen, el, ElementSate.Save, list.ToList());
                 ScreenAllElement.Add(el);
             }
             //如果不是组态，打开定时器
@@ -726,13 +742,13 @@ namespace MonitorSystem
         /// <param name="eleStae"></param>
         /// <param name="listObj"></param>
         /// <returns></returns>
-        private MonitorControl ShowElement(t_Element obj, ElementSate eleStae, List<t_ElementProperty> listObj)
+        public MonitorControl ShowElement(Canvas canvas, t_Element obj, ElementSate eleStae, List<t_ElementProperty> listObj)
         {
             if (obj.ImageURL != null && obj.ImageURL.IndexOf("MonitorSystem") == 0)
             {
                 MonitorControl instance = (MonitorControl)Activator.CreateInstance(Type.GetType(obj.ImageURL));
                 //var instance = Activator.CreateInstance(Type.GetType(t.ImageURL));
-                SetEletemt(instance, obj, eleStae, listObj);
+                SetEletemt(canvas, instance, obj, eleStae, listObj);
                 return instance;
             }
             else
@@ -741,126 +757,126 @@ namespace MonitorSystem
                 {
                     case "MyButton":
                         TP_Button mtpButtom = new TP_Button();
-                        SetEletemt(mtpButtom, obj, eleStae, listObj);
+                        SetEletemt(canvas, mtpButtom, obj, eleStae, listObj);
                         return mtpButtom;
                     //break;
                     case "MonitorLine":
                         MonitorLine mPubLine = new MonitorLine();
-                        SetEletemt(mPubLine, obj, eleStae, listObj);
+                        SetEletemt(canvas, mPubLine, obj, eleStae, listObj);
                         return mPubLine;
                     //break;
                     case "MonitorText":
                         MonitorText mPubText = new MonitorText();
                         mPubText.MyText = obj.TxtInfo;
-                        SetEletemt(mPubText, obj, eleStae, listObj);
+                        SetEletemt(canvas, mPubText, obj, eleStae, listObj);
                         return mPubText;
                     //break;
                     case "ColorText":
                         ColorText mColorText = new ColorText();
-                        SetEletemt(mColorText, obj, eleStae, listObj);
+                        SetEletemt(canvas, mColorText, obj, eleStae, listObj);
                         return mColorText;
                     //break;
                     case "InputTextBox":
                         InputTextBox mInputTextBox = new InputTextBox();
                         mInputTextBox.MyText = obj.TxtInfo;
-                        SetEletemt(mInputTextBox, obj, eleStae, listObj);
+                        SetEletemt(canvas, mInputTextBox, obj, eleStae, listObj);
                         return mInputTextBox;
                     //break;
                     case "ButtonCtrl":
                         ButtonCtrl mButtonCtrl = new ButtonCtrl();
                         mButtonCtrl.MyText = obj.TxtInfo;
-                        SetEletemt(mButtonCtrl, obj, eleStae, listObj);
+                        SetEletemt(canvas, mButtonCtrl, obj, eleStae, listObj);
                         return mButtonCtrl;
                     //break;
                     case "MonitorCur":
                         MonitorCur mPubCur = new MonitorCur();
-                        SetEletemt(mPubCur, obj, eleStae, listObj);
+                        SetEletemt(canvas, mPubCur, obj, eleStae, listObj);
                         return mPubCur;
                     //break;
                     case "MonitorRectangle":
                         MonitorRectangle mPubRec = new MonitorRectangle();
-                        SetEletemt(mPubRec, obj, eleStae, listObj);
+                        SetEletemt(canvas, mPubRec, obj, eleStae, listObj);
                         return mPubRec;
                     //break;
                     case "MonitorGrid":
                         MonitorGrid mPubGrid = new MonitorGrid();
-                        SetEletemt(mPubGrid, obj, eleStae, listObj);
+                        SetEletemt(canvas, mPubGrid, obj, eleStae, listObj);
                         return mPubGrid;
                     //break;
                     case "FoldLine":
                         MonitorFoldLine mPubFoldLine = new MonitorFoldLine();
-                        SetEletemt(mPubFoldLine, obj, eleStae, listObj);
+                        SetEletemt(canvas, mPubFoldLine, obj, eleStae, listObj);
                         return mPubFoldLine;
                     //break;
                     case "Temprary":
                         Temprary mTemprary = new Temprary();
-                        SetEletemt(mTemprary, obj, eleStae, listObj);
+                        SetEletemt(canvas, mTemprary, obj, eleStae, listObj);
                         return mTemprary;
                     case "DLBiaoPan":
                         DLBiaoPan mDLBiaoPan = new DLBiaoPan();
                         obj.Width = 2 * obj.Height.Value;
-                        SetEletemt(mDLBiaoPan, obj, eleStae, listObj);
+                        SetEletemt(canvas, mDLBiaoPan, obj, eleStae, listObj);
                         return mDLBiaoPan;
                     case "DigitalBiaoPan":
                         DigitalBiaoPan mDigitalBiaoPan = new DigitalBiaoPan();
-                        SetEletemt(mDigitalBiaoPan, obj, eleStae, listObj);
+                        SetEletemt(canvas, mDigitalBiaoPan, obj, eleStae, listObj);
                         return mDigitalBiaoPan;
                     case "Switch":
                         Switch mSwitch = new Switch();
-                        SetEletemt(mSwitch, obj, eleStae, listObj);
+                        SetEletemt(canvas, mSwitch, obj, eleStae, listObj);
                         return mSwitch;
                     case "SignalSwitch":
                         SignalSwitch mSignalSwitch = new SignalSwitch();
                         obj.Width = obj.Height;
-                        SetEletemt(mSignalSwitch, obj, eleStae, listObj);
+                        SetEletemt(canvas, mSignalSwitch, obj, eleStae, listObj);
                         return mSignalSwitch;
                     case "DetailSwitch":
                         DetailSwitch mDetailSwitch = new DetailSwitch();
-                        SetEletemt(mDetailSwitch, obj, eleStae, listObj);
+                        SetEletemt(canvas, mDetailSwitch, obj, eleStae, listObj);
                         return mDetailSwitch;
                     case "RealTimeCurve":
                         RealTimeCurve mRealTime = new RealTimeCurve();
-                        SetEletemt(mRealTime, obj, eleStae, listObj);
+                        SetEletemt(canvas, mRealTime, obj, eleStae, listObj);
                         return mRealTime;
                     case "TableCtrl":
                         TableCtrl mTableCtrl = new TableCtrl();
-                        SetEletemt(mTableCtrl, obj, eleStae, listObj);
+                        SetEletemt(canvas, mTableCtrl, obj, eleStae, listObj);
                         return mTableCtrl;
                     case "zedGraphCtrl":
                         zedGraphCtrl mzedGraphCtrl = new zedGraphCtrl();
-                        SetEletemt(mzedGraphCtrl, obj, eleStae, listObj);
+                        SetEletemt(canvas, mzedGraphCtrl, obj, eleStae, listObj);
                         return mzedGraphCtrl;
                     case "zedGraphLineCtrl":
                         zedGraphLineCtrl mzedGraphLineCtrl = new zedGraphLineCtrl();
-                        SetEletemt(mzedGraphLineCtrl, obj, eleStae, listObj);
+                        SetEletemt(canvas, mzedGraphLineCtrl, obj, eleStae, listObj);
                         return mzedGraphLineCtrl;
                     case "zedGraphPieCtrl":
                         zedGraphPieCtrl mzedGraphPieCtrl = new zedGraphPieCtrl();
-                        SetEletemt(mzedGraphPieCtrl, obj, eleStae, listObj);
+                        SetEletemt(canvas, mzedGraphPieCtrl, obj, eleStae, listObj);
                         return mzedGraphPieCtrl;
                     case "MyLine"://曲线
                         MyLine mMyLine = new MyLine();
-                        SetEletemt(mMyLine, obj, eleStae, listObj);
+                        SetEletemt(canvas, mMyLine, obj, eleStae, listObj);
                         return mMyLine;
                     case "BackgroundRect"://背景
                         BackgroundRect mBackgroundRect = new BackgroundRect();
-                        SetEletemt(mBackgroundRect, obj, eleStae, listObj);
+                        SetEletemt(canvas, mBackgroundRect, obj, eleStae, listObj);
                         return mBackgroundRect;
                     case "PicBox"://窗口式背景控件
                         PicBox mPicBox = new PicBox();
-                        SetEletemt(mPicBox, obj, eleStae, listObj);
+                        SetEletemt(canvas, mPicBox, obj, eleStae, listObj);
                         return mPicBox;
                     case "DrawLine"://窗口式背景控件
                         DrawLine mDrawLine = new DrawLine();
-                        SetEletemt(mDrawLine, obj, eleStae, listObj);
+                        SetEletemt(canvas, mDrawLine, obj, eleStae, listObj);
                         return mDrawLine;
                     case "ExtProControl"://窗口式背景控件
                         ExtProControl mExtProControl = new ExtProControl();
-                        SetEletemt(mExtProControl, obj, eleStae, listObj);
+                        SetEletemt(canvas, mExtProControl, obj, eleStae, listObj);
                         return mExtProControl;
                     case "DimorphismGraphCtrl"://窗口式背景控件
                         DimorphismGraphCtrl mDimorphismGraphCtrl = new DimorphismGraphCtrl();
-                        SetEletemt(mDimorphismGraphCtrl, obj, eleStae, listObj);
+                        SetEletemt(canvas, mDimorphismGraphCtrl, obj, eleStae, listObj);
                         return mDimorphismGraphCtrl;
                     //case "dlfh01"://电力符号
                     //    Dlfh01 dlfh01Ctrl = new Dlfh01();
@@ -899,7 +915,7 @@ namespace MonitorSystem
                         ImageSource mm = bitmap;
                         TP mtp = new TP();
                         mtp.Source = mm;
-                        SetEletemt(mtp, obj, eleStae, listObj);
+                        SetEletemt(canvas, mtp, obj, eleStae, listObj);
                         return mtp;
 
 
@@ -908,7 +924,7 @@ namespace MonitorSystem
             }
         }
 
-        private void SetEletemt(MonitorControl mControl, t_Element obj, ElementSate eleStae,
+        private void SetEletemt(Canvas canvas, MonitorControl mControl, t_Element obj, ElementSate eleStae,
             List<t_ElementProperty> listObj)
         {
             mControl.Selected += (o, e) =>
@@ -925,14 +941,14 @@ namespace MonitorSystem
             mControl.ListElementProp = listObj;
             mControl.ElementState = eleStae;
 
-            if (eleStae == ElementSate.Save)
-            {
-                mControl.Name = obj.ElementID.ToString();
-            }
+            //if (eleStae == ElementSate.Save)
+            //{
+            //    mControl.Name = obj.ElementID.ToString();
+            //}
             mControl.SetPropertyValue();
             mControl.SetCommonPropertyValue();
             //添加到场景
-            csScreen.Children.Add(mControl);
+            canvas.Children.Add(mControl);
 
             //if (CBIsztControl.IsChecked.Value)
             if (IsZT)
@@ -949,13 +965,13 @@ namespace MonitorSystem
         /// <param name="mHeight"></param>
         /// <param name="mMagrinX"></param>
         /// <param name="mMagrinY"></param>
-        private void AddSelectControlElement(double mWidth, double mHeight, double mMagrinX, double mMagrinY)
+        private MonitorControl AddSelectControlElement(Canvas canvas, double mWidth, double mHeight, double mMagrinX, double mMagrinY)
         {
             t_Control t = GetSelectControl();
-            CreateControl(t, mWidth, mHeight, mMagrinX, mMagrinY);
+            return CreateControl(canvas, t, mWidth, mHeight, mMagrinX, mMagrinY);
         }
 
-        public void CreateControl(t_Control t, double width, double height, double x, double y)
+        public MonitorControl CreateControl(Canvas canvas, t_Control t, double width, double height, double x, double y)
         {
             if (t != null && t.ControlID > 0)
             {
@@ -981,8 +997,11 @@ namespace MonitorSystem
                     listElementPro.Add(tt);
                 }
 
-                ShowElement(mElement, ElementSate.New, listElementPro).DesignMode();
+                var monitorControl = ShowElement(canvas, mElement, ElementSate.New, listElementPro);
+                monitorControl.DesignMode();
+                return monitorControl;
             }
+            return null;
         }
 
         #region  画控件
@@ -1000,7 +1019,7 @@ namespace MonitorSystem
         /// </summary>
         /// <param name="tCon"></param>
         /// <returns></returns>
-        private t_Element InitElement(t_Control tCon)
+        public t_Element InitElement(t_Control tCon)
         {
             t_Element mElem = new t_Element();
             mElem.ChildScreenID = "0";
@@ -1125,8 +1144,9 @@ namespace MonitorSystem
 
         #region 保存场景及元素、属性
 
-        List<MonitorControl> listMonitorAddElement=new List<MonitorControl>();
-        int AddElementNumber = 0;
+        List<MonitorControl> listMonitorAddElement = new List<MonitorControl>();
+        List<MonitorControl> listMonitorModifiedElement = new List<MonitorControl>();
+        //int AddElementNumber = 0;
         private void SaveElement()
         {
             //保存背景图片
@@ -1139,77 +1159,109 @@ namespace MonitorSystem
 
             //循环所有存在元素
             listMonitorAddElement.Clear();
+            listMonitorModifiedElement.Clear();
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
-                var ui = csScreen.Children[i];
+                var m = csScreen.Children[i] as MonitorControl;
 
-                if (ui is MonitorControl)
+                if (null != m && !m.IsToolTip)
                 {
-                    MonitorControl m = (MonitorControl)ui;
-                    ElementSate el = m.ElementState;
-                    t_Element meleObj = m.ScreenElement;
-                    meleObj.Width = Convert.ToInt32( m.Width);
-                    meleObj.Height = Convert.ToInt32( m.Height);
-                    meleObj.ScreenX = Convert.ToInt32( m.GetValue(Canvas.LeftProperty));
-                    meleObj.ScreenY =Convert.ToInt32( m.GetValue(Canvas.TopProperty));
+                    var el = m.ElementState;
+                    var meleObj = m.ScreenElement;
+                    meleObj.Width = Convert.ToInt32(m.Width);
+                    meleObj.Height = Convert.ToInt32(m.Height);
+                    meleObj.ScreenX = Convert.ToInt32(m.GetValue(Canvas.LeftProperty));
+                    meleObj.ScreenY = Convert.ToInt32(m.GetValue(Canvas.TopProperty));
 
                     if (el == ElementSate.New)
                     {
                         m.ScreenElement = meleObj;
-                        listMonitorAddElement.Add(m);
+                        _DataContext.t_Elements.Add(meleObj); // 2个必须同步添加
+                        listMonitorAddElement.Add(m);// 2个必须同步添加
+                        m.ElementState = ElementSate.Save;
                     }
                     else
                     {
                         CheckElementChange(meleObj);
 
-                        //保存属性
-                        List<t_ElementProperty> listPro = m.ListElementProp;
-                        if (listPro != null && listPro.Count > 0)
+                        var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == meleObj.ElementID).ToList();
+                        foreach (var removeProperty in removeProperties)
                         {
-                            foreach (t_ElementProperty cp in listPro)
+                            _DataContext.t_ElementProperties.Remove(removeProperty);
+                        }
+
+                        listMonitorModifiedElement.Add(m); // 同修改同步
+                    }
+                    var toolTipControl = m.ToolTipControl;
+
+                    if (null != toolTipControl && toolTipControl.ToolTipCanvas.Children.Count > 0)
+                    {
+                        Debug.Assert(null != toolTipControl.Target, "ToolTipControl 的 Target 属性不能为null.");
+                        Debug.Assert(null != toolTipControl.Target.ScreenElement, "ToolTipControl 的 Target.ScreenElement 属性不能为null.");
+
+                        var toolTipElement = toolTipControl.ScreenElement.Clone();
+
+                        toolTipElement.Width = Convert.ToInt32(toolTipControl.Width);
+                        toolTipElement.Height = Convert.ToInt32(toolTipControl.Height);
+
+                        if (el != ElementSate.New)
+                        {
+                            var removeElements = _DataContext.t_Elements.Where(t => t.ScreenID == meleObj.ElementID * -1).ToList();
+
+                            // 删除老的ToolTip\子控件，及他们的老属性
+                            foreach (var removeElement in removeElements)
                             {
-                              var v  =_DataContext.t_ElementProperties.Where(a => a.ElementID == cp.ElementID &&
-                                    a.PropertyNo == cp.PropertyNo);
-                              if (v != null && v.Count() > 0)
-                              {
-                                  v.First().PropertyValue = cp.PropertyValue;
-                              }
-                            }//end foreach
-                        }//end if (listPro
+                                _DataContext.t_Elements.Remove(removeElement);
+                                // 删除属性
+                                var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == removeElement.ElementID).ToList();
+                                foreach (var removeProperty in removeProperties)
+                                {
+                                    _DataContext.t_ElementProperties.Remove(removeProperty);
+                                }
+                            }
+                            toolTipElement.ScreenID = meleObj.ElementID * -1;
+                        }
+                        else
+                        {
+                            toolTipElement.ScreenID = null;
+                        }
+
+                        _DataContext.t_Elements.Add(toolTipElement.Clone());// 2个必须同步添加
+
+                        listMonitorAddElement.Add(toolTipControl);// 2个必须同步添加
+                        // 添加子控件
+                        foreach (var child in toolTipControl.ToolTipCanvas.Children)
+                        {
+                            var childMoinitor = child as MonitorControl;
+                            if (null != childMoinitor)
+                            {
+                                // 保存ToolTip 子控件
+                                var childElement = childMoinitor.ScreenElement.Clone();
+                                childElement.Width = Convert.ToInt32(childMoinitor.Width);
+                                childElement.Height = Convert.ToInt32(childMoinitor.Height);
+                                childElement.ScreenX = (int)Canvas.GetLeft(childMoinitor);
+                                childElement.ScreenY = (int)Canvas.GetTop(childMoinitor);
+                                if (el != ElementSate.New)
+                                {
+                                    childElement.ScreenID = meleObj.ElementID * -1;
+                                }
+                                else
+                                {
+                                    childElement.ScreenID = null;
+                                }
+                                if (_DataContext.t_Elements.Contains(childElement))
+                                {
+                                    _DataContext.t_Elements.Remove(childElement);
+                                }
+                                _DataContext.t_Elements.Add(childElement.Clone());// 2个必须同步添加
+                                listMonitorAddElement.Add(childMoinitor);// 2个必须同步添加
+                            }
+                        }
                     }
                 }
             }
 
-            //循环已添加的属性
-            foreach (t_Element mEle in ScreenAllElement)
-            {
-               var v= csScreen.FindName(mEle.ElementID.ToString());
-               if (v == null)
-               {
-                   _DataContext.t_Elements.Remove(mEle);
-                   //移出属性
-                   var vPro = _DataContext.t_ElementProperties.Where(a => a.ElementID == mEle.ElementID);
-                   if (vPro.Count() > 0)
-                   {
-                       List<t_ElementProperty> listEp=vPro.ToList();
-                       foreach (t_ElementProperty ep in listEp)
-                       {
-                           //_DataContext.t_ElementProperties.d
-                           _DataContext.t_ElementProperties.Remove(ep);
-                       }
-                   }
-               }
-            }
-
-            if (listMonitorAddElement.Count > 0)
-            {
-                AddElementNumber = 0;
-
-                t_Element elem = listMonitorAddElement[0].ScreenElement;
-                _DataContext.t_Elements.Add(elem);
-                _DataContext.SubmitChanges(SubmitCompleted, null);
-            }
-            else
+            if (_DataContext.HasChanges)
             {
                 _DataContext.SubmitChanges(SubmitCompleted, null);
             }
@@ -1221,43 +1273,8 @@ namespace MonitorSystem
         /// <param name="result"></param>
         private void SubmitCompleted(SubmitOperation result)
         {
-           EntityChangeSet obj= result.ChangeSet;
-           if (obj.AddedEntities.Count == 0)
-           {
-               if (IsShowSaveToot)
-               {
-                   IsShowSaveToot = false;
-                   MessageBox.Show("保存成功！", "温馨提示", MessageBoxButton.OK);
-               }
-               ISBack = false;
-               LoadScreenData(_CurrentScreen);
-               return;
-           }
-           foreach (var v in obj.AddedEntities)
-           {
-               if (v is t_Element)
-               {
-                   t_Element vobj = (t_Element)v;
-                   
-
-
-                   foreach (t_ElementProperty ep in listMonitorAddElement[AddElementNumber].ListElementProp)
-                   {
-                        ep.ElementID = vobj.ElementID;
-                       _DataContext.t_ElementProperties.Add(ep);
-                   }
-                   _DataContext.SubmitChanges(SubmitPropertyCompleted,null);
-               }
-           }
-        }
-        /// <summary>
-        /// 提交元素完成
-        /// </summary>
-        /// <param name="result"></param>
-        private void SubmitPropertyCompleted(SubmitOperation result)
-        {
-            AddElementNumber++;
-            if (listMonitorAddElement.Count <= AddElementNumber)
+            EntityChangeSet obj = result.ChangeSet;
+            if (obj.AddedEntities.Count == 0)
             {
                 if (IsShowSaveToot)
                 {
@@ -1268,9 +1285,95 @@ namespace MonitorSystem
                 LoadScreenData(_CurrentScreen);
                 return;
             }
-            t_Element elem = listMonitorAddElement[AddElementNumber].ScreenElement;
-            _DataContext.t_Elements.Add(elem);
-            _DataContext.SubmitChanges(SubmitCompleted, null);
+
+            var elementID = 0;
+            // 新增
+            if (obj.AddedEntities.Count == listMonitorAddElement.Count)
+            {
+                for (int i = 0; i < obj.AddedEntities.Count; i++)
+                {
+                    var addElement = obj.AddedEntities[i] as t_Element;
+                    var newElement = listMonitorAddElement[i];
+                    var listProperties = listMonitorAddElement[i].ListElementProp;
+
+                    if (addElement.ControlID.HasValue
+                        && addElement.ControlID.Value != -9999
+                        && addElement.ScreenID.HasValue)
+                    {
+                        elementID = addElement.ElementID * -1;
+                    }
+                    else if (!addElement.ScreenID.HasValue)
+                    {
+                        var editElment = _DataContext.t_Elements.FirstOrDefault(t => t.ElementID == addElement.ElementID);
+                        if (null != editElment)
+                        {
+                            editElment.ScreenID = elementID;
+                        }
+                    }
+                    else
+                    {
+                    }
+
+                    foreach (var ep in listProperties)
+                    {
+                        ep.ElementID = addElement.ElementID;
+                        _DataContext.t_ElementProperties.Add(ep);
+                    }
+                }
+            }
+
+            foreach (var monitorControl in listMonitorModifiedElement)
+            {
+                var modifiedElement = monitorControl.ScreenElement;
+                foreach (var ep in monitorControl.ListElementProp)
+                {
+                    ep.ElementID = modifiedElement.ElementID;
+                    _DataContext.t_ElementProperties.Add(ep);
+                }
+            }
+
+            if (_DataContext.HasChanges)
+            {
+                _DataContext.SubmitChanges(SubmitPropertyCompleted, null);
+            }
+
+            //foreach (var v in obj.AddedEntities)
+            //{
+            //    if (v is t_Element)
+            //    {
+            //        t_Element vobj = (t_Element)v;
+
+            //        foreach (t_ElementProperty ep in listMonitorAddElement[AddElementNumber].ListElementProp)
+            //        {
+            //            ep.ElementID = vobj.ElementID;
+            //            _DataContext.t_ElementProperties.Add(ep);
+            //        }
+            //        _DataContext.SubmitChanges(SubmitPropertyCompleted, null);
+            //    }
+            //}
+        }
+        /// <summary>
+        /// 提交元素完成
+        /// </summary>
+        /// <param name="result"></param>
+        private void SubmitPropertyCompleted(SubmitOperation result)
+        {
+            //AddElementNumber++;
+            //if (listMonitorAddElement.Count <= AddElementNumber)
+            if(!result.HasError)
+            {
+                if (IsShowSaveToot)
+                {
+                    IsShowSaveToot = false;
+                    MessageBox.Show("保存成功！", "温馨提示", MessageBoxButton.OK);
+                }
+                ISBack = false;
+                LoadScreenData(_CurrentScreen);
+                return;
+            }
+            //t_Element elem = listMonitorAddElement[AddElementNumber].ScreenElement;
+            //_DataContext.t_Elements.Add(elem);
+            //_DataContext.SubmitChanges(SubmitCompleted, null);
         }
 
         /// <summary>
@@ -1361,7 +1464,7 @@ namespace MonitorSystem
                     int mWidth = Convert.ToInt16(CoptyObj.Width);
                     int mHeight = Convert.ToInt16(CoptyObj.Height);
                     mobj.ElementClone((MonitorControl)CoptyObj, mWidth, mHeight);
-                    ShowElement(mobj.Element, ElementSate.New, mobj.ListElementProperty);
+                    ShowElement(csScreen, mobj.Element, ElementSate.New, mobj.ListElementProperty);
                 }              
             }
         }

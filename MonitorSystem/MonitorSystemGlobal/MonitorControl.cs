@@ -12,13 +12,26 @@ using System.Windows.Shapes;
 using MonitorSystem.Web.Moldes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ServiceModel.DomainServices.Client;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
     public abstract partial class MonitorControl : UserControl
     {
+        /// <summary>
+        /// 是否为ToolTip
+        /// </summary>
+        public bool IsToolTip { get; protected set; }
+
+        private bool _allowToolTip = true;
+        public bool AllowToolTip
+        {
+            get { return _allowToolTip; }
+            set { _allowToolTip = value; }
+        }
+
         public bool IsDesignMode { get { return null != AdornerLayer; } }
-        protected Adorner AdornerLayer { get; set; }
+        public Adorner AdornerLayer { get; protected set; }
         public abstract void DesignMode();
         public abstract void UnDesignMode();
         public abstract object GetRootControl();
@@ -110,7 +123,6 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public abstract void SetCommonPropertyValue();
 
-        
         /// <summary>
         /// 控件状态，新添加的，或以保存的
         /// </summary>
@@ -118,16 +130,51 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public void SetAttrByName(string name, object value)
         {
-            if (ListElementProp == null)
-                return;
-            foreach (t_ElementProperty ep in ListElementProp)
+            if(null == ScreenElement
+                || !ScreenElement.ControlID.HasValue)
             {
-                if (ep.PropertyName.Trim().ToUpper() == name.Trim().ToUpper())
+                return;
+            }
+            if (ListElementProp == null)
+            {
+                ListElementProp = new List<t_ElementProperty>();
+                var elementProperties = LoadScreen._DataContext.t_ControlProperties.Where(t => t.ControlID == ScreenElement.ControlID.Value);
+                foreach (t_ControlProperty elementProperty in elementProperties)
                 {
-                    ep.PropertyValue = value.ToString();
-                    //break;
+                    t_ElementProperty tt = new t_ElementProperty();
+                    tt.Caption = elementProperty.Caption;
+                    tt.ElementID = ScreenElement.ElementID;
+                    tt.PropertyNo = elementProperty.PropertyNo;
+                    tt.PropertyValue = elementProperty.DefaultValue;
+                    tt.PropertyName = elementProperty.PropertyName;
+                    ListElementProp.Add(tt);
                 }
             }
+
+            var property = ListElementProp.FirstOrDefault(p => string.Equals(p.PropertyName, name, StringComparison.CurrentCultureIgnoreCase));
+            if (null != property)
+            {
+                property.PropertyValue = null == value ? string.Empty : value.ToString();
+            }
+            //else if (null != ScreenElement && null != value)
+            //{
+            //    var max = ListElementProp.Max(t => t.PropertyNo);
+            //    ListElementProp.Add(new t_ElementProperty()
+            //    {
+            //        ElementID = ScreenElement.ElementID,
+            //        PropertyName = name,
+            //        PropertyValue = value.ToString(),
+            //        PropertyNo = max
+            //    });
+            //}
+            //foreach (t_ElementProperty ep in ListElementProp)
+            //{
+            //    if (ep.PropertyName.Trim().ToUpper() == name.Trim().ToUpper())
+            //    {
+            //        ep.PropertyValue = value.ToString();
+            //        //break;
+            //    }
+            //}
         }
 
         private  string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Translate", "Foreground" };
@@ -180,6 +227,98 @@ namespace MonitorSystem.MonitorSystemGlobal
             //m_fValueArray = fValueArray;
         }
         #endregion
+
+        public bool IsToolTipLoaded { get; set; }
+        public ToolTipControl ToolTipControl { get; set; }
+        protected override void OnMouseEnter(MouseEventArgs e)
+        {
+            if (!IsToolTip && !IsDesignMode)
+            {
+                if (!IsToolTipLoaded)
+                {
+                    if (null == ToolTipControl)
+                    {
+                        var screenID = _ScreenElement.ElementID * -1;
+                        LoadScreen._DataContext.Load<t_Element>(LoadScreen._DataContext.GetT_ElementsByScreenIDQuery(screenID), LoadToolTipCallback, null);
+                    }
+                }
+                else
+                {
+                     SetToolTipPosition();
+                }
+            }
+            base.OnMouseEnter(e);
+        }
+
+        /// <summary>
+        /// 加载ToolTip子元素
+        /// </summary>
+        /// <param name="result"></param>
+        private void LoadToolTipCallback(LoadOperation<t_Element> result)
+        {
+            if (!result.HasError)
+            {
+                var screenID = _ScreenElement.ElementID * -1;
+                LoadScreen._DataContext.Load<t_ElementProperty>(LoadScreen._DataContext.GetScreenElementPropertyQuery(screenID), LoadToolTipPropertyCallback, result.Entities);
+            }
+        }
+
+        /// <summary>
+        /// 加载ToolTip子元素属性
+        /// </summary>
+        /// <param name="result"></param>
+        private void LoadToolTipPropertyCallback(LoadOperation<t_ElementProperty> result)
+        {
+            if (!result.HasError && result.UserState is IEnumerable<t_Element>)
+            {
+                var elements = result.UserState as IEnumerable<t_Element>;
+                IsToolTipLoaded = true;
+                var toolTipControlElement = elements.FirstOrDefault(t => t.ControlID == -9999);
+                if (null != toolTipControlElement
+                    && Parent is Canvas)
+                {
+                    var parent = Parent as Canvas;
+                    ToolTipControl = new ToolTipControl(this);
+                    ToolTipControl.Width = toolTipControlElement.Width.HasValue ? toolTipControlElement.Width.Value : 300d;
+                    ToolTipControl.Height = toolTipControlElement.Height.HasValue ? toolTipControlElement.Height.Value : 200d;
+                    ToolTipControl.Transparent = 100;
+                    ToolTipControl.SetValue(Canvas.ZIndexProperty, 10000);
+                    ToolTipControl.ScreenElement = toolTipControlElement;
+                    ToolTipControl.ListElementProp = result.Entities.Where(p => p.ElementID == toolTipControlElement.ElementID).ToList();
+                    ToolTipControl.ElementState = ElementSate.Save;
+                    ToolTipControl.SetPropertyValue();
+                    ToolTipControl.SetCommonPropertyValue();
+                    parent.Children.Add(ToolTipControl);
+                    SetToolTipPosition();
+
+                    var childElements = elements.Where(t => t.ControlID != -9999);
+                    foreach (var childElement in childElements)
+                    {
+                        var poperties = result.Entities.Where(p => p.ElementID == childElement.ElementID).ToList();
+                        LoadScreen._instance.ShowElement(ToolTipControl.ToolTipCanvas, childElement, ElementSate.Save, poperties);
+                    }
+                }
+            }
+        }
+
+        private void SetToolTipPosition()
+        {
+            if (null != ToolTipControl)
+            {
+                ToolTipControl.Visibility = Visibility.Visible;
+                ToolTipControl.SetPosition();
+            }
+        }
+
+        protected override void OnMouseLeave(MouseEventArgs e)
+        {
+            if (!IsToolTip && !IsDesignMode
+                && null != ToolTipControl)
+            {
+                ToolTipControl.Visibility = Visibility.Collapsed;
+            }
+            base.OnMouseLeave(e);
+        }
     }
 
     public enum ElementSate

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.ServiceModel.DomainServices.Client;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -8,10 +11,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem
 {
-    public class Common
+    public static class Common
     {
         #region 常量
         
@@ -187,5 +191,76 @@ namespace MonitorSystem
             return str;
         }
         #endregion
+
+        public static t_Element Clone(this t_Element source)
+        {
+            return new t_Element()
+            {
+                BackColor = source.BackColor,
+                ChannelNo = source.ChannelNo,
+                ChildScreenID = source.ChildScreenID,
+                ComputeStr = source.ComputeStr,
+                ControlID = source.ControlID,
+                ForeColor = source.ForeColor,
+                DeviceID = source.DeviceID,
+                ScreenX = source.ScreenX,
+                ScreenID = source.ScreenID,
+                ScreenY = source.ScreenY,
+                SerialNum = source.SerialNum,
+                ElementID = source.ElementID,
+                ElementName = source.ElementName,
+                Font = source.Font,
+                Height = source.Height,
+                ImageURL = source.ImageURL,
+                LevelNo = source.LevelNo,
+                MaxFloat = source.MaxFloat,
+                MinFloat = source.MinFloat,
+                oldX = source.oldX,
+                oldY = source.oldY,
+                Width = source.Width,
+                Method = source.Method,
+                TotalLength = source.TotalLength,
+                Transparent = source.Transparent,
+                TxtInfo = source.TxtInfo,
+            };
+        }
+
+        public static t_ElementProperty Clone(this t_ElementProperty source)
+        {
+            return new t_ElementProperty()
+            {
+                Caption = source.Caption,
+                ElementID = source.ElementID,
+                PropertyName = source.PropertyName,
+                PropertyNo = source.PropertyNo,
+                PropertyValue = source.PropertyValue,
+            };
+        }
+
+        //private static AutoResetEvent _autoReset = new AutoResetEvent(false);
+
+        //private static t_Control _tipControl = null;
+
+        //public static t_Control TipControlID
+        //{
+        //    get
+        //    {
+        //        if (_tipControl == null)
+        //        {
+        //            LoadScreen._DataContext.Load(LoadScreen._DataContext.GetT_ControlByTypeQuery(-1), LoadControlsByTypeCallback, null);
+        //            _autoReset.WaitOne();
+        //        }
+        //        return _tipControl;
+        //    }
+        //}
+
+        //private static void LoadControlsByTypeCallback(LoadOperation<t_Control> result)
+        //{
+        //    if (!result.HasError)
+        //    {
+        //        _tipControl = result.Entities.FirstOrDefault();
+        //    }
+        //    _autoReset.Set();
+        //}
     }
 }
