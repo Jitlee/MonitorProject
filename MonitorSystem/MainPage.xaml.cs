@@ -1,4 +1,4 @@
-﻿using System;
+﻿//using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Browser;
+using MonitorSystem.Other;
 
 namespace MonitorSystem
 {
@@ -22,6 +23,8 @@ namespace MonitorSystem
             if (HtmlPage.Document.QueryString.Count > 0)
                 strWhere = HtmlPage.Document.QueryString["toWhere"];
 
+            //this.Content = new SilverlightControl1();
+            //return;
             //this.Content = new SilverlightControl1();
             //return; toWhere=RealtimeCurve
             if (strWhere == "RealtimeCurve")

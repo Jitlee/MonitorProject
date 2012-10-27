@@ -4,9 +4,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" IsHitTestVisible="False" xmlns:my="clr-namespace:MonitorSystem.MonitorSystemGlobal" xmlns:my1="clr-namespace:System;assembly=mscorlib" xmlns:my2="clr-namespace:MonitorSystem.ZTControls" Height="385" Width="476">
-    <Canvas>
-       
-        <Ellipse Canvas.Left="80" Canvas.Top="92" Height="165" Name="ellipse1" Stroke="Black" StrokeThickness="1" Width="169" />
+    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" BorderThickness="1,1,1,0" 
+             xmlns:my="clr-namespace:MonitorSystem.MonitorSystemGlobal" xmlns:my1="clr-namespace:System;assembly=mscorlib" xmlns:my2="clr-namespace:MonitorSystem.ZTControls" Height="602" Width="884" xmlns:my3="clr-namespace:MonitorSystem.Other">
+    <Canvas Height="578" Width="856">
+        <my3:RealTimeT Canvas.Left="23" Canvas.Top="84" Height="544" x:Name="realTime1" Width="751" />
     </Canvas>
 </UserControl>

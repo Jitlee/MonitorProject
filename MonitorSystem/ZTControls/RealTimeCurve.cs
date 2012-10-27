@@ -53,14 +53,6 @@ namespace MonitorSystem.ZTControls
             ShowCurve(RealtimeValue);
         }
 
-        //public   double FontSize
-        //{
-        //    get { return this.FontSize; }
-        //    set {
-        //        double fontsize = value;
-        //        this.FontSize = fontsize;
-        //    }
-        //}
 
         private void RealTimeCurve_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -888,7 +880,6 @@ namespace MonitorSystem.ZTControls
                 this.noteMessages[this.noteNow].time = System.DateTime.Now;
                 this.noteMessages[this.noteNow].X = (int)this.picCurveShow.Width;
                 this.noteMessages[this.noteNow].Y = (int)(this.picCurveShow.Height - (newValue / (this._YmaxValue - this._YminValue)) * this.picCurveShow.Height);
-
             }
             else
             {

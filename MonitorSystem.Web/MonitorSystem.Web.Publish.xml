@@ -1,14 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <publishData>
-  <publishProfile publishUrl="C:\inetpub\wwwroot\demo" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="配置文件1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
-    <file relUrl="bin/MonitorSystem.Web.pdb" publishTime="05/19/2012 00:32:36" />
-    <file relUrl="MonitorSystemTestPage.html" publishTime="05/06/2012 17:01:03" />
-    <file relUrl="GetData/GetData.svc" publishTime="05/05/2012 13:14:15" />
-    <file relUrl="Web.config" publishTime="05/19/2012 00:24:54" />
-    <file relUrl="Silverlight.js" publishTime="04/12/2012 01:38:22" />
-    <file relUrl="bin/MonitorSystem.Web.dll" publishTime="05/19/2012 00:32:36" />
-    <file relUrl="MonitorSystemTestPage.aspx" publishTime="05/06/2012 17:01:03" />
-    <file relUrl="ClientBin/MonitorSystem.xap" publishTime="05/19/2012 00:32:40" />
-    <file relUrl="test1.aspx" publishTime="05/13/2012 12:01:19" />
+  <publishProfile publishUrl="F:\WebSite\Monitor" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="配置文件1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="bin/MonitorSystem.Web.pdb" publishTime="10/20/2012 15:57:11" />
+    <file relUrl="MonitorSystemTestPage.aspx" publishTime="10/15/2012 21:55:00" />
+    <file relUrl="Upload/PIC/bg1.jpg" publishTime="10/15/2012 21:55:00" />
+    <file relUrl="test1.aspx" publishTime="10/15/2012 21:55:00" />
+    <file relUrl="GetData/GetData.svc" publishTime="10/15/2012 21:55:00" />
+    <file relUrl="Web.config" publishTime="10/20/2012 15:56:42" />
+    <file relUrl="fullScreen.js" publishTime="10/15/2012 21:55:00" />
+    <file relUrl="MonitorSystemTestPage.html" publishTime="10/15/2012 21:55:00" />
+    <file relUrl="ClientBin/MonitorSystem.xap" publishTime="10/20/2012 15:54:00" />
+    <file relUrl="bin/MonitorSystem.Web.dll" publishTime="10/20/2012 15:57:11" />
+    <file relUrl="Upload/PIC/Near2.jpg" publishTime="10/15/2012 21:55:00" />
+    <file relUrl="Silverlight.js" publishTime="10/15/2012 21:55:00" />
+    <file relUrl="Upload/PIC/jump.jpg" publishTime="10/15/2012 21:55:00" />
   </publishProfile>
 </publishData>

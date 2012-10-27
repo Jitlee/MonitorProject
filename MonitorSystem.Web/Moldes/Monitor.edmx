@@ -18,6 +18,7 @@
           </EntitySet>
           <EntitySet Name="t_Element" EntityType="MonitorDemo2Model.Store.t_Element" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_Element_Library" EntityType="MonitorDemo2Model.Store.t_Element_Library" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="t_Element_RealTimeLine" EntityType="MonitorDemo2Model.Store.t_Element_RealTimeLine" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_ElementProperty" EntityType="MonitorDemo2Model.Store.t_ElementProperty" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_ElementProperty_Library" EntityType="MonitorDemo2Model.Store.t_ElementProperty_Library" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_GalleryClassification" EntityType="MonitorDemo2Model.Store.t_GalleryClassification" store:Type="Tables" Schema="dbo" />
@@ -123,6 +124,32 @@
           <Property Name="MaxFloat" Type="float" />
           <Property Name="SerialNum" Type="int" />
           <Property Name="TotalLength" Type="float" />
+        </EntityType>
+        <EntityType Name="t_Element_RealTimeLine">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="char" Nullable="false" MaxLength="36" />
+          <Property Name="ScreenID" Type="int" Nullable="false" />
+          <Property Name="ElementID" Type="int" Nullable="false" />
+          <Property Name="LineType" Type="int" Nullable="false" />
+          <Property Name="LineName" Type="varchar" MaxLength="10" />
+          <Property Name="LineCZ" Type="int" />
+          <Property Name="LineShowType" Type="int" />
+          <Property Name="LineStyle" Type="int" />
+          <Property Name="LinePointBJ" Type="int" />
+          <Property Name="LineColor" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="MinValue" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="MaxValue" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ValueDecimal" Type="int" Nullable="false" />
+          <Property Name="ShowFormat" Type="varchar" MaxLength="20" />
+          <Property Name="TimeLen" Type="int" Nullable="false" />
+          <Property Name="TimeLenType" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="LineCYZQLent" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="LineCYZQType" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="DeviceID" Type="int" />
+          <Property Name="ChannelNo" Type="int" />
+          <Property Name="ComputeStr" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="t_ElementProperty">
           <Key>
@@ -248,6 +275,7 @@
             <Parameter Name="oldScreenID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="GalleryClassification" EntityType="MonitorDemo2Model.t_GalleryClassification" />
+          <EntitySet Name="t_Element_RealTimeLine" EntityType="MonitorDemo2Model.t_Element_RealTimeLine" />
         </EntityContainer>
         <EntityType Name="t_Control">
           <Key>
@@ -430,6 +458,32 @@
           <Property Type="String" Name="Name" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Description" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="Sort" Nullable="false" />
+        </EntityType>
+        <EntityType Name="t_Element_RealTimeLine">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="String" Name="ID" Nullable="false" MaxLength="36" FixedLength="true" Unicode="false" />
+          <Property Type="Int32" Name="ScreenID" Nullable="false" />
+          <Property Type="Int32" Name="ElementID" Nullable="false" />
+          <Property Type="Int32" Name="LineType" Nullable="false" />
+          <Property Type="String" Name="LineName" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="LineCZ" />
+          <Property Type="Int32" Name="LineShowType" />
+          <Property Type="Int32" Name="LineStyle" />
+          <Property Type="Int32" Name="LinePointBJ" />
+          <Property Type="String" Name="LineColor" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="MinValue" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="MaxValue" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ValueDecimal" Nullable="false" />
+          <Property Type="String" Name="ShowFormat" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="TimeLen" Nullable="false" />
+          <Property Type="String" Name="TimeLenType" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LineCYZQLent" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LineCYZQType" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="DeviceID" />
+          <Property Type="Int32" Name="ChannelNo" />
+          <Property Type="String" Name="ComputeStr" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -624,6 +678,33 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="t_Element_RealTimeLine">
+            <EntityTypeMapping TypeName="MonitorDemo2Model.t_Element_RealTimeLine">
+              <MappingFragment StoreEntitySet="t_Element_RealTimeLine">
+                <ScalarProperty Name="ComputeStr" ColumnName="ComputeStr" />
+                <ScalarProperty Name="ChannelNo" ColumnName="ChannelNo" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="LineCYZQType" ColumnName="LineCYZQType" />
+                <ScalarProperty Name="LineCYZQLent" ColumnName="LineCYZQLent" />
+                <ScalarProperty Name="TimeLenType" ColumnName="TimeLenType" />
+                <ScalarProperty Name="TimeLen" ColumnName="TimeLen" />
+                <ScalarProperty Name="ShowFormat" ColumnName="ShowFormat" />
+                <ScalarProperty Name="ValueDecimal" ColumnName="ValueDecimal" />
+                <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
+                <ScalarProperty Name="MinValue" ColumnName="MinValue" />
+                <ScalarProperty Name="LineColor" ColumnName="LineColor" />
+                <ScalarProperty Name="LinePointBJ" ColumnName="LinePointBJ" />
+                <ScalarProperty Name="LineStyle" ColumnName="LineStyle" />
+                <ScalarProperty Name="LineShowType" ColumnName="LineShowType" />
+                <ScalarProperty Name="LineCZ" ColumnName="LineCZ" />
+                <ScalarProperty Name="LineName" ColumnName="LineName" />
+                <ScalarProperty Name="LineType" ColumnName="LineType" />
+                <ScalarProperty Name="ElementID" ColumnName="ElementID" />
+                <ScalarProperty Name="ScreenID" ColumnName="ScreenID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -657,6 +738,7 @@
         <EntityTypeShape EntityType="MonitorDemo2Model.t_Sys_MainRealTimeSet" Width="2" PointX="5.125" PointY="8.25" Height="2.6339322916666674" />
         <EntityTypeShape EntityType="MonitorDemo2Model.V_ScreenMonitorValue" Width="1.5" PointX="0.5" PointY="0.5" Height="2.4653124999999996" />
         <EntityTypeShape EntityType="MonitorDemo2Model.t_GalleryClassification" Width="1.5" PointX="7" PointY="1.625" Height="1.7790128580729174" />
+        <EntityTypeShape EntityType="MonitorDemo2Model.t_Element_RealTimeLine" Width="1.5" PointX="8.375" PointY="4.75" Height="4.48875" />
       </Diagram>
     </Diagrams>
   </Designer>

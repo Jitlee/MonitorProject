@@ -1584,6 +1584,107 @@ begin
 	end
 end
 
+--添加“仪表13”
+set @AddControl='OtherRealTime'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'8','MonitorSystem.Other.RealTimeT','其它','实时曲线');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		-- X轴
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'XISSGShow','true','是否X轴栅格显示');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'XMainNumber','3','X主分度数');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'XMainColor','#FFFF0000','X主分度颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'XPriNumber','3','X次分度数');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'XPriColor','#FFFF0000','X度次分颜色');
+		
+		--Y轴
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'YISSGShow','true','是否Y轴栅格显示');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'YMainNumber','3','Y主分度数');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 8,'YMainColor','#FFFF0000','Y主分度颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 9,'YPriNumber','3','Y次分度数');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 10,'YPriColor','#FFFF0000','Y度次分颜色');
+		--其它颜色
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 11,'ISShowBorder','True','显示边框');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 29,'BorderColor','#FFFF0000','边框');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 12,'ISShowGridBack','True','显示背景');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 30,'GridBackColor','#FFFF0000','背景颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 13,'ISShowCursor','True','显示游标');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 31,'CursorColor','#FFFF0000','游标颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 14,'ISShowTime','True','显示时间');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 32,'TimeColor','#FFFF0000','时间颜色');
+		
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 15,'UsePerZB','false','采用百分比坐标');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 16,'NoUseDataMove','false','无效数据移出');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 17,'DoubleClickShowSet','true','双击显示设置框');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 18,'RightShowYZB','false',' 右显示Y轴坐标');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 19,'MultiXZShow','false','多X轴显示');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 20,'MultiYZShow','false','多Y轴显示');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 33,'IsShowLegend','true','显示图例');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 21,'ShowLegend','111111111','图例信息');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 22,'InfoLWidth','10','信息栏宽度');
+
+		--放缩设置
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 23,'MouseDrawEnlare','false','鼠标拖动放大');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 24,'XZEnlare','false','X轴放大');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 25,'YZEnlare','false','Y轴放大');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 26,'MouseDrawMove','true','鼠标拖动移动');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 27,'XZMove','true','X轴移动');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 28,'YZMove','true','Y轴移动');
+	end
+--这个属性还需要添加一个表:
+--因为它有多个线条
+--曲线类型、名称、取值、类型(直线、阶梯线)、样式(),标记(不画点、。。。。)
+--颜色 低值、高值、小数位、选择设备(从哪里取值)
+--显示格式（年月日时分秒）、时间:
+--时间设置	时间长度	采样周期
+
+
+
+end
+
 
 
 

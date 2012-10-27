@@ -1238,6 +1238,9 @@ namespace MonitorSystem
                if (v is t_Element)
                {
                    t_Element vobj = (t_Element)v;
+                   
+
+
                    foreach (t_ElementProperty ep in listMonitorAddElement[AddElementNumber].ListElementProp)
                    {
                         ep.ElementID = vobj.ElementID;

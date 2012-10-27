@@ -204,7 +204,7 @@
     <Compile Include="Gallery\Meter\Meter6.cs" />
     <Compile Include="Gallery\Meter\Meter7.cs" />
     <Compile Include="Gallery\Meter\Meter8.cs" />
-	<Compile Include="Gallery\Meter\Meter9.cs" />
+    <Compile Include="Gallery\Meter\Meter9.cs" />
     <Compile Include="Gallery\Meter\Meter10.cs" />
     <Compile Include="Gallery\Meter\Meter11.cs" />
     <Compile Include="Gallery\Meter\Meter12.cs" />
@@ -224,6 +224,20 @@
     <Compile Include="MonitorSystemGlobal\MonitorGrid.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorRectangle.cs" />
     <Compile Include="Controls\PropertyGrid\ColorValueEditor.cs" />
+    <Compile Include="Other\InputDilog.xaml.cs">
+      <DependentUpon>InputDilog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Other\InputObj.xaml.cs">
+      <DependentUpon>InputObj.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Other\RealLineShow.cs" />
+    <Compile Include="Other\RealtimeProperty.xaml.cs">
+      <DependentUpon>RealtimeProperty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Other\RealTimeT.xaml.cs">
+      <DependentUpon>RealTimeT.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Other\RealTimeLineOR.cs" />
     <Compile Include="Property\ScreenCopy.xaml.cs">
       <DependentUpon>ScreenCopy.xaml</DependentUpon>
     </Compile>
@@ -375,6 +389,22 @@
     <Page Include="MonitorSystemGlobal\TPSetProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Other\InputDilog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Other\InputObj.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Other\RealtimeProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Other\RealTimeT.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Property\ScreenCopy.xaml">
       <SubType>Designer</SubType>

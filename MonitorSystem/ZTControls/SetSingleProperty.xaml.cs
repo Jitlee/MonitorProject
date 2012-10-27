@@ -81,7 +81,6 @@ namespace MonitorSystem.ZTControls
             Devices = new ObservableCollection<t_Device>(_DataCV.t_Devices);
             cbDeviceID.DisplayMemberPath = "DeviceName";
             //查询
-
             this.DataContext = this;
         }
 

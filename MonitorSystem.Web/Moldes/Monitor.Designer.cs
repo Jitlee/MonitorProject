@@ -256,6 +256,22 @@ namespace MonitorSystem.Web.Moldes
             }
         }
         private ObjectSet<t_GalleryClassification> _GalleryClassification;
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        public ObjectSet<t_Element_RealTimeLine> t_Element_RealTimeLine
+        {
+            get
+            {
+                if ((_t_Element_RealTimeLine == null))
+                {
+                    _t_Element_RealTimeLine = base.CreateObjectSet<t_Element_RealTimeLine>("t_Element_RealTimeLine");
+                }
+                return _t_Element_RealTimeLine;
+            }
+        }
+        private ObjectSet<t_Element_RealTimeLine> _t_Element_RealTimeLine;
 
         #endregion
         #region AddTo 方法
@@ -354,6 +370,14 @@ namespace MonitorSystem.Web.Moldes
         public void AddToGalleryClassification(t_GalleryClassification t_GalleryClassification)
         {
             base.AddObject("GalleryClassification", t_GalleryClassification);
+        }
+    
+        /// <summary>
+        /// 用于向 t_Element_RealTimeLine EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
+        /// </summary>
+        public void AddTot_Element_RealTimeLine(t_Element_RealTimeLine t_Element_RealTimeLine)
+        {
+            base.AddObject("t_Element_RealTimeLine", t_Element_RealTimeLine);
         }
 
         #endregion
@@ -1987,6 +2011,563 @@ namespace MonitorSystem.Web.Moldes
         private Nullable<global::System.Double> _TotalLength;
         partial void OnTotalLengthChanging(Nullable<global::System.Double> value);
         partial void OnTotalLengthChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// 没有元数据文档可用。
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="MonitorDemo2Model", Name="t_Element_RealTimeLine")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class t_Element_RealTimeLine : EntityObject
+    {
+        #region 工厂方法
+    
+        /// <summary>
+        /// 创建新的 t_Element_RealTimeLine 对象。
+        /// </summary>
+        /// <param name="id">ID 属性的初始值。</param>
+        /// <param name="screenID">ScreenID 属性的初始值。</param>
+        /// <param name="elementID">ElementID 属性的初始值。</param>
+        /// <param name="lineType">LineType 属性的初始值。</param>
+        /// <param name="lineColor">LineColor 属性的初始值。</param>
+        /// <param name="minValue">MinValue 属性的初始值。</param>
+        /// <param name="maxValue">MaxValue 属性的初始值。</param>
+        /// <param name="valueDecimal">ValueDecimal 属性的初始值。</param>
+        /// <param name="timeLen">TimeLen 属性的初始值。</param>
+        /// <param name="timeLenType">TimeLenType 属性的初始值。</param>
+        /// <param name="lineCYZQLent">LineCYZQLent 属性的初始值。</param>
+        /// <param name="lineCYZQType">LineCYZQType 属性的初始值。</param>
+        public static t_Element_RealTimeLine Createt_Element_RealTimeLine(global::System.String id, global::System.Int32 screenID, global::System.Int32 elementID, global::System.Int32 lineType, global::System.String lineColor, global::System.String minValue, global::System.String maxValue, global::System.Int32 valueDecimal, global::System.Int32 timeLen, global::System.String timeLenType, global::System.String lineCYZQLent, global::System.String lineCYZQType)
+        {
+            t_Element_RealTimeLine t_Element_RealTimeLine = new t_Element_RealTimeLine();
+            t_Element_RealTimeLine.ID = id;
+            t_Element_RealTimeLine.ScreenID = screenID;
+            t_Element_RealTimeLine.ElementID = elementID;
+            t_Element_RealTimeLine.LineType = lineType;
+            t_Element_RealTimeLine.LineColor = lineColor;
+            t_Element_RealTimeLine.MinValue = minValue;
+            t_Element_RealTimeLine.MaxValue = maxValue;
+            t_Element_RealTimeLine.ValueDecimal = valueDecimal;
+            t_Element_RealTimeLine.TimeLen = timeLen;
+            t_Element_RealTimeLine.TimeLenType = timeLenType;
+            t_Element_RealTimeLine.LineCYZQLent = lineCYZQLent;
+            t_Element_RealTimeLine.LineCYZQType = lineCYZQType;
+            return t_Element_RealTimeLine;
+        }
+
+        #endregion
+        #region 基元属性
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                if (_ID != value)
+                {
+                    OnIDChanging(value);
+                    ReportPropertyChanging("ID");
+                    _ID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("ID");
+                    OnIDChanged();
+                }
+            }
+        }
+        private global::System.String _ID;
+        partial void OnIDChanging(global::System.String value);
+        partial void OnIDChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ScreenID
+        {
+            get
+            {
+                return _ScreenID;
+            }
+            set
+            {
+                OnScreenIDChanging(value);
+                ReportPropertyChanging("ScreenID");
+                _ScreenID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ScreenID");
+                OnScreenIDChanged();
+            }
+        }
+        private global::System.Int32 _ScreenID;
+        partial void OnScreenIDChanging(global::System.Int32 value);
+        partial void OnScreenIDChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ElementID
+        {
+            get
+            {
+                return _ElementID;
+            }
+            set
+            {
+                OnElementIDChanging(value);
+                ReportPropertyChanging("ElementID");
+                _ElementID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ElementID");
+                OnElementIDChanged();
+            }
+        }
+        private global::System.Int32 _ElementID;
+        partial void OnElementIDChanging(global::System.Int32 value);
+        partial void OnElementIDChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 LineType
+        {
+            get
+            {
+                return _LineType;
+            }
+            set
+            {
+                OnLineTypeChanging(value);
+                ReportPropertyChanging("LineType");
+                _LineType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LineType");
+                OnLineTypeChanged();
+            }
+        }
+        private global::System.Int32 _LineType;
+        partial void OnLineTypeChanging(global::System.Int32 value);
+        partial void OnLineTypeChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LineName
+        {
+            get
+            {
+                return _LineName;
+            }
+            set
+            {
+                OnLineNameChanging(value);
+                ReportPropertyChanging("LineName");
+                _LineName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LineName");
+                OnLineNameChanged();
+            }
+        }
+        private global::System.String _LineName;
+        partial void OnLineNameChanging(global::System.String value);
+        partial void OnLineNameChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> LineCZ
+        {
+            get
+            {
+                return _LineCZ;
+            }
+            set
+            {
+                OnLineCZChanging(value);
+                ReportPropertyChanging("LineCZ");
+                _LineCZ = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LineCZ");
+                OnLineCZChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _LineCZ;
+        partial void OnLineCZChanging(Nullable<global::System.Int32> value);
+        partial void OnLineCZChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> LineShowType
+        {
+            get
+            {
+                return _LineShowType;
+            }
+            set
+            {
+                OnLineShowTypeChanging(value);
+                ReportPropertyChanging("LineShowType");
+                _LineShowType = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LineShowType");
+                OnLineShowTypeChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _LineShowType;
+        partial void OnLineShowTypeChanging(Nullable<global::System.Int32> value);
+        partial void OnLineShowTypeChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> LineStyle
+        {
+            get
+            {
+                return _LineStyle;
+            }
+            set
+            {
+                OnLineStyleChanging(value);
+                ReportPropertyChanging("LineStyle");
+                _LineStyle = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LineStyle");
+                OnLineStyleChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _LineStyle;
+        partial void OnLineStyleChanging(Nullable<global::System.Int32> value);
+        partial void OnLineStyleChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> LinePointBJ
+        {
+            get
+            {
+                return _LinePointBJ;
+            }
+            set
+            {
+                OnLinePointBJChanging(value);
+                ReportPropertyChanging("LinePointBJ");
+                _LinePointBJ = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LinePointBJ");
+                OnLinePointBJChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _LinePointBJ;
+        partial void OnLinePointBJChanging(Nullable<global::System.Int32> value);
+        partial void OnLinePointBJChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LineColor
+        {
+            get
+            {
+                return _LineColor;
+            }
+            set
+            {
+                OnLineColorChanging(value);
+                ReportPropertyChanging("LineColor");
+                _LineColor = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LineColor");
+                OnLineColorChanged();
+            }
+        }
+        private global::System.String _LineColor;
+        partial void OnLineColorChanging(global::System.String value);
+        partial void OnLineColorChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String MinValue
+        {
+            get
+            {
+                return _MinValue;
+            }
+            set
+            {
+                OnMinValueChanging(value);
+                ReportPropertyChanging("MinValue");
+                _MinValue = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("MinValue");
+                OnMinValueChanged();
+            }
+        }
+        private global::System.String _MinValue;
+        partial void OnMinValueChanging(global::System.String value);
+        partial void OnMinValueChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String MaxValue
+        {
+            get
+            {
+                return _MaxValue;
+            }
+            set
+            {
+                OnMaxValueChanging(value);
+                ReportPropertyChanging("MaxValue");
+                _MaxValue = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("MaxValue");
+                OnMaxValueChanged();
+            }
+        }
+        private global::System.String _MaxValue;
+        partial void OnMaxValueChanging(global::System.String value);
+        partial void OnMaxValueChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ValueDecimal
+        {
+            get
+            {
+                return _ValueDecimal;
+            }
+            set
+            {
+                OnValueDecimalChanging(value);
+                ReportPropertyChanging("ValueDecimal");
+                _ValueDecimal = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ValueDecimal");
+                OnValueDecimalChanged();
+            }
+        }
+        private global::System.Int32 _ValueDecimal;
+        partial void OnValueDecimalChanging(global::System.Int32 value);
+        partial void OnValueDecimalChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ShowFormat
+        {
+            get
+            {
+                return _ShowFormat;
+            }
+            set
+            {
+                OnShowFormatChanging(value);
+                ReportPropertyChanging("ShowFormat");
+                _ShowFormat = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ShowFormat");
+                OnShowFormatChanged();
+            }
+        }
+        private global::System.String _ShowFormat;
+        partial void OnShowFormatChanging(global::System.String value);
+        partial void OnShowFormatChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TimeLen
+        {
+            get
+            {
+                return _TimeLen;
+            }
+            set
+            {
+                OnTimeLenChanging(value);
+                ReportPropertyChanging("TimeLen");
+                _TimeLen = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TimeLen");
+                OnTimeLenChanged();
+            }
+        }
+        private global::System.Int32 _TimeLen;
+        partial void OnTimeLenChanging(global::System.Int32 value);
+        partial void OnTimeLenChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TimeLenType
+        {
+            get
+            {
+                return _TimeLenType;
+            }
+            set
+            {
+                OnTimeLenTypeChanging(value);
+                ReportPropertyChanging("TimeLenType");
+                _TimeLenType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("TimeLenType");
+                OnTimeLenTypeChanged();
+            }
+        }
+        private global::System.String _TimeLenType;
+        partial void OnTimeLenTypeChanging(global::System.String value);
+        partial void OnTimeLenTypeChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LineCYZQLent
+        {
+            get
+            {
+                return _LineCYZQLent;
+            }
+            set
+            {
+                OnLineCYZQLentChanging(value);
+                ReportPropertyChanging("LineCYZQLent");
+                _LineCYZQLent = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LineCYZQLent");
+                OnLineCYZQLentChanged();
+            }
+        }
+        private global::System.String _LineCYZQLent;
+        partial void OnLineCYZQLentChanging(global::System.String value);
+        partial void OnLineCYZQLentChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LineCYZQType
+        {
+            get
+            {
+                return _LineCYZQType;
+            }
+            set
+            {
+                OnLineCYZQTypeChanging(value);
+                ReportPropertyChanging("LineCYZQType");
+                _LineCYZQType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LineCYZQType");
+                OnLineCYZQTypeChanged();
+            }
+        }
+        private global::System.String _LineCYZQType;
+        partial void OnLineCYZQTypeChanging(global::System.String value);
+        partial void OnLineCYZQTypeChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> DeviceID
+        {
+            get
+            {
+                return _DeviceID;
+            }
+            set
+            {
+                OnDeviceIDChanging(value);
+                ReportPropertyChanging("DeviceID");
+                _DeviceID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DeviceID");
+                OnDeviceIDChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _DeviceID;
+        partial void OnDeviceIDChanging(Nullable<global::System.Int32> value);
+        partial void OnDeviceIDChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ChannelNo
+        {
+            get
+            {
+                return _ChannelNo;
+            }
+            set
+            {
+                OnChannelNoChanging(value);
+                ReportPropertyChanging("ChannelNo");
+                _ChannelNo = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ChannelNo");
+                OnChannelNoChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ChannelNo;
+        partial void OnChannelNoChanging(Nullable<global::System.Int32> value);
+        partial void OnChannelNoChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ComputeStr
+        {
+            get
+            {
+                return _ComputeStr;
+            }
+            set
+            {
+                OnComputeStrChanging(value);
+                ReportPropertyChanging("ComputeStr");
+                _ComputeStr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ComputeStr");
+                OnComputeStrChanged();
+            }
+        }
+        private global::System.String _ComputeStr;
+        partial void OnComputeStrChanging(global::System.String value);
+        partial void OnComputeStrChanged();
 
         #endregion
     
