@@ -1288,6 +1288,27 @@ namespace MonitorSystem
                 }
             }
 
+            //循环已添加的属性
+            foreach (t_Element mEle in ScreenAllElement)
+            {
+                var v = csScreen.FindName(mEle.ElementID.ToString());
+                if (v == null)
+                {
+                    _DataContext.t_Elements.Remove(mEle);
+                    //移出属性
+                    var vPro = _DataContext.t_ElementProperties.Where(a => a.ElementID == mEle.ElementID);
+                    if (vPro.Count() > 0)
+                    {
+                        List<t_ElementProperty> listEp = vPro.ToList();
+                        foreach (t_ElementProperty ep in listEp)
+                        {
+                            _DataContext.t_ElementProperties.Remove(ep);
+                        }
+                    }
+                }
+            }
+
+
             if (_DataContext.HasChanges)
             {
                 _DataContext.SubmitChanges(SubmitCompleted, null);
