@@ -27,6 +27,7 @@ using MonitorSystem.Dqfh;
 using MonitorSystem.Dldz;
 using MonitorSystem.Gallery.Meter;
 using System.Diagnostics;
+using MonitorSystem.Other;
 
 namespace MonitorSystem
 {
@@ -293,6 +294,8 @@ namespace MonitorSystem
             _DataContext.Load(_DataContext.GetT_ElementProperty_LibraryQuery(), LoadElementProperty_LibraryCompleted, null);
            //加载控件属性
             _DataContext.Load(_DataContext.GetT_ControlPropertyQuery(), LoadControlPropertyCompleted, null);
+
+           // _DataContext.Load(_DataContext.GetT_Element_RealTimeLineQuery().Where(a=> a.ElementID== 
 
             //实例化属性窗口
             fwProperty = new FloatableWindow();
@@ -1318,6 +1321,18 @@ namespace MonitorSystem
                     {
                         ep.ElementID = addElement.ElementID;
                         _DataContext.t_ElementProperties.Add(ep);
+                    }
+
+                    //添加实时曲线的线
+                    if (listMonitorAddElement[i] is RealTimeT)
+                    {
+                        var add = listMonitorAddElement[i] as RealTimeT;
+                        foreach (RealTimeLineOR LineOr in add.ListRealTimeLine)
+                        {
+                            LineOr.LineInfo.ScreenID = _CurrentScreen.ScreenID;
+                            LineOr.LineInfo.ElementID = addElement.ElementID;
+                            _DataContext.t_Element_RealTimeLines.Add(LineOr.LineInfo);
+                        }
                     }
                 }
             }

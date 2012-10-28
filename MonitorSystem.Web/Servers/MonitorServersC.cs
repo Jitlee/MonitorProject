@@ -114,6 +114,26 @@ namespace MonitorSystem.Web.Servers
         {
             return this.ObjectContext.t_Element.Where(t => t.ScreenID == screenID);
         }
+
+        /// <summary>
+        /// 获取图库分类
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<t_GalleryClassification> GetT_GalleryClassification()
+        {
+            return this.ObjectContext.GalleryClassification;
+        }
+
+        /// <summary>
+        /// 根据 control type 查询控件 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public IQueryable<t_Control> GetT_ControlByType(int type)
+        {
+            return this.ObjectContext.t_Control.Where(t => t.ControlType == type);
+        }
+
     }
 
     

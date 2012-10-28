@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Collections.Generic;
+using MonitorSystem.Web.Moldes;
+using System.Windows.Threading;
 
 namespace MonitorSystem.Other
 {
@@ -32,45 +34,50 @@ namespace MonitorSystem.Other
 
     public class RealTimeLineOR
     {
-        public RealTimeLineOR()
+        t_Element_RealTimeLine _LineInfo;
+        /// <summary>
+        /// 线参数信息
+        /// </summary>
+        public t_Element_RealTimeLine LineInfo
         {
-            _PolyLine.Stroke = new SolidColorBrush(_LineColor);
+            get { return _LineInfo; }
+            set { _LineInfo = value; }
+        }
+
+        public RealTimeLineOR(t_Element_RealTimeLine mLine)
+        {
+            _LineInfo = mLine;
+
+            _PolyLine.Stroke = new SolidColorBrush(Common.StringToColor(_LineInfo.LineColor));
             _PolyLine.StrokeThickness = 2;
             _PolyLine.Points = pc;
             _PolyLine.SetValue(Canvas.ZIndexProperty, 999);
-            _PolyLine.Name = _LineGuid;
+            _PolyLine.Name = _LineInfo.ID;
 
             //曲线点
             noteMessages = new CoordinatesValue[maxNote];
+
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += (sender, obj) =>
+            {
+                Random rd = new Random();
+                //获取值，刷新
+               
+                    AddNewValue(Convert.ToDouble(rd.NextDouble() * int.Parse(LineInfo.MaxValue)));
+                    ShowCurve();
+            };
+            timer.Start();
         }
 
         /// <summary>
         /// 实使化参数
         /// </summary>
-        public void InitPara()
-        {
+        //public void InitPara()
+        //{
 
-        }
-
-        private string _LineName;
-        /// <summary>
-        /// 线名称
-        /// </summary>
-        public string LineName
-        {
-            get { return _LineName; }
-            set { _LineName = value; }
-        }
-
-        private string _LineGuid = Guid.NewGuid().ToString();
-        /// <summary>
-        /// 线ID
-        /// </summary>
-        public string LineGuid
-        {
-            get { return _LineGuid; }
-            set { _LineGuid = value; }
-        }
+        //}       
 
         double _YValue = 0.0;
         /// <summary>
@@ -82,20 +89,7 @@ namespace MonitorSystem.Other
             set { _YValue = value; }
         }
 
-
-        private Color _LineColor= Colors.Blue;
-        /// <summary>
-        /// 实时曲线颜色
-        /// </summary>
-        public Color LineColor
-        {
-            get { return _LineColor; }
-            set {
-                _LineColor = value;
-                _PolyLine.Stroke = new SolidColorBrush(_LineColor);
-            }
-        }
-
+        
         RealLineShow _TitleShowInfo;
         /// <summary>
         /// 实时曲线基本信息显示
@@ -129,50 +123,13 @@ namespace MonitorSystem.Other
             set { _StartTime = value; }
         }
 
-        int _TimeLen =8;
-        /// <summary>
-        /// 时间长度|取值范围 
-        /// </summary>
-        public int TimeLen
+        public void SetTimeLen(int value)
         {
-            get { return _TimeLen; }
-            set { _TimeLen = value;
+            _LineInfo.TimeLen = value;
             SetPointReMovePx();
-            }
         }
         
-        private string _TimeLenType="s";
-        /// <summary>
-        /// 时间长度类型
-        /// </summary>
-        public string TimeLenType
-        {
-            get { return _TimeLenType; }
-            set { _TimeLenType = value; }
-        }
-
-
-        int _CYZQ = 1;
-        /// <summary>
-        /// 采样周期
-        /// </summary>
-        public int CYZQ
-        {
-            get { return _CYZQ; }
-            set { _CYZQ = value;
-                SetPointReMovePx();
-            }
-        }
-
-        string _CYZQType = "ss";//秒
-        /// <summary>
-        /// 采样周期类型
-        /// </summary>
-        public string CYZQType
-        {
-            get { return _CYZQType; }
-            set { _CYZQType = value; }
-        }
+      
         /// <summary>
         /// 面版可显示点数量,根据取值宽围/采样频率
         /// </summary>
@@ -186,25 +143,48 @@ namespace MonitorSystem.Other
         /// </summary>
         public void SetPointReMovePx()
         {
-            int len = GetTimeUSELen();
-            _PicShowPointNumber = len / _CYZQ;//取值宽围/采样频率
+            int len = GetTimeShowELen();
+            _PicShowPointNumber = len / GetCYTimeLen();//取值宽围/采样频率
             curveRemove = _PicCurveWidth / _PicShowPointNumber;
         }
 
-        private int  GetTimeUSELen()
+        private int GetCYTimeLen()
         {
             int len = 5;
-            if (_TimeLenType == "ss")
+            int CYZQLent= int.Parse(_LineInfo.LineCYZQLent);
+            if (_LineInfo.LineCYZQType == "ss")
             {
-                len = _TimeLen;
+                len = CYZQLent;
             }
-            else if (_TimeLenType == "mm")
+            else if (_LineInfo.LineCYZQType == "mm")
             {
-                len = _TimeLen * 60;
+                len = CYZQLent * 60;
             }
-            else if (TimeLenType == "hh")
+            else if (_LineInfo.LineCYZQLent == "hh")
             {
-                len = _TimeLen * 60 * 60;
+                len = CYZQLent * 60 * 60;
+            }
+            return len;
+        }
+
+        /// <summary>
+        /// 时间显示长度
+        /// </summary>
+        /// <returns></returns>
+        private int  GetTimeShowELen()
+        {
+            int len = 5;
+            if (_LineInfo.TimeLenType == "ss")
+            {
+                len = _LineInfo.TimeLen;
+            }
+            else if (_LineInfo.TimeLenType == "mm")
+            {
+                len = _LineInfo.TimeLen * 60;
+            }
+            else if (_LineInfo.TimeLenType == "hh")
+            {
+                len = _LineInfo.TimeLen * 60 * 60;
             }
             return len;
         }
@@ -221,7 +201,7 @@ namespace MonitorSystem.Other
            if (_TextList.Count == 0)
                return;
 
-           int len = GetTimeUSELen();
+           int len = GetTimeShowELen();
 
            int timeLenPer = len / (_TextList.Count - 1);
            int txtCount = _TextList.Count;
@@ -235,32 +215,6 @@ namespace MonitorSystem.Other
         }
 
         #endregion
-
-        /// <summary>
-        /// 最小值
-        /// </summary>
-        private double _YminValue = 0;
-        /// <summary>
-        /// 最小值
-        /// </summary>
-        public double YminValue
-        {
-            get { return _YminValue; }
-            set { _YminValue = value; }
-        }
-        /// <summary>
-        /// 最大值
-        /// </summary>
-        private double _YmaxValue = 100;
-        /// <summary>
-        /// 最小值
-        /// </summary>
-        public double YmaxValue
-        {
-            get { return _YmaxValue; }
-            set { _YmaxValue = value; }
-        }
-
         /// <summary>
         /// 鼠标X，Y 坐标值，及该点坐标记录值、记录时间（数组）
         /// </summary>
@@ -373,7 +327,8 @@ namespace MonitorSystem.Other
 
                 this.noteNow++;
             }
-            _TitleShowInfo.SetDataValue(newValue);
+            if (_TitleShowInfo != null)
+                _TitleShowInfo.SetDataValue(newValue);
         }
 
         /// <summary>
@@ -388,15 +343,21 @@ namespace MonitorSystem.Other
             }
         }
         #endregion
-
+        public double GetHalf()
+        {
+            double half = 0;
+            if (_YZSFPer != 1)
+                half = ((int.Parse(_LineInfo.MaxValue) - int.Parse(_LineInfo.MinValue)) * (_YZSFPer - 1)) / 2;
+            return half;
+        }
         #region 缩放处理
         private int GetYValue(double newValue)
         {
             double half = 0;
             if (_YZSFPer != 1)
-                half = ((_YmaxValue - _YminValue) * (_YZSFPer - 1)) / 2;
-            double max = this._YmaxValue + half;
-            double min = this._YminValue - half;
+                half = ((int.Parse(_LineInfo.MaxValue) -int.Parse(_LineInfo.MinValue)) * (_YZSFPer - 1)) / 2;
+            double max = int.Parse(_LineInfo.MaxValue) + half;
+            double min = int.Parse(_LineInfo.MinValue) - half;
 
             double per = (newValue - min) / (max - min);
             double y = _picCurveShowHeight * (1 - per);

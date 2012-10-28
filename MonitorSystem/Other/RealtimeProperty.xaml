@@ -2,22 +2,22 @@
            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
            xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
-           Width="768" Height="486" 
+           Width="757" Height="448" 
            Title="属性" xmlns:my="clr-namespace:MonitorSystem.Controls" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit">
-    <Grid x:Name="LayoutRoot" Margin="2">
+    <Grid x:Name="LayoutRoot" Margin="2" Height="416">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="1" />
-        <Button x:Name="OKButton" Content="确定" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="1" />
-        <controls:TabControl    Name="tabControl1"  >
+        <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,3,15,9" Grid.Row="1" />
+        <Button x:Name="OKButton" Content="确定" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,5,106,7" Grid.Row="1" />
+        <controls:TabControl    Name="tabControl1">
           
 
 
             <controls:TabItem Header="通用" Name="tbCommon">
-                <Grid >
+                <Grid Height="352">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4"/>
                         <ColumnDefinition />
@@ -38,9 +38,10 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <!--X轴-->
-                    <CheckBox Grid.Row="1" Grid.Column="1" x:Name="XISSGShow"  Content="是否X轴栅格显示"  Height="20" Width="112"></CheckBox>
-                    <TextBlock Grid.Row="1" Grid.Column="2" Text="X主分度数："  Height="25" Width="54" Margin="11,6,0,10" HorizontalAlignment="Left"></TextBlock>
-                    <ComboBox Grid.Column="2" Grid.Row="1" x:Name="XMainNumber"  Height="20" Width="53"  HorizontalAlignment="Right" Margin="0,11,58,11">
+                    <CheckBox Grid.Row="1" Grid.Column="1" x:Name="XISSGShow"  Content="是否X轴栅格显示"  Height="20" Width="112" Margin="22,9,48,12"></CheckBox>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="X主分度数："  Height="24" Width="54" Margin="8,10,0,6" HorizontalAlignment="Left"></TextBlock>
+                    <ComboBox Grid.Column="2" Grid.Row="1" x:Name="XMainNumber"  Height="24" Width="50"  
+                              HorizontalAlignment="Right" Margin="0,6,69,6">
                         <ComboBoxItem  Content="0条"/>
                         <ComboBoxItem Content="1条"/>
                         <ComboBoxItem Content="2条"/>
@@ -62,9 +63,9 @@
                         <ComboBoxItem Content="18条"/>
                         <ComboBoxItem Content="19条"/>
                     </ComboBox>
-                    <my:ColorPicker Grid.Column="2" Grid.Row="1" x:Name="XMainColor" HorizontalAlignment="Left" Margin="137,11,0,0"  VerticalAlignment="Top" Width="45" Height="25" FontSize="12" />
-                    <TextBlock Grid.Row="1" Grid.Column="3" Text="X次分度数：" Margin="6,14,122,9" Width="54"></TextBlock>
-                    <ComboBox Grid.Column="3"  Grid.Row="1" x:Name="XPriNumber" Margin="66,13,63,11" Width="53">
+                    <my:ColorPicker Grid.Column="2" Grid.Row="1" x:Name="XMainColor" HorizontalAlignment="Left" Margin="125,6,0,0"  VerticalAlignment="Top" Width="45" Height="25" FontSize="12" />
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="X次分度数：" Margin="6,11,122,12" Width="54"></TextBlock>
+                    <ComboBox Grid.Column="3"  Grid.Row="1" x:Name="XPriNumber"  Height="25" Width="50">
                         <ComboBoxItem  Content="0条"/>
                         <ComboBoxItem Content="1条"/>
                         <ComboBoxItem Content="2条"/>
@@ -86,11 +87,11 @@
                         <ComboBoxItem Content="18条"/>
                         <ComboBoxItem Content="19条"/>
                     </ComboBox>
-                    <my:ColorPicker Grid.Column="3" Grid.Row="1" x:Name="XPriColor" HorizontalAlignment="Left" Margin="128,11,0,0"   VerticalAlignment="Top" Width="45" Height="25" FontSize="12" />
+                    <my:ColorPicker Grid.Column="3" Grid.Row="1" x:Name="XPriColor" HorizontalAlignment="Left" Margin="128,8,0,0"   VerticalAlignment="Top" Width="45" Height="25" FontSize="12" />
                     <!--Y轴-->
-                    <CheckBox Grid.Row="2" Grid.Column="1" x:Name="YISSGShow"  Content="是否Y轴栅格显示" Margin="20,13,50,6" Width="112"></CheckBox>
-                    <TextBlock Grid.Row="2" Grid.Column="2" Text="Y主分度数：" Margin="6,14,122,6" Width="54"></TextBlock>
-                    <ComboBox Grid.Column="2"  Grid.Row="2" x:Name="YMainNumber" Margin="66,13,63,6" Width="53">
+                    <CheckBox Grid.Row="2" Grid.Column="1" x:Name="YISSGShow"  Content="是否Y轴栅格显示" Margin="20,9,50,10" Width="112"></CheckBox>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="Y主分度数：" Margin="6,12,122,8" Width="54"></TextBlock>
+                    <ComboBox Grid.Column="2"  Grid.Row="2" x:Name="YMainNumber"  Height="24" Width="50" Margin="63,8,65,7">
                         <ComboBoxItem  Content="0条"/>
                         <ComboBoxItem Content="1条"/>
                         <ComboBoxItem Content="2条"/>
@@ -112,9 +113,9 @@
                         <ComboBoxItem Content="18条"/>
                         <ComboBoxItem Content="19条"/>
                     </ComboBox>
-                    <my:ColorPicker Grid.Column="2" Grid.Row="2" x:Name="YMainColor" HorizontalAlignment="Left" Margin="122,11,0,0"   VerticalAlignment="Top" Width="45" Height="25" FontSize="12" />
-                    <TextBlock Grid.Row="2" Grid.Column="3" Text="X次分度数：" Margin="6,14,122,6" Width="54"></TextBlock>
-                    <ComboBox  Grid.Row="2" Grid.Column="3" x:Name="YPriNumber" Margin="66,13,63,6" Width="53">
+                    <my:ColorPicker Grid.Column="2" Grid.Row="2" x:Name="YMainColor" HorizontalAlignment="Left" Margin="124,9,0,0"   VerticalAlignment="Top" Width="45" Height="25" FontSize="12" />
+                    <TextBlock Grid.Row="2" Grid.Column="3" Text="Y次分度数：" Margin="6,12,122,8" Width="50"></TextBlock>
+                    <ComboBox  Grid.Row="2" Grid.Column="3" x:Name="YPriNumber"  Height="24" Width="50">
                         <ComboBoxItem  Content="0条"/>
                         <ComboBoxItem Content="1条"/>
                         <ComboBoxItem Content="2条"/>
@@ -139,33 +140,33 @@
                     <my:ColorPicker Grid.Column="3" Grid.Row="2" x:Name="YPriColor" HorizontalAlignment="Left" Margin="128,11,0,0"   VerticalAlignment="Top" Width="45" Height="25" FontSize="12" />
                    
                     <!--颜色-->
-                    <CheckBox Grid.Column="1" Grid.Row="3" x:Name="ISShowBorder"  Content="边框：" Margin="20,5,0,7"  Width="61" HorizontalAlignment="Left" />
-                    <my:ColorPicker Grid.Column="1" Grid.Row="3"  x:Name="BorderColor"  HorizontalAlignment="Left" Margin="75,12,0,0"  VerticalAlignment="Top" Width="45" Height="25" FontSize="12" />
-                    <CheckBox Grid.Column="2" Grid.Row="3"  x:Name="ISShowGridBack"  Content="背景：" HorizontalAlignment="Left" Margin="11,12,0,5" Width="61" />
-                    <my:ColorPicker Grid.Column="2" Grid.Row="3" x:Name="GridBackColor"   FontSize="12" Height="25" HorizontalAlignment="Left" Margin="71,5,0,0" VerticalAlignment="Top" Width="45" />
-                    <CheckBox  Grid.Column="3" Grid.Row="3"  x:Name="ISShowCursor" Content="游标：" HorizontalAlignment="Left" Margin="11,15,0,0" Width="61" />
-                    <my:ColorPicker Grid.Column="3" Grid.Row="3" x:Name="CursorColor"   FontSize="12" Height="25" HorizontalAlignment="Left" Margin="66,12,0,0" VerticalAlignment="Top" Width="45" />
-                    <CheckBox Grid.Column="4" Grid.Row="3"  x:Name="ISShowTime"   Content="时间：" HorizontalAlignment="Left" Margin="17,18,0,5" Width="61" />
-                    <my:ColorPicker  Grid.Column="4" Grid.Row="3" x:Name="TimeColor" FontSize="12" Height="25" HorizontalAlignment="Left" Margin="72,15,0,0" VerticalAlignment="Top" Width="45" />
+                    <CheckBox Grid.Column="1" Grid.Row="3" x:Name="ISShowBorder"  Content="边框：" Margin="20,9,0,10"  Width="61" HorizontalAlignment="Left" />
+                    <my:ColorPicker Grid.Column="1" Grid.Row="3"  x:Name="BorderColor"  HorizontalAlignment="Left" Margin="74,6,0,0"  VerticalAlignment="Top" Width="45" Height="25" FontSize="12" />
+                    <CheckBox Grid.Column="2" Grid.Row="3"  x:Name="ISShowGridBack"  Content="背景：" HorizontalAlignment="Left" Margin="11,10,0,11" Width="61" />
+                    <my:ColorPicker Grid.Column="2" Grid.Row="3" x:Name="GridBackColor"   FontSize="12" Height="25" HorizontalAlignment="Right" Margin="0,7,66,0" VerticalAlignment="Top" Width="45" />
+                    <CheckBox  Grid.Column="3" Grid.Row="3"  x:Name="ISShowCursor" Content="游标：" HorizontalAlignment="Left" Margin="10,11,0,11" Width="61" />
+                    <my:ColorPicker Grid.Column="3" Grid.Row="3" x:Name="CursorColor"   FontSize="12" Height="25" HorizontalAlignment="Left" Margin="66,7,0,0" VerticalAlignment="Top" Width="45" />
+                    <CheckBox Grid.Column="4" Grid.Row="3"  x:Name="ISShowTime"   Content="时间：" HorizontalAlignment="Left" Margin="17,12,0,5" Width="61" />
+                    <my:ColorPicker  Grid.Column="4" Grid.Row="3" x:Name="TimeColor" FontSize="12" Height="25" HorizontalAlignment="Left" Margin="72,8,0,0" VerticalAlignment="Top" Width="45" />
 
                     <CheckBox Grid.Column="1" Grid.Row="4" x:Name="UsePerZB" Content="采用百分比坐标" HorizontalAlignment="Left" Margin="20,11,0,9" Width="112" />
                     <CheckBox Grid.Column="2" Grid.Row="4" x:Name="NoUseDataMove" Content="无效数据移出"  HorizontalAlignment="Left" Margin="11,11,0,9" Width="100" />
-                    <CheckBox Grid.Column="3" Grid.Row="4" x:Name="DoubleClickShowSet" Content="双击显示设置框"  HorizontalAlignment="Left" Margin="22,11,0,9" Width="108" />
+                    <CheckBox Grid.Column="3" Grid.Row="4" x:Name="DoubleClickShowSet" Content="双击显示设置框"  HorizontalAlignment="Left" Margin="10,11,0,9" Width="108" />
                     <CheckBox Grid.Column="4" Grid.Row="4" x:Name="RightShowYZB" Content="右显示Y轴坐标"  HorizontalAlignment="Left" Margin="17,11,0,9" Width="116" />
 
-                    <CheckBox  Grid.Column="1" Grid.Row="5" x:Name="MultiXZShow" Content="多X轴显示" HorizontalAlignment="Left" Margin="40,20,0,0" Width="80" />
-                    <CheckBox Grid.Column="2" Grid.Row="5" x:Name="MultiYZShow" Content="多Y轴显示" HorizontalAlignment="Left" Margin="11,12,0,0" Width="83" />
-                    <CheckBox Grid.Column="3" Grid.Row="5" x:Name="IsShowLegend" Content="显示图例" HorizontalAlignment="Left" Margin="22,12,0,12" Width="78" />
+                    <CheckBox  Grid.Column="1" Grid.Row="5" x:Name="MultiXZShow" Content="多X轴显示" HorizontalAlignment="Left" Margin="21,10,0,10" Width="80" />
+                    <CheckBox Grid.Column="2" Grid.Row="5" x:Name="MultiYZShow" Content="多Y轴显示" HorizontalAlignment="Left" Margin="11,11,0,1" Width="83" />
+                    <CheckBox Grid.Column="3" Grid.Row="5" x:Name="IsShowLegend" Content="显示图例" HorizontalAlignment="Left" Margin="9,12,0,1" Width="78" />
                     <!--显示-->
-                    <TextBlock Grid.Column="1" Grid.Row="6" Text="信息栏宽度" Margin="20,13,95,0" Width="67"></TextBlock>
-                    <TextBox Grid.Column="1" Grid.Row="6" x:Name="InfoLWidth" Margin="93,14,29,9" Width="60"></TextBox>
+                    <TextBlock Grid.Column="1" Grid.Row="6" Text="信息栏宽度" Margin="22,11,93,11" Width="67"></TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="6" x:Name="InfoLWidth" Width="84" Height="26" Margin="85,4,11,4"></TextBox>
 
-                    <CheckBox  Grid.Column="1" Grid.Row="7" x:Name="MouseDrawEnlare" Content="鼠标拖动放大"  HorizontalAlignment="Left" Margin="35,6,0,14" Width="97" Checked="MouseDrawEnlare_Checked" />
-                    <CheckBox Grid.Column="2" Grid.Row="7"   x:Name="XZEnlare" Content="X轴放大" HorizontalAlignment="Left" Margin="14,6,0,14" Width="80" />
-                    <CheckBox Grid.Column="3" Grid.Row="7"  x:Name="YZEnlare"  Content="Y轴放大" HorizontalAlignment="Left" Margin="31,20,0,0" Width="80" />
-                    <CheckBox Grid.Column="1" Grid.Row="8"   x:Name="MouseDrawMove" Content="鼠标拖动移动" HorizontalAlignment="Left" Margin="35,8,0,13" Width="80" Checked="MouseDrawMove_Checked" />
-                    <CheckBox  Grid.Column="2" Grid.Row="8"  x:Name="XZMove" Content="X轴移动"  HorizontalAlignment="Left" Margin="6,8,0,13" Width="80" />
-                    <CheckBox Grid.Column="3" Grid.Row="8"   x:Name="YZMove" Content="Y轴移动"  HorizontalAlignment="Left" Margin="31,8,0,13" Width="80" />
+                    <CheckBox  Grid.Column="1" Grid.Row="7" x:Name="MouseDrawEnlare" Content="鼠标拖动放大"  HorizontalAlignment="Left" Margin="22,9,0,11" Width="97" Checked="MouseDrawEnlare_Checked" />
+                    <CheckBox Grid.Column="2" Grid.Row="7"   x:Name="XZEnlare" Content="X轴放大" HorizontalAlignment="Left" Margin="13,10,0,10" Width="80" />
+                    <CheckBox Grid.Column="3" Grid.Row="7"  x:Name="YZEnlare"  Content="Y轴放大" HorizontalAlignment="Left" Margin="10,10,0,10" Width="80" />
+                    <CheckBox Grid.Column="1" Grid.Row="8"   x:Name="MouseDrawMove" Content="鼠标拖动移动" HorizontalAlignment="Left" Margin="21,8,0,13" Width="98" Checked="MouseDrawMove_Checked" />
+                    <CheckBox  Grid.Column="2" Grid.Row="8"  x:Name="XZMove" Content="X轴移动"  HorizontalAlignment="Left" Margin="12,8,0,13" Width="80" />
+                    <CheckBox Grid.Column="3" Grid.Row="8"   x:Name="YZMove" Content="Y轴移动"  HorizontalAlignment="Left" Margin="9,8,0,13" Width="80" />
                 </Grid>
             </controls:TabItem>
             
@@ -189,12 +190,22 @@
                     <sdk:Label Grid.Column="1" Grid.Row="1" Height="28" 
                                Margin="10,3,116,2" Name="label1"  Content="曲线类型："  Width="57" />
                     <ComboBox Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Left" 
-                              Margin="63,5,0,0" Name="comboBox1" VerticalAlignment="Top" Width="120" >
+                              Margin="63,5,0,0" Name="LineType" VerticalAlignment="Top" Width="119" >
                         <ComboBoxItem  Content="实时趋势"/>
                         <!--<ComboBoxItem Content="历史曲线"/>-->
                     </ComboBox>
-                    <sdk:DataGrid x:Name="dgDataList"   Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,0,0,14" />
-                    <sdk:TabControl  Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" Margin="0,12,0,0">
+                    <sdk:DataGrid x:Name="dgDataList"  ItemsSource="{Binding ListEletement}"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,31,0,16" SelectionChanged="dgDataList_SelectionChanged" AutoGenerateColumns="False" Grid.RowSpan="2">
+                        <sdk:DataGrid.Columns>
+                            <sdk:DataGridTextColumn Header="名称" Width="160"  Binding="{Binding LineName}" />
+
+                            <sdk:DataGridTextColumn Header="时间范围" Width="100"  Binding="{Binding TimeLen}" />
+                            <sdk:DataGridTextColumn Header="采样周期" Width="100"  Binding="{Binding LineCYZQLent}" />
+                            <sdk:DataGridTextColumn Header="最小值" Width="100"  Binding="{Binding MinValue}" />
+                            <sdk:DataGridTextColumn Header="最大值" Width="100"  Binding="{Binding MaxValue}" />
+                            <sdk:DataGridTextColumn Header="小数位数" Width="100"  Binding="{Binding ValueDecimal}" />
+                        </sdk:DataGrid.Columns>
+                    </sdk:DataGrid>
+                    <sdk:TabControl  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="4" Margin="0,131,0,0" Grid.RowSpan="2">
                         <sdk:TabItem  Header="画笔">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -212,9 +223,9 @@
                                 <sdk:Label Margin="30,8,175,4"  Content="名称：" />
                                 <TextBox Margin="0,10,47,4" Name="LineName" 
                                           Width="120" HorizontalAlignment="Right" />                                
-                                <sdk:Label Content="逻辑表达式：" Height="28" Margin="3,0,176,8" Grid.Column="2" Grid.Row="3" />
-                                <TextBox Height="23" HorizontalAlignment="Right" Margin="0,2,40,11" Name="ComputeStr" Width="120" Grid.Column="2" Grid.Row="3" />
-                                <sdk:Label Content="取值：" Height="28" Margin="18,8,178,1" Grid.Column="1" />
+                                <sdk:Label Content="逻辑表达式：" Height="28" Margin="5,2,174,5" Grid.Column="2" Grid.Row="3" />
+                                <TextBox Height="23" HorizontalAlignment="Right" Margin="0,3,40,7" Name="ComputeStr" Width="120" Grid.Column="2" Grid.Row="3" />
+                                <sdk:Label Content="取值：" Height="28" Margin="25,9,176,34" Grid.Column="1" Grid.RowSpan="2" />
                                 <ComboBox Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="68,9,0,0" Name="LineCZ"
                                           VerticalAlignment="Top" Width="120">
                                     <ComboBoxItem Content="瞬时取值"></ComboBoxItem>
@@ -236,7 +247,7 @@
                                           Width="120" Grid.Row="1" >
                                     <ComboBoxItem Content="直线"></ComboBoxItem>
                                 </ComboBox>
-                                <sdk:Label Content="标记：" Height="28" Margin="20,9,182,0" Grid.Column="1" Grid.Row="1" />
+                                <sdk:Label Content="标记：" Height="28" Margin="21,9,181,34" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="69,9,0,0" Name="LinePointBJ" VerticalAlignment="Top" 
                                           Width="120" Grid.Column="1" Grid.Row="1" >
                                     <ComboBoxItem Content="不画点"></ComboBoxItem>
@@ -251,20 +262,20 @@
 
 
                                 <sdk:Label Content="低限：" Height="28" Margin="27,6,178,3" Grid.Row="2" />
-                                <TextBox Height="23" HorizontalAlignment="Right" Margin="0,8,49,6" Name="MinValue" Width="120" Grid.Row="2" />
-                                <sdk:Label Content="高限：" Height="28" Margin="22,8,182,1" Grid.Column="1" Grid.Row="2" />
-                                <TextBox Height="23" HorizontalAlignment="Right" Margin="0,10,51,4" Name="MaxValue" Width="120" Grid.Column="1" Grid.Row="2" />
+                                <TextBox Height="23" HorizontalAlignment="Right" Margin="0,7,49,4" Name="MinValue" Width="120" Grid.Row="2" />
+                                <sdk:Label Content="高限：" Height="28" Margin="21,8,183,1" Grid.Column="1" Grid.Row="2" />
+                                <TextBox Height="23" HorizontalAlignment="Right" Margin="0,9,51,2" Name="MaxValue" Width="120" Grid.Column="1" Grid.Row="2" />
                                 <sdk:Label Content="小数：" Height="28" Margin="34,5,166,4" Grid.Column="2" Grid.Row="2" />
-                                <toolkit:NumericUpDown Height="22" HorizontalAlignment="Left" Margin="78,6,0,0" Maximum="31" Minimum="1" Name="ValueDecimal" VerticalAlignment="Top" Grid.Column="2" Grid.Row="2" Width="48" />
+                                <toolkit:NumericUpDown Height="22" HorizontalAlignment="Left" Margin="78,6,0,0" Maximum="31" Minimum="0" Name="ValueDecimal" VerticalAlignment="Top" Grid.Column="2" Grid.Row="2" Width="48" />
 
                                 <!--ItemsSource="{Binding Channels}"-->
                                 <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="3" Text="关联设备：" Margin="0,10,177,6" />
                                 <ComboBox Height="23" ItemsSource="{Binding Devices}" HorizontalAlignment="Left"
                   SelectedItem="{Binding SelectedDevices, Mode=TwoWay}"
-                  Grid.Row="3" Name="cbDeviceID"  Width="121" SelectionChanged="cbDeviceID_SelectionChanged" Margin="70,6,0,7" />
-                                <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1"   Text="关联通道：" Margin="0,6,182,10" />
+                  Grid.Row="3" Name="cbDeviceID"  Width="121" SelectionChanged="cbDeviceID_SelectionChanged" Margin="70,5,0,7" />
+                                <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1"   Text="关联通道：" Margin="0,7,183,8" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" 
-                                          DisplayMemberPath="ChannelName" Grid.Row="3" Grid.Column="1" Name="cbChanncel"  Width="121" Margin="69,6,0,7" />
+                                          DisplayMemberPath="ChannelName" Grid.Row="3" Grid.Column="1" Name="cbChanncel"  Width="121" Margin="69,5,0,7" />
                                 
                             </Grid>
                         </sdk:TabItem>
@@ -315,7 +326,7 @@
                                 <sdk:Label Content="采样周期：" Height="19" HorizontalAlignment="Left" Margin="307,109,0,0" Name="label11" VerticalAlignment="Top" Width="60" />
                                 <TextBox HorizontalAlignment="Right" Margin="0,105,294,19" Name="LineCYZQLent" Width="51" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="424,105,0,0" Name="LineCYZQType" VerticalAlignment="Top" Width="56">
-                                    <ComboBoxItem Content="秒" />
+                                    <ComboBoxItem Content="秒"  />
                                     <ComboBoxItem Content="分" />
                                     <ComboBoxItem Content="时" />
                                     <ComboBoxItem Content="日" />
@@ -324,9 +335,9 @@
                         </sdk:TabItem>
                     </sdk:TabControl>
 
-                    <Button Content="添加" Grid.Column="3" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="135,135,0,0" Name="btnAdd" VerticalAlignment="Top" Width="55" Grid.RowSpan="2" Grid.ColumnSpan="2" />
-                    <Button Content="修改" Grid.Column="4" Grid.Row="2" Grid.RowSpan="2" Height="23" HorizontalAlignment="Left" Margin="23,135,0,0" Name="btnAlert" VerticalAlignment="Top" Width="55" />
-                    <Button Content="删除" Grid.Column="4" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="92,136,0,0" Name="btnDelete" VerticalAlignment="Top" Width="55" Grid.RowSpan="2" />
+                    <Button Content="添加" Grid.Column="3" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="135,130,0,0" Name="btnAdd" VerticalAlignment="Top" Width="55" Grid.RowSpan="2" Grid.ColumnSpan="2" Click="btnAdd_Click" />
+                    <Button Content="修改" Grid.Column="4" Grid.Row="2" Grid.RowSpan="2" Height="23" HorizontalAlignment="Left" Margin="23,130,0,0" Name="btnAlert" VerticalAlignment="Top" Width="55" Click="btnAlert_Click" />
+                    <Button Content="删除" Grid.Column="4" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="92,131,0,0" Name="btnDelete" VerticalAlignment="Top" Width="55" Grid.RowSpan="2" Click="btnDelete_Click" />
                     
                 </Grid>
             </controls:TabItem>

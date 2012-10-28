@@ -30,14 +30,23 @@ namespace MonitorSystem.Other
         /// 背景框
         /// </summary>
         Canvas _CanvasGrid = new Canvas();//用于装背景
-        Canvas _CanvasLine = new Canvas();//用于装线
+        public  Canvas _CanvasLine = new Canvas();//用于装线
         //Canvas _CanvasZ = new Canvas();//用于存放XZ和YZ
 
-        List<RealTimeLineOR> listRealTimeLine = new List<RealTimeLineOR>();
+        List<RealTimeLineOR> _listRealTimeLine = new List<RealTimeLineOR>();
+        /// <summary>
+        /// 所有线信息
+        /// </summary>
+        public List<RealTimeLineOR> ListRealTimeLine
+        {
+            get { return _listRealTimeLine; }
+            set { _listRealTimeLine = value; }
+        }
         public RealTimeT()
         {
             InitializeComponent();
-            
+
+            InitLine();
             this.Width = 400;
             this.Height = 400;
             _CanvasGrid.SetValue(Canvas.ZIndexProperty, 2);
@@ -47,6 +56,34 @@ namespace MonitorSystem.Other
             _Canvas.SizeChanged += new SizeChangedEventHandler(Canvas_SizeChanged);
             this.SizeChanged += new SizeChangedEventHandler(RealTime_SizeChanged);
             PaintBasicInfo();
+
+            this.MouseLeftButtonUp+=new MouseButtonEventHandler(RealTimeT_MouseLeftButtonUp);
+        }
+        int Number = 0;
+        DateTime PriTime = DateTime.Now;
+        private void RealTimeT_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            TimeSpan t = DateTime.Now - PriTime;
+            if (t.Hours == 0 && t.Minutes == 0 && t.Seconds == 0 && t.Milliseconds <= 600)
+            {
+                Number++;
+
+            }
+            else
+            {
+                Number = 1;
+            }
+            PriTime = DateTime.Now;
+
+            txtVal.Text = Number.ToString();
+            if (Number == 2)
+            {
+                RealtimeProperty rp = new RealtimeProperty();
+                rp.RealTimeData = this;
+                rp.Init();
+                rp.Show();
+                Number = 0;
+            }
         }
         private void RealTime_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -90,7 +127,20 @@ namespace MonitorSystem.Other
             {
                 AdornerLayer = new Adorner(this);
                 AdornerLayer.Selected += OnSelected;
+              
+                var menu = new ContextMenu();
+                var menuItem = new MenuItem() { Header = "属性" };
+                menuItem.Click += PropertyMenuItem_Click;
+                menu.Items.Add(menuItem);
+                AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
             }
+        }
+        private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            RealtimeProperty rp = new RealtimeProperty();
+            rp.RealTimeData = this;
+            rp.Init();
+            rp.Show();
         }
 
         private void OnSelected(object sender, EventArgs e)
@@ -120,10 +170,141 @@ namespace MonitorSystem.Other
             {
                 string name = pro.PropertyName.ToUpper();
                 string value = pro.PropertyValue;
-
-                if (name == "LeftOrNot".ToUpper())
+                //X轴	
+                if (name == "XISSGShow".ToUpper())//是否X轴栅格显示
                 {
-
+                    XISSGShow = Convert.ToBoolean(value);
+                }
+                else if (name == "XMainNumber".ToUpper())//X主分度数
+                {
+                    XMainNumber = Convert.ToInt32(value);
+                }
+                else if (name == "XMainColor".ToUpper())//X主分度颜色
+                {
+                    XMainColor = Common.StringToColor(value);
+                }
+                else if (name == "XPriNumber".ToUpper())//X次分度数
+                {
+                    XPriNumber = Convert.ToInt32(value);
+                }
+                else if (name == "XPriColor".ToUpper())//X次分度颜色
+                {
+                    XPriColor = Common.StringToColor(value);
+                }
+               //Y轴
+                else if (name == "YISSGShow".ToUpper())//是否Y轴栅格显示
+                {
+                    YISSGShow = Convert.ToBoolean(value);
+                }
+                else if (name == "YMainNumber".ToUpper())//Y主分度数
+                {
+                    YMainNumber = Convert.ToInt32(value);
+                }
+                else if (name == "YMainColor".ToUpper())//Y主分度颜色
+                {
+                    YMainColor = Common.StringToColor(value);
+                }
+                else if (name == "YPriNumber".ToUpper())//Y次分度数
+                {
+                    YPriNumber = Convert.ToInt32(value);
+                }
+                else if (name == "YPriColor".ToUpper())//Y次分度颜色
+                {
+                    YPriColor = Common.StringToColor(value);
+                }
+                //其它颜色
+                else if (name == "ISShowBorder".ToUpper())//显示边框
+                {
+                    ISShowBorder = Convert.ToBoolean(value);
+                }
+                else if (name == "BorderColor".ToUpper())//边框颜色
+                {
+                    BorderColor = Common.StringToColor(value);
+                }
+                else if (name == "ISShowGridBack".ToUpper())//显示背景
+                {
+                    ISShowGridBack = Convert.ToBoolean(value);
+                }
+                else if (name == "GridBackColor".ToUpper())//背景颜色
+                {
+                    GridBackColor = Common.StringToColor(value);
+                }
+                else if (name == "ISShowCursor".ToUpper())//显示游标
+                {
+                    ISShowCursor = Convert.ToBoolean(value);
+                }
+                else if (name == "CursorColor".ToUpper())//游标颜色
+                {
+                    CursorColor = Common.StringToColor(value);
+                }
+                else if (name == "ISShowTime".ToUpper())//显示时间
+                {
+                    ISShowTime = Convert.ToBoolean(value);
+                }
+                else if (name == "TimeColor".ToUpper())//时间颜色
+                {
+                    TimeColor = Common.StringToColor(value);
+                }
+                else if (name == "UsePerZB".ToUpper())//采用百分比坐标
+                {
+                    UsePerZB = Convert.ToBoolean(value);
+                }
+                else if (name == "NoUseDataMove".ToUpper())//无效数据移出
+                {
+                    NoUseDataMove = Convert.ToBoolean(value);
+                }
+                else if (name == "DoubleClickShowSet".ToUpper())//双击显示设置框
+                {
+                    DoubleClickShowSet = Convert.ToBoolean(value);
+                }
+                else if (name == "RightShowYZB".ToUpper())//右显示Y轴坐标
+                {
+                    RightShowYZB = Convert.ToBoolean(value);
+                }
+                else if (name == "MultiXZShow".ToUpper())//多X轴显示
+                {
+                    MultiXZShow = Convert.ToBoolean(value);
+                }
+                else if (name == "MultiYZShow".ToUpper())//多Y轴显示
+                {
+                    MultiYZShow = Convert.ToBoolean(value);
+                }
+                else if (name == "IsShowLegend".ToUpper())//显示图例
+                {
+                    IsShowLegend = Convert.ToBoolean(value);
+                }
+                else if (name == "ShowLegend".ToUpper())//显示图例
+                {
+                    ShowLegend = value.ToString();
+                }
+                else if (name == "InfoLWidth".ToUpper())//信息栏宽度
+                {
+                    InfoLWidth =int.Parse( value);
+                }
+                //放缩设置
+                else if (name == "MouseDrawEnlare".ToUpper())//鼠标拖动放大
+                {
+                    MouseDrawEnlare = Convert.ToBoolean(value);
+                }
+                else if (name == "XZEnlare".ToUpper())//X轴放大
+                {
+                    XZEnlare = Convert.ToBoolean(value);
+                }
+                else if (name == "YZEnlare".ToUpper())//Y轴放大
+                {
+                    YZEnlare = Convert.ToBoolean(value);
+                }
+                else if (name == "MouseDrawMove".ToUpper())//鼠标拖动移动
+                {
+                    MouseDrawMove = Convert.ToBoolean(value);
+                }
+                else if (name == "XZMove".ToUpper())//X轴移动
+                {
+                    XZMove = Convert.ToBoolean(value);
+                }
+                else if (name == "YZMove".ToUpper())//Y轴移动
+                {
+                    YZMove = Convert.ToBoolean(value);
                 }
             }
         }
@@ -199,51 +380,7 @@ namespace MonitorSystem.Other
         #endregion
 
         #endregion
-        /*
-             XISSGShow	--是否X轴栅格显示		
-			 XMainNumber	--X主分度数 		
-			 XMainColor X主分度颜色 		
-			 XPriNumber X次分度数		
-			 XPriColor X度次分颜色
-		
-		--Y轴
-		
-			 YISSGShow 是否Y轴栅格显示		
-			 YMainNumber Y主分度数		
-			 YMainColor Y主分度颜色		
-			 YPriNumber Y次分度数		
-			 YPriColor Y度次分颜色
-		--其它颜色		
-			 ISShowBorder 显示边框		
-			 BorderColor 边框		
-			 ISShowGridBack 显示背景		
-			 GridBackColor 背景颜色		
-			 ISShowCursor 显示游标		
-			 CursorColor 游标颜色		
-			 ISShowTime 显示时间		
-			 TimeColor 时间颜色
-		
-
-		
-			 UsePerZB 采用百分比坐标		
-			 NoUseDataMove 无效数据移出		
-			 DoubleClickShowSet 双击显示设置框		
-			 RightShowYZB 右显示Y轴坐标		
-			 MultiXZShow 多X轴显示		
-			 MultiYZShow 多Y轴显示		
-			 ShowLegend 显示图例		
-			 InfoLWidth 信息栏宽度
-
-		--放缩设置
-		
-			 MouseDrawEnlare 鼠标拖动放大		
-			 XZEnlare X轴放大		
-			 YZEnlare Y轴放大		
-			 MouseDrawMove 鼠标拖动移动		
-			 XZMove X轴移动		
-			 YZMove Y轴移动
-         * */
-
+       
         #region X轴
         private bool _XISSGShow = true;
         /// <summary>
@@ -252,7 +389,9 @@ namespace MonitorSystem.Other
         public bool XISSGShow
         {
             get { return _XISSGShow; }
-            set { _XISSGShow = value; }
+            set { _XISSGShow = value;
+            SetAttrByName("XISSGShow", value);
+            }
         }
 
         private int _XMainNumber = 3;
@@ -262,7 +401,7 @@ namespace MonitorSystem.Other
         public int XMainNumber
         {
             get { return _XMainNumber; }
-            set { _XMainNumber = value; }
+            set { _XMainNumber = value; SetAttrByName("XMainNumber", value); }
         }
 
         private Color _XMainColor = Colors.Black;
@@ -272,7 +411,7 @@ namespace MonitorSystem.Other
         public Color XMainColor
         {
             get { return _XMainColor; }
-            set { _XMainColor = value; }
+            set { _XMainColor = value; SetAttrByName("XMainColor", value); }
         }
 
 
@@ -283,7 +422,7 @@ namespace MonitorSystem.Other
         public int XPriNumber
         {
             get { return _XPriNumber; }
-            set { _XPriNumber = value; }
+            set { _XPriNumber = value; SetAttrByName("XPriNumber", value); }
         }
 
         private Color _XPriColor = Colors.Black;
@@ -293,7 +432,7 @@ namespace MonitorSystem.Other
         public Color XPriColor
         {
             get { return _XPriColor; }
-            set { _XPriColor = value; }
+            set { _XPriColor = value; SetAttrByName("XPriColor", value); }
         }
 
         #endregion Y轴
@@ -307,7 +446,7 @@ namespace MonitorSystem.Other
         public bool YISSGShow
         {
             get { return _YISSGShow; }
-            set { _YISSGShow = value; }
+            set { _YISSGShow = value; SetAttrByName("YISSGShow", value); }
         }
 
         private int _YMainNumber = 3;
@@ -317,7 +456,7 @@ namespace MonitorSystem.Other
         public int YMainNumber
         {
             get { return _YMainNumber; }
-            set { _YMainNumber = value; }
+            set { _YMainNumber = value; SetAttrByName("YMainNumber", value); }
         }
 
         private Color _YMainColor = Colors.Black;
@@ -327,7 +466,7 @@ namespace MonitorSystem.Other
         public Color YMainColor
         {
             get { return _YMainColor; }
-            set { _YMainColor = value; }
+            set { _YMainColor = value; SetAttrByName("YMainColor", value); }
         }
 
 
@@ -338,7 +477,7 @@ namespace MonitorSystem.Other
         public int YPriNumber
         {
             get { return _YPriNumber; }
-            set { _YPriNumber = value; }
+            set { _YPriNumber = value; SetAttrByName("YPriNumber", value); }
         }
 
         private Color _YPriColor = Colors.Black;
@@ -348,7 +487,7 @@ namespace MonitorSystem.Other
         public Color YPriColor
         {
             get { return _YPriColor; }
-            set { _YPriColor = value; }
+            set { _YPriColor = value; SetAttrByName("YPriColor", value); }
         }
 
         #endregion
@@ -371,7 +510,7 @@ namespace MonitorSystem.Other
         public bool ISShowBorder
         {
             get { return _ISShowBorder; }
-            set { _ISShowBorder = value; }
+            set { _ISShowBorder = value; SetAttrByName("ISShowBorder", value); }
         }
 
 
@@ -382,7 +521,7 @@ namespace MonitorSystem.Other
         public Color BorderColor
         {
             get { return _BorderColor; }
-            set { _BorderColor = value; }
+            set { _BorderColor = value; SetAttrByName("BorderColor", value); }
         }
 
         private bool _ISShowGridBack = true;
@@ -392,7 +531,7 @@ namespace MonitorSystem.Other
         public bool ISShowGridBack
         {
             get { return _ISShowGridBack; }
-            set { _ISShowGridBack = value; }
+            set { _ISShowGridBack = value; SetAttrByName("ISShowGridBack", value); }
         }
 
 
@@ -403,7 +542,7 @@ namespace MonitorSystem.Other
         public Color GridBackColor
         {
             get { return _GridBackColor; }
-            set { _GridBackColor = value; }
+            set { _GridBackColor = value; SetAttrByName("GridBackColor", value); }
         }
 
         private bool _ISShowCursor = false;
@@ -413,7 +552,7 @@ namespace MonitorSystem.Other
         public bool ISShowCursor
         {
             get { return _ISShowCursor; }
-            set { _ISShowCursor = value; }
+            set { _ISShowCursor = value; SetAttrByName("ISShowCursor", value); }
         }
 
         private Color _CursorColor;
@@ -423,7 +562,7 @@ namespace MonitorSystem.Other
         public Color CursorColor
         {
             get { return _CursorColor; }
-            set { _CursorColor = value; }
+            set { _CursorColor = value; SetAttrByName("CursorColor", value); }
         }
 
         private bool _ISShowTime = true;
@@ -433,7 +572,7 @@ namespace MonitorSystem.Other
         public bool ISShowTime
         {
             get { return _ISShowTime; }
-            set { _ISShowTime = value; }
+            set { _ISShowTime = value; SetAttrByName("ISShowTime", value); }
         }
 
         private Color _TimeColor;
@@ -443,7 +582,7 @@ namespace MonitorSystem.Other
         public Color TimeColor
         {
             get { return _TimeColor; }
-            set { _TimeColor = value; }
+            set { _TimeColor = value; SetAttrByName("TimeColor", value); }
         }
         #endregion
 
@@ -456,7 +595,7 @@ namespace MonitorSystem.Other
         public bool UsePerZB
         {
             get { return _UsePerZB; }
-            set { _UsePerZB = value; }
+            set { _UsePerZB = value; SetAttrByName("UsePerZB", value); }
         }
 
         private bool _NoUseDataMove;
@@ -466,7 +605,7 @@ namespace MonitorSystem.Other
         public bool NoUseDataMove
         {
             get { return _NoUseDataMove; }
-            set { _NoUseDataMove = value; }
+            set { _NoUseDataMove = value; SetAttrByName("NoUseDataMove", value); }
         }
 
         private bool _DoubleClickShowSet;
@@ -476,7 +615,7 @@ namespace MonitorSystem.Other
         public bool DoubleClickShowSet
         {
             get { return _DoubleClickShowSet; }
-            set { _DoubleClickShowSet = value; }
+            set { _DoubleClickShowSet = value; SetAttrByName("DoubleClickShowSet", value); }
         }
 
         private bool _RightShowYZB;
@@ -486,7 +625,7 @@ namespace MonitorSystem.Other
         public bool RightShowYZB
         {
             get { return _RightShowYZB; }
-            set { _RightShowYZB = value; }
+            set { _RightShowYZB = value; SetAttrByName("RightShowYZB", value); }
         }
 
         private bool _MultiXZShow = false;
@@ -496,7 +635,7 @@ namespace MonitorSystem.Other
         public bool MultiXZShow
         {
             get { return _MultiXZShow; }
-            set { _MultiXZShow = value; }
+            set { _MultiXZShow = value; SetAttrByName("MultiXZShow", value); }
         }
 
         private bool _MultiYZShow;
@@ -506,7 +645,7 @@ namespace MonitorSystem.Other
         public bool MultiYZShow
         {
             get { return _MultiYZShow; }
-            set { _MultiYZShow = value; }
+            set { _MultiYZShow = value; SetAttrByName("MultiYZShow", value); }
         }
 
         private bool _IsShowLegend;
@@ -516,7 +655,7 @@ namespace MonitorSystem.Other
         public bool IsShowLegend
         {
             get { return _IsShowLegend; }
-            set { _IsShowLegend = value; }
+            set { _IsShowLegend = value; SetAttrByName("IsShowLegend", value); }
         }
 
         private string _ShowLegend;
@@ -529,7 +668,7 @@ namespace MonitorSystem.Other
         public string ShowLegend
         {
             get { return _ShowLegend; }
-            set { _ShowLegend = value; }
+            set { _ShowLegend = value; SetAttrByName("ShowLegend", value); }
         }
 
         private int _infoLWidth;
@@ -539,7 +678,7 @@ namespace MonitorSystem.Other
         public int InfoLWidth
         {
             get { return _infoLWidth; }
-            set { _infoLWidth = value; }
+            set { _infoLWidth = value; SetAttrByName("InfoLWidth", value); }
         }
         #endregion
 
@@ -551,7 +690,7 @@ namespace MonitorSystem.Other
         public bool MouseDrawEnlare
         {
             get { return _MouseDrawEnlare; }
-            set { _MouseDrawEnlare = value; }
+            set { _MouseDrawEnlare = value; SetAttrByName("MouseDrawEnlare", value); }
         }
 
         private bool _XZEnlare;
@@ -561,7 +700,7 @@ namespace MonitorSystem.Other
         public bool XZEnlare
         {
             get { return _XZEnlare; }
-            set { _XZEnlare = value; }
+            set { _XZEnlare = value; SetAttrByName("XZEnlare", value); }
         }
 
         private bool _YZEnlare;
@@ -571,7 +710,7 @@ namespace MonitorSystem.Other
         public bool YZEnlare
         {
             get { return _YZEnlare; }
-            set { _YZEnlare = value; }
+            set { _YZEnlare = value; SetAttrByName("YZEnlare", value); }
         }
 
 
@@ -582,7 +721,7 @@ namespace MonitorSystem.Other
         public bool MouseDrawMove
         {
             get { return _MouseDrawMove; }
-            set { _MouseDrawMove = value; }
+            set { _MouseDrawMove = value; SetAttrByName("MouseDrawMove", value); }
         }
 
         private bool _XZMove;
@@ -592,7 +731,7 @@ namespace MonitorSystem.Other
         public bool XZMove
         {
             get { return _XZMove; }
-            set { _XZMove = value; }
+            set { _XZMove = value; SetAttrByName("XZMove", value); }
         }
 
         private bool _YZMove;
@@ -602,26 +741,23 @@ namespace MonitorSystem.Other
         public bool YZMove
         {
             get { return _YZMove; }
-            set { _YZMove = value; }
+            set { _YZMove = value; SetAttrByName("YZMove", value); }
         }
 
         #endregion
 
 
-
-
-
         /// <summary>
         /// 显示基本信息
         /// </summary>
-        private void PaintBasicInfo()
+        public void PaintBasicInfo()
         {
             if (double.IsNaN(_Canvas.Width))
                 return;
             _Canvas.Children.Clear();
             _Canvas.Children.Add(_CanvasGrid);
             _Canvas.Children.Add(_CanvasLine);
-            InitLine();
+           
             //实时线网格
             PainGrid();
             DrawLine();
@@ -634,20 +770,43 @@ namespace MonitorSystem.Other
         /// </summary>
         private void InitLine()
         {
-            RealTimeLineOR obj = new RealTimeLineOR();
-            obj.LineName = "ll";
-            obj.YminValue = 50;
-            obj.YmaxValue = 150;
+            t_Element_RealTimeLine objLine = new t_Element_RealTimeLine();
+            objLine.ID = Guid.NewGuid().ToString();
+            objLine.LineName = "ll";
+            objLine.MaxValue = "100";
+            objLine.MinValue = "0";
+            objLine.LineCZ = 0;
+            objLine.LineCYZQLent = "1";
+            objLine.LineCYZQType = "ss";
+            objLine.TimeLen = 50;
+            objLine.TimeLenType = "ss";
+            objLine.LineShowType = 0;
+            objLine.LineStyle = 0;
+            objLine.LinePointBJ = 0;
+            objLine.ShowFormat = "mm:ss";
+            objLine.LineColor = Colors.Blue.ToString();
 
-            obj.LineColor = Colors.Red;
-            listRealTimeLine.Add(obj);
+            RealTimeLineOR obj = new RealTimeLineOR(objLine);
+            _listRealTimeLine.Add(obj);
 
-            RealTimeLineOR obj1 = new RealTimeLineOR();
-            obj1.LineName = "lsbee";
-            obj1.YminValue = 50;
-            obj1.YmaxValue = 150;
-            obj.LineColor = Colors.Purple;
-            listRealTimeLine.Add(obj1);
+            t_Element_RealTimeLine objLine1 = new t_Element_RealTimeLine();
+            objLine1.ID = Guid.NewGuid().ToString();
+            objLine1.LineName = "1211";
+            objLine1.MaxValue = "100";
+            objLine1.MinValue = "0";
+            objLine1.LineCZ = 0;
+            objLine1.LineCYZQLent = "1";
+            objLine1.LineCYZQType = "ss";
+            objLine1.TimeLen = 50;
+            objLine1.TimeLenType = "ss";
+            objLine1.LineShowType = 0;
+            objLine1.LineStyle = 0;
+            objLine1.LinePointBJ = 0;
+            objLine1.ShowFormat = "mm:ss";
+            objLine1.LineColor = Colors.Red.ToString();
+
+            RealTimeLineOR obj1 = new RealTimeLineOR(objLine1);
+            _listRealTimeLine.Add(obj1);
         }
         /// <summary>
         /// 显示曲线
@@ -655,15 +814,17 @@ namespace MonitorSystem.Other
         private void DrawLine()
         {
             gdLineDefine.RowDefinitions.Clear();
-            for (int i = 0; i < listRealTimeLine.Count; i++)
+            gdLineDefine.Children.Clear();
+            _CanvasLine.Children.Clear();
+            for (int i = 0; i < _listRealTimeLine.Count; i++)
             {
                 gdLineDefine.RowDefinitions.Add(new RowDefinition());
             }
 
             int index = 0;
-            //_CanvasLine.Background = new SolidColorBrush(Colors.Cyan);
-            foreach (RealTimeLineOR objOR in listRealTimeLine)
+            foreach (RealTimeLineOR objOR in _listRealTimeLine)
             {
+                
                 RealLineShow obj = new RealLineShow(objOR);
                 objOR.TitleShowInfo = obj;
                 objOR.PicCurveShowHeight = LineCanversHeight;
@@ -773,50 +934,58 @@ namespace MonitorSystem.Other
             _Line3.Stroke = _Line1.Stroke = new SolidColorBrush(_BorderColor);
             _Line3.StrokeThickness = _Line1.StrokeThickness = 2;
 
-            //Y轴线
-            double _YStartDoble = 0;
-            double aYMainSize = xGridWidth / (this._YMainNumber + 1);
-            double aYPerSize = aYMainSize / (this._YPriNumber + 1);
-
-            for (int imain = 0; imain < _YMainNumber; imain++)
+            //Y网格
+            if (_YISSGShow)
             {
+                double _YStartDoble = 0;
+                double aYMainSize = xGridWidth / (this._YMainNumber + 1);
+                double aYPerSize = aYMainSize / (this._YPriNumber + 1);
+
+                for (int imain = 0; imain < _YMainNumber; imain++)
+                {
+                    PainPriGrid(_YStartDoble, aYPerSize, false);
+                    double y = _YStartDoble + aYMainSize;
+                    _YStartDoble = y;
+                    _CanvasGrid.Children.Add(AddMainLine(y, y, 0, yGridHeight, _YMainColor, 2));
+                }
                 PainPriGrid(_YStartDoble, aYPerSize, false);
-                double y = _YStartDoble + aYMainSize;
-                _YStartDoble = y;
-                _CanvasGrid.Children.Add(AddMainLine(y, y, 0, yGridHeight, _YMainColor, 2));
             }
-            PainPriGrid(_YStartDoble, aYPerSize, false);
-
-            //X轴线
-            double _XStartDoble = 0;
-            double aXMainSize = yGridHeight / (this._XMainNumber + 1);
-            double aXPerSize = aXMainSize / (this._XPriNumber + 1);
-
-            for (int imain = 0; imain < _XMainNumber; imain++)
+            //X网格
+            if (_XISSGShow)
             {
+                double _XStartDoble = 0;
+                double aXMainSize = yGridHeight / (this._XMainNumber + 1);
+                double aXPerSize = aXMainSize / (this._XPriNumber + 1);
+
+                for (int imain = 0; imain < _XMainNumber; imain++)
+                {
+                    PainPriGrid(_XStartDoble, aXPerSize, true);
+                    double X = _XStartDoble + aXMainSize;
+                    _XStartDoble = X;
+                    _CanvasGrid.Children.Add(AddMainLine(0, xGridWidth, X, X, _XMainColor, 2));
+                }
                 PainPriGrid(_XStartDoble, aXPerSize, true);
-                double X = _XStartDoble + aXMainSize;
-                _XStartDoble = X;
-                _CanvasGrid.Children.Add(AddMainLine(0, xGridWidth, X, X, _XMainColor, 2));
             }
-            PainPriGrid(_XStartDoble, aXPerSize, true);
         }
 
         private void PainPriGrid(double startPosition, double aPerSize, bool ISAddY)
         {
-            for (int i = 0; i < this._XPriNumber; i++)
+            if (ISAddY)//y轴
             {
-                if (ISAddY)//y轴
+                for (int i = 0; i < this._YPriNumber; i++)
                 {
                     double priy = startPosition + aPerSize;
                     startPosition = priy;
-                    _CanvasGrid.Children.Add(AddPrimLine(0, xGridWidth, priy, priy, _XMainColor, 1));
+                    _CanvasGrid.Children.Add(AddPrimLine(0, xGridWidth, priy, priy, _YPriColor, 1));
                 }
-                else//x轴
+            }
+            else//x轴
+            {
+                for (int i = 0; i < this._XPriNumber; i++)
                 {
                     double priX = startPosition + aPerSize;
                     startPosition = priX;
-                    _CanvasGrid.Children.Add(AddPrimLine(priX, priX, 0, yGridHeight, _XMainColor, 1));
+                    _CanvasGrid.Children.Add(AddPrimLine(priX, priX, 0, yGridHeight, _XPriColor, 1));
                 }
             }
         }
@@ -849,9 +1018,7 @@ namespace MonitorSystem.Other
 
         #endregion
         #region 画X、Y轴
-
-
-
+        
 
         /// <summary>
         /// X轴线长度
@@ -872,14 +1039,15 @@ namespace MonitorSystem.Other
             //X轴处理 
             if (_MultiXZShow)
             {
-                foreach (RealTimeLineOR obj in listRealTimeLine)
+                foreach (RealTimeLineOR obj in _listRealTimeLine)
                 {
                     PaintX(obj);
                 }
             }
             else
             {
-                PaintX(listRealTimeLine.First());
+                if (_listRealTimeLine.Count > 0)
+                    PaintX(_listRealTimeLine.First());
             }
             //画Y轴
             PaintY();
@@ -892,7 +1060,7 @@ namespace MonitorSystem.Other
         {
             if (MultiXZShow)
             {
-                _YStart = (XZLineHeight + XZTxtHeight) * listRealTimeLine.Count;
+                _YStart = (XZLineHeight + XZTxtHeight) * _listRealTimeLine.Count;
             }
             else
             {
@@ -902,7 +1070,7 @@ namespace MonitorSystem.Other
             if (MultiXZShow)
             {
 
-                _XStart = (YZLineWidth + YZTxtWidth) * listRealTimeLine.Count;
+                _XStart = (YZLineWidth + YZTxtWidth) * _listRealTimeLine.Count;
             }
             else
             {
@@ -927,7 +1095,7 @@ namespace MonitorSystem.Other
                 mXZ.X2 = xGridWidth;
             }
             mXZ.Y1 = mXZ.Y2 = xzY;
-            mXZ.Stroke = new SolidColorBrush(objOR.LineColor);
+            mXZ.Stroke = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
             mXZ.StrokeThickness = 2;
             _CanvasZ.Children.Add(mXZ);
             objOR.TextList.Clear();
@@ -942,15 +1110,16 @@ namespace MonitorSystem.Other
                 mkd.X1 = mkd.X2 = _x;
                 mkd.Y1 = xzY;
                 mkd.Y2 = xzY + XZLineHeight;
-                mkd.Stroke = new SolidColorBrush(objOR.LineColor);
+                mkd.Stroke = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
                 mkd.StrokeThickness = 2;
                 _CanvasZ.Children.Add(mkd);
 
                 //添加X轴标签
+                
                 TextBlock tb = new TextBlock();
                 //tb.Text = DateTime.Now.ToString("hh:MM:ss");
                 objOR.TextList.Add(tb);
-                tb.Foreground = new SolidColorBrush(objOR.LineColor);
+                tb.Foreground = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
                 tb.SetValue(Canvas.LeftProperty, _x - 24);
                 tb.SetValue(Canvas.TopProperty, xzY + XZLineHeight);
                 _CanvasZ.Children.Add(tb);
@@ -984,13 +1153,19 @@ namespace MonitorSystem.Other
                 mXZ.X2 = mXZ.X1 = xGridWidth;
             mXZ.Y1 = 0;
             mXZ.Y2 = yGridHeight;
-            mXZ.Stroke = new SolidColorBrush(Colors.Black);
-            mXZ.StrokeThickness = 4;
+            mXZ.Stroke = new SolidColorBrush(_YMainColor);
+            mXZ.StrokeThickness = 2;
             _CanvasZ.Children.Add(mXZ);
-            //if (_RightShowYZB)
-            //{
-            //}
-            string[] arrText = GetYText(listRealTimeLine.First());
+           
+            string[] arrText = null;
+            if (_listRealTimeLine.Count > 0)
+            {
+              arrText=  GetYText(_listRealTimeLine.First());
+            }
+            else
+            {
+                arrText = GetYText();
+            }
             for (int imain = 0; imain < _YMainNumber + 2; imain++)
             {
                 double _y = imain * ayzMainSize;
@@ -1004,8 +1179,8 @@ namespace MonitorSystem.Other
                 mkd.X1 = _X;
                 mkd.X2 = yzX;
                 mkd.Y1 = mkd.Y2 = _y;
-                mkd.Stroke = new SolidColorBrush(Colors.Black);
-                mkd.StrokeThickness = 4;
+                mkd.Stroke = new SolidColorBrush(_YPriColor);
+                mkd.StrokeThickness = 2;
                 _CanvasZ.Children.Add(mkd);
 
                 //添加Y轴标签
@@ -1027,11 +1202,10 @@ namespace MonitorSystem.Other
         {
             string[] ytextArr = new string[_YMainNumber + 2];
 
-            double half = 0;
-            if (obj.YZSFPer != 1)
-                half = ((obj.YmaxValue - obj.YminValue) * (obj.YZSFPer - 1)) / 2;
-            double max = obj.YmaxValue + half;
-            double min = obj.YminValue - half;
+
+           double half = obj.GetHalf();
+           double max = int.Parse(obj.LineInfo.MaxValue) + half;
+           double min = int.Parse(obj.LineInfo.MinValue) - half;
 
             double v = max - min;
             double vPer = v / (_YMainNumber + 1);
@@ -1043,40 +1217,25 @@ namespace MonitorSystem.Other
             ytextArr[_YMainNumber + 1] = min.ToString();
             return ytextArr;
         }
+        private string[] GetYText()
+        {
+            string[] ytextArr = new string[_YMainNumber + 2];
+            for(int i=0;i< _YMainNumber+2;i++)
+            {
+                ytextArr[i] = (i * 10).ToString();
+            }
+            return ytextArr;
+        }
         #endregion
 
         private void ShowValue()
         {
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 1);
-            timer.Tick += (sender, obj) =>
-            {
-                Random rd = new Random();
-                foreach (RealTimeLineOR objOR in listRealTimeLine)
-                {
-                    objOR.AddNewValue(Convert.ToDouble(rd.NextDouble() * objOR.YmaxValue));
-                    objOR.ShowCurve();
-                }
-            };
-            timer.Start();
+            
         }
-
-
-
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            RealtimeProperty rp = new RealtimeProperty();
-            rp.RealTimeData = this;
-            rp.Init();
-            rp.Show();
-            //Random rd = new Random();
-            //foreach (RealTimeLineOR objOR in listRealTimeLine)
-            //{
-            //    objOR.AddNewValue( Convert.ToDouble(txtVal.Text));
-            //    objOR.ShowCurve();
-
-            //}
+           
         }
 
         /// <summary>
@@ -1095,7 +1254,6 @@ namespace MonitorSystem.Other
             _Canvas.SetValue(Grid.ColumnProperty, 1);
             LineList.SetValue(Grid.ColumnProperty, 0);
 
-
             _RightShowYZB = true;
             PainGrid();
             PainXYZ();
@@ -1104,7 +1262,7 @@ namespace MonitorSystem.Other
         #region 缩放处理
         private void HeadSF(double _SFper)
         {
-            foreach (RealTimeLineOR obj in listRealTimeLine)
+            foreach (RealTimeLineOR obj in _listRealTimeLine)
             {
                 if (obj.YZSFPer == _SFper)
                     continue;
@@ -1180,17 +1338,14 @@ namespace MonitorSystem.Other
         #region 曲线显示隐藏处理
         private void RealLineShow_ChangeLineShow(object sender, EventArgs e)
         {
-            RealLineArgs obj = (RealLineArgs)e;
-
-            if (string.IsNullOrEmpty(obj.Name))
+            if (e == null)
             {
                 ShowOrHideAllLine(true);
+                return;
             }
-            else
-            {
-                ShowOrHideAllLine(false);
-                ShowALine(obj.Name);
-            }
+            RealLineArgs obj = (RealLineArgs)e;
+            ShowOrHideAllLine(false);
+            ShowALine(obj.Name);          
         }
         /// <summary>
         ///  隐藏曲线
@@ -1210,9 +1365,9 @@ namespace MonitorSystem.Other
         /// <returns></returns>
         private bool HideALine(string LineName)
         {
-            foreach (RealTimeLineOR obj in listRealTimeLine)
+            foreach (RealTimeLineOR obj in _listRealTimeLine)
             {
-                if (obj.LineName == LineName)
+                if (obj.LineInfo.LineName == LineName)
                 {
                     _CanvasLine.Children.Remove(obj.PolyLine);
                     return true;
@@ -1227,11 +1382,11 @@ namespace MonitorSystem.Other
         /// <returns></returns>
         private bool ShowALine(string LineName)
         {
-            foreach (RealTimeLineOR obj in listRealTimeLine)
+            foreach (RealTimeLineOR obj in _listRealTimeLine)
             {
-                if (obj.LineName == LineName)
+                if (obj.LineInfo.LineName == LineName)
                 {
-                    if (_CanvasLine.FindName(obj.LineGuid) == null)
+                    if (_CanvasLine.FindName(obj.LineInfo.ID) == null)
                     {
                         _CanvasLine.Children.Add(obj.PolyLine);
                     }
@@ -1247,18 +1402,18 @@ namespace MonitorSystem.Other
         /// <returns></returns>
         private bool ShowOrHideAllLine(bool isShow)
         {
-            foreach (RealTimeLineOR obj in listRealTimeLine)
+            foreach (RealTimeLineOR obj in _listRealTimeLine)
             {
                 if (isShow)//显示
                 {
-                    if (_CanvasLine.FindName(obj.LineGuid) == null)
+                    if (_CanvasLine.FindName(obj.LineInfo.ID) == null)
                     {
                         _CanvasLine.Children.Add(obj.PolyLine);
                     }
                 }
                 else//隐藏
                 {
-                    if (_CanvasLine.FindName(obj.LineGuid) != null)
+                    if (_CanvasLine.FindName(obj.LineInfo.ID) != null)
                     {
                         _CanvasLine.Children.Remove(obj.PolyLine);
                     }
@@ -1285,12 +1440,12 @@ namespace MonitorSystem.Other
         #region 处理显示时间长度
         private void HeadTimeLen(int Len, string type)
         {
-            foreach (RealTimeLineOR obj in listRealTimeLine)
+            foreach (RealTimeLineOR obj in _listRealTimeLine)
             {
-                if (obj.TimeLen == Len && type == obj.TimeLenType)
+                if (obj.LineInfo.TimeLen == Len && type == obj.LineInfo.TimeLenType)
                     continue;
-                obj.TimeLenType = type;
-                obj.TimeLen = Len;
+                obj.LineInfo.TimeLenType = type;
+                obj.LineInfo.TimeLen = Len;
                 obj.ChangeXValue();
                 obj.ShowCurve();
             }
