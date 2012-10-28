@@ -1803,7 +1803,7 @@ begin
 	if @ControlID > 0
 	begin
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 1,'Stroke','#FF000000','边线颜色');
+			 VALUES(@ControlID, 1,'Stroke','#FF646464','边线颜色');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 2,'StrokeThickness','1','边线粗细');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])

@@ -780,9 +780,15 @@ namespace MonitorSystem
             {
                 var list = _DataContext.t_ElementProperties.Where(a => a.ElementID == el.ElementID);
                 var monitorControl = ShowElement(canvas, el, ElementSate.Save, list.ToList());
-                if (null != monitorControl && null != parentContol)
+                if (null != monitorControl)
                 {
                     monitorControl.ParentControl = parentContol;
+                    monitorControl.AllowToolTip = false;
+                    monitorControl.ClearValue(Canvas.ZIndexProperty);
+                    if (null != monitorControl.AdornerLayer)
+                    {
+                        monitorControl.AdornerLayer.AllToolTip = false;
+                    }
                 }
                 ScreenAllElement.Add(el);
             }
@@ -1221,6 +1227,7 @@ namespace MonitorSystem
             //循环所有存在元素
             listMonitorAddElement.Clear();
             listMonitorModifiedElement.Clear();
+            tbWait.IsBusy = true;
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var m = csScreen.Children[i] as MonitorControl;
@@ -1409,6 +1416,7 @@ namespace MonitorSystem
                 EntityChangeSet obj = result.ChangeSet;
                 if (obj.AddedEntities.Count == 0 && listMonitorModifiedElement.Count == 0)
                 {
+                    tbWait.IsBusy = false;
                     if (IsShowSaveToot)
                     {
                         IsShowSaveToot = false;
@@ -1490,6 +1498,10 @@ namespace MonitorSystem
                     _DataContext.SubmitChanges(SubmitPropertyCompleted, null);
                 }
             }
+            else
+            {
+                tbWait.IsBusy = false;
+            }
         }
         /// <summary>
         /// 提交元素完成
@@ -1497,6 +1509,7 @@ namespace MonitorSystem
         /// <param name="result"></param>
         private void SubmitPropertyCompleted(SubmitOperation result)
         {
+            tbWait.IsBusy = false;
             //AddElementNumber++;
             //if (listMonitorAddElement.Count <= AddElementNumber)
             if(!result.HasError)

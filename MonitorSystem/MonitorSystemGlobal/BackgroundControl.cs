@@ -365,8 +365,14 @@ namespace MonitorSystem.MonitorSystemGlobal
             {
                 this._border.IsHitTestVisible = false;
                 AdornerLayer = new Adorner(this);
-                this.SetValue(Canvas.ZIndexProperty, 10000);
-
+                if (AllowToolTip && null == this.ParentControl)
+                {
+                    this.SetValue(Canvas.ZIndexProperty, 10000);
+                }
+                else
+                {
+                    this.ClearValue(Canvas.ZIndexProperty);
+                }
                 //AdornerLayer.AllowMove = false;
                 AdornerLayer.Selected += OnSelected;
                 AdornerLayer.Unselected += OnUnselected;
