@@ -27,6 +27,7 @@ using MonitorSystem.Dqfh;
 using MonitorSystem.Dldz;
 using MonitorSystem.Gallery.Meter;
 using System.Diagnostics;
+using MonitorSystem.Other;
 
 namespace MonitorSystem
 {
@@ -314,6 +315,8 @@ namespace MonitorSystem
             _DataContext.Load(_DataContext.GetT_ElementProperty_LibraryQuery(), LoadElementProperty_LibraryCompleted, null);
            //加载控件属性
             _DataContext.Load(_DataContext.GetT_ControlPropertyQuery(), LoadControlPropertyCompleted, null);
+
+           // _DataContext.Load(_DataContext.GetT_Element_RealTimeLineQuery().Where(a=> a.ElementID== 
 
             //实例化属性窗口
             fwProperty = new FloatableWindow();
@@ -1320,6 +1323,7 @@ namespace MonitorSystem
                     {
                         _DataContext.t_Elements.Remove(childElement);
                     }
+
                     _DataContext.t_Elements.Add(childElement.Clone());// 2个必须同步添加
                     listMonitorAddElement.Add(childMoinitor);// 2个必须同步添加
                 }
@@ -1346,6 +1350,14 @@ namespace MonitorSystem
                     LoadScreenData(_CurrentScreen);
                     return;
                 }
+
+
+                //foreach (RealTimeLineOR LineOr in add.ListRealTimeLine)
+                //{
+                //    LineOr.LineInfo.ScreenID = _CurrentScreen.ScreenID;
+                //    LineOr.LineInfo.ElementID = addElement.ElementID;
+                //    _DataContext.t_Element_RealTimeLines.Add(LineOr.LineInfo);
+                //}
 
                 var elementID = 0;
                 // 新增

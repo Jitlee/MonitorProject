@@ -102,10 +102,10 @@
     <Compile Include="Servers\CV.metadata.cs" />
     <Compile Include="Servers\CVC.cs" />
     <Compile Include="Servers\FileService.cs" />
-    <Compile Include="Servers\Paser.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servers\MonitorServers.cs" />
     <Compile Include="Servers\MonitorServers.metadata.cs" />
+    <Compile Include="Servers\Paser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servers\MonitorServers.metadataC.cs" />
     <Compile Include="Servers\MonitorServersC.cs">
       <SubType>Code</SubType>

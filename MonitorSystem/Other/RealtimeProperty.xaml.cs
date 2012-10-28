@@ -69,24 +69,30 @@ namespace MonitorSystem.Other
             set { _ChanncelID = value; }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void RaisePropertyChanged(string propertyName)
-        {
-            if (null != PropertyChanged)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+        //public event PropertyChangedEventHandler PropertyChanged;
+        //private void RaisePropertyChanged(string propertyName)
+        //{
+        //    if (null != PropertyChanged)
+        //    {
+        //        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        //    }
+        //}
         private void cbDeviceID_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (cbDeviceID.SelectedIndex < 0)
+                return;
             t_Device d = (t_Device)cbDeviceID.Items[cbDeviceID.SelectedIndex];
             LoadChanncel(d.DeviceID);
         }
-
+        private void LoadChanncel(int deviceid, int ChanncelID)
+        {
+            _DataCV.Load(_DataCV.GetT_ChannelQuery().Where(a => a.DeviceID == deviceid),
+                LoadChanncelCommplete, ChanncelID);
+        }
         private void LoadChanncel(int deviceid)
         {
             _DataCV.Load(_DataCV.GetT_ChannelQuery().Where(a => a.DeviceID == deviceid),
-                LoadChanncelCommplete, deviceid);
+                LoadChanncelCommplete, null);
         }
 
         private void LoadChanncelCommplete(LoadOperation<t_Channel> result)
@@ -102,10 +108,13 @@ namespace MonitorSystem.Other
             {
                 Channels = new ObservableCollection<t_Channel>(v);
                 cbChanncel.ItemsSource = Channels;
-                var vc = v.Where(a => a.ChannelNo == _ChanncelID);
-                if (vc.Count() > 0)
+                if (result.UserState != null)
                 {
-                    cbChanncel.SelectedItem = vc.First();
+                    var vc = v.Where(a => a.ChannelNo == Convert.ToInt32(result.UserState));
+                    if (vc.Count() > 0)
+                    {
+                        cbChanncel.SelectedItem = vc.First();
+                    }
                 }
             }
         }
@@ -117,10 +126,18 @@ namespace MonitorSystem.Other
 
             _dataContext = LoadScreen._DataContext;
             _DataCV = LoadScreen._DataCV;
-            
+
             Devices = new ObservableCollection<t_Device>(_DataCV.t_Devices);
             cbDeviceID.DisplayMemberPath = "DeviceName";
             this.DataContext = this;
+
+            ShowYear.Value = DateTime.Now.Year;
+            ShowMonth.Value = DateTime.Now.Month;
+            ShowDay.Value = DateTime.Now.Day;
+
+            ShowHH.Value = DateTime.Now.Hour;
+            ShowMi.Value = DateTime.Now.Minute;
+            ShowSS.Value = DateTime.Now.Millisecond;
         }
 
         RealTimeT _RealTimeData;
@@ -131,6 +148,16 @@ namespace MonitorSystem.Other
         {
             get { return _RealTimeData; }
             set { _RealTimeData = value; }
+        }
+
+        ObservableCollection<t_Element_RealTimeLine> _ListEletement = new ObservableCollection<t_Element_RealTimeLine>();
+        /// <summary>
+        /// 
+        /// </summary>
+        public ObservableCollection<t_Element_RealTimeLine> ListEletement
+        {
+            get { return _ListEletement; }
+            set { _ListEletement = value; }
         }
 
         public void Init()
@@ -182,6 +209,13 @@ namespace MonitorSystem.Other
             this.MouseDrawMove.IsChecked = _RealTimeData.MouseDrawMove;// 鼠标拖动移动		
             this.XZMove.IsChecked = _RealTimeData.XZMove;// X轴移动		
             this.YZMove.IsChecked = _RealTimeData.YZMove;// Y轴移动
+
+            //线信息
+            foreach (RealTimeLineOR obj in _RealTimeData.ListRealTimeLine)
+            {
+                ListEletement.Add(obj.LineInfo);
+            }
+            SetDefult();
         }
 
         /// <summary>
@@ -226,7 +260,7 @@ namespace MonitorSystem.Other
             _RealTimeData.MultiYZShow = this.MultiYZShow.IsChecked.Value; //多Y轴显示
             _RealTimeData.IsShowLegend = this.IsShowLegend.IsChecked.Value;   //显示图例
             //_RealTimeData.ShowLegend;
-            _RealTimeData.InfoLWidth=int.Parse(this.InfoLWidth.Text); //信息栏宽度
+            _RealTimeData.InfoLWidth = int.Parse(this.InfoLWidth.Text); //信息栏宽度
 
             //放缩设置
             _RealTimeData.MouseDrawEnlare = this.MouseDrawEnlare.IsChecked.Value;// 鼠标拖动放大		
@@ -237,13 +271,56 @@ namespace MonitorSystem.Other
             _RealTimeData.YZMove = this.YZMove.IsChecked.Value;// Y轴移动
         }
 
+        private void AdminLine()
+        {
+            //移出
+            if (DeleteRealTime.Count > 0)
+            {
+                foreach (t_Element_RealTimeLine obj in DeleteRealTime)
+                {
+                    //_RealTimeData.
+                    RealTimeLineOR _line = GetRealLine(obj);
+                    if (_line != null)
+                    {
+                        _RealTimeData.ListRealTimeLine.Remove(_line);
+                        _RealTimeData._CanvasLine.Children.Remove(_line.PolyLine);
+                    }
+                }
+            }
+
+            foreach (t_Element_RealTimeLine obj in ListEletement)
+            {
+                RealTimeLineOR _line = GetRealLine(obj);
+                if (_line != null)
+                {
+                    _line.LineInfo = obj;
+                }
+                else
+                {
+                    RealTimeLineOR _data = new RealTimeLineOR(obj);
+                    _RealTimeData.ListRealTimeLine.Add(_data);
+                }
+            }
+        }
+
+        private RealTimeLineOR GetRealLine(t_Element_RealTimeLine obj)
+        {
+            foreach (RealTimeLineOR line in _RealTimeData.ListRealTimeLine)
+            {
+                if (line.LineInfo.ID == obj.ID)
+                    return line;
+            }
+            return null;
+        }
+
 
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            t_Channel t = (t_Channel)cbChanncel.SelectedItem;
-            MessageBox.Show(t.ChannelName);
             SaveDate();
+            AdminLine();
+            _RealTimeData.PaintBasicInfo();
+            //MessageBox.Show(_RealTimeData.ListRealTimeLine[0].LineInfo.LineName);
             this.DialogResult = true;
         }
 
@@ -284,292 +361,291 @@ namespace MonitorSystem.Other
         #endregion
 
         #region 曲线处理
-
-        private ElementRealTimeLineOR GetRealTimeLineOR()
+        private void SetDefult()
         {
-            ElementRealTimeLineOR obj = new ElementRealTimeLineOR();
-            obj.Linename = this.LineName.Text;
-            
-            //obj.ID
-            /*
-obj.ScreenID
-ElementID
-LineType
-LineName
-LineCZ
-LineShowType
-LineStyle
-LinePointBJ
-LineColor
-MinValue
-MaxValue
-ValueDecimal
-ShowFormat
-TimeLen
-TimeLenType
-LineCYZQLent
-LineCYZQType
-DeviceID
-ChannelNo
-ComputeStr
-StartTime
+            this.LineName.Text = "ll";
+            LineType.SelectedIndex = 0;
+            LineCZ.SelectedIndex = 0;
+            LineShowType.SelectedIndex = 0;
+            LineStyle.SelectedIndex = 0;
 
-*/
-            return obj;
+            LinePointBJ.SelectedIndex = 0;
+
+            LineColor.Color = Colors.Blue;
+            MinValue.Text = "0";
+            MaxValue.Text = "100";
+            ValueDecimal.Value = 0;
+
+            FormartYear.IsChecked = false;
+            FormartMonth.IsChecked = false;
+            FormartDay.IsChecked = false;
+
+            FormartHH.IsChecked = true;
+            FormartMi.IsChecked = true;
+            FormartSS.IsChecked = true;
+
+            TimeLen.Text = "100";
+            TimeLenType.SelectedIndex = 0;
+
+            LineCYZQLent.Text = "1";
+            LineCYZQType.SelectedIndex = 0;
+            this.ComputeStr.Text = "";
+
+            ShowYear.Value = DateTime.Now.Year;
+            ShowMonth.Value = DateTime.Now.Month;
+            ShowDay.Value = DateTime.Now.Day;
+
+            ShowHH.Value = DateTime.Now.Hour;
+            ShowMi.Value = DateTime.Now.Minute;
+            ShowSS.Value = DateTime.Now.Millisecond;
         }
 
-        List<ElementRealTimeLineOR> listRealTimeLisne = new List<ElementRealTimeLineOR>();
-        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        private void SetRealTimeLineOR(t_Element_RealTimeLine obj)
+        {
+            _RealTime = obj;
+
+            if (obj == null)
+                return;
+            this.LineName.Text = obj.LineName;
+            LineType.SelectedIndex = obj.LineType;
+            LineCZ.SelectedIndex = obj.LineCZ.Value;
+            LineShowType.SelectedIndex = obj.LineShowType.Value;
+            LineStyle.SelectedIndex = obj.LineStyle.Value;
+
+            LinePointBJ.SelectedIndex = obj.LinePointBJ.Value;
+
+            LineColor.Color = Common.StringToColor(obj.LineColor);
+            MinValue.Text = obj.MinValue;
+            MaxValue.Text = obj.MaxValue;
+            ValueDecimal.Value = obj.ValueDecimal;
+
+
+
+            if (obj.ShowFormat.IndexOf("yyyy") == 0)//年度
+            {
+                FormartYear.IsChecked = true;
+            }
+            if (obj.ShowFormat.IndexOf("MM") >= 0)//月
+            {
+                FormartMonth.IsChecked = true;
+            }
+            if (obj.ShowFormat.IndexOf("dd") >= 0)//日
+            {
+                FormartDay.IsChecked = true;
+            }
+
+            if (obj.ShowFormat.IndexOf("HH") >= 0)//日
+            {
+                FormartHH.IsChecked = true;
+            }
+
+            if (obj.ShowFormat.IndexOf("mm") >= 0)//分
+            {
+                FormartMi.IsChecked = true;
+            }
+
+            if (obj.ShowFormat.IndexOf("ss") >= 0)//秒
+            {
+                FormartSS.IsChecked = true;
+            }
+
+            TimeLen.Text = obj.TimeLen.ToString();
+            TimeLenType.SelectedIndex = GetIndex(obj.TimeLenType);
+
+            LineCYZQLent.Text = obj.LineCYZQLent;
+            LineCYZQType.SelectedIndex = GetIndex(obj.LineCYZQType);
+
+
+            if (obj.ComputeStr == null)
+                obj.ComputeStr = "";
+            this.ComputeStr.Text = obj.ComputeStr;
+
+            if (obj.DeviceID.HasValue)
+            {
+                var v = _devices.FirstOrDefault(a => a.DeviceID == obj.DeviceID);
+                cbDeviceID.SelectedValue = v;
+
+                if (obj.ChannelNo.HasValue)
+                {
+                    LoadChanncel(v.DeviceID, obj.ChannelNo.Value);
+                }
+                else
+                {
+                    LoadChanncel(v.DeviceID);
+                }
+            }
+
+
+            //obj.ComputeStr = this.ComputeStr.Text;
+            ShowYear.Value = DateTime.Now.Year;
+            ShowMonth.Value = DateTime.Now.Month;
+            ShowDay.Value = DateTime.Now.Day;
+
+            ShowHH.Value = DateTime.Now.Hour;
+            ShowMi.Value = DateTime.Now.Minute;
+            ShowSS.Value = DateTime.Now.Millisecond;
+        }
+        t_Element_RealTimeLine _RealTime = new t_Element_RealTimeLine();
+        private void SaveRealTimeLineOR()
         {
 
+            _RealTime.LineName = this.LineName.Text;
+
+            _RealTime.LineType = this.LineStyle.SelectedIndex;
+            _RealTime.LineCZ = LineCZ.SelectedIndex;
+            _RealTime.LineShowType = LineShowType.SelectedIndex;
+            _RealTime.LineStyle = LineStyle.SelectedIndex;
+            _RealTime.LinePointBJ = LinePointBJ.SelectedIndex;
+
+            _RealTime.LineColor = LineColor.Color.ToString();
+            _RealTime.MinValue = MinValue.Text;
+            _RealTime.MaxValue = MaxValue.Text;
+            _RealTime.ValueDecimal = int.Parse(ValueDecimal.Value.ToString());
+
+            string strShowFormat = string.Empty;
+            if (this.FormartYear.IsChecked.Value)//年度
+            {
+                strShowFormat = "yyyy";
+            }
+            if (this.FormartMonth.IsChecked.Value)//月
+            {
+                strShowFormat = string.Format("{0}{1}MM", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : "-");
+            }
+            if (this.FormartMonth.IsChecked.Value)//日
+            {
+                strShowFormat = string.Format("{0}{1}dd", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : "-");
+            }
+
+            if (this.FormartMonth.IsChecked.Value)//时
+            {
+                strShowFormat = string.Format("{0}{1}HH", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : " ");
+            }
+
+            if (this.FormartMonth.IsChecked.Value)//分
+            {
+                strShowFormat = string.Format("{0}{1}mm", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : ":");
+            }
+
+            if (this.FormartMonth.IsChecked.Value)//秒
+            {
+                strShowFormat = string.Format("{0}{1}ss", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : ":");
+            }
+            _RealTime.ShowFormat = strShowFormat;
+
+            _RealTime.TimeLen = int.Parse(TimeLen.Text);
+            //ComboBoxItem cbi = (ComboBoxItem)TimeLenType.SelectedItem;
+            _RealTime.TimeLenType = GetStr(TimeLenType.SelectedIndex);
+
+            _RealTime.LineCYZQLent = LineCYZQLent.Text;
+            //cbi = (ComboBoxItem)LineCYZQType.SelectedItem;
+            _RealTime.LineCYZQType = GetStr(LineCYZQType.SelectedIndex);
+
+            if (cbDeviceID.SelectedIndex >= 0)
+            {
+                t_Device d = (t_Device)cbDeviceID.Items[cbDeviceID.SelectedIndex];
+                _RealTime.DeviceID = d.DeviceID;
+            }
+
+            if (cbChanncel.SelectedIndex >= 0)
+            {
+                t_Channel tc = (t_Channel)cbChanncel.Items[cbChanncel.SelectedIndex];
+                _RealTime.ChannelNo = tc.ChannelNo;
+            }
+
+            _RealTime.ComputeStr = this.ComputeStr.Text;
+
+            string strTime = string.Format("{0}:{1}:{2} {3}:{4}:{5}", this.ShowYear.Value, this.ShowMonth.Value, this.ShowDay.Value,
+                this.ShowHH.Value, this.ShowMi.Value, this.ShowSS.Value);
+
+        }
+        #region 时间范围处理
+        private int GetIndex(string str)
+        {
+            if (str == "ss")
+            {
+                return 0;
+            }
+            else if (str == "mm")
+            {
+                return 1;
+            }
+            else if (str == "")
+            {
+                return 2;
+            }
+
+            return 3;
+        }
+
+        private string GetStr(int index)
+        {
+            if (index == 0)
+            {
+                return "ss";
+            }
+            else if (index == 1)
+            {
+                return "mm";
+            }
+            else if (index == 2)
+            {
+                return "hh";
+            }
+            return "dd";
+        }
+        #endregion
+
+        List<t_Element_RealTimeLine> DeleteRealTime = new List<t_Element_RealTimeLine>();
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            _RealTime = new t_Element_RealTimeLine();
+            _RealTime.ID = Guid.NewGuid().ToString();
+            SaveRealTimeLineOR();
+            //名称
+            foreach (t_Element_RealTimeLine obj in ListEletement)
+            {
+                if (obj.LineName == _RealTime.LineName)
+                {
+                    MessageBox.Show(string.Format("名称：{0}，已经存在！", _RealTime.LineName));
+                    return;
+                }
+            }
+            ListEletement.Add(_RealTime);
         }
 
         private void btnAlert_Click(object sender, RoutedEventArgs e)
         {
-
+            if (dgDataList.SelectedItem == null)
+            {
+                MessageBox.Show("请选择移出项！");
+                return;
+            }
+            SaveRealTimeLineOR();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
+            if (dgDataList.SelectedItem == null)
+            {
+                MessageBox.Show("请选择移出项！");
+                return;
+            }
+            var v = dgDataList.SelectedItem as t_Element_RealTimeLine;
+            ListEletement.Remove(v);
+            DeleteRealTime.Add(v);
 
         }
         #endregion
+
+        private void dgDataList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var v = ((DataGrid)sender).SelectedItem as t_Element_RealTimeLine;
+            SetRealTimeLineOR(v);
+
+        }
+
+
+
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class ElementRealTimeLineOR
-    {
-
-        private string _Id;
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Id
-        {
-            get { return _Id; }
-            set { _Id = value; }
-        }
-
-        private int _Screenid;
-        /// <summary>
-        /// 场景ID
-        /// </summary>
-        public int Screenid
-        {
-            get { return _Screenid; }
-            set { _Screenid = value; }
-        }
-
-        private int _Elementid;
-        /// <summary>
-        /// 无素ID
-        /// </summary>
-        public int Elementid
-        {
-            get { return _Elementid; }
-            set { _Elementid = value; }
-        }
-
-        private int _Linetype;
-        /// <summary>
-        /// 线类型
-        /// </summary>
-        public int Linetype
-        {
-            get { return _Linetype; }
-            set { _Linetype = value; }
-        }
-
-        private string _Linename;
-        /// <summary>
-        /// 线名称
-        /// </summary>
-        public string Linename
-        {
-            get { return _Linename; }
-            set { _Linename = value; }
-        }
-
-        private int _Linecz;
-        /// <summary>
-        /// 取值()
-        /// </summary>
-        public int Linecz
-        {
-            get { return _Linecz; }
-            set { _Linecz = value; }
-        }
-
-        private int _Lineshowtype;
-        /// <summary>
-        /// 类型(直线、阶梯线)
-        /// </summary>
-        public int Lineshowtype
-        {
-            get { return _Lineshowtype; }
-            set { _Lineshowtype = value; }
-        }
-
-        private int _Linestyle;
-        /// <summary>
-        /// 样式
-        /// </summary>
-        public int Linestyle
-        {
-            get { return _Linestyle; }
-            set { _Linestyle = value; }
-        }
-
-        private int _Linepointbj;
-        /// <summary>
-        /// 标记,不画点
-        /// </summary>
-        public int Linepointbj
-        {
-            get { return _Linepointbj; }
-            set { _Linepointbj = value; }
-        }
-
-        private string _Linecolor;
-        /// <summary>
-        /// 线颜色
-        /// </summary>
-        public string Linecolor
-        {
-            get { return _Linecolor; }
-            set { _Linecolor = value; }
-        }
-
-        private string _Minvalue;
-        /// <summary>
-        /// 最小值
-        /// </summary>
-        public string Minvalue
-        {
-            get { return _Minvalue; }
-            set { _Minvalue = value; }
-        }
-
-        private string _Maxvalue;
-        /// <summary>
-        /// 最大值
-        /// </summary>
-        public string Maxvalue
-        {
-            get { return _Maxvalue; }
-            set { _Maxvalue = value; }
-        }
-
-        private int _Valuedecimal;
-        /// <summary>
-        /// 小数位长度
-        /// </summary>
-        public int Valuedecimal
-        {
-            get { return _Valuedecimal; }
-            set { _Valuedecimal = value; }
-        }
-
-        private string _Showformat;
-        /// <summary>
-        /// 显示格式
-        /// </summary>
-        public string Showformat
-        {
-            get { return _Showformat; }
-            set { _Showformat = value; }
-        }
-
-        private int _Timelen;
-        /// <summary>
-        /// 时间长度
-        /// </summary>
-        public int Timelen
-        {
-            get { return _Timelen; }
-            set { _Timelen = value; }
-        }
-
-        private string _Timelentype;
-        /// <summary>
-        /// 时间长度类型
-        /// </summary>
-        public string Timelentype
-        {
-            get { return _Timelentype; }
-            set { _Timelentype = value; }
-        }
-
-        private string _Linecyzqlent;
-        /// <summary>
-        /// 时间采样周期
-        /// </summary>
-        public string Linecyzqlent
-        {
-            get { return _Linecyzqlent; }
-            set { _Linecyzqlent = value; }
-        }
-
-        private string _Linecyzqtype;
-        /// <summary>
-        /// 采样周期类型
-        /// </summary>
-        public string Linecyzqtype
-        {
-            get { return _Linecyzqtype; }
-            set { _Linecyzqtype = value; }
-        }
-
-        private int _Deviceid;
-        /// <summary>
-        /// 取值设备ID
-        /// </summary>
-        public int Deviceid
-        {
-            get { return _Deviceid; }
-            set { _Deviceid = value; }
-        }
-
-        private int _Channelno;
-        /// <summary>
-        /// 取值设备通道
-        /// </summary>
-        public int Channelno
-        {
-            get { return _Channelno; }
-            set { _Channelno = value; }
-        }
-
-        private string _Computestr;
-        /// <summary>
-        /// 取值表达试
-        /// </summary>
-        public string Computestr
-        {
-            get { return _Computestr; }
-            set { _Computestr = value; }
-        }
-
-        private DateTime _Starttime;
-        /// <summary>
-        /// 开始时间
-        /// </summary>
-        public DateTime Starttime
-        {
-            get { return _Starttime; }
-            set { _Starttime = value; }
-        }
-
-        /// <summary>
-        /// ElementRealTimeLine构造函数
-        /// </summary>
-        public ElementRealTimeLineOR()
-        {
-
-        }
-    }
-
 }
 

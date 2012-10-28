@@ -18,11 +18,10 @@ namespace MonitorSystem.Other
     {
         Border _Border = new Border();
         StackPanel _Stack = new StackPanel();
-        RealTimeLineOR _LineOR = new RealTimeLineOR();
+        RealTimeLineOR _LineOR;
         public RealLineShow(RealTimeLineOR obj)
         {
             Init();
-
             _LineOR = obj;
             ShowInfo();
         }
@@ -48,7 +47,7 @@ namespace MonitorSystem.Other
         TextBlock tb = new TextBlock();
         private void ShowInfo()
         {
-            tb.Text = _LineOR.LineName;            
+            tb.Text = _LineOR.LineInfo.LineName;            
             _Stack.Children.Add(tb);
 
             tbY.Text = string.Format("Y[{0}]", _LineOR.YValue);
@@ -68,7 +67,7 @@ namespace MonitorSystem.Other
         /// </summary>
         public void SetShowColor()
         {
-            SolidColorBrush colorB = new SolidColorBrush(_LineOR.LineColor);
+            SolidColorBrush colorB = new SolidColorBrush(Common.StringToColor( _LineOR.LineInfo.LineColor));
             tb.Foreground = colorB;
             tbY.Foreground = colorB;
             tbMaxValue.Foreground = colorB;
@@ -85,8 +84,13 @@ namespace MonitorSystem.Other
 
         protected void RealLineShow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            RealLineArgs eL=new RealLineArgs();
-            eL.Name = _LineOR.LineName;
+            RealLineArgs eL = new RealLineArgs();
+            if (_LineOR == null)
+            { eL = null; }
+            else
+            {
+                eL.Name = _LineOR.LineInfo.LineName;
+            }
             OnChangeLineShow(eL);
         }
 
