@@ -1,3 +1,4 @@
+USE [GDK_BCM]
 -- ================================================
 -- Template generated from Template Explorer using:
 -- Create Procedure (New Menu).SQL
@@ -31,7 +32,7 @@ BEGIN
 	SELECT * FROM [t_ElementProperty] AS A
 		WHERE EXISTS(SELECT NULl FROM [t_Element] AS B 
 			WHERE A.[ElementID] = B.[ElementID] AND B.[ScreenID] = @ScreenID)
-	UNION
+	UNION ALL
 	SELECT * FROM [t_ElementProperty] AS A
 		WHERE EXISTS(SELECT NULL FROM [t_Element] AS B WHERE 
 				A.[ElementID] = B.[ElementID] AND

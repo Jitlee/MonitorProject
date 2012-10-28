@@ -238,8 +238,34 @@ namespace MonitorSystem.MonitorSystemGlobal
                 {
                     if (null == ToolTipControl && null != _ScreenElement)
                     {
+                        IsToolTipLoaded = true;
                         var screenID = _ScreenElement.ElementID * -1;
-                        LoadScreen._DataContext.Load<t_Element>(LoadScreen._DataContext.GetT_ElementsByScreenIDQuery(screenID), LoadToolTipCallback, null);
+                        //LoadScreen._DataContext.Load<t_Element>(LoadScreen._DataContext.GetT_ElementsByScreenIDQuery(screenID), LoadToolTipCallback, null);
+                        var toolTipControlElement = LoadScreen._DataContext.t_Elements.FirstOrDefault(t => t.ControlID == -9999 && t.ScreenID == screenID && t.ElementType == "ToolTip");
+                        if (null != toolTipControlElement
+                            && Parent is Canvas)
+                        {
+                            var parent = Parent as Canvas;
+                            ToolTipControl = new ToolTipControl(this);
+                            ToolTipControl.Width = toolTipControlElement.Width.HasValue ? toolTipControlElement.Width.Value : 300d;
+                            ToolTipControl.Height = toolTipControlElement.Height.HasValue ? toolTipControlElement.Height.Value : 200d;
+                            ToolTipControl.Transparent = 100;
+                            ToolTipControl.SetValue(Canvas.ZIndexProperty, 10000);
+                            ToolTipControl.ScreenElement = toolTipControlElement;
+                            ToolTipControl.ListElementProp = LoadScreen._DataContext.t_ElementProperties.Where(p => p.ElementID == toolTipControlElement.ElementID).ToList();
+                            ToolTipControl.ElementState = ElementSate.Save;
+                            ToolTipControl.SetPropertyValue();
+                            ToolTipControl.SetCommonPropertyValue();
+                            parent.Children.Add(ToolTipControl);
+                            SetToolTipPosition();
+
+                            var childElements = LoadScreen._DataContext.t_Elements.Where(t => t.ScreenID == screenID && t.ControlID != -9999 && t.ElementType == "ToolTip");
+                            foreach (var childElement in childElements)
+                            {
+                                var poperties = LoadScreen._DataContext.t_ElementProperties.Where(p => p.ElementID == childElement.ElementID).ToList();
+                                LoadScreen._instance.ShowElement(ToolTipControl.ToolTipCanvas, childElement, ElementSate.Save, poperties);
+                            }
+                        }
                     }
                 }
                 else
@@ -248,57 +274,6 @@ namespace MonitorSystem.MonitorSystemGlobal
                 }
             }
             base.OnMouseEnter(e);
-        }
-
-        /// <summary>
-        /// 加载ToolTip子元素
-        /// </summary>
-        /// <param name="result"></param>
-        private void LoadToolTipCallback(LoadOperation<t_Element> result)
-        {
-            if (!result.HasError)
-            {
-                var screenID = _ScreenElement.ElementID * -1;
-                LoadScreen._DataContext.Load<t_ElementProperty>(LoadScreen._DataContext.GetScreenElementPropertyQuery(screenID), LoadToolTipPropertyCallback, result.Entities);
-            }
-        }
-
-        /// <summary>
-        /// 加载ToolTip子元素属性
-        /// </summary>
-        /// <param name="result"></param>
-        private void LoadToolTipPropertyCallback(LoadOperation<t_ElementProperty> result)
-        {
-            if (!result.HasError && result.UserState is IEnumerable<t_Element>)
-            {
-                var elements = result.UserState as IEnumerable<t_Element>;
-                IsToolTipLoaded = true;
-                var toolTipControlElement = elements.FirstOrDefault(t => t.ControlID == -9999);
-                if (null != toolTipControlElement
-                    && Parent is Canvas)
-                {
-                    var parent = Parent as Canvas;
-                    ToolTipControl = new ToolTipControl(this);
-                    ToolTipControl.Width = toolTipControlElement.Width.HasValue ? toolTipControlElement.Width.Value : 300d;
-                    ToolTipControl.Height = toolTipControlElement.Height.HasValue ? toolTipControlElement.Height.Value : 200d;
-                    ToolTipControl.Transparent = 100;
-                    ToolTipControl.SetValue(Canvas.ZIndexProperty, 10000);
-                    ToolTipControl.ScreenElement = toolTipControlElement;
-                    ToolTipControl.ListElementProp = result.Entities.Where(p => p.ElementID == toolTipControlElement.ElementID).ToList();
-                    ToolTipControl.ElementState = ElementSate.Save;
-                    ToolTipControl.SetPropertyValue();
-                    ToolTipControl.SetCommonPropertyValue();
-                    parent.Children.Add(ToolTipControl);
-                    SetToolTipPosition();
-
-                    var childElements = elements.Where(t => t.ControlID != -9999);
-                    foreach (var childElement in childElements)
-                    {
-                        var poperties = result.Entities.Where(p => p.ElementID == childElement.ElementID).ToList();
-                        LoadScreen._instance.ShowElement(ToolTipControl.ToolTipCanvas, childElement, ElementSate.Save, poperties);
-                    }
-                }
-            }
         }
 
         private void SetToolTipPosition()

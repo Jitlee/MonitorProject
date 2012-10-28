@@ -412,6 +412,82 @@ namespace MonitorSystem.Web.Moldes
     
             return base.ExecuteFunction("P_CopyScreen", newScreenIDParameter, oldScreenIDParameter);
         }
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        /// <param name="screenID">没有元数据文档可用。</param>
+        public ObjectResult<t_Element> P_GetElementsByScreenID(Nullable<global::System.Int32> screenID)
+        {
+            ObjectParameter screenIDParameter;
+            if (screenID.HasValue)
+            {
+                screenIDParameter = new ObjectParameter("ScreenID", screenID);
+            }
+            else
+            {
+                screenIDParameter = new ObjectParameter("ScreenID", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction<t_Element>("P_GetElementsByScreenID", screenIDParameter);
+        }
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        /// <param name="mergeOption"></param>
+        /// <param name="screenID">没有元数据文档可用。</param>
+        public ObjectResult<t_Element> P_GetElementsByScreenID(Nullable<global::System.Int32> screenID, MergeOption mergeOption)
+        {
+            ObjectParameter screenIDParameter;
+            if (screenID.HasValue)
+            {
+                screenIDParameter = new ObjectParameter("ScreenID", screenID);
+            }
+            else
+            {
+                screenIDParameter = new ObjectParameter("ScreenID", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction<t_Element>("P_GetElementsByScreenID", mergeOption, screenIDParameter);
+        }
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        /// <param name="screenID">没有元数据文档可用。</param>
+        public ObjectResult<t_ElementProperty> P_GetElementPropertiesByScreenID(Nullable<global::System.Int32> screenID)
+        {
+            ObjectParameter screenIDParameter;
+            if (screenID.HasValue)
+            {
+                screenIDParameter = new ObjectParameter("ScreenID", screenID);
+            }
+            else
+            {
+                screenIDParameter = new ObjectParameter("ScreenID", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction<t_ElementProperty>("P_GetElementPropertiesByScreenID", screenIDParameter);
+        }
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        /// <param name="mergeOption"></param>
+        /// <param name="screenID">没有元数据文档可用。</param>
+        public ObjectResult<t_ElementProperty> P_GetElementPropertiesByScreenID(Nullable<global::System.Int32> screenID, MergeOption mergeOption)
+        {
+            ObjectParameter screenIDParameter;
+            if (screenID.HasValue)
+            {
+                screenIDParameter = new ObjectParameter("ScreenID", screenID);
+            }
+            else
+            {
+                screenIDParameter = new ObjectParameter("ScreenID", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction<t_ElementProperty>("P_GetElementPropertiesByScreenID", mergeOption, screenIDParameter);
+        }
 
         #endregion
     }
@@ -1402,6 +1478,30 @@ namespace MonitorSystem.Web.Moldes
         private global::System.String _ComputeStr;
         partial void OnComputeStrChanging(global::System.String value);
         partial void OnComputeStrChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ElementType
+        {
+            get
+            {
+                return _ElementType;
+            }
+            set
+            {
+                OnElementTypeChanging(value);
+                ReportPropertyChanging("ElementType");
+                _ElementType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ElementType");
+                OnElementTypeChanged();
+            }
+        }
+        private global::System.String _ElementType;
+        partial void OnElementTypeChanging(global::System.String value);
+        partial void OnElementTypeChanged();
 
         #endregion
     

@@ -16,11 +16,12 @@ namespace MonitorSystem.Web.Servers
     public partial class MonitorServers
     {
 
-        public IEnumerable<t_ElementProperty> GetScreenElementProperty(int ScreenID)
+        public IQueryable<t_ElementProperty> GetScreenElementProperty(int ScreenID)
         {
-          var v=  from f in ObjectContext.t_ElementProperty from c in ObjectContext.t_Element 
-                  where  c.ElementID==f.ElementID && c.ScreenID ==ScreenID select f;
-          return v;
+          //var v=  from f in ObjectContext.t_ElementProperty from c in ObjectContext.t_Element 
+          //        where  c.ElementID==f.ElementID && c.ScreenID ==ScreenID select f;
+          //return v;
+            return ObjectContext.P_GetElementPropertiesByScreenID(ScreenID).AsQueryable();
         }
 
         public void CopyScreenElement(int newScreenID,int oldScreen)
@@ -112,7 +113,7 @@ namespace MonitorSystem.Web.Servers
         /// <returns></returns>
         public IQueryable<t_Element> GetT_ElementsByScreenID(int screenID)
         {
-            return this.ObjectContext.t_Element.Where(t => t.ScreenID == screenID);
+            return this.ObjectContext.P_GetElementsByScreenID(screenID).AsQueryable();
         }
 
         /// <summary>

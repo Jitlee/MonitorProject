@@ -1,3 +1,4 @@
+USE [GDK_BCM]
 -- ================================================
 -- Template generated from Template Explorer using:
 -- Create Procedure (New Menu).SQL
@@ -29,7 +30,7 @@ BEGIN
 
     -- Insert statements for procedure here
 	SELECT * FROM [t_Element] WHERE [ScreenID]=@ScreenID
-	UNION
+	UNION ALL
 	SELECT * FROM [t_Element] AS A WHERE 
 		EXISTS(SELECT NULL FROM [t_Element] B 
 			WHERE B.[ScreenID]=@ScreenID AND A.[ScreenID] = B.[ElementID] * -1)

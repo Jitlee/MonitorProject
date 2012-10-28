@@ -244,6 +244,10 @@ namespace MonitorSystem
                         monitor.AllowToolTip = false;
                         monitor.AdornerLayer.AllToolTip = false;
                     }
+                    if (null != monitor.ScreenElement)
+                    {
+                        monitor.ScreenElement.ElementType = "ToolTip";
+                    }
                 }
                 else
                 {
@@ -262,6 +266,10 @@ namespace MonitorSystem
                             {
                                 monitor.AllowToolTip = false;
                                 monitor.AdornerLayer.AllToolTip = false;
+                            }
+                            if (null != monitor.ScreenElement)
+                            {
+                                monitor.ScreenElement.ElementType = "Background";
                             }
                             PropertyMain.Instance.ResetSelected();
                             return;
@@ -920,7 +928,7 @@ namespace MonitorSystem
                     case "BackgroundControl":
                         BackgroundControl backgroundControl = new BackgroundControl();
                         SetEletemt(canvas, backgroundControl, obj, eleStae, listObj);
-                        var childElements = _DataContext.t_Elements.Where(e => e.ScreenID == obj.ElementID).ToList();
+                        var childElements = _DataContext.t_Elements.Where(e => e.ScreenID == obj.ElementID * -1 && e.ElementType == "Background").ToList();
                         ShowElements(childElements, backgroundControl.BackgroundCanvas);
                         return backgroundControl;
                     //case "dlfh01"://电力符号
@@ -1220,11 +1228,11 @@ namespace MonitorSystem
 
                     if (el == ElementSate.New)
                     {
-                        m.ScreenElement = meleObj;
-                        _DataContext.t_Elements.Add(meleObj); // 2个必须同步添加
-                        listMonitorAddElement.Add(m);// 2个必须同步添加
-                        m.ElementState = ElementSate.Save;
-                    }
+                            m.ScreenElement = meleObj;
+                            _DataContext.t_Elements.Add(meleObj); // 2个必须同步添加
+                            listMonitorAddElement.Add(m);// 2个必须同步添加
+                            m.ElementState = ElementSate.Save;
+                        }
                     else
                     {
                         CheckElementChange(meleObj);
@@ -1238,7 +1246,7 @@ namespace MonitorSystem
                         // 删除子属性
                         if (m is RealTimeT)
                         {
-                            var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == meleObj.ElementID);
+                            var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == meleObj.ElementID).ToList();
 
                             foreach (var removeElement in removeElements)
                             {
@@ -1265,7 +1273,7 @@ namespace MonitorSystem
 
                         if (el != ElementSate.New)
                         {
-                            RemoveOldProperties(meleObj);
+                            RemoveOldProperties(meleObj, "ToolTip");
                             toolTipElement.ScreenID = meleObj.ElementID * -1;
                         }
                         else
@@ -1287,7 +1295,7 @@ namespace MonitorSystem
                         var backgroundControl = m as BackgroundControl;
                         if (el == ElementSate.Save)
                         {
-                            RemoveOldProperties(meleObj);
+                            RemoveOldProperties(meleObj, "Background");
                         }
 
                         AddChildControl(backgroundControl.BackgroundCanvas, el, meleObj);
@@ -1303,16 +1311,23 @@ namespace MonitorSystem
                 if (v == null)
                 {
                     _DataContext.t_Elements.Remove(mEle);
-                    //移出属性
-                    var vPro = _DataContext.t_ElementProperties.Where(a => a.ElementID == mEle.ElementID);
-                    if (vPro.Count() > 0)
+
+                    var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == mEle.ElementID).ToList();
+                    foreach (var removeProperty in removeProperties)
                     {
-                        List<t_ElementProperty> listEp = vPro.ToList();
-                        foreach (t_ElementProperty ep in listEp)
-                        {
-                            _DataContext.t_ElementProperties.Remove(ep);
-                        }
+                        _DataContext.t_ElementProperties.Remove(removeProperty);
                     }
+
+                    // 删除子 RealTimeT 属性
+                    var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == mEle.ElementID);
+
+                    foreach (var removeElement in removeElements)
+                    {
+                        _DataContext.t_Element_RealTimeLines.Remove(removeElement);
+                    }
+
+                    RemoveOldProperties(mEle, "ToolTip"); // 删除ToolTip子元素及其子元素的属性
+                    RemoveOldProperties(mEle, "Background"); // 删除Background子元素及其子元素的属性
                 }
             }
 
@@ -1323,9 +1338,9 @@ namespace MonitorSystem
             }
         }
 
-        private static void RemoveOldProperties(t_Element meleObj)
+        private static void RemoveOldProperties(t_Element meleObj, string elementType)
         {
-            var removeElements = _DataContext.t_Elements.Where(t => t.ScreenID == meleObj.ElementID * -1).ToList();
+            var removeElements = _DataContext.t_Elements.Where(t => t.ScreenID == meleObj.ElementID * -1 && t.ElementType == elementType).ToList();
             // 删除老的ToolTip\子控件，及他们的老属性
             foreach (var removeElement in removeElements)
             {
