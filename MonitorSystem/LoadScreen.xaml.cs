@@ -1225,6 +1225,17 @@ namespace MonitorSystem
                             _DataContext.t_ElementProperties.Remove(removeProperty);
                         }
 
+                        // 删除子属性
+                        if (m is RealTimeT)
+                        {
+                            var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == meleObj.ElementID);
+
+                            foreach (var removeElement in removeElements)
+                            {
+                                _DataContext.t_Element_RealTimeLines.Remove(removeElement);
+                            }
+                        }
+
                         listMonitorModifiedElement.Add(m); // 同修改同步
                     }
 
@@ -1351,14 +1362,6 @@ namespace MonitorSystem
                     return;
                 }
 
-
-                //foreach (RealTimeLineOR LineOr in add.ListRealTimeLine)
-                //{
-                //    LineOr.LineInfo.ScreenID = _CurrentScreen.ScreenID;
-                //    LineOr.LineInfo.ElementID = addElement.ElementID;
-                //    _DataContext.t_Element_RealTimeLines.Add(LineOr.LineInfo);
-                //}
-
                 var elementID = 0;
                 // 新增
                 if (obj.AddedEntities.Count == listMonitorAddElement.Count)
@@ -1366,7 +1369,7 @@ namespace MonitorSystem
                     for (int i = 0; i < obj.AddedEntities.Count; i++)
                     {
                         var addElement = obj.AddedEntities[i] as t_Element;
-                        var newElement = listMonitorAddElement[i];
+                        var addMonitorControl = listMonitorAddElement[i];
                         var listProperties = listMonitorAddElement[i].ListElementProp;
 
                         if (addElement.ControlID.HasValue
@@ -1383,8 +1386,16 @@ namespace MonitorSystem
                                 editElment.ScreenID = elementID;
                             }
                         }
-                        else
+
+                        if (addMonitorControl is RealTimeT)
                         {
+                            var addRealTimeT = addMonitorControl as RealTimeT;
+                            foreach (var line in addRealTimeT.ListRealTimeLine)
+                            {
+                                line.LineInfo.ScreenID = _CurrentScreen.ScreenID;
+                                line.LineInfo.ElementID = addElement.ElementID;
+                                _DataContext.t_Element_RealTimeLines.Add(line.LineInfo.Clone());
+                            }
                         }
 
                         foreach (var ep in listProperties)
@@ -1398,6 +1409,18 @@ namespace MonitorSystem
                 foreach (var monitorControl in listMonitorModifiedElement)
                 {
                     var modifiedElement = monitorControl.ScreenElement;
+
+                    if (monitorControl is RealTimeT)
+                    {
+                        var addRealTimeT = monitorControl as RealTimeT;
+                        foreach (var line in addRealTimeT.ListRealTimeLine)
+                        {
+                            line.LineInfo.ScreenID = _CurrentScreen.ScreenID;
+                            line.LineInfo.ElementID = monitorControl.ScreenElement.ElementID;
+                            _DataContext.t_Element_RealTimeLines.Add(line.LineInfo.Clone());
+                        }
+                    }
+
                     foreach (var ep in monitorControl.ListElementProp)
                     {
                         ep.ElementID = modifiedElement.ElementID;
