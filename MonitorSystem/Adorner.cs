@@ -519,6 +519,7 @@ namespace MonitorSystem
                         var monitor = child as MonitorControl;
                         if (null != monitor)
                         {
+                            monitor.ParentControl = toolTipControl;
                             monitor.AllowToolTip = false;
                             monitor.DesignMode();
                             monitor.ClearValue(Canvas.ZIndexProperty);
@@ -652,6 +653,7 @@ namespace MonitorSystem
                         var monitor = LoadScreen._instance.ShowElement(toolTipControl.ToolTipCanvas, childElement, ElementSate.Save, poperties);
                         if (null != monitor)
                         {
+                            monitor.ParentControl = toolTipControl;
                             monitor.DesignMode();
                             monitor.AllowToolTip = false;
                             monitor.ClearValue(Canvas.ZIndexProperty);

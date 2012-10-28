@@ -241,6 +241,7 @@ namespace MonitorSystem
                     if (null != monitor
                         && null != monitor.AdornerLayer)
                     {
+                        monitor.ParentControl = Adorner.CurrenttoolTipControl;
                         monitor.AllowToolTip = false;
                         monitor.ClearValue(Canvas.ZIndexProperty);
                         monitor.AdornerLayer.AllToolTip = false;
@@ -780,7 +781,7 @@ namespace MonitorSystem
             {
                 var list = _DataContext.t_ElementProperties.Where(a => a.ElementID == el.ElementID);
                 var monitorControl = ShowElement(canvas, el, ElementSate.Save, list.ToList());
-                if (null != monitorControl)
+                if (null != monitorControl && null != parentContol)
                 {
                     monitorControl.ParentControl = parentContol;
                     monitorControl.AllowToolTip = false;
@@ -1610,13 +1611,41 @@ namespace MonitorSystem
             ModifierKeys keys = ModifierKeys.Control;
             if (keys == ModifierKeys.Control && e.Key == Key.V)
             {
-                if (CoptyObj != null)
+                var copyMonitor = CoptyObj as MonitorControl;
+                if (copyMonitor != null && !(copyMonitor is ToolTipControl))
                 {
                     ScreenElementObj mobj = new MonitorSystemGlobal.ScreenElementObj();
-                    int mWidth = Convert.ToInt16(CoptyObj.Width);
-                    int mHeight = Convert.ToInt16(CoptyObj.Height);
-                    mobj.ElementClone((MonitorControl)CoptyObj, mWidth, mHeight);
-                    ShowElement(csScreen, mobj.Element, ElementSate.New, mobj.ListElementProperty);
+                    int mWidth = Convert.ToInt16(copyMonitor.Width);
+                    int mHeight = Convert.ToInt16(copyMonitor.Height);
+                    mobj.ElementClone(copyMonitor, mWidth, mHeight);
+                    var canvas = csScreen;
+                    if (copyMonitor.ParentControl is BackgroundControl)
+                    {
+                        canvas = (copyMonitor.ParentControl as BackgroundControl).BackgroundCanvas;
+                    }
+                    else if (copyMonitor.ParentControl is ToolTipControl)
+                    {
+                        canvas = (copyMonitor.ParentControl as ToolTipControl).ToolTipCanvas;
+                    }
+                    var monitor = ShowElement(canvas, mobj.Element, ElementSate.New, mobj.ListElementProperty);
+                    if (null != copyMonitor.ParentControl)
+                    {
+                        monitor.ParentControl = copyMonitor.ParentControl;
+                        monitor.DesignMode();
+                        monitor.AllowToolTip = false;
+                        monitor.ClearValue(Canvas.ZIndexProperty);
+                        if (null != monitor.AdornerLayer)
+                        {
+                            monitor.AdornerLayer.AllToolTip = false;
+                        }
+
+                        if (null != monitor.ScreenElement
+                            && null != copyMonitor.ParentControl.ScreenElement)
+                        {
+                            monitor.ScreenElement.ElementType = copyMonitor.ScreenElement.ElementType;
+                            monitor.ScreenElement.ScreenID = copyMonitor.ParentControl.ScreenElement.ElementID * -1;
+                        }
+                    }
                 }              
             }
         }
