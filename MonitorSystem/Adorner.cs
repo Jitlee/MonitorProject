@@ -489,7 +489,8 @@ namespace MonitorSystem
                 {
                     Debug.Assert(null != target.ScreenElement, "MonitorControl 的 ScreenElement 属性不能为null.");
                     var screenID = target.ScreenElement.ElementID * -1;
-                    LoadScreen._DataContext.Load<t_Element>(LoadScreen._DataContext.GetT_ElementsByScreenIDQuery(screenID), LoadToolTipCallback, null);
+                    //LoadScreen._DataContext.Load<t_Element>(LoadScreen._DataContext.GetT_ElementsByScreenIDQuery(screenID), LoadToolTipCallback, null);
+                    LoadToolTip(LoadScreen._DataContext.t_Elements.Where(el => el.ScreenID == screenID && el.ElementType == "ToolTip").ToList());
                 }
                 else if (toolTipControl.Visibility == Visibility.Collapsed)
                 {
@@ -530,22 +531,15 @@ namespace MonitorSystem
         /// 加载ToolTip子元素
         /// </summary>
         /// <param name="result"></param>
-        private void LoadToolTipCallback(LoadOperation<t_Element> result)
+        private void LoadToolTip(List<t_Element> elements)
         {
-            var target = _associatedElement as MonitorControl;
-            if (null != target && !result.HasError)
+            if (elements.Count() > 0)
             {
-                if (result.Entities.Count() > 0)
-                {
-                    Debug.Assert(null != target.ScreenElement, "MonitorControl 的 ScreenElement 属性不能为null.");
-                    var screenID = target.ScreenElement.ElementID * -1;
-                    LoadScreen._DataContext.Load<t_ElementProperty>(LoadScreen._DataContext.GetScreenElementPropertyQuery(screenID), LoadToolTipPropertyCallback, result.Entities);
-                }
-                else// if (Common.TipControlID != null)
-                {
-                    //CreateToolTip(Common.TipControlID);
-                    LoadScreen._DataContext.Load(LoadScreen._DataContext.GetT_ControlByTypeQuery(-1), LoadControlsByTypeCallback, null);
-                }
+                LoadToolTipProperty(elements);
+            }
+            else
+            {
+                LoadScreen._DataContext.Load(LoadScreen._DataContext.GetT_ControlByTypeQuery(-1), LoadControlsByTypeCallback, null);
             }
         }
 
@@ -572,6 +566,7 @@ namespace MonitorSystem
                     var toolTipControlElement = LoadScreen._instance.InitElement(t_control);
                     toolTipControlElement.Transparent = 100;
                     toolTipControlElement.ControlID = -9999;
+                    toolTipControlElement.ElementType = "ToolTip";
                     toolTipControlElement.ElementName = t_control.ControlName;
                     toolTipControl.ScreenElement = toolTipControlElement;
                     toolTipControlElement.Width = 300;
@@ -610,14 +605,12 @@ namespace MonitorSystem
         /// 加载ToolTip子元素属性
         /// </summary>
         /// <param name="result"></param>
-        private void LoadToolTipPropertyCallback(LoadOperation<t_ElementProperty> result)
+        private void LoadToolTipProperty(List<t_Element> elements)
         {
             var target = _associatedElement as MonitorControl;
-            if (null != target
-                && !result.HasError && result.UserState is IEnumerable<t_Element>)
+            if (null != target)
             {
                 target.IsToolTipLoaded = true;
-                var elements = result.UserState as IEnumerable<t_Element>;
                 var toolTipControlElement = elements.FirstOrDefault(t => t.ControlID == -9999);
                 if (null != toolTipControlElement)
                 {
@@ -626,7 +619,7 @@ namespace MonitorSystem
                     toolTipControl.Height = toolTipControlElement.Height.HasValue ? toolTipControlElement.Height.Value : 200d;
                     toolTipControl.SetValue(Canvas.ZIndexProperty, 10000);
                     toolTipControl.ScreenElement = toolTipControlElement;
-                    toolTipControl.ListElementProp = result.Entities.Where(p => p.ElementID == toolTipControlElement.ElementID).ToList();
+                    toolTipControl.ListElementProp = LoadScreen._DataContext.t_ElementProperties.Where(p => p.ElementID == toolTipControlElement.ElementID).ToList();
                     toolTipControl.ElementState = ElementSate.Save;
                     toolTipControl.SetPropertyValue();
                     toolTipControl.SetCommonPropertyValue();
@@ -643,7 +636,7 @@ namespace MonitorSystem
                     var childElements = elements.Where(t => t.ControlID != -9999);
                     foreach (var childElement in childElements)
                     {
-                        var poperties = result.Entities.Where(p => p.ElementID == childElement.ElementID).ToList();
+                        var poperties = LoadScreen._DataContext.t_ElementProperties.Where(p => p.ElementID == childElement.ElementID).ToList();
                         var monitorControl = LoadScreen._instance.ShowElement(toolTipControl.ToolTipCanvas, childElement, ElementSate.Save, poperties);
                         if (null != monitorControl)
                         {

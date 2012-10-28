@@ -95,6 +95,7 @@
           <Property Name="TotalLength" Type="float" />
           <Property Name="LevelNo" Type="int" />
           <Property Name="ComputeStr" Type="varchar" MaxLength="100" />
+          <Property Name="ElementType" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="t_Element_Library">
           <Key>
@@ -254,6 +255,12 @@
           <Parameter Name="newScreenID" Type="int" Mode="In" />
           <Parameter Name="oldScreenID" Type="int" Mode="In" />
         </Function>
+        <Function Name="P_GetElementPropertiesByScreenID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ScreenID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="P_GetElementsByScreenID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ScreenID" Type="int" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -276,6 +283,12 @@
           </FunctionImport>
           <EntitySet Name="GalleryClassification" EntityType="MonitorDemo2Model.t_GalleryClassification" />
           <EntitySet Name="t_Element_RealTimeLine" EntityType="MonitorDemo2Model.t_Element_RealTimeLine" />
+          <FunctionImport Name="P_GetElementsByScreenID" EntitySet="t_Element" ReturnType="Collection(MonitorDemo2Model.t_Element)">
+            <Parameter Name="ScreenID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="P_GetElementPropertiesByScreenID" EntitySet="t_ElementProperty" ReturnType="Collection(MonitorDemo2Model.t_ElementProperty)">
+            <Parameter Name="ScreenID" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="t_Control">
           <Key>
@@ -329,6 +342,7 @@
           <Property Type="Double" Name="TotalLength" />
           <Property Type="Int32" Name="LevelNo" />
           <Property Type="String" Name="ComputeStr" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ElementType" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="t_Element_Library">
           <Key>
@@ -517,6 +531,7 @@
           <EntitySetMapping Name="t_Element">
             <EntityTypeMapping TypeName="MonitorDemo2Model.t_Element">
               <MappingFragment StoreEntitySet="t_Element">
+                <ScalarProperty Name="ElementType" ColumnName="ElementType" />
                 <ScalarProperty Name="ComputeStr" ColumnName="ComputeStr" />
                 <ScalarProperty Name="LevelNo" ColumnName="LevelNo" />
                 <ScalarProperty Name="TotalLength" ColumnName="TotalLength" />
@@ -705,6 +720,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="P_GetElementsByScreenID" FunctionName="MonitorDemo2Model.Store.P_GetElementsByScreenID" />
+          <FunctionImportMapping FunctionImportName="P_GetElementPropertiesByScreenID" FunctionName="MonitorDemo2Model.Store.P_GetElementPropertiesByScreenID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

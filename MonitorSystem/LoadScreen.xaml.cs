@@ -244,6 +244,10 @@ namespace MonitorSystem
                         monitor.AllowToolTip = false;
                         monitor.AdornerLayer.AllToolTip = false;
                     }
+                    if (null != monitor.ScreenElement)
+                    {
+                        monitor.ScreenElement.ElementType = "ToolTip";
+                    }
                 }
                 else
                 {
@@ -262,6 +266,10 @@ namespace MonitorSystem
                             {
                                 monitor.AllowToolTip = false;
                                 monitor.AdornerLayer.AllToolTip = false;
+                            }
+                            if (null != monitor.ScreenElement)
+                            {
+                                monitor.ScreenElement.ElementType = "Background";
                             }
                             PropertyMain.Instance.ResetSelected();
                             return;
@@ -910,7 +918,7 @@ namespace MonitorSystem
                     case "BackgroundControl":
                         BackgroundControl backgroundControl = new BackgroundControl();
                         SetEletemt(canvas, backgroundControl, obj, eleStae, listObj);
-                        var childElements = _DataContext.t_Elements.Where(e => e.ScreenID == obj.ElementID).ToList();
+                        var childElements = _DataContext.t_Elements.Where(e => e.ScreenID == obj.ElementID * -1 && e.ElementType == "Background").ToList();
                         ShowElements(childElements, backgroundControl.BackgroundCanvas);
                         return backgroundControl;
                     //case "dlfh01"://电力符号
