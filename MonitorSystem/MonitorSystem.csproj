@@ -225,6 +225,7 @@
     <Compile Include="MonitorSystemGlobal\MonitorGrid.cs" />
     <Compile Include="MonitorSystemGlobal\MonitorRectangle.cs" />
     <Compile Include="Controls\PropertyGrid\ColorValueEditor.cs" />
+    <Compile Include="MonitorSystemGlobal\BackgroundControl.cs" />
     <Compile Include="Other\InputDilog.xaml.cs">
       <DependentUpon>InputDilog.xaml</DependentUpon>
     </Compile>

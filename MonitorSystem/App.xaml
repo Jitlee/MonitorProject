@@ -96,10 +96,6 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="local:Adorner">
                             <Grid>
-                                <Rectangle 
-    								StrokeDashArray="5,5"
-                                           Fill="#55FF0000"
-                                    Margin="4"/>
                                 <Rectangle x:Name="ContentAdorner"
     								Stroke="Black"
     								StrokeDashArray="5,5"

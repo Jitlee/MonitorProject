@@ -62,13 +62,45 @@ namespace MonitorSystem.MonitorSystemGlobal
             set { _pointPlace = value; PaintBorder(); }
         }
 
+        #region 是否打开
+
+        private static readonly DependencyProperty IsOpenProperty =
+           DependencyProperty.Register("IsOpen",
+           typeof(bool), typeof(ToolTipControl), new PropertyMetadata(false, IsOpenPropertyChanged));
+
+        public bool IsOpen
+        {
+            get { return (bool)GetValue(IsOpenProperty); }
+            set { SetValue(IsOpenProperty, value); SetAttrByName("IsOpen", value.ToString()); }
+        }
+
+        private static void IsOpenPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var element = d as ToolTipControl;
+            if (null != element)
+            {
+                element.OnIsOpenChanged((bool)e.OldValue, (bool)e.NewValue);
+            }
+        }
+
+        private void OnIsOpenChanged(bool oldValue, bool newValue)
+        {
+            this.Visibility = IsOpen ? Visibility.Visible : Visibility.Collapsed;
+            if (null != AdornerLayer)
+            {
+                AdornerLayer.IsOpen = newValue;
+            }
+        }
+
+        #endregion
+
         #region 填充颜色
 
-        [DefaultValue(""), Description("填充颜色"), Category("杂项")]
         private static readonly DependencyProperty FillProperty =
            DependencyProperty.Register("Fill",
            typeof(Color), typeof(ToolTipControl), new PropertyMetadata(Colors.White, FillPropertyChanged));
 
+        [DefaultValue(""), Description("填充颜色"), Category("杂项")]
         public Color Fill
         {
             get { return (Color)GetValue(FillProperty); }
@@ -93,11 +125,12 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         #region 边线颜色
 
-        [DefaultValue(""), Description("边线颜色"), Category("杂项")]
         private static readonly DependencyProperty StrokeProperty =
            DependencyProperty.Register("Stroke",
            typeof(Color), typeof(ToolTipControl), new PropertyMetadata(Colors.Black, StrokePropertyChanged));
 
+
+        [DefaultValue(""), Description("边线颜色"), Category("杂项")]
         public Color Stroke
         {
             get { return (Color)GetValue(StrokeProperty); }
@@ -122,11 +155,11 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         #region 边线粗细
 
-        [DefaultValue(""), Description("边线粗细"), Category("杂项")]
         private static readonly DependencyProperty StrokeThicknessProperty =
            DependencyProperty.Register("StrokeThickness",
            typeof(double), typeof(ToolTipControl), new PropertyMetadata(1d, StrokeThicknessPropertyChanged));
 
+        [DefaultValue(""), Description("边线粗细"), Category("杂项")]
         public double StrokeThickness
         {
             get { return (double)GetValue(StrokeThicknessProperty); }
@@ -152,11 +185,11 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         #region 圆角度
 
-        [DefaultValue(""), Description("圆角度"), Category("杂项")]
         private static readonly DependencyProperty CornerRadiusProperty =
            DependencyProperty.Register("CornerRadius",
            typeof(double), typeof(ToolTipControl), new PropertyMetadata(10d, CornerRadiusPropertyChanged));
 
+        [DefaultValue(""), Description("圆角度"), Category("杂项")]
         public double CornerRadius
         {
             get { return (double)GetValue(CornerRadiusProperty); }
@@ -181,11 +214,11 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         #region 圆角度
 
-        [DefaultValue(""), Description("透明度(0~100)"), Category("杂项")]
         private static readonly DependencyProperty TransparentProperty =
            DependencyProperty.Register("Transparent",
            typeof(double), typeof(ToolTipControl), new PropertyMetadata(100d, TransparentPropertyChanged));
 
+        [DefaultValue(""), Description("透明度(0~100)"), Category("杂项")]
         public double Transparent
         {
             get { return (double)GetValue(TransparentProperty); }
@@ -496,18 +529,27 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             if (!IsDesignMode)
             {
-                foreach (var child in this.ToolTipCanvas.Children.ToList())
-                {
-                    var monitor = child as MonitorControl;
-                    if (null != monitor && !monitor.IsDesignMode)
-                    {
-                        monitor.DesignMode();
-                    }
-                }
                 AdornerLayer = new Adorner(this);
                 //AdornerLayer.AllowMove = false;
                 AdornerLayer.Selected += OnSelected;
                 AdornerLayer.AllToolTip = false;
+                AdornerLayer.IsOpen = IsOpen;
+
+                //var children = ToolTipCanvas.Children.ToArray();
+                //foreach (var child in children)
+                //{
+                //    var monitor = child as MonitorControl;
+                //    if (null != monitor)
+                //    {
+                //        monitor.DesignMode();
+                //        monitor.AllowToolTip = false;
+                //        if (null != monitor.AdornerLayer)
+                //        {
+                //            monitor.AdornerLayer.AllToolTip = false;
+                //            monitor.AdornerLayer.SynchroHost();
+                //        }
+                //    }
+                //}
             }
         }
 
@@ -518,19 +560,14 @@ namespace MonitorSystem.MonitorSystemGlobal
                 AdornerLayer.Selected -= OnSelected;
                 AdornerLayer.Dispose();
                 AdornerLayer = null;
-                //foreach (UIElement child in ToolTipCanvas.Children)
-                //{
-                //    if (child is MonitorControl)
-                //    {
-                //        (child as MonitorControl).UnDesignMode();
-                //    }
-                //}
-                foreach (var child in this.ToolTipCanvas.Children.ToList())
+
+                var children = ToolTipCanvas.Children.ToArray();
+                foreach (var child in children)
                 {
                     var monitor = child as MonitorControl;
                     if (null != monitor && monitor.IsDesignMode)
                     {
-                        (child as MonitorControl).UnDesignMode();
+                        monitor.UnDesignMode();
                     }
                 }
             }

@@ -82,7 +82,7 @@ END
 
 declare @ControlNum int;--查询控件数量，用于判断是否已经添加
 set @ControlNum=0;
-declare @AddControl varchar(10);--添加控件名称
+declare @AddControl varchar(50);--添加控件名称
 
 --添加“电力符号001”
 set @AddControl='dlfh01'
@@ -1788,6 +1788,36 @@ begin
 	end
 end
 
+--BackgroundControl
+set @AddControl='BackgroundControl'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'2','Text.jpg','组态控件','背景框');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'Stroke','#FF000000','边线颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'StrokeThickness','1','边线粗细');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'CornerRadius','10','圆角度');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 4,'FromColor','#FF58504E','起始填充颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'ToColor','#FF262920','终止填充颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'FillDirection','0','填充方向');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'BackImage','','填充图片');
+	end
+end
 
 end
 
