@@ -46,19 +46,25 @@ namespace MonitorSystem.Other
         {
             InitializeComponent();
 
-            InitLine();
+            
+            
             this.Width = 400;
             this.Height = 400;
+          
+        }
+
+        private void InitBasicinfo()
+        {
             _CanvasGrid.SetValue(Canvas.ZIndexProperty, 2);
             _CanvasLine.SetValue(Canvas.ZIndexProperty, 10);
             _Canvas.Children.Add(_CanvasGrid);
             _Canvas.Children.Add(_CanvasLine);
             _Canvas.SizeChanged += new SizeChangedEventHandler(Canvas_SizeChanged);
             this.SizeChanged += new SizeChangedEventHandler(RealTime_SizeChanged);
-            PaintBasicInfo();
-
-            this.MouseLeftButtonUp+=new MouseButtonEventHandler(RealTimeT_MouseLeftButtonUp);
+            this.MouseLeftButtonUp += new MouseButtonEventHandler(RealTimeT_MouseLeftButtonUp);
         }
+        
+
         int Number = 0;
         DateTime PriTime = DateTime.Now;
         private void RealTimeT_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -307,6 +313,13 @@ namespace MonitorSystem.Other
                     YZMove = Convert.ToBoolean(value);
                 }
             }
+
+            //属性实例化完，加载直线
+            //把这个放在这里，因为，在图库里，双击也会弹出属性框来
+            InitBasicinfo();
+
+            InitLine();
+            PaintBasicInfo();
         }
 
         public override void SetCommonPropertyValue()
@@ -770,43 +783,56 @@ namespace MonitorSystem.Other
         /// </summary>
         private void InitLine()
         {
-            t_Element_RealTimeLine objLine = new t_Element_RealTimeLine();
-            objLine.ID = Guid.NewGuid().ToString();
-            objLine.LineName = "ll";
-            objLine.MaxValue = "100";
-            objLine.MinValue = "0";
-            objLine.LineCZ = 0;
-            objLine.LineCYZQLent = "1";
-            objLine.LineCYZQType = "ss";
-            objLine.TimeLen = 50;
-            objLine.TimeLenType = "ss";
-            objLine.LineShowType = 0;
-            objLine.LineStyle = 0;
-            objLine.LinePointBJ = 0;
-            objLine.ShowFormat = "mm:ss";
-            objLine.LineColor = Colors.Blue.ToString();
 
-            RealTimeLineOR obj = new RealTimeLineOR(objLine);
-            _listRealTimeLine.Add(obj);
+           var vLine= LoadScreen._DataContext.t_Element_RealTimeLines.Where(a => a.ElementID == this.ScreenElement.ElementID);
+           if (vLine.Count() > 0)
+           {
+               foreach (t_Element_RealTimeLine tLine in vLine)
+               {
+                   RealTimeLineOR obj = new RealTimeLineOR(tLine);
+                   _listRealTimeLine.Add(obj);
+               }
+           }
+           else
+           {
+               t_Element_RealTimeLine objLine = new t_Element_RealTimeLine();
+               objLine.ID = Guid.NewGuid().ToString();
+               objLine.LineName = "ll";
+               objLine.MaxValue = "100";
+               objLine.MinValue = "0";
+               objLine.LineCZ = 0;
+               objLine.LineCYZQLent = "1";
+               objLine.LineCYZQType = "ss";
+               objLine.TimeLen = 50;
+               objLine.TimeLenType = "ss";
+               objLine.LineShowType = 0;
+               objLine.LineStyle = 0;
+               objLine.LinePointBJ = 0;
+               objLine.ShowFormat = "mm:ss";
+               objLine.LineColor = Colors.Blue.ToString();
 
-            t_Element_RealTimeLine objLine1 = new t_Element_RealTimeLine();
-            objLine1.ID = Guid.NewGuid().ToString();
-            objLine1.LineName = "1211";
-            objLine1.MaxValue = "100";
-            objLine1.MinValue = "0";
-            objLine1.LineCZ = 0;
-            objLine1.LineCYZQLent = "1";
-            objLine1.LineCYZQType = "ss";
-            objLine1.TimeLen = 50;
-            objLine1.TimeLenType = "ss";
-            objLine1.LineShowType = 0;
-            objLine1.LineStyle = 0;
-            objLine1.LinePointBJ = 0;
-            objLine1.ShowFormat = "mm:ss";
-            objLine1.LineColor = Colors.Red.ToString();
+               RealTimeLineOR obj = new RealTimeLineOR(objLine);
+               _listRealTimeLine.Add(obj);
 
-            RealTimeLineOR obj1 = new RealTimeLineOR(objLine1);
-            _listRealTimeLine.Add(obj1);
+               //t_Element_RealTimeLine objLine1 = new t_Element_RealTimeLine();
+               //objLine1.ID = Guid.NewGuid().ToString();
+               //objLine1.LineName = "1211";
+               //objLine1.MaxValue = "100";
+               //objLine1.MinValue = "0";
+               //objLine1.LineCZ = 0;
+               //objLine1.LineCYZQLent = "1";
+               //objLine1.LineCYZQType = "ss";
+               //objLine1.TimeLen = 50;
+               //objLine1.TimeLenType = "ss";
+               //objLine1.LineShowType = 0;
+               //objLine1.LineStyle = 0;
+               //objLine1.LinePointBJ = 0;
+               //objLine1.ShowFormat = "mm:ss";
+               //objLine1.LineColor = Colors.Red.ToString();
+
+               //RealTimeLineOR obj1 = new RealTimeLineOR(objLine1);
+               //_listRealTimeLine.Add(obj1);
+           }
         }
         /// <summary>
         /// 显示曲线
