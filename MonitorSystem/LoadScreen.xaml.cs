@@ -688,6 +688,8 @@ namespace MonitorSystem
             
             //设置当前
             _CurrentScreen = _Screen;
+            
+            _DataContext.Load(_DataContext.GetT_Element_RealTimeLineQuery().Where(a => a.ScreenID == _Screen.ScreenID) );
             //加载元素
             _DataContext.Load(_DataContext.GetT_ElementsByScreenIDQuery(_Screen.ScreenID),
                 LoadElementCompleted, _Screen.ScreenID);
@@ -1293,6 +1295,27 @@ namespace MonitorSystem
                     #endregion
                 }
             }
+
+            //循环已添加的属性
+            foreach (t_Element mEle in ScreenAllElement)
+            {
+                var v = csScreen.FindName(mEle.ElementID.ToString());
+                if (v == null)
+                {
+                    _DataContext.t_Elements.Remove(mEle);
+                    //移出属性
+                    var vPro = _DataContext.t_ElementProperties.Where(a => a.ElementID == mEle.ElementID);
+                    if (vPro.Count() > 0)
+                    {
+                        List<t_ElementProperty> listEp = vPro.ToList();
+                        foreach (t_ElementProperty ep in listEp)
+                        {
+                            _DataContext.t_ElementProperties.Remove(ep);
+                        }
+                    }
+                }
+            }
+
 
             if (_DataContext.HasChanges)
             {
