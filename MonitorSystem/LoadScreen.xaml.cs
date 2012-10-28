@@ -659,6 +659,8 @@ namespace MonitorSystem
             
             //设置当前
             _CurrentScreen = _Screen;
+            
+            _DataContext.Load(_DataContext.GetT_Element_RealTimeLineQuery().Where(a => a.ScreenID == _Screen.ScreenID) );
             //加载元素
             _DataContext.Load(_DataContext.GetT_ElementQuery().Where(a => a.ScreenID == _Screen.ScreenID),
                 LoadElementCompleted, _Screen.ScreenID);
