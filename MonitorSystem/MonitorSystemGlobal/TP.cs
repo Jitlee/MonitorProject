@@ -62,6 +62,17 @@ namespace MonitorSystem.MonitorSystemGlobal
         }
 
         public override event EventHandler Selected;
+		
+		public override event EventHandler Unselected;
+
+		private void OnUnselected(object sender, EventArgs e)
+		{
+			if(null != Unselected)
+			{
+				Unselected(this, RoutedEventArgs.Empty);
+			}
+		}
+
         private Image _image = new Image();
 
         private static readonly DependencyProperty SourceProperty =

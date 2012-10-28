@@ -52,6 +52,17 @@ namespace MonitorSystem.Dlfh
         #region 公共
         #region 函数
         public override event EventHandler Selected;
+		
+		public override event EventHandler Unselected;
+
+		private void OnUnselected(object sender, EventArgs e)
+		{
+			if(null != Unselected)
+			{
+				Unselected(this, RoutedEventArgs.Empty);
+			}
+		}
+
         public override void UnDesignMode()
         {
             if (IsDesignMode)

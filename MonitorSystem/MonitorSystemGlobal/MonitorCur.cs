@@ -26,6 +26,17 @@ namespace MonitorSystem.MonitorSystemGlobal
             Content = _mElli;
         }
         public override event EventHandler Selected;
+		
+		public override event EventHandler Unselected;
+
+		private void OnUnselected(object sender, EventArgs e)
+		{
+			if(null != Unselected)
+			{
+				Unselected(this, RoutedEventArgs.Empty);
+			}
+		}
+
 
         #region 属性
         private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize","Translate", "Foreground","Transparent"

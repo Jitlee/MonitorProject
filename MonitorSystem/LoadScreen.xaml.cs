@@ -242,6 +242,7 @@ namespace MonitorSystem
                         && null != monitor.AdornerLayer)
                     {
                         monitor.AllowToolTip = false;
+                        monitor.ClearValue(Canvas.ZIndexProperty);
                         monitor.AdornerLayer.AllToolTip = false;
                     }
                     if (null != monitor.ScreenElement)
@@ -261,10 +262,13 @@ namespace MonitorSystem
                             var position = backgrondControl.GetPosition();
                             // 添加到ToolTipControl区域
                             var monitor = AddSelectControlElement(backgrondControl.BackgroundCanvas, width, height, left - position.X, top - position.Y);
+
+                            monitor.ParentControl = backgrondControl;
                             if (null != monitor
                                 && null != monitor.AdornerLayer)
                             {
                                 monitor.AllowToolTip = false;
+                                monitor.ClearValue(Canvas.ZIndexProperty);
                                 monitor.AdornerLayer.AllToolTip = false;
                             }
                             if (null != monitor.ScreenElement)
@@ -770,12 +774,16 @@ namespace MonitorSystem
             tbWait.IsBusy = false;
         }
 
-        private void ShowElements(List<t_Element> lsitElement, Canvas canvas)
+        private void ShowElements(List<t_Element> lsitElement, Canvas canvas, MonitorControl parentContol = null)
         {
             foreach (t_Element el in lsitElement)
             {
                 var list = _DataContext.t_ElementProperties.Where(a => a.ElementID == el.ElementID);
-                ShowElement(canvas, el, ElementSate.Save, list.ToList());
+                var monitorControl = ShowElement(canvas, el, ElementSate.Save, list.ToList());
+                if (null != monitorControl && null != parentContol)
+                {
+                    monitorControl.ParentControl = parentContol;
+                }
                 ScreenAllElement.Add(el);
             }
         }
@@ -929,7 +937,7 @@ namespace MonitorSystem
                         BackgroundControl backgroundControl = new BackgroundControl();
                         SetEletemt(canvas, backgroundControl, obj, eleStae, listObj);
                         var childElements = _DataContext.t_Elements.Where(e => e.ScreenID == obj.ElementID * -1 && e.ElementType == "Background").ToList();
-                        ShowElements(childElements, backgroundControl.BackgroundCanvas);
+                        ShowElements(childElements, backgroundControl.BackgroundCanvas, backgroundControl);
                         return backgroundControl;
                     //case "dlfh01"://电力符号
                     //    Dlfh01 dlfh01Ctrl = new Dlfh01();
@@ -1310,24 +1318,27 @@ namespace MonitorSystem
                 var v = csScreen.FindName(mEle.ElementID.ToString());
                 if (v == null)
                 {
-                    _DataContext.t_Elements.Remove(mEle);
-
-                    var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == mEle.ElementID).ToList();
-                    foreach (var removeProperty in removeProperties)
+                    if (_DataContext.t_Elements.Contains(mEle))
                     {
-                        _DataContext.t_ElementProperties.Remove(removeProperty);
+                        _DataContext.t_Elements.Remove(mEle);
+
+                        var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == mEle.ElementID).ToList();
+                        foreach (var removeProperty in removeProperties)
+                        {
+                            _DataContext.t_ElementProperties.Remove(removeProperty);
+                        }
+
+                        // 删除子 RealTimeT 属性
+                        var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == mEle.ElementID);
+
+                        foreach (var removeElement in removeElements)
+                        {
+                            _DataContext.t_Element_RealTimeLines.Remove(removeElement);
+                        }
+
+                        RemoveOldProperties(mEle, "ToolTip"); // 删除ToolTip子元素及其子元素的属性
+                        RemoveOldProperties(mEle, "Background"); // 删除Background子元素及其子元素的属性
                     }
-
-                    // 删除子 RealTimeT 属性
-                    var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == mEle.ElementID);
-
-                    foreach (var removeElement in removeElements)
-                    {
-                        _DataContext.t_Element_RealTimeLines.Remove(removeElement);
-                    }
-
-                    RemoveOldProperties(mEle, "ToolTip"); // 删除ToolTip子元素及其子元素的属性
-                    RemoveOldProperties(mEle, "Background"); // 删除Background子元素及其子元素的属性
                 }
             }
 

@@ -13,12 +13,15 @@ using MonitorSystem.Web.Moldes;
 using System.ComponentModel;
 using MonitorSystem.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Data;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
     public partial class BackgroundControl : MonitorControl
     {
+        private Grid _layoutRoot = new Grid();
         private Border _border = new Border();
+        private Button _toolTipButton = new Button();
         public readonly Canvas BackgroundCanvas = new Canvas();
 
         #region 属性
@@ -226,6 +229,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         private void OnStrokeThicknessChanged(double oldValue, double newValue)
         {
             _border.BorderThickness = new Thickness(newValue);
+            BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(newValue, newValue, Width - newValue * 2d, Height - newValue * 2d), RadiusX = CornerRadius, RadiusY = CornerRadius };
         }
 
         #endregion
@@ -255,7 +259,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         private void OnCornerRadiusChanged(double oldValue, double newValue)
         {
             this._border.CornerRadius = new CornerRadius(newValue);
-            BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(0d, 0d, Width, Height), RadiusX = CornerRadius, RadiusY = CornerRadius };
+            BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(StrokeThickness, StrokeThickness, Width - StrokeThickness * 2d, Height - StrokeThickness * 2d), RadiusX = CornerRadius, RadiusY = CornerRadius };
         }
 
         #endregion
@@ -293,20 +297,32 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public BackgroundControl()
         {
-            _border.Child = BackgroundCanvas;
             _border.CornerRadius = new CornerRadius(CornerRadius);
             _border.BorderThickness = new Thickness(StrokeThickness);
             _border.BorderBrush = new SolidColorBrush(Stroke);
+            _toolTipButton.Style = Application.Current.Resources["ImageButtonStyle"] as Style;
+            _layoutRoot.Children.Add(_border);
+            _layoutRoot.Children.Add(BackgroundCanvas);
+            _layoutRoot.Children.Add(_toolTipButton);
             UpdateBackground();
-            Content = _border;
+            Content = _layoutRoot;
             Background = new SolidColorBrush(Colors.Red);
             this.SizeChanged += BackgroundControl_SizeChanged;
             this.Selected += BackgroundControl_Selected;
+            _toolTipButton.Click += ToolTipButton_Click;
+        }
+
+        private void ToolTipButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (null != AdornerLayer)
+            {
+                AdornerLayer.ToggleToolTip();
+            }
         }
 
         private void BackgroundControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(0d,0d, e.NewSize.Width, e.NewSize.Height), RadiusX = CornerRadius, RadiusY = CornerRadius };
+            BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(StrokeThickness, StrokeThickness, e.NewSize.Width - 2d * StrokeThickness, e.NewSize.Height - 2d * StrokeThickness), RadiusX = CornerRadius, RadiusY = CornerRadius };
         }
 
         private void BackgroundControl_Selected(object sender, EventArgs e)
@@ -347,10 +363,14 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             if (!IsDesignMode)
             {
+                this._border.IsHitTestVisible = false;
                 AdornerLayer = new Adorner(this);
+                this.SetValue(Canvas.ZIndexProperty, 10000);
+
                 //AdornerLayer.AllowMove = false;
                 AdornerLayer.Selected += OnSelected;
-                //AdornerLayer.AllToolTip = false;
+                AdornerLayer.Unselected += OnUnselected;
+                AdornerLayer.AllToolTip = false;
 
                 var children = BackgroundCanvas.Children.ToArray();
                 foreach (var child in children)
@@ -360,6 +380,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                     {
                         monitor.DesignMode();
                         monitor.AllowToolTip = false;
+                        monitor.ClearValue(Canvas.ZIndexProperty);
                         if (null != monitor.AdornerLayer)
                         {
                             monitor.AdornerLayer.AllToolTip = false;
@@ -373,7 +394,10 @@ namespace MonitorSystem.MonitorSystemGlobal
         {
             if (IsDesignMode)
             {
+                this._border.IsHitTestVisible = true;
+                this.ClearValue(Canvas.ZIndexProperty);
                 AdornerLayer.Selected -= OnSelected;
+                AdornerLayer.Unselected -= OnUnselected;
                 AdornerLayer.Dispose();
                 AdornerLayer = null;
 
@@ -391,6 +415,11 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private void OnSelected(object sender, EventArgs e)
         {
+            //this.SetValue(Canvas.ZIndexProperty, 10000);
+            if (AllowToolTip)
+            {
+                _toolTipButton.Visibility = Visibility.Visible;
+            }
             if (null != Selected)
             {
                 Selected(this, RoutedEventArgs.Empty);
@@ -410,6 +439,19 @@ namespace MonitorSystem.MonitorSystemGlobal
         }
 
         public override event EventHandler Selected;
+		
+		public override event EventHandler Unselected;
+
+		private void OnUnselected(object sender, EventArgs e)
+		{
+            //this.ClearValue(Canvas.ZIndexProperty);
+            _toolTipButton.Visibility = Visibility.Collapsed;
+			if(null != Unselected)
+			{
+				Unselected(this, RoutedEventArgs.Empty);
+			}
+		}
+
 
         public override void SetPropertyValue()
         {

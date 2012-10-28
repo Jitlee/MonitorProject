@@ -95,6 +95,17 @@ namespace MonitorSystem.ZTControls
         }
 
         public override event EventHandler Selected;
+		
+		public override event EventHandler Unselected;
+
+		private void OnUnselected(object sender, EventArgs e)
+		{
+			if(null != Unselected)
+			{
+				Unselected(this, RoutedEventArgs.Empty);
+			}
+		}
+
 
         public override void SetPropertyValue()
         {
