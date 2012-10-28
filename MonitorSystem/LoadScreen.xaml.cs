@@ -681,7 +681,8 @@ namespace MonitorSystem
             //设置当前
             _CurrentScreen = _Screen;
             
-            _DataContext.Load(_DataContext.GetT_Element_RealTimeLineQuery().Where(a => a.ScreenID == _Screen.ScreenID) );
+            _DataContext.Load(_DataContext.GetT_Element_RealTimeLineQuery().Where(a => a.ScreenID == _Screen.ScreenID)
+                , LoadElementRealtimeLineCompleted, null);
             //加载元素
             _DataContext.Load(_DataContext.GetT_ElementsByScreenIDQuery(_Screen.ScreenID),
                 LoadElementCompleted, _Screen.ScreenID);
@@ -729,6 +730,13 @@ namespace MonitorSystem
             }
             _DataContext.Load(_DataContext.GetScreenElementPropertyQuery(Convert.ToInt32(result.UserState)),
                 LoadElementPropertiesCompleted, result.UserState);
+        }
+
+        private void LoadElementRealtimeLineCompleted(LoadOperation<t_Element_RealTimeLine> result)
+        {
+           //int Count= result.Entities.Count();
+           //MessageBox.Show(Count.ToString());
+            //暂未做处理
         }
        
         /// <summary>

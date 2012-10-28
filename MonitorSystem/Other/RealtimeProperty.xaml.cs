@@ -284,10 +284,18 @@ namespace MonitorSystem.Other
                     {
                         _RealTimeData.ListRealTimeLine.Remove(_line);
                         _RealTimeData._CanvasLine.Children.Remove(_line.PolyLine);
+                        if (_RealTimeData.ElementState == MonitorSystemGlobal.ElementSate.Save)
+                        {
+                            var v = LoadScreen._DataContext.t_Element_RealTimeLines.Where(a => a.ID == obj.ID);
+                            if (v.Count() == 1)
+                            {
+                                LoadScreen._DataContext.t_Element_RealTimeLines.Remove(v.First());
+                            }
+                        }
                     }
                 }
             }
-
+            //修改、添加
             foreach (t_Element_RealTimeLine obj in ListEletement)
             {
                 RealTimeLineOR _line = GetRealLine(obj);
@@ -299,6 +307,12 @@ namespace MonitorSystem.Other
                 {
                     RealTimeLineOR _data = new RealTimeLineOR(obj);
                     _RealTimeData.ListRealTimeLine.Add(_data);
+                    if (_RealTimeData.ElementState == MonitorSystemGlobal.ElementSate.Save)
+                    {
+                        obj.ScreenID = _RealTimeData.ScreenElement.ScreenID.Value;
+                        obj.ElementID = _RealTimeData.ScreenElement.ElementID;
+                        LoadScreen._DataContext.t_Element_RealTimeLines.Add(obj);
+                    }
                 }
             }
         }
@@ -320,7 +334,7 @@ namespace MonitorSystem.Other
             SaveDate();
             AdminLine();
             _RealTimeData.PaintBasicInfo();
-            //MessageBox.Show(_RealTimeData.ListRealTimeLine[0].LineInfo.LineName);
+            
             this.DialogResult = true;
         }
 
