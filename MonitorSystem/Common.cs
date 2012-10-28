@@ -237,6 +237,34 @@ namespace MonitorSystem
             };
         }
 
+        public static t_Element_RealTimeLine Clone(this t_Element_RealTimeLine source)
+        {
+            return new t_Element_RealTimeLine()
+            {
+                ChannelNo = source.ChannelNo,
+                ComputeStr = source.ComputeStr,
+                DeviceID = source.DeviceID,
+                ElementID = source.ElementID,
+                ID = source.ID,
+                LineColor = source.LineColor,
+                LineCYZQLent = source.LineCYZQLent,
+                LineCYZQType = source.LineCYZQType,
+                LineCZ = source.LineCZ,
+                LineName = source.LineName,
+                LinePointBJ=  source.LinePointBJ,
+                LineShowType = source.LineShowType,
+                LineStyle = source.LineStyle,
+                LineType = source.LineType,
+                MaxValue = source.MaxValue,
+                MinValue = source.MinValue,
+                ScreenID = source.ScreenID,
+                ShowFormat = source.ShowFormat,
+                TimeLen = source.TimeLen,
+                TimeLenType = source.TimeLenType,
+                ValueDecimal  = source.ValueDecimal
+            };
+        }
+
         //private static AutoResetEvent _autoReset = new AutoResetEvent(false);
 
         //private static t_Control _tipControl = null;
