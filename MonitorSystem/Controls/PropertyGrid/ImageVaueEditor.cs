@@ -19,7 +19,8 @@ namespace MonitorSystem.Controls
         private Grid _grid = new Grid();
         private Image _image = new Image() { Height = 16d, Width = 16d, HorizontalAlignment = HorizontalAlignment.Center };
         private TextBox _text = new TextBox();
-        private Button _button = new Button() { Width = 30 };
+        private Button _broswerButton = new Button() { Width = 30, Content="..." };
+        private Button _removeButton = new Button() { Width = 30, Content="×", IsEnabled = false, Foreground=new SolidColorBrush(Colors.Red) };
         private ImageAttribute _attribute;
         private readonly static Brush _grayBrush = new SolidColorBrush(Colors.Gray);
         private readonly static Brush _blackBrush = new SolidColorBrush(Colors.Black);
@@ -41,14 +42,18 @@ namespace MonitorSystem.Controls
             _grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1d, GridUnitType.Auto) });
             _grid.ColumnDefinitions.Add(new ColumnDefinition());
             _grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1d, GridUnitType.Auto) });
+            _grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1d, GridUnitType.Auto) });
             _grid.Children.Add(_image);
             _grid.Children.Add(_text);
-            _grid.Children.Add(_button);
+            _grid.Children.Add(_removeButton);
+            _grid.Children.Add(_broswerButton);
             _image.SetValue(Grid.ColumnProperty, 0);
             _text.SetValue(Grid.ColumnProperty, 1);
-            _button.SetValue(Grid.ColumnProperty, 2);
+            _removeButton.SetValue(Grid.ColumnProperty, 2);
+            _broswerButton.SetValue(Grid.ColumnProperty, 3);
             this.Content = _grid;
-            _button.Click += Button_Click;
+            _broswerButton.Click += BroswerButton_Click;
+            _removeButton.Click += RemoveButton_Click;
             UpdateLabel(property.Value);
             _text.GotFocus += Text_GotFocus;
             _text.Background = null;
@@ -71,6 +76,7 @@ namespace MonitorSystem.Controls
                 var url = value.ToString();
                 _text.Text = url;
                 _text.Foreground = _blackBrush;
+                _removeButton.IsEnabled = true;
                 if (!string.IsNullOrEmpty(_attribute.Path))
                 {
                     // 文件夹固定
@@ -82,6 +88,7 @@ namespace MonitorSystem.Controls
             {
                 _text.Text = "没有图片";
                 _text.Foreground = _grayBrush;
+                _removeButton.IsEnabled = false;
             }
             _image.Source = ImagePathConverter.Convert(value);
         }
@@ -99,9 +106,15 @@ namespace MonitorSystem.Controls
             }
         }
 
-        void Button_Click(object sender, RoutedEventArgs e)
+        void BroswerButton_Click(object sender, RoutedEventArgs e)
         {
             new ImagesBrowseWindow(ImageSelection_Changed, _attribute.Path, _attribute.OnlyImage).Show();
+        }
+
+        void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            Property.Value = string.Empty;
+            _removeButton.IsEnabled = false;
         }
 
         private void ImageSelection_Changed(FileModel file)
@@ -115,6 +128,7 @@ namespace MonitorSystem.Controls
             {
                 Property.Value = file.Url.Remove(0, _attribute.Path.Length).Trim('/');
             }
+            _removeButton.IsEnabled = true;
         }
     }
 }

@@ -236,7 +236,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             {
                 if (!IsToolTipLoaded)
                 {
-                    if (null == ToolTipControl)
+                    if (null == ToolTipControl && null != _ScreenElement)
                     {
                         var screenID = _ScreenElement.ElementID * -1;
                         LoadScreen._DataContext.Load<t_Element>(LoadScreen._DataContext.GetT_ElementsByScreenIDQuery(screenID), LoadToolTipCallback, null);

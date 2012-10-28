@@ -101,6 +101,34 @@ namespace MonitorSystem
         //    }
         //}
 
+        #region 是否打开
+
+        private static readonly DependencyProperty IsOpenProperty =
+           DependencyProperty.Register("IsOpen",
+           typeof(bool), typeof(Adorner), new PropertyMetadata(true, IsOpenPropertyChanged));
+
+        public bool IsOpen
+        {
+            get { return (bool)GetValue(IsOpenProperty); }
+            set { SetValue(IsOpenProperty, value); }
+        }
+
+        private static void IsOpenPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var element = d as Adorner;
+            if (null != element)
+            {
+                element.OnIsOpenChanged((bool)e.OldValue, (bool)e.NewValue);
+            }
+        }
+
+        private void OnIsOpenChanged(bool oldValue, bool newValue)
+        {
+            IsHitTestVisible = newValue;
+        }
+
+        #endregion
+
         private static readonly DependencyProperty IsLockScaleProperty =
             DependencyProperty.Register("IsLockScale",
             typeof(bool), typeof(Adorner), new PropertyMetadata(default(bool), new PropertyChangedCallback(IsLockScale_Changed)));
@@ -374,11 +402,16 @@ namespace MonitorSystem
                 var button = _associatedElement as ButtonBase;
                 button.IsTabStop = _associatedIsTapStop;
             }
-
-            _contentAdorner.MouseLeftButtonDown -= BackgroundAdorner_MouseLeftButtonDown;
-            _contentAdorner.MouseLeftButtonUp -= BackgroundAdorner_MouseLeftButtonUp;
+            if (null != _contentAdorner)
+            {
+                _contentAdorner.MouseLeftButtonDown -= BackgroundAdorner_MouseLeftButtonDown;
+                _contentAdorner.MouseLeftButtonUp -= BackgroundAdorner_MouseLeftButtonUp;
+            }
             //_associatedElement.SizeChanged -= _associatedElement_SizeChanged;
-            _parent.Children.Remove(this);
+            if (null != _parent)
+            {
+                _parent.Children.Remove(this);
+            }
             GC.SuppressFinalize(this);
         }
 
@@ -460,21 +493,33 @@ namespace MonitorSystem
                 }
                 else if (toolTipControl.Visibility == Visibility.Collapsed)
                 {
-                    toolTipControl.Visibility = Visibility.Visible;
                     if (null != CurrenttoolTipControl)
                     {
-                        CurrenttoolTipControl.Visibility = Visibility.Collapsed;
+                        CurrenttoolTipControl.IsOpen = false;
                     }
                     CurrenttoolTipControl = toolTipControl;
 
                     ToolTipLayoutUpdate();
-                    toolTipControl.AdornerLayer._contentAdorner.Visibility = Visibility.Visible;
+                    toolTipControl.IsOpen = true;
+                    var children = toolTipControl.ToolTipCanvas.Children.ToArray();
+                    foreach (var child in children)
+                    {
+                        var monitor = child as MonitorControl;
+                        if (null != monitor)
+                        {
+                            monitor.AllowToolTip = false;
+                            monitor.DesignMode();
+                            if (null != monitor.AdornerLayer)
+                            {
+                                monitor.AdornerLayer.AllToolTip = false;
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    toolTipControl.Visibility = Visibility.Collapsed;
+                    toolTipControl.IsOpen = false;
                     CurrenttoolTipControl = null;
-                    toolTipControl.AdornerLayer._contentAdorner.Visibility = Visibility.Collapsed;
                 }
             }
         }
@@ -553,9 +598,10 @@ namespace MonitorSystem
                     target.ToolTipControl = toolTipControl;
                     if (null != CurrenttoolTipControl)
                     {
-                        CurrenttoolTipControl.Visibility = Visibility.Collapsed;
+                        CurrenttoolTipControl.IsOpen = false;
                     }
                     CurrenttoolTipControl = toolTipControl;
+                    toolTipControl.IsOpen = true;
                 }
             }
         }
@@ -590,15 +636,24 @@ namespace MonitorSystem
                     target.ToolTipControl = toolTipControl;
                     if (null != CurrenttoolTipControl)
                     {
-                        CurrenttoolTipControl.Visibility = Visibility.Collapsed;
+                        CurrenttoolTipControl.IsOpen = false;
                     }
                     CurrenttoolTipControl = toolTipControl;
+                    toolTipControl.IsOpen = true;
                     var childElements = elements.Where(t => t.ControlID != -9999);
                     foreach (var childElement in childElements)
                     {
                         var poperties = result.Entities.Where(p => p.ElementID == childElement.ElementID).ToList();
                         var monitorControl = LoadScreen._instance.ShowElement(toolTipControl.ToolTipCanvas, childElement, ElementSate.Save, poperties);
-                        monitorControl.DesignMode();
+                        if (null != monitorControl)
+                        {
+                            monitorControl.DesignMode();
+                            monitorControl.AllowToolTip = false;
+                            if (null != monitorControl.AdornerLayer)
+                            {
+                                monitorControl.AdornerLayer.AllToolTip = false;
+                            }
+                        }
                     }
                 }
             }
@@ -623,10 +678,12 @@ namespace MonitorSystem
         {
             try
             {
-                var beginPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(0.0, 0.0));
+                //var beginPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(0.0, 0.0));
+                var beginX = Canvas.GetLeft(_associatedElement);
+                var beginY = Canvas.GetTop(_associatedElement);
                 var endPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(_associatedElement.ActualWidth, this._associatedElement.ActualHeight));
-                this._contentAdorner.SetValue(FrameworkElement.WidthProperty, endPoint.X - beginPoint.X);
-                this._contentAdorner.SetValue(FrameworkElement.HeightProperty, endPoint.Y - beginPoint.Y);
+                this._contentAdorner.SetValue(FrameworkElement.WidthProperty, endPoint.X - beginX);
+                this._contentAdorner.SetValue(FrameworkElement.HeightProperty, endPoint.Y - beginY);
                 var margin = (Thickness)_contentAdorner.GetValue(FrameworkElement.MarginProperty);
                 _offsetLeft = margin.Left;
                 _offsetTop = margin.Top;
@@ -1062,10 +1119,13 @@ namespace MonitorSystem
 
         public void SynchroHost()
         {
-            _contentAdorner.SetValue(FrameworkElement.WidthProperty, _associatedElement.ActualWidth);
-            _contentAdorner.SetValue(FrameworkElement.HeightProperty, _associatedElement.ActualHeight);
-            this.SetValue(Canvas.LeftProperty, (double)_associatedElement.GetValue(Canvas.LeftProperty) - _offsetLeft);
-            this.SetValue(Canvas.TopProperty, (double)_associatedElement.GetValue(Canvas.TopProperty) - _offsetTop);
+            if (null != _contentAdorner)
+            {
+                _contentAdorner.SetValue(FrameworkElement.WidthProperty, _associatedElement.ActualWidth);
+                _contentAdorner.SetValue(FrameworkElement.HeightProperty, _associatedElement.ActualHeight);
+                this.SetValue(Canvas.LeftProperty, (double)_associatedElement.GetValue(Canvas.LeftProperty) - _offsetLeft);
+                this.SetValue(Canvas.TopProperty, (double)_associatedElement.GetValue(Canvas.TopProperty) - _offsetTop);
+            }
         }
 
         public void SynchroHost(double x, double y)

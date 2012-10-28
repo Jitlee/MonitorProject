@@ -442,7 +442,7 @@ namespace MonitorSystem.ZTControls
             //{
             //    myTemp = (minValue + maxValue) / 2;
             //}
-            circle = this.Width / 4;
+            circle = finalSize.Width / 4;
             if (cudu >= circle)
             {
                 cudu = 2 * circle / 3;
