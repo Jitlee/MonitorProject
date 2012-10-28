@@ -222,6 +222,7 @@ namespace MonitorSystem
                 TotalLength = source.TotalLength,
                 Transparent = source.Transparent,
                 TxtInfo = source.TxtInfo,
+                ElementType = source.ElementType,
             };
         }
 
