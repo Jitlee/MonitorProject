@@ -115,7 +115,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         #endregion
 
-        #region 填充终止颜色
+        #region 背景图片
 
         private static readonly DependencyProperty BackImageProperty =
            DependencyProperty.Register("BackImage",
@@ -274,7 +274,12 @@ namespace MonitorSystem.MonitorSystemGlobal
         public double Transparent
         {
             get { return (double)GetValue(TransparentProperty); }
-            set { SetValue(TransparentProperty, value); SetAttrByName("Transparent", value.ToString()); }
+            set
+            {
+                SetValue(TransparentProperty, value);
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = (int)value;
+            }
         }
 
         private static void TransparentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -330,7 +335,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             var cornerRadius = CornerRadius - StrokeThickness / 2d;
             if (cornerRadius < 0d)
             {
-                cornerRadius = 0;
+                cornerRadius = 0d;
             }
             BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(StrokeThickness, StrokeThickness, Width - 2d * StrokeThickness, Height - 2d * StrokeThickness), RadiusX = cornerRadius, RadiusY = cornerRadius };
         }
