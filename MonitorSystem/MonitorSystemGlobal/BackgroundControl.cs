@@ -32,7 +32,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty FromColorProperty =
            DependencyProperty.Register("FromColor",
-           typeof(Color), typeof(BackgroundControl), new PropertyMetadata(Colors.White, FromColorPropertyChanged));
+           typeof(Color), typeof(BackgroundControl), new PropertyMetadata(Color.FromArgb(0xff, 0x58, 0x50, 0x4E), FromColorPropertyChanged));
 
         [DefaultValue(""), Description("开始颜色"), Category("背景")]
         public Color FromColor
@@ -61,7 +61,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty ToColorProperty =
            DependencyProperty.Register("ToColor",
-           typeof(Color), typeof(BackgroundControl), new PropertyMetadata(Colors.White, ToColorPropertyChanged));
+           typeof(Color), typeof(BackgroundControl), new PropertyMetadata(Color.FromArgb(0xff, 0x26, 0x29, 0x20), ToColorPropertyChanged));
 
         [DefaultValue(""), Description("终止颜色"), Category("背景")]
         public Color ToColor
@@ -179,7 +179,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty StrokeProperty =
            DependencyProperty.Register("Stroke",
-           typeof(Color), typeof(BackgroundControl), new PropertyMetadata(Colors.Black, StrokePropertyChanged));
+           typeof(Color), typeof(BackgroundControl), new PropertyMetadata(Color.FromArgb(0xff, 0x64, 0x64, 0x64), StrokePropertyChanged));
 
         [DefaultValue(""), Description("边线颜色"), Category("杂项")]
         public Color Stroke
@@ -229,7 +229,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         private void OnStrokeThicknessChanged(double oldValue, double newValue)
         {
             _border.BorderThickness = new Thickness(newValue);
-            BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(newValue, newValue, Width - newValue * 2d, Height - newValue * 2d), RadiusX = CornerRadius, RadiusY = CornerRadius };
+            UpdateClip();
         }
 
         #endregion
@@ -259,7 +259,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         private void OnCornerRadiusChanged(double oldValue, double newValue)
         {
             this._border.CornerRadius = new CornerRadius(newValue);
-            BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(StrokeThickness, StrokeThickness, Width - StrokeThickness * 2d, Height - StrokeThickness * 2d), RadiusX = CornerRadius, RadiusY = CornerRadius };
+            UpdateClip();
         }
 
         #endregion
@@ -322,7 +322,17 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private void BackgroundControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(StrokeThickness, StrokeThickness, e.NewSize.Width - 2d * StrokeThickness, e.NewSize.Height - 2d * StrokeThickness), RadiusX = CornerRadius, RadiusY = CornerRadius };
+            UpdateClip();
+        }
+
+        private void UpdateClip()
+        {
+            var cornerRadius = CornerRadius - StrokeThickness / 2d;
+            if (cornerRadius < 0d)
+            {
+                cornerRadius = 0;
+            }
+            BackgroundCanvas.Clip = new RectangleGeometry() { Rect = new Rect(StrokeThickness, StrokeThickness, Width - 2d * StrokeThickness, Height - 2d * StrokeThickness), RadiusX = cornerRadius, RadiusY = cornerRadius };
         }
 
         private void BackgroundControl_Selected(object sender, EventArgs e)
