@@ -241,7 +241,9 @@ namespace MonitorSystem
                     if (null != monitor
                         && null != monitor.AdornerLayer)
                     {
+                        monitor.ParentControl = Adorner.CurrenttoolTipControl;
                         monitor.AllowToolTip = false;
+                        monitor.ClearValue(Canvas.ZIndexProperty);
                         monitor.AdornerLayer.AllToolTip = false;
                     }
                     if (null != monitor.ScreenElement)
@@ -261,10 +263,13 @@ namespace MonitorSystem
                             var position = backgrondControl.GetPosition();
                             // 添加到ToolTipControl区域
                             var monitor = AddSelectControlElement(backgrondControl.BackgroundCanvas, width, height, left - position.X, top - position.Y);
+
+                            monitor.ParentControl = backgrondControl;
                             if (null != monitor
                                 && null != monitor.AdornerLayer)
                             {
                                 monitor.AllowToolTip = false;
+                                monitor.ClearValue(Canvas.ZIndexProperty);
                                 monitor.AdornerLayer.AllToolTip = false;
                             }
                             if (null != monitor.ScreenElement)
@@ -770,12 +775,22 @@ namespace MonitorSystem
             tbWait.IsBusy = false;
         }
 
-        private void ShowElements(List<t_Element> lsitElement, Canvas canvas)
+        private void ShowElements(List<t_Element> lsitElement, Canvas canvas, MonitorControl parentContol = null)
         {
             foreach (t_Element el in lsitElement)
             {
                 var list = _DataContext.t_ElementProperties.Where(a => a.ElementID == el.ElementID);
-                ShowElement(canvas, el, ElementSate.Save, list.ToList());
+                var monitorControl = ShowElement(canvas, el, ElementSate.Save, list.ToList());
+                if (null != monitorControl && null != parentContol)
+                {
+                    monitorControl.ParentControl = parentContol;
+                    monitorControl.AllowToolTip = false;
+                    monitorControl.ClearValue(Canvas.ZIndexProperty);
+                    if (null != monitorControl.AdornerLayer)
+                    {
+                        monitorControl.AdornerLayer.AllToolTip = false;
+                    }
+                }
                 ScreenAllElement.Add(el);
             }
         }
@@ -929,7 +944,7 @@ namespace MonitorSystem
                         BackgroundControl backgroundControl = new BackgroundControl();
                         SetEletemt(canvas, backgroundControl, obj, eleStae, listObj);
                         var childElements = _DataContext.t_Elements.Where(e => e.ScreenID == obj.ElementID * -1 && e.ElementType == "Background").ToList();
-                        ShowElements(childElements, backgroundControl.BackgroundCanvas);
+                        ShowElements(childElements, backgroundControl.BackgroundCanvas, backgroundControl);
                         return backgroundControl;
                     //case "dlfh01"://电力符号
                     //    Dlfh01 dlfh01Ctrl = new Dlfh01();
@@ -1213,6 +1228,7 @@ namespace MonitorSystem
             //循环所有存在元素
             listMonitorAddElement.Clear();
             listMonitorModifiedElement.Clear();
+            tbWait.IsBusy = true;
             for (int i = 0; i < csScreen.Children.Count; i++)
             {
                 var m = csScreen.Children[i] as MonitorControl;
@@ -1310,24 +1326,27 @@ namespace MonitorSystem
                 var v = csScreen.FindName(mEle.ElementID.ToString());
                 if (v == null)
                 {
-                    _DataContext.t_Elements.Remove(mEle);
-
-                    var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == mEle.ElementID).ToList();
-                    foreach (var removeProperty in removeProperties)
+                    if (_DataContext.t_Elements.Contains(mEle))
                     {
-                        _DataContext.t_ElementProperties.Remove(removeProperty);
+                        _DataContext.t_Elements.Remove(mEle);
+
+                        var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == mEle.ElementID).ToList();
+                        foreach (var removeProperty in removeProperties)
+                        {
+                            _DataContext.t_ElementProperties.Remove(removeProperty);
+                        }
+
+                        // 删除子 RealTimeT 属性
+                        var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == mEle.ElementID);
+
+                        foreach (var removeElement in removeElements)
+                        {
+                            _DataContext.t_Element_RealTimeLines.Remove(removeElement);
+                        }
+
+                        RemoveOldProperties(mEle, "ToolTip"); // 删除ToolTip子元素及其子元素的属性
+                        RemoveOldProperties(mEle, "Background"); // 删除Background子元素及其子元素的属性
                     }
-
-                    // 删除子 RealTimeT 属性
-                    var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == mEle.ElementID);
-
-                    foreach (var removeElement in removeElements)
-                    {
-                        _DataContext.t_Element_RealTimeLines.Remove(removeElement);
-                    }
-
-                    RemoveOldProperties(mEle, "ToolTip"); // 删除ToolTip子元素及其子元素的属性
-                    RemoveOldProperties(mEle, "Background"); // 删除Background子元素及其子元素的属性
                 }
             }
 
@@ -1398,6 +1417,7 @@ namespace MonitorSystem
                 EntityChangeSet obj = result.ChangeSet;
                 if (obj.AddedEntities.Count == 0 && listMonitorModifiedElement.Count == 0)
                 {
+                    tbWait.IsBusy = false;
                     if (IsShowSaveToot)
                     {
                         IsShowSaveToot = false;
@@ -1479,6 +1499,10 @@ namespace MonitorSystem
                     _DataContext.SubmitChanges(SubmitPropertyCompleted, null);
                 }
             }
+            else
+            {
+                tbWait.IsBusy = false;
+            }
         }
         /// <summary>
         /// 提交元素完成
@@ -1486,6 +1510,7 @@ namespace MonitorSystem
         /// <param name="result"></param>
         private void SubmitPropertyCompleted(SubmitOperation result)
         {
+            tbWait.IsBusy = false;
             //AddElementNumber++;
             //if (listMonitorAddElement.Count <= AddElementNumber)
             if(!result.HasError)
@@ -1586,13 +1611,41 @@ namespace MonitorSystem
             ModifierKeys keys = ModifierKeys.Control;
             if (keys == ModifierKeys.Control && e.Key == Key.V)
             {
-                if (CoptyObj != null)
+                var copyMonitor = CoptyObj as MonitorControl;
+                if (copyMonitor != null && !(copyMonitor is ToolTipControl))
                 {
                     ScreenElementObj mobj = new MonitorSystemGlobal.ScreenElementObj();
-                    int mWidth = Convert.ToInt16(CoptyObj.Width);
-                    int mHeight = Convert.ToInt16(CoptyObj.Height);
-                    mobj.ElementClone((MonitorControl)CoptyObj, mWidth, mHeight);
-                    ShowElement(csScreen, mobj.Element, ElementSate.New, mobj.ListElementProperty);
+                    int mWidth = Convert.ToInt16(copyMonitor.Width);
+                    int mHeight = Convert.ToInt16(copyMonitor.Height);
+                    mobj.ElementClone(copyMonitor, mWidth, mHeight);
+                    var canvas = csScreen;
+                    if (copyMonitor.ParentControl is BackgroundControl)
+                    {
+                        canvas = (copyMonitor.ParentControl as BackgroundControl).BackgroundCanvas;
+                    }
+                    else if (copyMonitor.ParentControl is ToolTipControl)
+                    {
+                        canvas = (copyMonitor.ParentControl as ToolTipControl).ToolTipCanvas;
+                    }
+                    var monitor = ShowElement(canvas, mobj.Element, ElementSate.New, mobj.ListElementProperty);
+                    if (null != copyMonitor.ParentControl)
+                    {
+                        monitor.ParentControl = copyMonitor.ParentControl;
+                        monitor.DesignMode();
+                        monitor.AllowToolTip = false;
+                        monitor.ClearValue(Canvas.ZIndexProperty);
+                        if (null != monitor.AdornerLayer)
+                        {
+                            monitor.AdornerLayer.AllToolTip = false;
+                        }
+
+                        if (null != monitor.ScreenElement
+                            && null != copyMonitor.ParentControl.ScreenElement)
+                        {
+                            monitor.ScreenElement.ElementType = copyMonitor.ScreenElement.ElementType;
+                            monitor.ScreenElement.ScreenID = copyMonitor.ParentControl.ScreenElement.ElementID * -1;
+                        }
+                    }
                 }              
             }
         }

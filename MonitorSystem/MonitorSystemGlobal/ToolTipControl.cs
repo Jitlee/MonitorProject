@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Windows;
@@ -8,9 +9,10 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MonitorSystem.Controls;
 using MonitorSystem.Web.Moldes;
-using System.ComponentModel;
 
 namespace MonitorSystem.MonitorSystemGlobal
 {
@@ -31,30 +33,6 @@ namespace MonitorSystem.MonitorSystemGlobal
         public MonitorControl Target { get; private set; }
 
         #region 属性
-
-        //private static readonly DependencyProperty PointPlaceProperty =
-        //   DependencyProperty.Register("PointPlace",
-        //   typeof(PointPlace), typeof(ToolTipControl), new PropertyMetadata(PointPlacePropertyChanged));
-
-        //public PointPlace PointPlace
-        //{
-        //    get { return (PointPlace)GetValue(PointPlaceProperty); }
-        //    set { SetValue(PointPlaceProperty, value); }
-        //}
-
-        //private static void PointPlacePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    var element = d as ToolTipControl;
-        //    if (null != element)
-        //    {
-        //        element.OnPointPlaceChanged();
-        //    }
-        //}
-
-        //private void OnPointPlaceChanged()
-        //{
-        //    PaintBorder();
-        //}
 
         public PointPlace PointPlace
         {
@@ -94,31 +72,148 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         #endregion
 
-        #region 填充颜色
+        #region 填充开始颜色
 
-        private static readonly DependencyProperty FillProperty =
-           DependencyProperty.Register("Fill",
-           typeof(Color), typeof(ToolTipControl), new PropertyMetadata(Colors.White, FillPropertyChanged));
+        private static readonly DependencyProperty FromColorProperty =
+           DependencyProperty.Register("FromColor",
+           typeof(Color), typeof(ToolTipControl), new PropertyMetadata(Color.FromArgb(0xff, 0x58, 0x50, 0x4E), FromColorPropertyChanged));
 
-        [DefaultValue(""), Description("填充颜色"), Category("杂项")]
-        public Color Fill
+        [DefaultValue(""), Description("开始颜色"), Category("背景")]
+        public Color FromColor
         {
-            get { return (Color)GetValue(FillProperty); }
-            set { SetValue(FillProperty, value); SetAttrByName("Fill", value.ToString()); }
+            get { return (Color)GetValue(FromColorProperty); }
+            set { SetValue(FromColorProperty, value); SetAttrByName("FromColor", value.ToString()); }
         }
 
-        private static void FillPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void FromColorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var element = d as ToolTipControl;
             if (null != element)
             {
-                element.OnFillChanged((Color)e.OldValue, (Color)e.NewValue);
+                element.OnFromColorChanged((Color)e.OldValue, (Color)e.NewValue);
             }
         }
 
-        private void OnFillChanged(Color oldValue, Color newValue)
+        private void OnFromColorChanged(Color oldValue, Color newValue)
         {
-            this._borderPath.Fill = new SolidColorBrush(newValue);
+            UpdateBackground();
+        }
+
+        #endregion
+
+        #region 填充终止颜色
+
+        private static readonly DependencyProperty ToColorProperty =
+           DependencyProperty.Register("ToColor",
+           typeof(Color), typeof(ToolTipControl), new PropertyMetadata(Color.FromArgb(0xff, 0x26, 0x29, 0x20), ToColorPropertyChanged));
+
+        [DefaultValue(""), Description("终止颜色"), Category("背景")]
+        public Color ToColor
+        {
+            get { return (Color)GetValue(ToColorProperty); }
+            set { SetValue(ToColorProperty, value); SetAttrByName("ToColor", value.ToString()); }
+        }
+
+        private static void ToColorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var element = d as ToolTipControl;
+            if (null != element)
+            {
+                element.OnToColorChanged((Color)e.OldValue, (Color)e.NewValue);
+            }
+        }
+
+        private void OnToColorChanged(Color oldValue, Color newValue)
+        {
+            UpdateBackground();
+        }
+
+        #endregion
+
+        #region 颜色方向
+
+        private static readonly DependencyProperty ColorDirectionProperty =
+           DependencyProperty.Register("ColorDirection",
+           typeof(Orientation), typeof(ToolTipControl), new PropertyMetadata(Orientation.Horizontal, ColorDirectionPropertyChanged));
+
+        [DefaultValue(""), Description("颜色方向"), Category("背景")]
+        public Orientation ColorDirection
+        {
+            get { return (Orientation)GetValue(ColorDirectionProperty); }
+            set { SetValue(ColorDirectionProperty, value); SetAttrByName("ColorDirection", value == Orientation.Horizontal ? 0 : 1); }
+        }
+
+        private static void ColorDirectionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var element = d as ToolTipControl;
+            if (null != element)
+            {
+                element.OnColorDirectionChanged((Orientation)e.OldValue, (Orientation)e.NewValue);
+            }
+        }
+
+        private void OnColorDirectionChanged(Orientation oldValue, Orientation newValue)
+        {
+            UpdateBackground();
+        }
+
+        #endregion
+
+        #region 背景图片
+
+        private static readonly DependencyProperty BackImageProperty =
+           DependencyProperty.Register("BackImage",
+           typeof(string), typeof(ToolTipControl), new PropertyMetadata(BackImagePropertyChanged));
+
+        [ImageAttribute("PIC")]
+        [DefaultValue(""), Description("背景图片"), Category("背景")]
+        public string BackImage
+        {
+            get { return (string)GetValue(BackImageProperty); }
+            set { SetValue(BackImageProperty, value); SetAttrByName("BackImage", value.ToString()); }
+        }
+
+        private static void BackImagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var element = d as ToolTipControl;
+            if (null != element)
+            {
+                element.OnBackImageChanged((string)e.OldValue, (string)e.NewValue);
+            }
+        }
+
+        private void OnBackImageChanged(string oldValue, string newValue)
+        {
+            UpdateBackground();
+        }
+
+        private void UpdateBackground()
+        {
+            if (string.IsNullOrEmpty(BackImage))
+            {
+                var brush = new LinearGradientBrush();
+                if (ColorDirection == Orientation.Horizontal)
+                {
+                    brush.StartPoint = new Point();
+                    brush.EndPoint = new Point(0d, 1d);
+                }
+                else
+                {
+                    brush.StartPoint = new Point();
+                    brush.EndPoint = new Point(1d, 0d);
+                }
+                brush.GradientStops.Add(new GradientStop() { Offset = 0d, Color = FromColor });
+                brush.GradientStops.Add(new GradientStop() { Offset = 1d, Color = ToColor });
+                _borderPath.Fill = brush;
+            }
+            else
+            {
+                _borderPath.Fill = new ImageBrush()
+                {
+                    Stretch = Stretch.UniformToFill,
+                    ImageSource = new BitmapImage(new Uri(Application.Current.Host.Source, string.Concat("../Upload/Pic/", BackImage.Trim('/'))))
+                };
+            }
         }
 
         #endregion
@@ -127,8 +222,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private static readonly DependencyProperty StrokeProperty =
            DependencyProperty.Register("Stroke",
-           typeof(Color), typeof(ToolTipControl), new PropertyMetadata(Colors.Black, StrokePropertyChanged));
-
+           typeof(Color), typeof(ToolTipControl), new PropertyMetadata(Color.FromArgb(0xff, 0x64, 0x64, 0x64), StrokePropertyChanged));
 
         [DefaultValue(""), Description("边线颜色"), Category("杂项")]
         public Color Stroke
@@ -148,7 +242,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private void OnStrokeChanged(Color oldValue, Color newValue)
         {
-            this._borderPath.Stroke = new SolidColorBrush(newValue);
+            _borderPath.Stroke = new SolidColorBrush(newValue);
         }
 
         #endregion
@@ -177,7 +271,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private void OnStrokeThicknessChanged(double oldValue, double newValue)
         {
-            this._borderPath.StrokeThickness = newValue;
+            _borderPath.StrokeThickness = StrokeThickness;
             PaintBorder();
         }
 
@@ -201,18 +295,18 @@ namespace MonitorSystem.MonitorSystemGlobal
             var element = d as ToolTipControl;
             if (null != element)
             {
-                element.OnCornerRadiusChanged();
+                element.OnCornerRadiusChanged((double)e.OldValue, (double)e.NewValue);
             }
         }
 
-        private void OnCornerRadiusChanged()
+        private void OnCornerRadiusChanged(double oldValue, double newValue)
         {
             PaintBorder();
         }
 
         #endregion
 
-        #region 圆角度
+        #region 透明度
 
         private static readonly DependencyProperty TransparentProperty =
            DependencyProperty.Register("Transparent",
@@ -222,7 +316,12 @@ namespace MonitorSystem.MonitorSystemGlobal
         public double Transparent
         {
             get { return (double)GetValue(TransparentProperty); }
-            set { SetValue(TransparentProperty, value); SetAttrByName("Transparent", value.ToString()); }
+            set
+            {
+                SetValue(TransparentProperty, value);
+                if (ScreenElement != null)
+                    ScreenElement.Transparent = (int)value;
+            }
         }
 
         private static void TransparentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -250,7 +349,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             _borderPathGeometry.Figures.Add(_borderPathFigure);
             _borderPath.IsHitTestVisible = false;
             _borderPath.Data = _borderPathGeometry;
-            _borderPath.Fill = new SolidColorBrush(Fill);
+            UpdateBackground();
             _borderPath.Stroke = new SolidColorBrush(Stroke);
             _borderPath.StrokeThickness = StrokeThickness;
             _borderCanvas.Children.Add(_borderPath);
@@ -271,7 +370,6 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private void ToolTipCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //ToolTipCanvas.Clip = new RectangleGeometry() { Rect = new Rect(new Point(), e.NewSize) };
             PaintBorder();
         }
 
@@ -381,175 +479,162 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         private void PaintBorder()
         {
-            _borderPathFigure.Segments.Clear();
-            var pointPlace = PointPlace;
-            var cornerRadius = CornerRadius;
-            var width = this.Width;
-            var height = this.Height;
-            var size = new Size(cornerRadius, cornerRadius);
-            switch (pointPlace)
+            try
             {
-                case MonitorSystemGlobal.PointPlace.TopLeft:
-                    _borderPathFigure.StartPoint = new Point();
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH * 2d / 3d + POINT_HEIGHT, POINT_HEIGHT * 0.75d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, POINT_HEIGHT * 0.75d) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, POINT_HEIGHT * 0.75d + cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH / 3d + cornerRadius, height) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(POINT_WIDTH / 3d, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH / 3d, POINT_HEIGHT * 1.25d) });
-                    ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = cornerRadius, RadiusY = cornerRadius, Rect = new Rect(0, 0, width - POINT_WIDTH / 3d, height - POINT_HEIGHT * 0.75d) };
-                    ToolTipCanvas.Margin = new Thickness(POINT_WIDTH / 3d, POINT_HEIGHT * 0.75d, 0d, 0d);
-                    break;
-                case MonitorSystemGlobal.PointPlace.TopMiddle:
-                    _borderPathFigure.StartPoint = new Point(cornerRadius, POINT_HEIGHT);
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point((width - POINT_WIDTH) / 2d, POINT_HEIGHT) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width / 2d, 0d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point((width + POINT_WIDTH) / 2d, POINT_HEIGHT) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, POINT_HEIGHT) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, POINT_HEIGHT + cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius + POINT_HEIGHT) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, POINT_HEIGHT), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = cornerRadius, RadiusY = cornerRadius, Rect = new Rect(0d, 0d, width, height - POINT_HEIGHT) };
-                    ToolTipCanvas.Margin = new Thickness(0, POINT_HEIGHT, 0d, 0d);
-                    break;
-                case MonitorSystemGlobal.PointPlace.RightTop:
-                    _borderPathFigure.StartPoint = new Point(cornerRadius, POINT_HEIGHT * 0.75d);
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH * 2d / 3d - POINT_HEIGHT, POINT_HEIGHT * 0.75d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, 0d) });
-                    //BorderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - POINT_WIDTH / 3d, POINT_HEIGHT * 0.75 + cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH / 3d, POINT_HEIGHT * 1.25d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH / 3d, height - cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius - POINT_WIDTH / 3d, height), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius + POINT_HEIGHT * 0.75d) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, POINT_HEIGHT * 0.75d), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = cornerRadius, RadiusY = cornerRadius, Rect = new Rect(0d, 0d, width - POINT_WIDTH / 3d, height - POINT_HEIGHT * 0.75d) };
-                    ToolTipCanvas.Margin = new Thickness(0d, POINT_HEIGHT * 0.75d, 0d, 0d);
-                    break;
-                case MonitorSystemGlobal.PointPlace.RightMiddle:
-                    _borderPathFigure.StartPoint = new Point(cornerRadius, 0d);
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_HEIGHT - cornerRadius, 0d) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - POINT_HEIGHT, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_HEIGHT, (height - POINT_WIDTH) / 2d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height / 2d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_HEIGHT, (height + POINT_WIDTH) / 2d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_HEIGHT, height - cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius - POINT_HEIGHT, height), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, 0), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = cornerRadius, RadiusY = cornerRadius, Rect = new Rect(0d, 0d, width - POINT_HEIGHT, height) };
-                    ToolTipCanvas.Margin = new Thickness(0d, 0d, POINT_HEIGHT, 0d);
-                    break;
-                case MonitorSystemGlobal.PointPlace.BottomRight:
-                    _borderPathFigure.StartPoint = new Point(cornerRadius, 0d);
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius - POINT_WIDTH / 3d, 0d) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - POINT_WIDTH / 3d, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH / 3d, height - POINT_HEIGHT * 1.25d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH * 2d / 3d - POINT_HEIGHT, height - POINT_HEIGHT * 0.75d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height - POINT_HEIGHT * 0.75d) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius - POINT_HEIGHT * 0.75d), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, 0), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = cornerRadius, RadiusY = cornerRadius, Rect = new Rect(0d, 0d, width - POINT_WIDTH / 3d, height - POINT_HEIGHT * 0.75d) };
-                    ToolTipCanvas.Margin = new Thickness(0d, 0d, 0d, 0d);
-                    break;
-                case MonitorSystemGlobal.PointPlace.BottomMiddle:
-                    _borderPathFigure.StartPoint = new Point(cornerRadius, 0d);
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, 0d) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius - POINT_HEIGHT) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height - POINT_HEIGHT), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point((width + POINT_WIDTH) / 2d, height - POINT_HEIGHT) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width / 2d, height) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point((width - POINT_WIDTH) / 2d, height - POINT_HEIGHT) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height - POINT_HEIGHT) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius - POINT_HEIGHT), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, 0), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = cornerRadius, RadiusY = cornerRadius, Rect = new Rect(0d, 0d, width, height - POINT_HEIGHT) };
-                    ToolTipCanvas.Margin = new Thickness(0d, 0d, 0d, 0d);
-                    break;
-                case MonitorSystemGlobal.PointPlace.LeftBottom:
-                    _borderPathFigure.StartPoint = new Point(cornerRadius + POINT_WIDTH / 3d, 0d);
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, 0d) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius - POINT_HEIGHT * 0.75d) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height - POINT_HEIGHT * 0.75d), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH * 2d / 3d + POINT_HEIGHT, height - POINT_HEIGHT * 0.75d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, height) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH / 3d, height - POINT_HEIGHT * 1.25d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH / 3d, cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius + POINT_WIDTH / 3d, 0d), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = cornerRadius, RadiusY = cornerRadius, Rect = new Rect(0, 0, width - POINT_WIDTH / 3d, height - POINT_HEIGHT * 0.75d) };
-                    ToolTipCanvas.Margin = new Thickness(POINT_WIDTH / 3d, 0d, 0d, 0d);
-                    break;
-                case MonitorSystemGlobal.PointPlace.LeftMiddle:
-                    _borderPathFigure.StartPoint = new Point(cornerRadius + POINT_HEIGHT, 0d);
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, 0d) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius + POINT_HEIGHT, height) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(POINT_HEIGHT, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_HEIGHT, (height + POINT_WIDTH) / 2d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0, height / 2d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_HEIGHT, (height - POINT_WIDTH) / 2d) });
-                    _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_HEIGHT, cornerRadius) });
-                    _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius + POINT_HEIGHT, 0), Size = size, SweepDirection = SweepDirection.Clockwise });
-                    ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = cornerRadius, RadiusY = cornerRadius, Rect = new Rect(0d, 0d, width - POINT_HEIGHT, height) };
-                    ToolTipCanvas.Margin = new Thickness(POINT_HEIGHT, 0d, 0d, 0d);
-                    break;
+                _borderPathFigure.Segments.Clear();
+                var pointPlace = PointPlace;
+                var cornerRadius = CornerRadius;
+                var width = this.Width;
+                var height = this.Height;
+                var size = new Size(cornerRadius, cornerRadius);
+                var thickness = StrokeThickness / 2d; // 估算值,不知道为什么
+
+                var radius = CornerRadius - StrokeThickness / 2d;
+                if (radius < 0d)
+                {
+                    radius = 0d;
+                }
+
+                switch (pointPlace)
+                {
+                    case MonitorSystemGlobal.PointPlace.TopLeft:
+                        _borderPathFigure.StartPoint = new Point();
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH * 2d / 3d + POINT_HEIGHT, POINT_HEIGHT * 0.75d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, POINT_HEIGHT * 0.75d) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, POINT_HEIGHT * 0.75d + cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH / 3d + cornerRadius, height) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(POINT_WIDTH / 3d, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH / 3d, POINT_HEIGHT * 1.25d) });
+                        ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = radius, RadiusY = radius, Rect = new Rect(thickness, thickness, width - POINT_WIDTH / 3d - 2d * thickness, height - POINT_HEIGHT * 0.75d - 2d * thickness) };
+                        ToolTipCanvas.Margin = new Thickness(POINT_WIDTH / 3d, POINT_HEIGHT * 0.75d, 0d, 0d);
+                        break;
+                    case MonitorSystemGlobal.PointPlace.TopMiddle:
+                        _borderPathFigure.StartPoint = new Point(cornerRadius, POINT_HEIGHT);
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point((width - POINT_WIDTH) / 2d, POINT_HEIGHT) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width / 2d, 0d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point((width + POINT_WIDTH) / 2d, POINT_HEIGHT) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, POINT_HEIGHT) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, POINT_HEIGHT + cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius + POINT_HEIGHT) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, POINT_HEIGHT), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = radius, RadiusY = radius, Rect = new Rect(thickness, thickness, width - 2d * thickness, height - POINT_HEIGHT - 2d * thickness) };
+                        ToolTipCanvas.Margin = new Thickness(0, POINT_HEIGHT, 0d, 0d);
+                        break;
+                    case MonitorSystemGlobal.PointPlace.RightTop:
+                        _borderPathFigure.StartPoint = new Point(cornerRadius, POINT_HEIGHT * 0.75d);
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH * 2d / 3d - POINT_HEIGHT, POINT_HEIGHT * 0.75d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, 0d) });
+                        //BorderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - POINT_WIDTH / 3d, POINT_HEIGHT * 0.75 + cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH / 3d, POINT_HEIGHT * 1.25d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH / 3d, height - cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius - POINT_WIDTH / 3d, height), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius + POINT_HEIGHT * 0.75d) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, POINT_HEIGHT * 0.75d), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = radius, RadiusY = radius, Rect = new Rect(thickness, thickness, width - POINT_WIDTH / 3d - 2d * thickness, height - POINT_HEIGHT * 0.75d - 2d * thickness) };
+                        ToolTipCanvas.Margin = new Thickness(0d, POINT_HEIGHT * 0.75d, 0d, 0d);
+                        break;
+                    case MonitorSystemGlobal.PointPlace.RightMiddle:
+                        _borderPathFigure.StartPoint = new Point(cornerRadius, 0d);
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_HEIGHT - cornerRadius, 0d) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - POINT_HEIGHT, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_HEIGHT, (height - POINT_WIDTH) / 2d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height / 2d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_HEIGHT, (height + POINT_WIDTH) / 2d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_HEIGHT, height - cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius - POINT_HEIGHT, height), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, 0), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = radius, RadiusY = radius, Rect = new Rect(thickness, thickness, width - POINT_HEIGHT - 2d * thickness, height - 2d * thickness) };
+                        ToolTipCanvas.Margin = new Thickness(0d, 0d, POINT_HEIGHT, 0d);
+                        break;
+                    case MonitorSystemGlobal.PointPlace.BottomRight:
+                        _borderPathFigure.StartPoint = new Point(cornerRadius, 0d);
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius - POINT_WIDTH / 3d, 0d) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - POINT_WIDTH / 3d, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH / 3d, height - POINT_HEIGHT * 1.25d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - POINT_WIDTH * 2d / 3d - POINT_HEIGHT, height - POINT_HEIGHT * 0.75d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height - POINT_HEIGHT * 0.75d) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius - POINT_HEIGHT * 0.75d), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, 0), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = radius, RadiusY = radius, Rect = new Rect(thickness, thickness, width - POINT_WIDTH / 3d - 2d * thickness, height - POINT_HEIGHT * 0.75d - 2d * thickness) };
+                        ToolTipCanvas.Margin = new Thickness(0d, 0d, 0d, 0d);
+                        break;
+                    case MonitorSystemGlobal.PointPlace.BottomMiddle:
+                        _borderPathFigure.StartPoint = new Point(cornerRadius, 0d);
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, 0d) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius - POINT_HEIGHT) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height - POINT_HEIGHT), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point((width + POINT_WIDTH) / 2d, height - POINT_HEIGHT) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width / 2d, height) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point((width - POINT_WIDTH) / 2d, height - POINT_HEIGHT) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius, height - POINT_HEIGHT) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(0d, height - cornerRadius - POINT_HEIGHT), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius, 0), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = radius, RadiusY = radius, Rect = new Rect(thickness, thickness, width - 2d * thickness, height - POINT_HEIGHT - 2d * thickness) };
+                        ToolTipCanvas.Margin = new Thickness(0d, 0d, 0d, 0d);
+                        break;
+                    case MonitorSystemGlobal.PointPlace.LeftBottom:
+                        _borderPathFigure.StartPoint = new Point(cornerRadius + POINT_WIDTH / 3d, 0d);
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, 0d) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius - POINT_HEIGHT * 0.75d) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height - POINT_HEIGHT * 0.75d), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH * 2d / 3d + POINT_HEIGHT, height - POINT_HEIGHT * 0.75d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0d, height) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH / 3d, height - POINT_HEIGHT * 1.25d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_WIDTH / 3d, cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius + POINT_WIDTH / 3d, 0d), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = radius, RadiusY = radius, Rect = new Rect(thickness, thickness, width - POINT_WIDTH / 3d - 2d * thickness, height - POINT_HEIGHT * 0.75d - 2d * thickness) };
+                        ToolTipCanvas.Margin = new Thickness(POINT_WIDTH / 3d, 0d, 0d, 0d);
+                        break;
+                    case MonitorSystemGlobal.PointPlace.LeftMiddle:
+                        _borderPathFigure.StartPoint = new Point(cornerRadius + POINT_HEIGHT, 0d);
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width - cornerRadius, 0d) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width, cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(width, height - cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(width - cornerRadius, height), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(cornerRadius + POINT_HEIGHT, height) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(POINT_HEIGHT, height - cornerRadius), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_HEIGHT, (height + POINT_WIDTH) / 2d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(0, height / 2d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_HEIGHT, (height - POINT_WIDTH) / 2d) });
+                        _borderPathFigure.Segments.Add(new LineSegment() { Point = new Point(POINT_HEIGHT, cornerRadius) });
+                        _borderPathFigure.Segments.Add(new ArcSegment() { Point = new Point(cornerRadius + POINT_HEIGHT, 0), Size = size, SweepDirection = SweepDirection.Clockwise });
+                        ToolTipCanvas.Clip = new RectangleGeometry() { RadiusX = radius, RadiusY = radius, Rect = new Rect(thickness, thickness, width - POINT_HEIGHT - 2d * thickness, height - 2d * thickness) };
+                        ToolTipCanvas.Margin = new Thickness(POINT_HEIGHT, 0d, 0d, 0d);
+                        break;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Property error occured at ToolTipControl!");
             }
         }
 
         #region 重载
-
-        //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        //{
-        //    if (IsDesignMode && null != AdornerLayer)
-        //    {
-        //        AdornerLayer.IsSelected = true;
-        //        AdornerLayer.OnSelected();
-        //    }
-        //    e.Handled = true;
-        //    base.OnMouseLeftButtonDown(e);
-        //}
 
         public override void DesignMode()
         {
             if (!IsDesignMode)
             {
                 AdornerLayer = new Adorner(this);
-                //AdornerLayer.AllowMove = false;
                 AdornerLayer.Selected += OnSelected;
                 AdornerLayer.AllToolTip = false;
                 AdornerLayer.IsOpen = IsOpen;
-
-                //var children = ToolTipCanvas.Children.ToArray();
-                //foreach (var child in children)
-                //{
-                //    var monitor = child as MonitorControl;
-                //    if (null != monitor)
-                //    {
-                //        monitor.DesignMode();
-                //        monitor.AllowToolTip = false;
-                //        if (null != monitor.AdornerLayer)
-                //        {
-                //            monitor.AdornerLayer.AllToolTip = false;
-                //            monitor.AdornerLayer.SynchroHost();
-                //        }
-                //    }
-                //}
             }
         }
 
@@ -578,13 +663,6 @@ namespace MonitorSystem.MonitorSystemGlobal
             if (null != Selected)
             {
                 Selected(this, RoutedEventArgs.Empty);
-                //foreach (var child in ToolTipCanvas.Children)
-                //{
-                //    if (child is MonitorControl)
-                //    {
-                //        (child as MonitorControl).DesignMode();
-                //    }
-                //}
             }
         }
 
@@ -594,6 +672,17 @@ namespace MonitorSystem.MonitorSystemGlobal
         }
 
         public override event EventHandler Selected;
+		
+		public override event EventHandler Unselected;
+
+		private void OnUnselected(object sender, EventArgs e)
+		{
+			if(null != Unselected)
+			{
+				Unselected(this, RoutedEventArgs.Empty);
+			}
+		}
+
 
         public override void SetPropertyValue()
         {
@@ -602,23 +691,42 @@ namespace MonitorSystem.MonitorSystemGlobal
                 string name = pro.PropertyName.ToUpper();
                 string value = pro.PropertyValue;
 
-                if (name == "Fill".ToUpper())
+                if (name == "FromColor".ToUpper())
                 {
-                    this._borderPath.Fill = new SolidColorBrush(Common.StringToColor(value));
+                    FromColor = Common.StringToColor(value);
+                }
+                else if (name == "ToColor".ToUpper())
+                {
+                    ToColor = Common.StringToColor(value);
+                }
+                else if (name == "FillDirection".ToUpper())
+                {
+                    int dirctionValue;
+                    if (int.TryParse(value, out dirctionValue))
+                    {
+                        ColorDirection = dirctionValue == 0 ? Orientation.Horizontal : Orientation.Vertical;
+                    }
+                    else
+                    {
+                        ColorDirection = Orientation.Horizontal;
+                    }
+                }
+                else if (name == "BackImage".ToUpper())
+                {
+                    BackImage = value;
                 }
                 else if (name == "Stroke".ToUpper())
                 {
-                    this._borderPath.Stroke = new SolidColorBrush(Common.StringToColor(value));
+                    Stroke = Common.StringToColor(value);
                 }
                 else if (name == "StrokeThickness".ToUpper())
                 {
-                    this._borderPath.StrokeThickness = Convert.ToDouble(value);
+                    StrokeThickness = Convert.ToDouble(value);
                 }
-                //else if (name == "CornerRadius".ToUpper())
-                //{
-
-                //}
-                PaintBorder();
+                else if (name == "CornerRadius".ToUpper())
+                {
+                    CornerRadius = Convert.ToDouble(value);
+                }
             }
         }
 
@@ -631,7 +739,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             this.Height = (double)ScreenElement.Height;
         }
 
-        private string[] m_BrowsableProperties = new string[] { "Width", "Height", "Fill", "Stroke", "StrokeThickness", "Transparent", "CornerRadius" };
+        private string[] m_BrowsableProperties = new string[] { "Width", "Height", "FromColor", "ToColor", "ColorDirection", "BackImage", "Stroke", "StrokeThickness", "Transparent", "CornerRadius" };
         public override string[] BrowsableProperties
         {
             get

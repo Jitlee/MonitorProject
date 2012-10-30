@@ -34,6 +34,7 @@ namespace MonitorSystem
     {
         private static Adorner _lastFocusObject = null;
         public event EventHandler Selected;
+        public event EventHandler Unselected;
 
         #region Fields
 
@@ -189,7 +190,7 @@ namespace MonitorSystem
         {
             if (null != _toolTipButton)
             {
-                _toolTipButton.Visibility = newValue ? Visibility.Visible : Visibility.Collapsed;
+                _toolTipButton.Visibility = IsSelected && newValue ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -353,6 +354,11 @@ namespace MonitorSystem
                 if (_lastFocusObject != this && null != _lastFocusObject)
                 {
                     _lastFocusObject.SetUnselect();
+
+                    if (null != _lastFocusObject.Unselected)
+                    {
+                        _lastFocusObject.Unselected(this, EventArgs.Empty);
+                    }
                 }
                 _lastFocusObject = this;
             }
@@ -470,7 +476,7 @@ namespace MonitorSystem
 
             _toolTipButton = base.GetTemplateChild("ToolTipButton") as Button;
             _toolTipButton.Click += new RoutedEventHandler(ToolTipButton_Click);
-            _toolTipButton.Visibility = AllToolTip ? Visibility.Visible : Visibility.Collapsed;
+            _toolTipButton.Visibility = IsSelected && AllToolTip ? Visibility.Visible : Visibility.Collapsed;
 
             //if (!AllowMove)
             //{
@@ -480,6 +486,11 @@ namespace MonitorSystem
         }
 
         private void ToolTipButton_Click(object sender, EventArgs e)
+        {
+            ToggleToolTip();
+        }
+
+        public void ToggleToolTip()
         {
             var target = _associatedElement as MonitorControl;
             if (null != target)
@@ -508,8 +519,10 @@ namespace MonitorSystem
                         var monitor = child as MonitorControl;
                         if (null != monitor)
                         {
+                            monitor.ParentControl = toolTipControl;
                             monitor.AllowToolTip = false;
                             monitor.DesignMode();
+                            monitor.ClearValue(Canvas.ZIndexProperty);
                             if (null != monitor.AdornerLayer)
                             {
                                 monitor.AdornerLayer.AllToolTip = false;
@@ -637,14 +650,16 @@ namespace MonitorSystem
                     foreach (var childElement in childElements)
                     {
                         var poperties = LoadScreen._DataContext.t_ElementProperties.Where(p => p.ElementID == childElement.ElementID).ToList();
-                        var monitorControl = LoadScreen._instance.ShowElement(toolTipControl.ToolTipCanvas, childElement, ElementSate.Save, poperties);
-                        if (null != monitorControl)
+                        var monitor = LoadScreen._instance.ShowElement(toolTipControl.ToolTipCanvas, childElement, ElementSate.Save, poperties);
+                        if (null != monitor)
                         {
-                            monitorControl.DesignMode();
-                            monitorControl.AllowToolTip = false;
-                            if (null != monitorControl.AdornerLayer)
+                            monitor.ParentControl = toolTipControl;
+                            monitor.DesignMode();
+                            monitor.AllowToolTip = false;
+                            monitor.ClearValue(Canvas.ZIndexProperty);
+                            if (null != monitor.AdornerLayer)
                             {
-                                monitorControl.AdornerLayer.AllToolTip = false;
+                                monitor.AdornerLayer.AllToolTip = false;
                             }
                         }
                     }

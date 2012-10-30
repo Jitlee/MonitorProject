@@ -80,6 +80,21 @@ BEGIN
 			   ,7)
 END
 
+GO
+IF NOT EXISTS(SELECT NULL FROM [t_GalleryClassification] WHERE [Id]=8)
+BEGIN
+	INSERT INTO [t_GalleryClassification]
+			   ([Id]
+			   ,[Name]
+			   ,[Description]
+			   ,[Sort])
+		 VALUES
+			   (8
+			   ,'其他'
+			   ,NULL
+			   ,8)
+END
+
 declare @ControlNum int;--查询控件数量，用于判断是否已经添加
 set @ControlNum=0;
 declare @AddControl varchar(50);--添加控件名称
@@ -1778,13 +1793,19 @@ begin
 	if @ControlID > 0
 	begin
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 1,'Fill','#FFFFFFFF','填充颜色');
+			 VALUES(@ControlID, 1,'Stroke','#FFC5B78A','边线颜色');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 2,'Stroke','#FF000000','边线颜色');
+			 VALUES(@ControlID, 2,'StrokeThickness','1','边线粗细');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 3,'StrokeThickness','1','边线粗细');
+			 VALUES(@ControlID, 3,'CornerRadius','10','圆角度');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 4,'CornerRadius','10','圆角度');
+			 VALUES(@ControlID, 4,'FromColor','#FFFFE7AF','起始填充颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 5,'ToColor','#FFFFE7AF','终止填充颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'FillDirection','0','填充方向');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'BackImage','','填充图片');
 	end
 end
 
@@ -1803,7 +1824,7 @@ begin
 	if @ControlID > 0
 	begin
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 1,'Stroke','#FF000000','边线颜色');
+			 VALUES(@ControlID, 1,'Stroke','#FF646464','边线颜色');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 2,'StrokeThickness','1','边线粗细');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])

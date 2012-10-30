@@ -23,6 +23,8 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// </summary>
         public bool IsToolTip { get; protected set; }
 
+        public MonitorControl ParentControl { get; set; }
+
         private bool _allowToolTip = true;
         public bool AllowToolTip
         {
@@ -46,6 +48,8 @@ namespace MonitorSystem.MonitorSystemGlobal
         }
 
         public abstract event EventHandler Selected;
+
+        public abstract event EventHandler Unselected;
 
         private t_Element _ScreenElement;
         public t_Element ScreenElement
