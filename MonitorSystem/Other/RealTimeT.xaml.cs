@@ -23,7 +23,7 @@ namespace MonitorSystem.Other
         /// <summary>
         /// 曲线列表
         /// </summary>
-        double LineListWidth = 80;
+        //double LineListWidth = 80;
 
         // Canvas _Canvas = new Canvas();
         /// <summary>
@@ -46,11 +46,8 @@ namespace MonitorSystem.Other
         {
             InitializeComponent();
 
-            
-            
             this.Width = 400;
             this.Height = 400;
-          
         }
 
         private void InitBasicinfo()
@@ -59,8 +56,11 @@ namespace MonitorSystem.Other
             _CanvasLine.SetValue(Canvas.ZIndexProperty, 10);
             _Canvas.Children.Add(_CanvasGrid);
             _Canvas.Children.Add(_CanvasLine);
-            _Canvas.SizeChanged += new SizeChangedEventHandler(Canvas_SizeChanged);
+            
+           // _Canvas.SizeChanged += new SizeChangedEventHandler(Canvas_SizeChanged);
             this.SizeChanged += new SizeChangedEventHandler(RealTime_SizeChanged);
+            _Canvas.SizeChanged += new SizeChangedEventHandler(Canvas_SizeChanged);
+
             this.MouseLeftButtonUp += new MouseButtonEventHandler(RealTimeT_MouseLeftButtonUp);
         }
         
@@ -81,7 +81,7 @@ namespace MonitorSystem.Other
             }
             PriTime = DateTime.Now;
 
-            txtVal.Text = Number.ToString();
+            
             if (Number == 2)
             {
                 RealtimeProperty rp = new RealtimeProperty();
@@ -96,14 +96,21 @@ namespace MonitorSystem.Other
             if (!(e.NewSize.Width > 0 && e.NewSize.Height > 0))
                 return;
 
+
             this.Width = e.NewSize.Width;
             this.Height = e.NewSize.Height;
+
+            gdMain.Width = e.NewSize.Width - 90;
         }
 
         private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (!(e.NewSize.Width > 0 && e.NewSize.Height > 0))
                 return;
+
+            //gdMain.Width = e.NewSize.Width;
+            //gdMain.Width = e.NewSize.Height;
+
             _Canvas.Width = e.NewSize.Width;
             _Canvas.Height = e.NewSize.Height;
 
@@ -772,6 +779,7 @@ namespace MonitorSystem.Other
             _Canvas.Children.Add(_CanvasLine);
            
             //实时线网格
+            SetXYStartPosition();
             PainGrid();
             DrawLine();
             ShowValue();
@@ -813,25 +821,6 @@ namespace MonitorSystem.Other
 
                RealTimeLineOR obj = new RealTimeLineOR(objLine);
                _listRealTimeLine.Add(obj);
-
-               //t_Element_RealTimeLine objLine1 = new t_Element_RealTimeLine();
-               //objLine1.ID = Guid.NewGuid().ToString();
-               //objLine1.LineName = "1211";
-               //objLine1.MaxValue = "100";
-               //objLine1.MinValue = "0";
-               //objLine1.LineCZ = 0;
-               //objLine1.LineCYZQLent = "1";
-               //objLine1.LineCYZQType = "ss";
-               //objLine1.TimeLen = 50;
-               //objLine1.TimeLenType = "ss";
-               //objLine1.LineShowType = 0;
-               //objLine1.LineStyle = 0;
-               //objLine1.LinePointBJ = 0;
-               //objLine1.ShowFormat = "mm:ss";
-               //objLine1.LineColor = Colors.Red.ToString();
-
-               //RealTimeLineOR obj1 = new RealTimeLineOR(objLine1);
-               //_listRealTimeLine.Add(obj1);
            }
         }
         /// <summary>
@@ -842,27 +831,52 @@ namespace MonitorSystem.Other
             gdLineDefine.RowDefinitions.Clear();
             gdLineDefine.Children.Clear();
             _CanvasLine.Children.Clear();
-            for (int i = 0; i < _listRealTimeLine.Count; i++)
-            {
-                gdLineDefine.RowDefinitions.Add(new RowDefinition());
-            }
 
+            //gdMain.ColumnDefinitions.Clear();
+            //gdMain.ColumnDefinitions.Add(new ColumnDefinition());
+            
+            
+            if (IsShowLegend)
+            {
+                //gdMain.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(80, GridUnitType.Auto) });
+                //
+                LineList.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                LineList.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            //_CanvasZ.SetValue(Grid.ColumnProperty, 0);
+            //_Canvas.SetValue(Grid.ColumnProperty, 0);
+
+
+            if (IsShowLegend)
+            {
+                for (int i = 0; i < _listRealTimeLine.Count; i++)
+                {
+                    gdLineDefine.RowDefinitions.Add(new RowDefinition());
+                }
+            }
             int index = 0;
             foreach (RealTimeLineOR objOR in _listRealTimeLine)
             {
-                
                 RealLineShow obj = new RealLineShow(objOR);
+               // obj.Width = 70;
                 objOR.TitleShowInfo = obj;
                 objOR.PicCurveShowHeight = LineCanversHeight;
                 objOR.PicCurveWidth = LineCanversWidth;
                 obj.ChangeLineShow += new EventHandler(RealLineShow_ChangeLineShow);
+                if (IsShowLegend)
+                {
+                    gdLineDefine.Children.Add(obj);
+                    obj.SetValue(Grid.RowProperty, index);
+                }
 
-                gdLineDefine.Children.Add(obj);
-                obj.SetValue(Grid.RowProperty, index);
                 //添加线到界面                
                 _CanvasLine.Children.Add(objOR.PolyLine);
                 index++;
             }
+           
         }
 
 
@@ -896,10 +910,13 @@ namespace MonitorSystem.Other
         /// </summary>
         double LineCanversHeight = 0;
 
-        private void PainGridBack()
-        {
-            _CanvasGrid.Background = new SolidColorBrush(_GridBackColor);
-        }
+        /// <summary>
+        /// 主线宽度
+        /// </summary>
+        double GridMainLineWidth = 1;
+        //次线宽度过
+        double GridPriLineWidth = 0.5;
+
         /// <summary>
         /// 显示背景框，和其它初使值
         /// </summary>
@@ -908,8 +925,16 @@ namespace MonitorSystem.Other
             //边框
             Line _Line1 = new Line();
             Line _Line3 = new Line();
+            //处理背景显示
+            if (ISShowGridBack)
+            {
+                _CanvasGrid.Background = new SolidColorBrush(_GridBackColor);
+            }
+            else
+            {
+                _CanvasGrid.Background = new SolidColorBrush();
+            }
 
-            PainGridBack();
             _CanvasGrid.Children.Clear();
 
             SetXYStartPosition();
@@ -939,58 +964,67 @@ namespace MonitorSystem.Other
                 _CanvasLine.SetValue(Canvas.LeftProperty, _XStart);
             }
 
-            //_CanvasGrid.SetValue(Canvas.TopProperty, _YStart);
-            //_CanvasLine.SetValue(Canvas.TopProperty, _YStart);
-
             xGridWidth = _Canvas.Width - _XStart;
             yGridHeight = _Canvas.Height - _YStart;// -XZHeight;  
 
             //边框
-            _CanvasGrid.Children.Add(_Line1);
-            _CanvasGrid.Children.Add(_Line3);
-            _Line1.X1 = 0;
-            _Line1.Y1 = 0;
-            _Line1.X2 = xGridWidth;
-            _Line1.Y2 = 0;
+            if (ISShowBorder)
+            {
+                _CanvasGrid.Children.Add(_Line1);
+                _CanvasGrid.Children.Add(_Line3);
+                _Line1.X1 = 0;
+                _Line1.Y1 = 0;
+                _Line1.X2 = xGridWidth;
+                _Line1.Y2 = 0;
 
-            _Line3.X1 = xGridWidth;
-            _Line3.X2 = xGridWidth;
-            _Line3.Y1 = 0;
-            _Line3.Y2 = yGridHeight;
-            _Line3.Stroke = _Line1.Stroke = new SolidColorBrush(_BorderColor);
-            _Line3.StrokeThickness = _Line1.StrokeThickness = 2;
+                //右边显示Y轴
+                if (RightShowYZB)
+                {
+                    _Line3.X2 = _Line3.X1 = 0;
+                }
+                else
+                {
+                    _Line3.X2 = _Line3.X1 = xGridWidth;
+                } 
+                _Line3.Y1 = 0;
+                _Line3.Y2 = yGridHeight;
 
+                _Line3.Stroke = _Line1.Stroke = new SolidColorBrush(_BorderColor);
+                _Line3.StrokeThickness = _Line1.StrokeThickness = 2;
+            }
             //Y网格
             if (_YISSGShow)
             {
                 double _YStartDoble = 0;
-                double aYMainSize = xGridWidth / (this._YMainNumber + 1);
+                double aYMainSize = yGridHeight / (this._YMainNumber + 1);
                 double aYPerSize = aYMainSize / (this._YPriNumber + 1);
 
                 for (int imain = 0; imain < _YMainNumber; imain++)
                 {
-                    PainPriGrid(_YStartDoble, aYPerSize, false);
+                    PainPriGrid(_YStartDoble, aYPerSize, true);
                     double y = _YStartDoble + aYMainSize;
                     _YStartDoble = y;
-                    _CanvasGrid.Children.Add(AddMainLine(y, y, 0, yGridHeight, _YMainColor, 2));
+                    // _CanvasGrid.Children.Add(AddMainLine(0, xGridWidth, X, X, _XMainColor, 2));
+                    _CanvasGrid.Children.Add(AddMainLine(0, xGridWidth, y, y, _YMainColor, GridMainLineWidth));
                 }
-                PainPriGrid(_YStartDoble, aYPerSize, false);
+                PainPriGrid(_YStartDoble, aYPerSize, true);
             }
             //X网格
             if (_XISSGShow)
             {
                 double _XStartDoble = 0;
-                double aXMainSize = yGridHeight / (this._XMainNumber + 1);
+                double aXMainSize = xGridWidth / (this._XMainNumber + 1);
                 double aXPerSize = aXMainSize / (this._XPriNumber + 1);
 
                 for (int imain = 0; imain < _XMainNumber; imain++)
                 {
-                    PainPriGrid(_XStartDoble, aXPerSize, true);
+                    PainPriGrid(_XStartDoble, aXPerSize, false);
                     double X = _XStartDoble + aXMainSize;
                     _XStartDoble = X;
-                    _CanvasGrid.Children.Add(AddMainLine(0, xGridWidth, X, X, _XMainColor, 2));
+
+                    _CanvasGrid.Children.Add(AddMainLine(X, X, 0, yGridHeight, _XMainColor, GridMainLineWidth));
                 }
-                PainPriGrid(_XStartDoble, aXPerSize, true);
+                PainPriGrid(_XStartDoble, aXPerSize, false);
             }
         }
 
@@ -1002,7 +1036,7 @@ namespace MonitorSystem.Other
                 {
                     double priy = startPosition + aPerSize;
                     startPosition = priy;
-                    _CanvasGrid.Children.Add(AddPrimLine(0, xGridWidth, priy, priy, _YPriColor, 1));
+                    _CanvasGrid.Children.Add(AddPrimLine(0, xGridWidth, priy, priy, _YPriColor, GridPriLineWidth));
                 }
             }
             else//x轴
@@ -1011,7 +1045,7 @@ namespace MonitorSystem.Other
                 {
                     double priX = startPosition + aPerSize;
                     startPosition = priX;
-                    _CanvasGrid.Children.Add(AddPrimLine(priX, priX, 0, yGridHeight, _XPriColor, 1));
+                    _CanvasGrid.Children.Add(AddPrimLine(priX, priX, 0, yGridHeight, _XPriColor, GridPriLineWidth));
                 }
             }
         }
@@ -1044,18 +1078,6 @@ namespace MonitorSystem.Other
 
         #endregion
         #region 画X、Y轴
-        
-
-        /// <summary>
-        /// X轴线长度
-        /// </summary>
-        int XZLineHeight = 8;
-        /// <summary>
-        /// X轴文本显示高度
-        /// </summary>
-        int XZTxtHeight = 15;
-
-
         /// <summary>
         /// 画X、Y轴
         /// </summary>
@@ -1065,20 +1087,54 @@ namespace MonitorSystem.Other
             //X轴处理 
             if (_MultiXZShow)
             {
+                int Index = 0;
                 foreach (RealTimeLineOR obj in _listRealTimeLine)
                 {
-                    PaintX(obj);
+                    PaintX(obj,Index);
+                    Index++;
                 }
             }
             else
             {
                 if (_listRealTimeLine.Count > 0)
-                    PaintX(_listRealTimeLine.First());
+                    PaintX(_listRealTimeLine.First(),0);
             }
             //画Y轴
-            PaintY();
+            if (_MultiYZShow)
+            {
+                int Index = 0;
+                if (RightShowYZB)
+                {
+                    foreach (RealTimeLineOR obj in _listRealTimeLine)
+                    {
+                        PaintY(obj, Index);
+                        Index++;
+                    }
+                }
+                else
+                {
+                    int LineNumber = _listRealTimeLine.Count;
+                    for (int i = LineNumber - 1; i >= 0; i--)
+                    {
+                        PaintY(_listRealTimeLine[i], LineNumber- (i+1));
+                        Index++;
+                    }
+                }
+            }
+            else
+            {
+                if (_listRealTimeLine.Count > 0)
+                    PaintY(_listRealTimeLine.First(),0);
+            }
         }
-
+        /// <summary>
+        /// X轴线长度
+        /// </summary>
+        int XZLineHeight = 5;
+        /// <summary>
+        /// X轴文本显示高度
+        /// </summary>
+        int XZTxtHeight = 15;
         /// <summary>
         /// 设置XY轴开始位置
         /// </summary>
@@ -1093,7 +1149,7 @@ namespace MonitorSystem.Other
                 _YStart = XZLineHeight + XZTxtHeight;
             }
 
-            if (MultiXZShow)
+            if (MultiYZShow)
             {
 
                 _XStart = (YZLineWidth + YZTxtWidth) * _listRealTimeLine.Count;
@@ -1104,13 +1160,21 @@ namespace MonitorSystem.Other
             }
         }
 
+        
+
         /// <summary>
         /// 画X轴
         /// </summary>
-        private void PaintX(RealTimeLineOR objOR)
+        private void PaintX(RealTimeLineOR objOR,int LineNumber)
         {
-            double axzMainSize = xGridWidth / (this._YMainNumber + 1);
-            double xzY = yGridHeight;
+            double Axzheight = XZTxtHeight + XZLineHeight;
+
+            double xYStartP = _Canvas.Height - _YStart;
+            xYStartP += Axzheight * LineNumber;
+
+            double axzMainSize = xGridWidth / (this._XMainNumber + 1);
+            //double xzY = yGridHeight;
+
             //x轴
             Line mXZ = new Line();
             mXZ.X1 = _XStart;
@@ -1120,10 +1184,11 @@ namespace MonitorSystem.Other
                 mXZ.X1 = 0;
                 mXZ.X2 = xGridWidth;
             }
-            mXZ.Y1 = mXZ.Y2 = xzY;
+            mXZ.Y1 = mXZ.Y2 = xYStartP;
             mXZ.Stroke = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
             mXZ.StrokeThickness = 2;
             _CanvasZ.Children.Add(mXZ);
+
             objOR.TextList.Clear();
             for (int imain = 0; imain < _XMainNumber + 2; imain++)
             {
@@ -1134,20 +1199,19 @@ namespace MonitorSystem.Other
                 }
                 Line mkd = new Line();
                 mkd.X1 = mkd.X2 = _x;
-                mkd.Y1 = xzY;
-                mkd.Y2 = xzY + XZLineHeight;
+                mkd.Y1 = xYStartP;
+                mkd.Y2 = xYStartP + XZLineHeight;
                 mkd.Stroke = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
-                mkd.StrokeThickness = 2;
+                mkd.StrokeThickness = 1;
                 _CanvasZ.Children.Add(mkd);
 
-                //添加X轴标签
-                
+                //添加X轴标签                
                 TextBlock tb = new TextBlock();
                 //tb.Text = DateTime.Now.ToString("hh:MM:ss");
                 objOR.TextList.Add(tb);
                 tb.Foreground = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
                 tb.SetValue(Canvas.LeftProperty, _x - 24);
-                tb.SetValue(Canvas.TopProperty, xzY + XZLineHeight);
+                tb.SetValue(Canvas.TopProperty, xYStartP + XZLineHeight);
                 _CanvasZ.Children.Add(tb);
             }
             objOR.SetXZTextBoxValue();
@@ -1155,67 +1219,73 @@ namespace MonitorSystem.Other
         /// <summary>
         /// X轴线长度
         /// </summary>
-        int YZLineWidth = 8;
+        int YZLineWidth = 3;
         /// <summary>
         /// X轴文本显示高度
         /// </summary>
-        int YZTxtWidth = 30;
+        int YZTxtWidth = 25;
         /// <summary>
         /// 画Y轴
         /// </summary>
-        private void PaintY()
+        private void PaintY(RealTimeLineOR objOR,int LineNumber)
         {
+            ///Y轴X坐标
+            double yXStartP = (YZLineWidth + YZTxtWidth) * (LineNumber + 1);
             //右边显示Y轴
-            double ayzMainSize = yGridHeight / (this._YMainNumber + 1);
-            double yzX = _XStart;//yzX坐标
+            double ayzMainSize = yGridHeight / (this._YMainNumber+1);
+
+            //double yzX = yXStartP;//y轴X坐标
             if (_RightShowYZB)
             {
-                yzX = xGridWidth;
+                yXStartP = xGridWidth + (YZLineWidth + YZTxtWidth) * LineNumber;
             }
+
             //Y轴
             Line mXZ = new Line();
-            mXZ.X2 = mXZ.X1 = _XStart;
-            if (RightShowYZB)
-                mXZ.X2 = mXZ.X1 = xGridWidth;
+            mXZ.X2 = mXZ.X1 = yXStartP;
             mXZ.Y1 = 0;
             mXZ.Y2 = yGridHeight;
-            mXZ.Stroke = new SolidColorBrush(_YMainColor);
+            mXZ.Stroke = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
             mXZ.StrokeThickness = 2;
             _CanvasZ.Children.Add(mXZ);
-           
+
             string[] arrText = null;
-            if (_listRealTimeLine.Count > 0)
-            {
-              arrText=  GetYText(_listRealTimeLine.First());
-            }
-            else
-            {
-                arrText = GetYText();
-            }
+            arrText = GetYText(objOR);
+
+            //文本显示位置
+            double txtPosintionStart = (YZLineWidth + YZTxtWidth) * (LineNumber);
+            if (RightShowYZB)
+                txtPosintionStart =txtPosintionStart+ xGridWidth+ YZLineWidth;
+            txtPosintionStart += 3;
+
             for (int imain = 0; imain < _YMainNumber + 2; imain++)
             {
                 double _y = imain * ayzMainSize;
                 double _X = 0;
-                if (_RightShowYZB)
-                    _X = yzX + YZLineWidth;
-                else
-                    _X = yzX - YZLineWidth;
 
+                if (RightShowYZB)
+                    _X = yXStartP + YZLineWidth;
+                else
+                    _X = yXStartP - YZLineWidth;
+                //y轴刻度线
                 Line mkd = new Line();
                 mkd.X1 = _X;
-                mkd.X2 = yzX;
+                mkd.X2 = yXStartP;
                 mkd.Y1 = mkd.Y2 = _y;
-                mkd.Stroke = new SolidColorBrush(_YPriColor);
-                mkd.StrokeThickness = 2;
+                mkd.Stroke = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
+                mkd.StrokeThickness = 1;
                 _CanvasZ.Children.Add(mkd);
 
                 //添加Y轴标签
                 TextBlock tb = new TextBlock();
+                tb.Foreground = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
                 tb.Text = arrText[imain];
+
                 if (!_RightShowYZB)
-                    _X = _X - YZTxtWidth + 2;
-                tb.SetValue(Canvas.LeftProperty, _X);
-                tb.SetValue(Canvas.TopProperty, _y);
+                    _X = _X + YZTxtWidth + 2;
+
+                tb.SetValue(Canvas.LeftProperty, txtPosintionStart);
+                tb.SetValue(Canvas.TopProperty, _y - 5);
                 _CanvasZ.Children.Add(tb);
             }
         }
@@ -1238,7 +1308,8 @@ namespace MonitorSystem.Other
             ytextArr[0] = max.ToString();
             for (int i = 1; i <= _YMainNumber; i++)
             {
-                ytextArr[i] = (max - (i * vPer)).ToString();
+              double val=  Math.Round(max - (i * vPer),obj.LineInfo.ValueDecimal);
+              ytextArr[i] = val.ToString();
             }
             ytextArr[_YMainNumber + 1] = min.ToString();
             return ytextArr;
@@ -1272,17 +1343,9 @@ namespace MonitorSystem.Other
         private void button2_Click(object sender, RoutedEventArgs e)
         {
             //X轴,Y轴换位置
-            gdMain.ColumnDefinitions.Clear();
-            gdMain.ColumnDefinitions.Add(new ColumnDefinition());
-            gdMain.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(LineListWidth, GridUnitType.Auto) });
-
-            _CanvasZ.SetValue(Grid.ColumnProperty, 1);
-            _Canvas.SetValue(Grid.ColumnProperty, 1);
-            LineList.SetValue(Grid.ColumnProperty, 0);
-
-            _RightShowYZB = true;
-            PainGrid();
-            PainXYZ();
+            //_RightShowYZB = true;
+            //PainGrid();
+            //PainXYZ();
         }
 
         #region 缩放处理
@@ -1472,6 +1535,7 @@ namespace MonitorSystem.Other
                     continue;
                 obj.LineInfo.TimeLenType = type;
                 obj.LineInfo.TimeLen = Len;
+                obj.SetPointReMovePx();
                 obj.ChangeXValue();
                 obj.ShowCurve();
             }

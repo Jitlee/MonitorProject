@@ -248,7 +248,7 @@
                                     <ComboBoxItem Content="直线"></ComboBoxItem>
                                 </ComboBox>
                                 <sdk:Label Content="标记：" Height="28" Margin="21,9,181,34" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" />
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="69,9,0,0" Name="LinePointBJ" VerticalAlignment="Top" 
+                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="67,9,0,0" Name="LinePointBJ" VerticalAlignment="Top" 
                                           Width="120" Grid.Column="1" Grid.Row="1" >
                                     <ComboBoxItem Content="不画点"></ComboBoxItem>
                                     <ComboBoxItem Content="方点"></ComboBoxItem>
@@ -270,12 +270,12 @@
 
                                 <!--ItemsSource="{Binding Channels}"-->
                                 <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="3" Text="关联设备：" Margin="0,10,177,6" />
-                                <ComboBox Height="23" ItemsSource="{Binding Devices}" HorizontalAlignment="Left"
+                                <ComboBox ItemsSource="{Binding Devices}" HorizontalAlignment="Left"
                   SelectedItem="{Binding SelectedDevices, Mode=TwoWay}"
-                  Grid.Row="3" Name="cbDeviceID"  Width="121" SelectionChanged="cbDeviceID_SelectionChanged" Margin="70,5,0,7" />
+                  Grid.Row="3" Name="cbDeviceID"  Width="121" SelectionChanged="cbDeviceID_SelectionChanged" Margin="70,3,0,2" />
                                 <TextBlock Height="20" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1"   Text="关联通道：" Margin="0,7,183,8" />
-                                <ComboBox Height="23" HorizontalAlignment="Left" 
-                                          DisplayMemberPath="ChannelName" Grid.Row="3" Grid.Column="1" Name="cbChanncel"  Width="121" Margin="69,5,0,7" />
+                                <ComboBox HorizontalAlignment="Left" 
+                                          DisplayMemberPath="ChannelName" Grid.Row="3" Grid.Column="1" Name="cbChanncel"  Width="121" Margin="64,5,0,0" />
                                 
                             </Grid>
                         </sdk:TabItem>
@@ -302,11 +302,11 @@
                                                        Minimum="1" Maximum="31"/>
                                 <sdk:Label Content="日" Height="20" HorizontalAlignment="Left" Margin="284,70,0,0" Name="label6" VerticalAlignment="Top" Width="20" />
                                 
-                                <toolkit:NumericUpDown Height="22" HorizontalAlignment="Left" Margin="311,69,0,0" Name="ShowHH" VerticalAlignment="Top"
+                                <toolkit:NumericUpDown Height="22" Margin="307,69,363,0" Name="ShowHH" VerticalAlignment="Top"
                                                        Minimum="0" Maximum="23"/>
-                                <sdk:Label Content="时" Height="20" HorizontalAlignment="Left" Margin="352,71,0,0" Name="label7" VerticalAlignment="Top" Width="20" />
+                                <sdk:Label Content="时" Height="20" HorizontalAlignment="Left" Margin="351,71,0,0" Name="label7" VerticalAlignment="Top" Width="20" />
                                 
-                                <toolkit:NumericUpDown Height="22" HorizontalAlignment="Left" Margin="370,71,0,0" Name="ShowMi" VerticalAlignment="Top"
+                                <toolkit:NumericUpDown Height="22" HorizontalAlignment="Left" Margin="369,71,0,0" Name="ShowMi" VerticalAlignment="Top"
                                                        Minimum="0" Maximum="59"/>
                                 <sdk:Label Content="分" Height="20" HorizontalAlignment="Left" Margin="412,73,0,0" Name="label8" VerticalAlignment="Top" Width="20" />
                                 
@@ -315,8 +315,8 @@
                                 <sdk:Label Content="秒" Height="20" HorizontalAlignment="Left" Margin="477,73,0,0" Name="label9" VerticalAlignment="Top" Width="20" />
                                 
                                 <sdk:Label  Name="label10" Content="时间长度：" Height="19" HorizontalAlignment="Left" Margin="28,109,0,0" VerticalAlignment="Top" Width="60" />
-                                <TextBox HorizontalAlignment="Right" Margin="0,105,557,19" Name="TimeLen" Width="59" />
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="165,105,0,0" Name="TimeLenType" VerticalAlignment="Top" Width="56">
+                                <TextBox HorizontalAlignment="Right" Margin="0,105,548,11" Name="TimeLen" Width="59" />
+                                <ComboBox Height="23" HorizontalAlignment="Right" Margin="0,105,486,0" Name="TimeLenType" VerticalAlignment="Top" Width="56">
                                     <ComboBoxItem Content="秒" />
                                     <ComboBoxItem Content="分" />
                                     <ComboBoxItem Content="时" />
@@ -324,8 +324,8 @@
                                 </ComboBox>
                                 
                                 <sdk:Label Content="采样周期：" Height="19" HorizontalAlignment="Left" Margin="307,109,0,0" Name="label11" VerticalAlignment="Top" Width="60" />
-                                <TextBox HorizontalAlignment="Right" Margin="0,105,294,19" Name="LineCYZQLent" Width="51" />
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="424,105,0,0" Name="LineCYZQType" VerticalAlignment="Top" Width="56">
+                                <TextBox HorizontalAlignment="Right" Margin="0,105,295,11" Name="LineCYZQLent" Width="51" />
+                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="415,105,0,0" Name="LineCYZQType" VerticalAlignment="Top" Width="56">
                                     <ComboBoxItem Content="秒"  />
                                     <ComboBoxItem Content="分" />
                                     <ComboBoxItem Content="时" />

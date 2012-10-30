@@ -15,14 +15,14 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>            
             <RowDefinition></RowDefinition>
-            <RowDefinition     Height="40"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition     Height="30"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
         
-        <Grid x:Name="gdMain" Grid.Row="0"  Grid.Column="0">
+        <Grid x:Name="gdMain" Grid.Row="0"  Grid.Column="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition    />
-                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="85" />
             </Grid.ColumnDefinitions>
              <!--用于装X轴和Y轴-->
             <Canvas x:Name="_CanvasZ" Grid.Row="0" Canvas.ZIndex="2"  Grid.Column="0" ></Canvas>
@@ -48,7 +48,7 @@
         </Grid>
         
         <!--滚动条-->
-        <StackPanel  Grid.Row="0" Background="Azure" Grid.Column="1" >
+        <StackPanel  Grid.Row="0"  Grid.Column="1" >
             <TextBlock  Text="gdt">
             </TextBlock>
         </StackPanel>
@@ -109,17 +109,13 @@
                 <Button x:Name="btnSF" Grid.Row="7" Content="缩放" Click="btnSF_Click" Height="21" VerticalAlignment="Top"></Button>
                 <Button x:Name="btnHF" Grid.Row="8" Content="恢复" Click="btnHF_Click"></Button>
             </Grid>
-            
         </Grid>
 
         <!--滚动条-->
         <StackPanel   Background="Azure" Grid.Row="1" Grid.Column="0" >
-            <TextBlock  Text="gdt">
-            </TextBlock>
+           
             <Grid>
-            <Button Content="交换位置" Height="24" Name="button2" Width="42" Click="button2_Click" />
-                <Button Content="刷新值" Height="23" Name="button1" Click="button1_Click" Margin="160,0,381,2" />
-                <TextBox Height="23" HorizontalAlignment="Left" Margin="40,-1,0,0" Name="txtVal" VerticalAlignment="Top" Width="120" />
+            
             </Grid>
         </StackPanel>
         <!--最下面的设置-->

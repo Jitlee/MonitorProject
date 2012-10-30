@@ -434,6 +434,13 @@ namespace MonitorSystem.Other
             ValueDecimal.Value = obj.ValueDecimal;
 
 
+            FormartYear.IsChecked = false;
+            FormartMonth.IsChecked = false;
+            FormartDay.IsChecked = false;
+            FormartHH.IsChecked = false;
+            FormartMi.IsChecked = false;
+            FormartSS.IsChecked = false;
+
 
             if (obj.ShowFormat.IndexOf("yyyy") == 0)//年度
             {
@@ -525,22 +532,22 @@ namespace MonitorSystem.Other
             {
                 strShowFormat = string.Format("{0}{1}MM", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : "-");
             }
-            if (this.FormartMonth.IsChecked.Value)//日
+            if (this.FormartDay.IsChecked.Value)//日
             {
                 strShowFormat = string.Format("{0}{1}dd", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : "-");
             }
 
-            if (this.FormartMonth.IsChecked.Value)//时
+            if (this.FormartHH.IsChecked.Value)//时
             {
                 strShowFormat = string.Format("{0}{1}HH", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : " ");
             }
 
-            if (this.FormartMonth.IsChecked.Value)//分
+            if (this.FormartMi.IsChecked.Value)//分
             {
                 strShowFormat = string.Format("{0}{1}mm", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : ":");
             }
 
-            if (this.FormartMonth.IsChecked.Value)//秒
+            if (this.FormartSS.IsChecked.Value)//秒
             {
                 strShowFormat = string.Format("{0}{1}ss", strShowFormat, string.IsNullOrEmpty(strShowFormat) ? "" : ":");
             }

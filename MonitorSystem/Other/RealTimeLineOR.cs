@@ -43,6 +43,7 @@ namespace MonitorSystem.Other
             get { return _LineInfo; }
             set { _LineInfo = value; }
         }
+        DispatcherTimer timer = new DispatcherTimer();
 
         public RealTimeLineOR(t_Element_RealTimeLine mLine)
         {
@@ -57,28 +58,19 @@ namespace MonitorSystem.Other
             //曲线点
             noteMessages = new CoordinatesValue[maxNote];
 
-
-            DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += (sender, obj) =>
             {
                 Random rd = new Random();
                 //获取值，刷新
                
-                    AddNewValue(Convert.ToDouble(rd.NextDouble() * int.Parse(LineInfo.MaxValue)));
-                    ShowCurve();
+                    //AddNewValue(Convert.ToDouble(rd.NextDouble() * int.Parse(LineInfo.MaxValue)));
+                    //ShowCurve();
             };
             timer.Start();
         }
 
-        /// <summary>
-        /// 实使化参数
-        /// </summary>
-        //public void InitPara()
-        //{
-
-        //}       
-
+       
         double _YValue = 0.0;
         /// <summary>
         /// 当前Y轴值
@@ -207,8 +199,9 @@ namespace MonitorSystem.Other
            int txtCount = _TextList.Count;
            for (int i = 0; i < _TextList.Count; i++)
            {
+               
                DateTime dt = _StartTime.AddSeconds(-(timeLenPer * (txtCount-i-1)));
-               _TextList[i].Text = dt.ToString("dd HH:mm:ss");
+               _TextList[i].Text = dt.ToString(_LineInfo.ShowFormat);
            }
            // _StartTime.AddSeconds
 
@@ -261,10 +254,10 @@ namespace MonitorSystem.Other
             get { return _YZSFPer; }
             set { _YZSFPer = value; }
         }
-
+        
         private double _MaxValue = 0;
         /// <summary>
-        /// 最大值
+        /// 显示值 最大值
         /// </summary>
         public double MaxValue
         {
@@ -274,14 +267,14 @@ namespace MonitorSystem.Other
 
         private double _MinValue = 0;
         /// <summary>
-        /// 最小值
+        /// 显示值 最小值
         /// </summary>
         public double MinValue
         {
             get { return _MinValue; }
             set { _MinValue = value; }
         }
-
+        
         #region 自动将最新采样数值添加到数组、显示
         /// <summary>
         /// 自动将最新采样数值添加到数组
@@ -289,6 +282,7 @@ namespace MonitorSystem.Other
         /// <param name="newValue">最新采样数值</param>
         public void AddNewValue(double newValue)
         {
+            newValue = Math.Round(newValue, LineInfo.ValueDecimal); 
             //处理最大值，及最小值
             if (newValue > _MaxValue)
                 _MaxValue = newValue;

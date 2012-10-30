@@ -97,7 +97,7 @@ namespace MonitorSystem.Other
         protected void boder_MouseEnter(object sender, MouseEventArgs e)
         {
             _Border.BorderBrush = new SolidColorBrush(Colors.Red);
-            _Border.BorderThickness = new Thickness(2.0);
+            _Border.BorderThickness = new Thickness(1.0);
         }
 
         protected void boder_MouseLeave(object sender, MouseEventArgs e)
