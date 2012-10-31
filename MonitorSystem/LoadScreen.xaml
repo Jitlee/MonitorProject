@@ -41,8 +41,8 @@
                 <StackPanel  HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
                     <ctrls:ImageButton Height="23" Width="75" Content="首页" Margin="5,0" Image="/MonitorSystem;component/Images/Common/首页_工具条.jpg" Click="Home_Click"/>
                     <ctrls:ImageButton Height="23" Width="75" Content="后退" Margin="5,0" Image="/MonitorSystem;component/Images/Common/prev.JPG" Click="Back_Click"/>
-                    <ctrls:ImageButton x:Name="DesignButton" Height="23" Width="75" Content="设计" Margin="5,0" Image="/MonitorSystem;component/Images/Common/prev.JPG" Click="DesignButton_Click" Visibility="Collapsed"/>
-                    <ctrls:ImageButton x:Name="GalleryButton" Height="23" Width="75" Content="图库" Margin="5,0" Image="/MonitorSystem;component/Images/Common/prev.JPG" Click="GalleryButton_Click" Visibility="Collapsed"/>
+                    <ctrls:ImageButton x:Name="DesignButton" Height="23" Width="75" Content="设计" Margin="5,0" Image="/MonitorSystem;component/Images/design.png" Click="DesignButton_Click" Visibility="Collapsed"/>
+                    <ctrls:ImageButton x:Name="GalleryButton" Height="23" Width="75" Content="图库" Margin="5,0" Image="/MonitorSystem;component/Images/gallery.png" Click="GalleryButton_Click" Visibility="Collapsed"/>
                 </StackPanel>               
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <sdk:Label Margin="5,5"

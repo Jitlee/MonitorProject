@@ -125,6 +125,10 @@
     <Compile Include="Controls\PropertyGrid\ImageAttribute.cs" />
     <Compile Include="Controls\SceneBackgroundBorder.cs" />
     <Compile Include="Controls\ImagePathConverter.cs" />
+    <Compile Include="Gallery\Pointer.cs" />
+    <Compile Include="Gallery\PointerControl.xaml.cs">
+      <DependentUpon>PointerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MonitorSystemGlobal\ToolTipControl.cs" />
     <Compile Include="Dldz\Dldz01.cs" />
     <Compile Include="Dldz\Dldz02.cs" />
@@ -375,6 +379,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Gallery\PointerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoadScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -517,6 +525,8 @@
     <Resource Include="Images\Common\首页_工具条.jpg" />
     <Resource Include="Images\Common\网络连接.JPG" />
     <Resource Include="Images\tip.png" />
+    <Resource Include="Images\design.png" />
+    <Resource Include="Images\gallery.png" />
     <Content Include="Ref\Microsoft.Expression.Interactions.xml" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\MyDataService\GetData.wsdl" />

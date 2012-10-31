@@ -47,31 +47,38 @@ namespace MonitorSystem
 
         public t_Control GetSelected()
         {
+            ListBox listBox = null;
             if (accordion.SelectedIndex == 0)
             {
-                return tpListBox.SelectedItem as t_Control;
+                listBox = tpListBox;
             }
             else if (accordion.SelectedIndex == 1)
             {
-                return ztListBox.SelectedItem as t_Control;
+                listBox = ztListBox;
             }
             else if (accordion.SelectedIndex == 2)
             {
-                return ggListBox.SelectedItem as t_Control;
+                listBox = ggListBox;
+            }
+            if (null != listBox && listBox.SelectedIndex > 0)
+            {
+                return listBox.SelectedItem as t_Control;
             }
             return null;
         }
 
         public void ResetSelected()
         {
-            if (null != tpListBox
-                && null != ztListBox
-                && null != ggListBox)
+            if (null != tpListBox && tpListBox.Items.Count > 0)
             {
                 tpListBox.SelectedIndex = 0;
-
+            }
+            if (null != ztListBox && ztListBox.Items.Count > 0)
+            {
                 ztListBox.SelectedIndex = 0;
-
+            }
+            if (null != ggListBox && ggListBox.Items.Count > 0)
+            {
                 ggListBox.SelectedIndex = 0;
             }
         }
@@ -330,6 +337,7 @@ namespace MonitorSystem
             }
             else
             {
+                GalleryControl.Instance.ResetSelected();
                 LoadScreen.AddElementModel();
             }
         }

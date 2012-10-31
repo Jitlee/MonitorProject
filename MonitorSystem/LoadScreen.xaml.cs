@@ -277,6 +277,7 @@ namespace MonitorSystem
                                 monitor.ScreenElement.ElementType = "Background";
                             }
                             PropertyMain.Instance.ResetSelected();
+                            GalleryControl.Instance.ResetSelected();
                             return;
                         }
                     }
@@ -286,6 +287,7 @@ namespace MonitorSystem
             }
 
             PropertyMain.Instance.ResetSelected();
+            GalleryControl.Instance.ResetSelected();
         }
 
         private void AddElementCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -1049,8 +1051,12 @@ namespace MonitorSystem
         /// <param name="mMagrinY"></param>
         private MonitorControl AddSelectControlElement(Canvas canvas, double mWidth, double mHeight, double mMagrinX, double mMagrinY)
         {
-            t_Control t = GetSelectControl();
-            return CreateControl(canvas, t, mWidth, mHeight, mMagrinX, mMagrinY);
+            var t = GetSelectControl();
+            if (null != t)
+            {
+                return CreateControl(canvas, t, mWidth, mHeight, mMagrinX, mMagrinY);
+            }
+            return null;
         }
 
         public MonitorControl CreateControl(Canvas canvas, t_Control t, double width, double height, double x, double y)
@@ -1093,7 +1099,12 @@ namespace MonitorSystem
         /// <returns></returns>
         private t_Control GetSelectControl()
         {
-            return PropertyMain.Instance.GetSelected();
+            var t = GalleryControl.Instance.GetSelected();
+            if (null == t)
+            {
+                return PropertyMain.Instance.GetSelected();
+            }
+            return t;
         }
 
         /// <summary>
