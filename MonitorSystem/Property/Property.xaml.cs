@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.ServiceModel.DomainServices.Client;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using MonitorSystem.Web.Servers;
-using System.ServiceModel.DomainServices.Client;
-using MonitorSystem.Web.Moldes;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using MonitorSystem.Controls;
 using MonitorSystem.Property;
-using System.Collections;
+using MonitorSystem.Web.Moldes;
+using MonitorSystem.Web.Servers;
 
 namespace MonitorSystem
 {
@@ -313,9 +314,9 @@ namespace MonitorSystem
 
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (this.Parent is FloatableWindow)
+            if (this.Parent is FloatPanel)
             {
-                (this.Parent as FloatableWindow).Title = (tabControl1.SelectedItem as TabItem).Header;
+                (this.Parent as FloatPanel).Title = (tabControl1.SelectedItem as TabItem).Header.ToString();
             }
             ResetSelected();
         }
