@@ -1,25 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System.ServiceModel.DomainServices.Client;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.ServiceModel.DomainServices.Client;
-using MonitorSystem.Web.Moldes;
-using System.Threading;
 using MonitorSystem.Controls.ImagesManager;
+using MonitorSystem.Gallery;
 using MonitorSystem.MonitorSystemGlobal;
-using System.Reflection;
+using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem.Controls
 {
     public partial class GalleryControl : UserControl
     {
+        public static GalleryControl Instance { get; private set; }
         public GalleryControl()
         {
             InitializeComponent();
@@ -28,6 +20,7 @@ namespace MonitorSystem.Controls
 
             var createCommand = new DelegateCommand<t_Control>(Create);
             GalleryListBox.SetValue(MouseDoubleClick.CommandProperty, createCommand);
+            Instance = this;
         }
 
         private void GalleryControl_Loaded(object sender, RoutedEventArgs e)
@@ -65,6 +58,12 @@ namespace MonitorSystem.Controls
             {
                 //this.GalleryListBox.ItemsSource = result.Entities;
                 this.GalleryListBox.Items.Clear();
+
+                var pointer = new Pointer();
+                pointer.Height = 93d;
+                pointer.Width = 93d;
+                this.GalleryListBox.Items.Add(new ListBoxItem() { Content= pointer, Height = 100d, Width= 100d });
+
                 foreach (var t in result.Entities)
                 {
                     var item = new ListBoxItem();
@@ -104,7 +103,36 @@ namespace MonitorSystem.Controls
 
         private void Create(t_Control tControl)
         {
-            LoadScreen._instance.CreateControl(LoadScreen._instance.csScreen, tControl, 150, 150, 0, 0);
+            if (null != tControl)
+            {
+                LoadScreen._instance.CreateControl(LoadScreen._instance.csScreen, tControl, 150, 150, 0, 0);
+            }
+        }
+
+        private void GalleryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (GalleryListBox.SelectedIndex < 1)
+            {
+                LoadScreen.UnAddElementModel();
+            }
+            else
+            {
+                PropertyMain.Instance.ResetSelected();
+                LoadScreen.AddElementModel();
+            }
+        }
+
+        public t_Control GetSelected()
+        {
+            return (GalleryListBox.SelectedItem as ListBoxItem).DataContext as t_Control;
+        }
+
+        public void ResetSelected()
+        {
+            if (GalleryListBox.Items.Count > 0)
+            {
+                GalleryListBox.SelectedIndex = 0;
+            }
         }
     }
 }

@@ -277,6 +277,7 @@ namespace MonitorSystem
                                 monitor.ScreenElement.ElementType = "Background";
                             }
                             PropertyMain.Instance.ResetSelected();
+                            GalleryControl.Instance.ResetSelected();
                             return;
                         }
                     }
@@ -286,6 +287,7 @@ namespace MonitorSystem
             }
 
             PropertyMain.Instance.ResetSelected();
+            GalleryControl.Instance.ResetSelected();
         }
 
         private void AddElementCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -302,11 +304,11 @@ namespace MonitorSystem
         #endregion
 
         #region 实例化
-        /// <summary>
-        /// 弹出属性窗口控件
-        /// </summary>
-        FloatableWindow fwProperty;
-        PropertyMain prop = new PropertyMain();
+        ///// <summary>
+        ///// 弹出属性窗口控件
+        ///// </summary>
+        //FloatableWindow fwProperty;
+        //PropertyMain prop = new PropertyMain();
 
         int LoadCommpleteNumber = 0;
         /// <summary>
@@ -331,27 +333,41 @@ namespace MonitorSystem
 
            // _DataContext.Load(_DataContext.GetT_Element_RealTimeLineQuery().Where(a=> a.ElementID== 
 
-            //实例化属性窗口
-            fwProperty = new FloatableWindow();
-            fwProperty.ParentLayoutRoot = LayoutRoot;//LayoutRoot;
-            fwProperty.Content = prop;
-            prop.Height = 420d;
-            fwProperty.Width = 300d;
-            fwProperty.Height = 450d;
-            fwProperty.Title = "场景";
-            fwProperty.SetValue(Canvas.ZIndexProperty, 900);
-            fwProperty.SetValue(Canvas.TopProperty,80d);
-            AddElementCanvas.SetValue(Canvas.ZIndexProperty, 800);
+            ////实例化属性窗口
+            //fwProperty = new FloatableWindow();
+            //fwProperty.ParentLayoutRoot = LayoutRoot;//LayoutRoot;
+            //fwProperty.Content = prop;
+            //prop.Height = 420d;
+            //fwProperty.Width = 300d;
+            //fwProperty.Height = 450d;
+            //fwProperty.Title = "场景";
+            //fwProperty.SetValue(Canvas.ZIndexProperty, 900);
+            //fwProperty.SetValue(Canvas.TopProperty,80d);
+            //AddElementCanvas.SetValue(Canvas.ZIndexProperty, 800);
           
-            this.SizeChanged += (o, e) => {
+            //this.SizeChanged += (o, e) => {
                
-                fwProperty.RenderTransform = new CompositeTransform()
-                {
-                    TranslateX = (e.NewSize.Width - fwProperty.Width)/2d  - 25d,
-                    TranslateY = (e.NewSize.Height - fwProperty.Height)/2d + 120d
-                };
-            };
-            fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
+            //    fwProperty.RenderTransform = new CompositeTransform()
+            //    {
+            //        TranslateX = (e.NewSize.Width - fwProperty.Width)/2d  - 25d,
+            //        TranslateY = (e.NewSize.Height - fwProperty.Height)/2d + 120d
+            //    };
+            //};
+            //fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
+
+            this.SizeChanged += LoadScreen_SizeChanged;
+        }
+
+        private void LoadScreen_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var width = 280d;
+            var height = (e.NewSize.Height - 65d) * 0.8d;
+            var left = e.NewSize.Width - width - 20d;
+            var top = (e.NewSize.Height - 65d) * 0.1d + 65d;
+            DesignFloatPanel.Width = width;
+            DesignFloatPanel.Height = height;
+            DesignFloatPanel.Left = left;
+            DesignFloatPanel.Top = top;
         }
 
         #region 实例化其它参数
@@ -1035,8 +1051,12 @@ namespace MonitorSystem
         /// <param name="mMagrinY"></param>
         private MonitorControl AddSelectControlElement(Canvas canvas, double mWidth, double mHeight, double mMagrinX, double mMagrinY)
         {
-            t_Control t = GetSelectControl();
-            return CreateControl(canvas, t, mWidth, mHeight, mMagrinX, mMagrinY);
+            var t = GetSelectControl();
+            if (null != t)
+            {
+                return CreateControl(canvas, t, mWidth, mHeight, mMagrinX, mMagrinY);
+            }
+            return null;
         }
 
         public MonitorControl CreateControl(Canvas canvas, t_Control t, double width, double height, double x, double y)
@@ -1079,7 +1099,12 @@ namespace MonitorSystem
         /// <returns></returns>
         private t_Control GetSelectControl()
         {
-            return PropertyMain.Instance.GetSelected();
+            var t = GalleryControl.Instance.GetSelected();
+            if (null == t)
+            {
+                return PropertyMain.Instance.GetSelected();
+            }
+            return t;
         }
 
         /// <summary>
@@ -1114,15 +1139,15 @@ namespace MonitorSystem
         }
         #endregion
 
-        /// <summary>
-        /// 属性窗口改变大小时发生
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void f_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            prop.ChangeSize(e.NewSize.Height, e.NewSize.Width);
-        }
+        ///// <summary>
+        ///// 属性窗口改变大小时发生
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //protected void f_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    prop.ChangeSize(e.NewSize.Height, e.NewSize.Width);
+        //}
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             IsShowSaveToot = true;//显示保存成功提示
@@ -1658,12 +1683,14 @@ namespace MonitorSystem
             ZTMenuScriptItem.Visibility = Visibility.Collapsed;
             AllSencesMenuScriptItem.Visibility = Visibility.Collapsed;
             GalleryButton.Visibility = Visibility.Visible;
+            DesignButton.Visibility = Visibility.Visible;
+            DesignFloatPanel.IsOpened = true;
             IsZT = true;
                        
             //加截属性窗口
-            fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
-            prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
-            fwProperty.Show();
+            //fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
+            //prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
+            //fwProperty.Show();
             //鼠标事件
             this.KeyDown += new KeyEventHandler(Screen_KeyDown);
 
@@ -1708,6 +1735,9 @@ namespace MonitorSystem
             ZTMenuScriptItem.Visibility = Visibility.Visible;
             AllSencesMenuScriptItem.Visibility = Visibility.Visible;
             GalleryButton.Visibility = Visibility.Collapsed;
+            DesignButton.Visibility = Visibility.Collapsed;
+            DesignFloatPanel.IsOpened = false;
+            GalleryFloatPanel.IsOpened = false;
             IsZT = false;
 
             this.KeyDown -= new KeyEventHandler(Screen_KeyDown);
@@ -1735,9 +1765,9 @@ namespace MonitorSystem
                     }
                 }
             }
-            fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
-            prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
-            fwProperty.Close();
+            //fwProperty.SizeChanged -= new SizeChangedEventHandler(f_SizeChanged);
+            //prop.ChangeScreen -= new EventHandler(prop_ChangeScreen);
+            //fwProperty.Close();
 
             //定时更新值开启
             timerRefrshValue.Start();
@@ -1795,6 +1825,11 @@ namespace MonitorSystem
         private void GalleryButton_Click(object sender, RoutedEventArgs e)
         {
             GalleryFloatPanel.IsOpened = !GalleryFloatPanel.IsOpened;
+        }
+
+        private void DesignButton_Click(object sender, RoutedEventArgs e)
+        {
+            DesignFloatPanel.IsOpened = !DesignFloatPanel.IsOpened;
         }
     }
 }

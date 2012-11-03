@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.ServiceModel.DomainServices.Client;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using MonitorSystem.Web.Servers;
-using System.ServiceModel.DomainServices.Client;
-using MonitorSystem.Web.Moldes;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using MonitorSystem.Controls;
 using MonitorSystem.Property;
-using System.Collections;
+using MonitorSystem.Web.Moldes;
+using MonitorSystem.Web.Servers;
 
 namespace MonitorSystem
 {
@@ -46,31 +47,38 @@ namespace MonitorSystem
 
         public t_Control GetSelected()
         {
+            ListBox listBox = null;
             if (accordion.SelectedIndex == 0)
             {
-                return tpListBox.SelectedItem as t_Control;
+                listBox = tpListBox;
             }
             else if (accordion.SelectedIndex == 1)
             {
-                return ztListBox.SelectedItem as t_Control;
+                listBox = ztListBox;
             }
             else if (accordion.SelectedIndex == 2)
             {
-                return ggListBox.SelectedItem as t_Control;
+                listBox = ggListBox;
+            }
+            if (null != listBox && listBox.SelectedIndex > 0)
+            {
+                return listBox.SelectedItem as t_Control;
             }
             return null;
         }
 
         public void ResetSelected()
         {
-            if (null != tpListBox
-                && null != ztListBox
-                && null != ggListBox)
+            if (null != tpListBox && tpListBox.Items.Count > 0)
             {
                 tpListBox.SelectedIndex = 0;
-
+            }
+            if (null != ztListBox && ztListBox.Items.Count > 0)
+            {
                 ztListBox.SelectedIndex = 0;
-
+            }
+            if (null != ggListBox && ggListBox.Items.Count > 0)
+            {
                 ggListBox.SelectedIndex = 0;
             }
         }
@@ -313,9 +321,9 @@ namespace MonitorSystem
 
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (this.Parent is FloatableWindow)
+            if (this.Parent is FloatPanel)
             {
-                (this.Parent as FloatableWindow).Title = (tabControl1.SelectedItem as TabItem).Header;
+                (this.Parent as FloatPanel).Title = (tabControl1.SelectedItem as TabItem).Header.ToString();
             }
             ResetSelected();
         }
@@ -329,6 +337,7 @@ namespace MonitorSystem
             }
             else
             {
+                GalleryControl.Instance.ResetSelected();
                 LoadScreen.AddElementModel();
             }
         }

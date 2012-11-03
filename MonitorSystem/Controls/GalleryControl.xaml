@@ -19,6 +19,7 @@
         <ListBox
             x:Name="GalleryListBox"
             Grid.Column="1"
+            SelectionChanged="GalleryListBox_SelectionChanged"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>

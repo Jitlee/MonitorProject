@@ -6,7 +6,8 @@
     mc:Ignorable="d"  d:DesignHeight="400" d:DesignWidth="500" 
              xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
              xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
-             xmlns:ctrls="clr-namespace:MonitorSystem.Controls">
+             xmlns:ctrls="clr-namespace:MonitorSystem.Controls"
+             xmlns:local="clr-namespace:MonitorSystem">
     <!--xmlns:menu="clr-namespace:SL4PopupMenu"-->
     <Grid x:Name="LayoutRoot">
         
@@ -40,7 +41,8 @@
                 <StackPanel  HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
                     <ctrls:ImageButton Height="23" Width="75" Content="首页" Margin="5,0" Image="/MonitorSystem;component/Images/Common/首页_工具条.jpg" Click="Home_Click"/>
                     <ctrls:ImageButton Height="23" Width="75" Content="后退" Margin="5,0" Image="/MonitorSystem;component/Images/Common/prev.JPG" Click="Back_Click"/>
-                    <ctrls:ImageButton x:Name="GalleryButton" Height="23" Width="75" Content="图库" Margin="5,0" Image="/MonitorSystem;component/Images/Common/prev.JPG" Click="GalleryButton_Click" Visibility="Collapsed"/>
+                    <ctrls:ImageButton x:Name="DesignButton" Height="23" Width="75" Content="设计" Margin="5,0" Image="/MonitorSystem;component/Images/design.png" Click="DesignButton_Click" Visibility="Collapsed"/>
+                    <ctrls:ImageButton x:Name="GalleryButton" Height="23" Width="75" Content="图库" Margin="5,0" Image="/MonitorSystem;component/Images/gallery.png" Click="GalleryButton_Click" Visibility="Collapsed"/>
                 </StackPanel>               
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <sdk:Label Margin="5,5"
@@ -79,6 +81,19 @@
             Title="图库">
             <ctrls:FloatPanel.Child>
                 <ctrls:GalleryControl x:Name="GalleryControl"/>
+            </ctrls:FloatPanel.Child>
+        </ctrls:FloatPanel>
+
+        <!-- 图库面板 -->
+        <ctrls:FloatPanel
+            x:Name="DesignFloatPanel"
+            Height="450"
+            Width="280"
+            Left="50"
+            Top="80"
+            Title="图库">
+            <ctrls:FloatPanel.Child>
+                <local:PropertyMain/>
             </ctrls:FloatPanel.Child>
         </ctrls:FloatPanel>
         <toolkit:BusyIndicator x:Name="tbWait" BusyContent="数据加载中，请稍候 ..."/>
