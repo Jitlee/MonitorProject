@@ -28,6 +28,7 @@ namespace MonitorSystem.Other
         public double X;
         public double Y;
         public double Value;
+        public Point PointPosi;
         public System.DateTime time;
     }
     #endregion
@@ -41,13 +42,18 @@ namespace MonitorSystem.Other
         public t_Element_RealTimeLine LineInfo
         {
             get { return _LineInfo; }
-            set { _LineInfo = value; }
+            set { _LineInfo = value;
+                GetTimeShowELen();
+            }
         }
-        DispatcherTimer timer = new DispatcherTimer();
-
+        DispatcherTimer timerSetValue = new DispatcherTimer();
+        DispatcherTimer timerLoadValue = new DispatcherTimer();
         public RealTimeLineOR(t_Element_RealTimeLine mLine)
         {
             _LineInfo = mLine;
+            GetTimeShowELen();
+
+            _YValue = double.Parse(_LineInfo.MinValue);
 
             _PolyLine.Stroke = new SolidColorBrush(Common.StringToColor(_LineInfo.LineColor));
             _PolyLine.StrokeThickness = 2;
@@ -57,19 +63,35 @@ namespace MonitorSystem.Other
 
             //曲线点
             noteMessages = new CoordinatesValue[maxNote];
-
-            timer.Interval = new TimeSpan(0, 0, 1);
-            timer.Tick += (sender, obj) =>
+            timerSetValue.Interval = new TimeSpan(0, 0, 2);
+            timerSetValue.Tick += (sender, obj) =>
             {
-                Random rd = new Random();
-                //获取值，刷新
-               
-                    //AddNewValue(Convert.ToDouble(rd.NextDouble() * int.Parse(LineInfo.MaxValue)));
-                    //ShowCurve();
-            };
-            timer.Start();
-        }
+                AddNewValue(_YValue);
+                if (_ISShowValue)
+                    ShowCurve();
+            }; 
+            timerSetValue.Start();
 
+
+            timerLoadValue.Interval = new TimeSpan(0, 0, 2);
+            timerLoadValue.Tick += (sender, obj) =>
+            {
+               
+                _YValue = rd.NextDouble() * 150;                
+            };
+            timerLoadValue.Start();
+        }
+        Random rd = new Random();
+        private bool _ISShowValue = true;
+        /// <summary>
+        /// 显示值
+        /// </summary>
+        public bool ISShowValue
+        {
+            get { return _ISShowValue; }
+            set { _ISShowValue = value; }
+        }
+       
        
         double _YValue = 0.0;
         /// <summary>
@@ -119,8 +141,7 @@ namespace MonitorSystem.Other
         {
             _LineInfo.TimeLen = value;
             SetPointReMovePx();
-        }
-        
+        }       
       
         /// <summary>
         /// 面版可显示点数量,根据取值宽围/采样频率
@@ -135,11 +156,15 @@ namespace MonitorSystem.Other
         /// </summary>
         public void SetPointReMovePx()
         {
-            int len = GetTimeShowELen();
-            _PicShowPointNumber = len / GetCYTimeLen();//取值宽围/采样频率
+            //int len = GetTimeShowELen();
+            _PicShowPointNumber = _TimeShowELen / GetCYTimeLen();//取值宽围/采样频率
             curveRemove = _PicCurveWidth / _PicShowPointNumber;
         }
 
+        /// <summary>
+        /// 采样时间长度
+        /// </summary>
+        /// <returns></returns>
         private int GetCYTimeLen()
         {
             int len = 5;
@@ -160,25 +185,28 @@ namespace MonitorSystem.Other
         }
 
         /// <summary>
+        /// 时间显示,长度,(S)秒
+        /// </summary>
+        int _TimeShowELen = 5;
+        /// <summary>
         /// 时间显示长度
         /// </summary>
         /// <returns></returns>
         private int  GetTimeShowELen()
-        {
-            int len = 5;
+        {            
             if (_LineInfo.TimeLenType == "ss")
             {
-                len = _LineInfo.TimeLen;
+                _TimeShowELen = _LineInfo.TimeLen;
             }
             else if (_LineInfo.TimeLenType == "mm")
             {
-                len = _LineInfo.TimeLen * 60;
+                _TimeShowELen = _LineInfo.TimeLen * 60;
             }
             else if (_LineInfo.TimeLenType == "hh")
             {
-                len = _LineInfo.TimeLen * 60 * 60;
+                _TimeShowELen = _LineInfo.TimeLen * 60 * 60;
             }
-            return len;
+            return _TimeShowELen;
         }
 
         /// <summary>
@@ -186,28 +214,61 @@ namespace MonitorSystem.Other
         /// </summary>
         public void SetXZTextBoxValue()
         {
-
            _StartTime= DateTime.Now;
            if (_TextList == null)
                return;
            if (_TextList.Count == 0)
                return;
 
-           int len = GetTimeShowELen();
-
-           int timeLenPer = len / (_TextList.Count - 1);
+           int timeLenPer = _TimeShowELen / (_TextList.Count - 1);
            int txtCount = _TextList.Count;
            for (int i = 0; i < _TextList.Count; i++)
-           {
-               
+           {               
                DateTime dt = _StartTime.AddSeconds(-(timeLenPer * (txtCount-i-1)));
                _TextList[i].Text = dt.ToString(_LineInfo.ShowFormat);
            }
-           // _StartTime.AddSeconds
-
         }
 
         #endregion
+
+        #region  获取游标值
+        /// <summary>
+        /// 根据当前游标X轴位值获取时间
+        /// </summary>
+        /// <param name="X"></param>
+        /// <returns></returns>
+        public string GetXCursorValue(double X)
+        {
+            double per = X / _PicCurveWidth;
+            int TimeLen = (int)(_TimeShowELen * (1 - per));
+            return DateTime.Now.AddSeconds(-TimeLen).ToString("HH:mm:ss");           
+        }
+
+        /// <summary>
+        /// 根据当前游标X轴位值获取时间
+        /// </summary>
+        /// <param name="X"></param>
+        /// <returns></returns>
+        public string GetYCursorValue(double Y)
+        {
+            double half = 0;
+            if (_YZSFPer != 1)
+                half = ((int.Parse(_LineInfo.MaxValue) - int.Parse(_LineInfo.MinValue)) * (_YZSFPer - 1)) / 2;
+            double max = int.Parse(_LineInfo.MaxValue) + half;
+            double min = int.Parse(_LineInfo.MinValue) - half;
+
+            double per =Y / _picCurveShowHeight;
+
+            var TimeLen =(max - min) * (1 - per);
+            return ((int)(TimeLen+ min)).ToString();
+        }
+
+        public void HeadMove(Size _size)
+        {
+            //_size.Width;
+        }
+        #endregion
+
         /// <summary>
         /// 鼠标X，Y 坐标值，及该点坐标记录值、记录时间（数组）
         /// </summary>
@@ -298,12 +359,16 @@ namespace MonitorSystem.Other
                 {
                     this.noteMessages[i] = this.noteMessages[i + 1];
                     this.noteMessages[i].X = this.noteMessages[i].X - curveRemove;
+
+                    this.noteMessages[i].PointPosi.X = this.noteMessages[i].X;
                 }
                 this.noteMessages[this.noteNow].SFPer = _YZSFPer;
                 this.noteMessages[this.noteNow].Value = newValue;
                 this.noteMessages[this.noteNow].time = System.DateTime.Now;
-                this.noteMessages[this.noteNow].X = (int)_PicCurveWidth;
-                this.noteMessages[this.noteNow].Y = GetYValue(newValue);
+
+                this.noteMessages[this.noteNow].PointPosi = new Point();
+                this.noteMessages[this.noteNow].PointPosi.X = this.noteMessages[this.noteNow].X = (int)_PicCurveWidth;
+                this.noteMessages[this.noteNow].PointPosi.Y = this.noteMessages[this.noteNow].Y = GetYValue(newValue);
             }
             else
             {
@@ -311,14 +376,15 @@ namespace MonitorSystem.Other
                 for (int i = 0; i < this.noteNow; i++)
                 {
                     this.noteMessages[i].X = this.noteMessages[i].X - curveRemove;
+                    this.noteMessages[i].PointPosi.X = this.noteMessages[i].X;
                 }
                 this.noteMessages[this.noteNow].SFPer = _YZSFPer;
                 this.noteMessages[this.noteNow].Value = newValue;
                 this.noteMessages[this.noteNow].time = System.DateTime.Now;
-                this.noteMessages[this.noteNow].X = (int)_PicCurveWidth;
 
-                this.noteMessages[this.noteNow].Y = GetYValue(newValue);
-
+                this.noteMessages[this.noteNow].PointPosi = new Point();
+                this.noteMessages[this.noteNow].PointPosi.X = this.noteMessages[this.noteNow].X = (int)_PicCurveWidth;
+                this.noteMessages[this.noteNow].PointPosi.Y = this.noteMessages[this.noteNow].Y = GetYValue(newValue);
                 this.noteNow++;
             }
             if (_TitleShowInfo != null)
@@ -337,6 +403,7 @@ namespace MonitorSystem.Other
             }
         }
         #endregion
+
         public double GetHalf()
         {
             double half = 0;
@@ -370,6 +437,7 @@ namespace MonitorSystem.Other
                 {
                     noteMessages[i].SFPer = _YZSFPer;
                     noteMessages[i].Y = GetYValue(noteMessages[i].Value);
+                    noteMessages[i].PointPosi.Y = noteMessages[i].Y;
                 }
             }
         }
@@ -397,8 +465,9 @@ namespace MonitorSystem.Other
                 pc.Clear();
                 for (int i = 0; i <= this.noteNow - 1; i++)
                 {
-                    Point p = new Point(this.noteMessages[i].X, this.noteMessages[i].Y);
-                    pc.Add(p);
+                    //Point p = new Point(this.noteMessages[i].X, this.noteMessages[i].Y);
+                    //pc.Add(p);
+                    pc.Add(this.noteMessages[i].PointPosi);
                 }
             }
             SetXZTextBoxValue();
