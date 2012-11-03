@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using MonitorSystem.MonitorSystemGlobal;
 using MonitorSystem.Web.Moldes;
 using System.ComponentModel;
+using MonitorSystem.ZTControls;
 
 namespace MonitorSystem.Gallery.Meter
 {
@@ -29,11 +30,36 @@ namespace MonitorSystem.Gallery.Meter
                 AdornerLayer = new Adorner(this);
                 AdornerLayer.Selected += OnSelected;
                 AdornerLayer.IsLockScale = true;
-                //var menu = new ContextMenu();
-                //var menuItem = new MenuItem() { Header = "属性" };
-                //menuItem.Click += PropertyMenuItem_Click;
-                //menu.Items.Add(menuItem);
-                //AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
+                var menu = new ContextMenu();
+                var menuItem = new MenuItem() { Header = "属性" };
+                menuItem.Click += PropertyMenuItem_Click;
+                menu.Items.Add(menuItem);
+                AdornerLayer.SetValue(ContextMenuService.ContextMenuProperty, menu);
+            }
+        }
+        
+        SetSingleProperty tpp = new SetSingleProperty();
+        private void PropertyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            tpp = new SetSingleProperty();
+
+            tpp.Closing += new EventHandler<System.ComponentModel.CancelEventArgs>(tpp_Closing);
+            tpp.DeviceID = this.ScreenElement.DeviceID.Value;
+            tpp.ChanncelID = this.ScreenElement.ChannelNo.Value;
+            tpp.LevelNo = this.ScreenElement.LevelNo.Value;
+            tpp.ComputeStr = this.ScreenElement.ComputeStr;
+            tpp.Init();
+            tpp.Show();
+        }
+
+        protected void tpp_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (tpp.IsOK)
+            {
+                this.ScreenElement.DeviceID = tpp.DeviceID;
+                this.ScreenElement.ChannelNo = tpp.ChanncelID;
+                this.ScreenElement.LevelNo = tpp.LevelNo;
+                this.ScreenElement.ComputeStr = tpp.ComputeStr;
             }
         }
 
