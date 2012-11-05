@@ -1096,7 +1096,7 @@ namespace MonitorSystem.Other
 
                 obj.YZSFPer = _SFper;
                 obj.HeadSFArr();
-                obj.ShowCurve();
+                //obj.ShowCurve();
             }
         }
         /// <summary>
@@ -1273,8 +1273,8 @@ namespace MonitorSystem.Other
                 obj.LineInfo.TimeLenType = type;
                 obj.LineInfo.TimeLen = Len;
                 obj.SetPointReMovePx();
-                obj.ChangeXValue();
-                obj.ShowCurve();
+                //obj.ChangeXValue();
+                //obj.ShowCurve();
             }
             PainXYZ();
         }

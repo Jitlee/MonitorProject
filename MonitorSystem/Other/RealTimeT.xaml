@@ -15,12 +15,14 @@
             <ColumnDefinition Width="3"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="8"/>
             <RowDefinition/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
-
-        <Grid x:Name="LayoutRoot" Background="Beige"  Grid.Column="1" Grid.Row="1">
+        <TextBox  x:Name="rtb" Grid.Column="1" ></TextBox>
+        <Button x:Name="btn" Click="button1_Click"  Grid.Column="2"  ></Button>
+            <Grid x:Name="LayoutRoot" Background="Beige"  Grid.Column="1" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="40"/>

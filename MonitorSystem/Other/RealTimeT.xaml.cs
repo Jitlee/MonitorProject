@@ -790,6 +790,7 @@ namespace MonitorSystem.Other
                 _CanvasGrid.MouseMove += new MouseEventHandler(_CanvasGrid_MouseMove);
                 _CanvasGrid.MouseLeftButtonDown += new MouseButtonEventHandler(_CanvasGrid_MouseLeftButtonDown);
                 _CanvasGrid.MouseLeftButtonUp += new MouseButtonEventHandler(_CanvasGrid_MouseLeftButtonUp);
+                _CanvasGrid.MouseLeave+=new MouseEventHandler(_CanvasGrid_MouseLeave);
             }
             else
             {
@@ -821,14 +822,27 @@ namespace MonitorSystem.Other
         /// 鼠标按下坐标点位置
         /// </summary>
         Point _CoursorStartPoint = new Point();
+
+        /// <summary>
+        /// 鼠标是否按下
+        /// </summary>
+        bool MouseISDown = false;
         protected void _CanvasGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            _CanvasGrid.CaptureMouse();
             _CoursorStartPoint = e.GetPosition(_CanvasGrid);
-
+            MouseISDown = true;
             CanvasISMove = false;
+
+            //处理按下时的显示点
+            foreach (RealTimeLineOR obj in _listRealTimeLine)
+            {
+                obj.SetMoveNote();
+            }
         }
         protected void _CanvasGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            _CanvasGrid.ReleaseMouseCapture();
             if (!CanvasISMove)//单击,鼠标没有移动
             {
                 if (_ISShowCursor)
@@ -845,12 +859,20 @@ namespace MonitorSystem.Other
                     }
                 }
             }
-        }
 
+            if (MouseISDown)
+            {
+                foreach (RealTimeLineOR obj in _listRealTimeLine)
+                {
+                    obj.ISShowValue = true;
+                }
+            }
+            MouseISDown = false;
+        }
+       
         protected void _CanvasGrid_MouseMove(object sender, MouseEventArgs e)
         {
             CanvasISMove = true;
-
             Point pMove = e.GetPosition(_CanvasGrid);
             if (CursorISHaveShow)//游标已经显示,处理游标位置
             {
@@ -863,16 +885,36 @@ namespace MonitorSystem.Other
             }
 
             //处理拖动情况
-            Size moveSize = new Size();
-            moveSize.Height = 0;
-            moveSize.Width = pMove.X - _CoursorStartPoint.X;
-
-            foreach (RealTimeLineOR obj in _listRealTimeLine)
+            if (MouseISDown)
             {
-                obj.ISShowValue = false;
-                obj.HeadMove(moveSize);
-            }
+                Size moveSize = new Size();
+                moveSize.Height = 0;
+                double mWidth =_CoursorStartPoint.X- pMove.X;
+                bool isAdd = false;
+                if (mWidth < 0)
+                {
+                    isAdd = false;
+                    mWidth *= -1;
+                }
+                else
+                {
+                    isAdd = true;
+                }
+                if (mWidth < FirstLineOR.MinMoveWidth)
+                    return;
 
+                foreach (RealTimeLineOR obj in _listRealTimeLine)
+                {
+                    obj.ISShowValue = false;
+                    obj.HeadMove(mWidth, isAdd, 0);
+                }
+                _CoursorStartPoint = pMove;
+            }
+        }
+
+        protected void _CanvasGrid_MouseLeave(object sender, MouseEventArgs e)
+        {
+            //_Cursor.Visibility = Visibility.Collapsed;
         }
         #endregion
 
@@ -1070,7 +1112,7 @@ namespace MonitorSystem.Other
                     _Line3.X2 = _Line3.X1 = xGridWidth;
                 }
                 _Line3.Y1 = 0;
-                _Line3.Y2 = yGridHeight;
+                _Line3.Y2 = yGridHeight - _YZStartPosition;
 
                 _Line3.Stroke = _Line1.Stroke = new SolidColorBrush(_BorderColor);
                 _Line3.StrokeThickness = _Line1.StrokeThickness = 2;
@@ -1105,7 +1147,7 @@ namespace MonitorSystem.Other
                     double X = _XStartDoble + aXMainSize;
                     _XStartDoble = X;
 
-                    _CanvasGrid.Children.Add(AddMainLine(X, X, 0, yGridHeight, _XMainColor, GridMainLineWidth));
+                    _CanvasGrid.Children.Add(AddMainLine(X, X, 0, yGridHeight - _YZStartPosition, _XMainColor, GridMainLineWidth));
                 }
                 PainPriGrid(_XStartDoble, aXPerSize, false);
             }
@@ -1128,7 +1170,7 @@ namespace MonitorSystem.Other
                 {
                     double priX = startPosition + aPerSize;
                     startPosition = priX;
-                    _CanvasGrid.Children.Add(AddPrimLine(priX, priX, 0, yGridHeight, _XPriColor, GridPriLineWidth));
+                    _CanvasGrid.Children.Add(AddPrimLine(priX, priX, 0, yGridHeight - _YZStartPosition, _XPriColor, GridPriLineWidth));
                 }
             }
         }
@@ -1410,10 +1452,7 @@ namespace MonitorSystem.Other
 
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+       
 
         /// <summary>
         /// 右边显示Y轴信息
@@ -1435,9 +1474,8 @@ namespace MonitorSystem.Other
             {
                 if (obj.YZSFPer == _SFper)
                     continue;
-                PainXYZ();
-
                 obj.YZSFPer = _SFper;
+                PainXYZ();
                 obj.HeadSFArr();
                 obj.ShowCurve();
             }
@@ -1612,14 +1650,24 @@ namespace MonitorSystem.Other
             foreach (RealTimeLineOR obj in _listRealTimeLine)
             {
                 if (obj.LineInfo.TimeLen == Len && type == obj.LineInfo.TimeLenType)
+                {
                     continue;
+                }
+                
                 obj.LineInfo.TimeLenType = type;
                 obj.LineInfo.TimeLen = Len;
                 obj.SetPointReMovePx();
-                obj.ChangeXValue();
+                obj.SetXZTextBoxValueByMaxTime();
+
+                obj.HeadXPosition();
                 obj.ShowCurve();
             }
-            PainXYZ();
+            //PaintBasicInfo();
+
+            //foreach (RealTimeLineOR obj in _listRealTimeLine)
+            //{
+                
+            //}
         }
 
         private void btnMi1_Click(object sender, RoutedEventArgs e)
@@ -1658,6 +1706,13 @@ namespace MonitorSystem.Other
         }
 
         #endregion
+
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+           var v= _listRealTimeLine.First();
+           rtb.Text = v.GetXValueList();
+        }
 
     }
 }
