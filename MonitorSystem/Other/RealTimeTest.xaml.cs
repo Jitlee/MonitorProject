@@ -1095,7 +1095,7 @@ namespace MonitorSystem.Other
                 PainXYZ();
 
                 obj.YZSFPer = _SFper;
-                obj.HeadSFArr();
+                obj.SetYZValue();
                 //obj.ShowCurve();
             }
         }

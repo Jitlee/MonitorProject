@@ -775,7 +775,7 @@ namespace MonitorSystem.Other
             SetXYStartPosition();
             PainGrid();
             DrawLine();
-            ShowValue();
+            //ShowValue();
             PainXYZ();
 
             //处理游标
@@ -822,7 +822,7 @@ namespace MonitorSystem.Other
         /// 鼠标按下坐标点位置
         /// </summary>
         Point _CoursorStartPoint = new Point();
-
+        //Point _CoursorStartPointY = new Point();
         /// <summary>
         /// 鼠标是否按下
         /// </summary>
@@ -833,12 +833,6 @@ namespace MonitorSystem.Other
             _CoursorStartPoint = e.GetPosition(_CanvasGrid);
             MouseISDown = true;
             CanvasISMove = false;
-
-            //处理按下时的显示点
-            foreach (RealTimeLineOR obj in _listRealTimeLine)
-            {
-                obj.SetMoveNote();
-            }
         }
         protected void _CanvasGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -855,7 +849,7 @@ namespace MonitorSystem.Other
                     else
                     {
                         _Cursor.Visibility = Visibility.Collapsed;
-                        CursorISHaveShow = false;
+                       // CursorISHaveShow = false;
                     }
                 }
             }
@@ -890,6 +884,7 @@ namespace MonitorSystem.Other
                 Size moveSize = new Size();
                 moveSize.Height = 0;
                 double mWidth =_CoursorStartPoint.X- pMove.X;
+                double mHeight =pMove.Y- _CoursorStartPoint.Y;
                 bool isAdd = false;
                 if (mWidth < 0)
                 {
@@ -900,21 +895,34 @@ namespace MonitorSystem.Other
                 {
                     isAdd = true;
                 }
-                if (mWidth < FirstLineOR.MinMoveWidth)
-                    return;
+                bool isMove = false;
 
-                foreach (RealTimeLineOR obj in _listRealTimeLine)
+                if (mWidth > FirstLineOR.MinMoveWidth)
                 {
-                    obj.ISShowValue = false;
-                    obj.HeadMove(mWidth, isAdd, 0);
+                    isMove = true;                    
                 }
-                _CoursorStartPoint = pMove;
+                if (mHeight > 1 || (mHeight * -1) > 1)
+                {
+                    isMove = true;
+                }
+                if (isMove)
+                {
+                    _CoursorStartPoint = pMove;
+                    foreach (RealTimeLineOR obj in _listRealTimeLine)
+                    {
+                        obj.ISShowValue = false;
+                        obj.HeadMove(mWidth, isAdd, mHeight);
+                        ShowYText(obj);
+                        obj.ShowCurve();
+                    }
+                    
+                }
             }
         }
 
         protected void _CanvasGrid_MouseLeave(object sender, MouseEventArgs e)
         {
-            //_Cursor.Visibility = Visibility.Collapsed;
+           
         }
         #endregion
 
@@ -1371,15 +1379,14 @@ namespace MonitorSystem.Other
             mXZ.StrokeThickness = 2;
             _CanvasZ.Children.Add(mXZ);
 
-            string[] arrText = null;
-            arrText = GetYText(objOR);
+            
 
             //文本显示位置
             double txtPosintionStart = (YZLineWidth + YZTxtWidth) * (LineNumber);
             if (RightShowYZB)
                 txtPosintionStart = txtPosintionStart + xGridWidth + YZLineWidth;
             txtPosintionStart += 3;
-
+            List<TextBlock> listYTxt = new List<TextBlock>();
             for (int imain = 0; imain < _YMainNumber + 2; imain++)
             {
                 double _y = imain * ayzMainSize + _YZStartPosition;
@@ -1401,14 +1408,30 @@ namespace MonitorSystem.Other
                 //添加Y轴标签
                 TextBlock tb = new TextBlock();
                 tb.Foreground = new SolidColorBrush(Common.StringToColor(objOR.LineInfo.LineColor));
-                tb.Text = arrText[imain];
+               
 
                 if (!_RightShowYZB)
                     _X = _X + YZTxtWidth + 2;
-
+                
                 tb.SetValue(Canvas.LeftProperty, txtPosintionStart);
                 tb.SetValue(Canvas.TopProperty, _y - 5);
                 _CanvasZ.Children.Add(tb);
+                listYTxt.Add(tb);
+            }
+            objOR.TextYList = listYTxt;
+            ShowYText(objOR);
+        }
+
+        private void ShowYText(RealTimeLineOR objOR)
+        {
+            string[] arrText = null;
+            arrText = GetYText(objOR);
+            if (objOR.TextYList != null && objOR.TextYList.Count > 0)
+            {
+                for (int imain = 0; imain < _YMainNumber + 2; imain++)
+                {
+                    objOR.TextYList[imain].Text = arrText[imain];
+                }
             }
         }
 
@@ -1419,21 +1442,19 @@ namespace MonitorSystem.Other
         private string[] GetYText(RealTimeLineOR obj)
         {
             string[] ytextArr = new string[_YMainNumber + 2];
-
-
             double half = obj.GetHalf();
             double max = int.Parse(obj.LineInfo.MaxValue) + half;
             double min = int.Parse(obj.LineInfo.MinValue) - half;
 
             double v = max - min;
             double vPer = v / (_YMainNumber + 1);
-            ytextArr[0] = max.ToString();
+            ytextArr[0] = (Math.Round(max + obj.MoveYValue, obj.LineInfo.ValueDecimal)).ToString();
             for (int i = 1; i <= _YMainNumber; i++)
             {
-                double val = Math.Round(max - (i * vPer), obj.LineInfo.ValueDecimal);
+                double val = Math.Round((max - (i * vPer) + obj.MoveYValue), obj.LineInfo.ValueDecimal);
                 ytextArr[i] = val.ToString();
             }
-            ytextArr[_YMainNumber + 1] = min.ToString();
+            ytextArr[_YMainNumber + 1] = (Math.Round((min + obj.MoveYValue), obj.LineInfo.ValueDecimal)).ToString();
             return ytextArr;
         }
         private string[] GetYText()
@@ -1447,13 +1468,7 @@ namespace MonitorSystem.Other
         }
         #endregion
 
-        private void ShowValue()
-        {
-
-        }
-
-       
-
+        
         /// <summary>
         /// 右边显示Y轴信息
         /// </summary>
@@ -1476,7 +1491,7 @@ namespace MonitorSystem.Other
                     continue;
                 obj.YZSFPer = _SFper;
                 PainXYZ();
-                obj.HeadSFArr();
+                obj.SetYZValue();
                 obj.ShowCurve();
             }
         }

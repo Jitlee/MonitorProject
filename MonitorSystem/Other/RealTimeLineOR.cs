@@ -53,7 +53,7 @@ namespace MonitorSystem.Other
             _LineInfo = mLine;
             GetTimeShowELen();
 
-            _YValue = double.Parse(_LineInfo.MinValue);
+            _YValue = GetLineMinValue();
 
             _PolyLine.Stroke = new SolidColorBrush(Common.StringToColor(_LineInfo.LineColor));
             _PolyLine.StrokeThickness = 0.5;
@@ -63,17 +63,17 @@ namespace MonitorSystem.Other
 
             //曲线点
             noteMessages = new CoordinatesValue[maxNote];
-            timerSetValue.Interval = new TimeSpan(0, 0, 3);
+            timerSetValue.Interval = new TimeSpan(0, 0, GetCYTimeLen());
             timerSetValue.Tick += (sender, obj) =>
             {
                 AddNewValue(_YValue);
-                if (_ISShowValue)
+                //if (_ISShowValue)
                     ShowCurve(noteNow);
             }; 
             timerSetValue.Start();
 
 
-            timerLoadValue.Interval = new TimeSpan(0, 0, 3);
+            timerLoadValue.Interval = new TimeSpan(0, 0, GetCYTimeLen());
             timerLoadValue.Tick += (sender, obj) =>
             {
                
@@ -87,10 +87,7 @@ namespace MonitorSystem.Other
         /// X轴最大时间
         /// </summary>
         private DateTime XZMaxTime = DateTime.Now;
-        /// <summary>
-        /// X轴最小时间
-        /// </summary>
-        private DateTime XZMinTime = DateTime.Now;
+       
 
         private bool _ISShowValue = true;
         /// <summary>
@@ -137,6 +134,16 @@ namespace MonitorSystem.Other
             set { _TextList = value; }
         }
 
+        List<TextBlock> _TextYList = new List<TextBlock>();
+        /// <summary>
+        /// X轴文本框显示信息
+        /// </summary>
+        public List<TextBlock> TextYList
+        {
+            get { return _TextYList; }
+            set { _TextYList = value; }
+        }
+
         //开始时间
         private DateTime _StartTime = DateTime.Now;
         /// <summary>
@@ -147,13 +154,7 @@ namespace MonitorSystem.Other
             get { return _StartTime; }
             set { _StartTime = value; }
         }
-
-        //public void SetTimeLen(int value)
-        //{
-        //    _LineInfo.TimeLen = value;
-        //    SetPointReMovePx();
-        //}       
-      
+     
         /// <summary>
         /// 面版可显示点数量,根据取值宽围/采样频率
         /// </summary>
@@ -234,9 +235,7 @@ namespace MonitorSystem.Other
             _MinMoveWidth = PicCurveWidth / _TimeShowELen;
             return _TimeShowELen;
         }
-
-
-
+        
         /// <summary>
         /// 设置X轴TextBox
         /// </summary>
@@ -245,9 +244,7 @@ namespace MonitorSystem.Other
            _StartTime= DateTime.Now;
            if (XZMaxTime > _StartTime)
                return;
-           else
-               XZMaxTime = _StartTime;
-
+        
            if (_TextList == null)
                return;
            if (_TextList.Count == 0)
@@ -255,7 +252,7 @@ namespace MonitorSystem.Other
 
            int timeLenPer = _TimeShowELen / (_TextList.Count - 1);
            int txtCount = _TextList.Count;
-           XZMaxTime = _StartTime;
+        
            for (int i = 0; i < _TextList.Count; i++)
            {               
                DateTime dt = _StartTime.AddSeconds(-(timeLenPer * (txtCount-i-1)));
@@ -281,7 +278,7 @@ namespace MonitorSystem.Other
                 DateTime dt = XZMaxTime.AddSeconds(-(timeLenPer * (txtCount - i - 1)));
                 _TextList[i].Text = dt.ToString(_LineInfo.ShowFormat);
             }
-            XZMinTime = XZMaxTime.AddSeconds(-(_TimeShowELen));
+            
         }
 
         #endregion
@@ -382,25 +379,18 @@ namespace MonitorSystem.Other
             DateTime NowTime=DateTime.Now;
 
             double NowXValue = 0.0;
-            if (NowTime > XZMaxTime)
+            if (NowTime > XZMaxTime && ISShowValue)//处理最大时间，但要在非移动的情况下才赋值
             {
                 XZMaxTime = NowTime;
-                //NowXValue = PicCurveWidth;
             }
-            //else
-            //{
-                NowXValue = GetXValue(NowTime);
-            //}
+            NowXValue = GetXValue(NowTime);
             if (this.noteNow >= this.maxNote - 1)
             {
                 //数组已经存满数值
                 for (int i = 0; i < this.noteNow; i++)
                 {
-                    //if (this.noteMessages[i].time > XZMinTime)
-                    //{
                         this.noteMessages[i] = this.noteMessages[i + 1];
                         this.noteMessages[i].X = GetXValue(this.noteMessages[i].time);
-                    //}
                 }
                 this.noteMessages[this.noteNow].SFPer = _YZSFPer;
                 this.noteMessages[this.noteNow].Value = newValue;
@@ -410,15 +400,6 @@ namespace MonitorSystem.Other
             }
             else
             {
-                
-                //for (int i = 0; i < this.noteNow; i++)
-                //{
-                //    //if (this.noteMessages[i].time < XZMinTime)
-                //    //{
-                //    //    continue;
-                //    //}
-                //    this.noteMessages[i].X = GetXValue(this.noteMessages[i].time);
-                //}
                 this.noteMessages[this.noteNow].SFPer = _YZSFPer;
                 this.noteMessages[this.noteNow].Value = newValue;
                 this.noteMessages[this.noteNow].time = NowTime;
@@ -430,8 +411,6 @@ namespace MonitorSystem.Other
                 for (int i = this.noteNow - 1; i >= 0; i--)
                 {
                     this.noteMessages[i].X = noteMessages[i + 1].X - curveRemove;
-                    //if (this.noteMessages[i].X < -30)
-                    //    break;
                 }
                 this.noteNow++;
             }
@@ -439,7 +418,7 @@ namespace MonitorSystem.Other
                 _TitleShowInfo.SetDataValue(newValue);
         }
 
-      
+
         /// <summary>
         /// 根据X最大时间来取值,
         /// 即：当前时间与最大时间的距离
@@ -447,38 +426,35 @@ namespace MonitorSystem.Other
         /// <param name="Time"></param>
         private double GetXValue(DateTime _Time)
         {
-            
-            //if (XZMaxTime == _Time)
-            //    return this.PicCurveWidth;
-            //大于最大时间
-            //if (XZMaxTime < _Time)
-            //{
-                TimeSpan t = _Time - XZMaxTime;
-
-                int m = t.Hours * 60 * 60 + t.Minutes * 50 + t.Seconds;
-                return this.PicCurveWidth + m * _MinMoveWidth;
-            //}
-            //小于最大值
-            //if (XZMaxTime > _Time)
-            //{
-            //    TimeSpan t = XZMaxTime - _Time;
-
-            //    int m= t.Hours * 60 * 60 + t.Minutes * 50 + t.Seconds;
-            //    return this.PicCurveWidth - m * _MinMoveWidth;
-            //}
-            //return 0.0;
-
+            TimeSpan t = _Time - XZMaxTime;
+            int m = t.Hours * 60 * 60 + t.Minutes * 50 + t.Seconds;
+            return this.PicCurveWidth + m * _MinMoveWidth;
         }
         #endregion
 
+        /// <summary>
+        /// 获取Y移动一单元，最小值，的高度
+        /// </summary>
+        /// <returns></returns>
+        public double GetYMinPx()
+        {
+            return _picCurveShowHeight / (GetLineMaxValue() - GetLineMinValue());
+        }
+       
+        #region 缩放处理
+
+        /// <summary>
+        /// 获取缩放值,
+        /// 缩放后，处理X最大值，Y最大值
+        /// </summary>
+        /// <returns></returns>
         public double GetHalf()
         {
             double half = 0;
             if (_YZSFPer != 1)
-                half = ((int.Parse(_LineInfo.MaxValue) - int.Parse(_LineInfo.MinValue)) * (_YZSFPer - 1)) / 2;
+                half = ((GetLineMaxValue() - GetLineMinValue()) * (_YZSFPer - 1)) / 2;
             return half;
         }
-        #region 缩放处理
         /// <summary>
         /// 获取根据值获取Y轴的坐标
         /// </summary>
@@ -486,11 +462,9 @@ namespace MonitorSystem.Other
         /// <returns></returns>
         private int GetYValue(double newValue)
         {
-            double half = 0;
-            if (_YZSFPer != 1)
-                half = ((int.Parse(_LineInfo.MaxValue) -int.Parse(_LineInfo.MinValue)) * (_YZSFPer - 1)) / 2;
-            double max = int.Parse(_LineInfo.MaxValue) + half;
-            double min = int.Parse(_LineInfo.MinValue) - half;
+            double half = GetHalf();
+            double max = GetLineMaxValue() + half;
+            double min = GetLineMinValue() - half;
 
             double per = (newValue - min) / (max - min);
             double y = _picCurveShowHeight * (1 - per);
@@ -498,18 +472,44 @@ namespace MonitorSystem.Other
         }
 
         /// <summary>
-        /// 处理缩放数组中的数据
+        /// 重新计算Y轴坐标位置
         /// </summary>
-        public void HeadSFArr()
+        public void SetYZValue()
         {
             for (int i = 0; i <= this.noteNow - 1; i++)
             {   
-                if (noteMessages[i].SFPer != _YZSFPer)
-                {
+                //if (noteMessages[i].SFPer != _YZSFPer)
+                //{
                     noteMessages[i].SFPer = _YZSFPer;
                     noteMessages[i].Y = GetYValue(noteMessages[i].Value);
-                }
+               // }
             }
+        }
+        #endregion
+
+        #region 处理线的最大值和最小值
+        /// <summary>
+        /// Y轴移动大小
+        /// </summary>
+        double _MoveYValue = 0;
+        /// <summary>
+        /// Y轴移动大小
+        /// </summary>
+        public double MoveYValue
+        {
+            get { return _MoveYValue; }
+            set { _MoveYValue = value; }
+        }
+
+        private double GetLineMaxValue()
+        {
+
+            return double.Parse(_LineInfo.MaxValue) + MoveYValue;
+        }
+
+        private double GetLineMinValue()
+        {
+            return double.Parse(_LineInfo.MinValue) + MoveYValue;
         }
         #endregion
 
@@ -525,17 +525,7 @@ namespace MonitorSystem.Other
             int TimeLen = (int)(_TimeShowELen * (1 - per));
             return DateTime.Now.AddSeconds(-TimeLen).ToString("HH:mm:ss");
         }
-
-        int _MoveNote = 0;
-        /// <summary>
-        /// 设置当前最大点
-        /// 用于:在移动时候，新添加的点就不在显示了
-        /// </summary>
-        public void SetMoveNote()
-        {
-            _MoveNote = noteNow;
-        }
-
+               
         /// <summary>
         /// 根据当前游标X轴位值获取时间
         /// </summary>
@@ -543,42 +533,51 @@ namespace MonitorSystem.Other
         /// <returns></returns>
         public string GetYCursorValue(double Y)
         {
-            double half = 0;
-            if (_YZSFPer != 1)
-                half = ((int.Parse(_LineInfo.MaxValue) - int.Parse(_LineInfo.MinValue)) * (_YZSFPer - 1)) / 2;
-            double max = int.Parse(_LineInfo.MaxValue) + half;
-            double min = int.Parse(_LineInfo.MinValue) - half;
+            double half = GetHalf();
+            //if (_YZSFPer != 1)
+            //    half = ((GetLineMaxValue() - GetLineMinValue()) * (_YZSFPer - 1)) / 2;
+            double max = GetLineMaxValue() + half;
+            double min = GetLineMinValue() - half;
 
             double per = Y / _picCurveShowHeight;
 
             var TimeLen = (max - min) * (1 - per);
             return ((int)(TimeLen + min)).ToString();
         }
+        #endregion
 
-        public void HeadMove(double XLen,bool XIsAdd, double YLen)
+        #region 移动
+        public void HeadMove(double XLen, bool XIsAdd, double YLen)
         {
-            HeadXZMoveTime(XLen, XIsAdd);
-            HeadXPosition();
-            ShowCurve(_MoveNote);
+            //处理Y轴移动
+            if (YLen > 1 || (YLen * -1) > 1)//大于一像素
+            {
+                double MoveNumber = YLen / GetYMinPx();
+                MoveYValue += MoveNumber;
+                SetYZValue();
+            }
+            //处理X轴移动
+            //if (XLen > _MinMoveWidth)
+            //{
+                HeadXZMoveTime(XLen, XIsAdd);
+                HeadXPosition();
+                //ShowCurve();//_MoveNote);
+            //}
         }
-
-       
 
         public void HeadXZMoveTime(double xlen, bool XIsAdd)
         {
             //移动与当前显示宽度的占比
-           double per= xlen / _PicCurveWidth;
+            double per = xlen / _PicCurveWidth;
             //应移动多长的位置
-           int moveTimeLen = (int)(_TimeShowELen * per);
-           if (XIsAdd)
-               XZMaxTime = XZMaxTime.AddSeconds(moveTimeLen);
-           else
-               XZMaxTime = XZMaxTime.AddSeconds(-moveTimeLen);
+            int moveTimeLen = (int)(_TimeShowELen * per);
+            if (XIsAdd)
+                XZMaxTime = XZMaxTime.AddSeconds(moveTimeLen);
+            else
+                XZMaxTime = XZMaxTime.AddSeconds(-moveTimeLen);
 
-          SetXZTextBoxValueByMaxTime();
+            SetXZTextBoxValueByMaxTime();
         }
-
-      
         #endregion
 
         #region 曲线
@@ -603,17 +602,8 @@ namespace MonitorSystem.Other
                 pc.Clear();
                 for (int i = 0; i <= ShowNote - 1; i++)
                 {
-
-                    //if (this.noteMessages[i].time > XZMinTime)
-                    //{
-                        //double mx = GetXValue(this.noteMessages[i].time);
-                        //Point p = new Point(mx, this.noteMessages[i].Y);
-                        //if (this.noteMessages[i].X < -30)
-                        //    continue;
-                        Point p = new Point(this.noteMessages[i].X, this.noteMessages[i].Y);
-                        pc.Add(p);
-                    //}
-                    //pc.Add(this.noteMessages[i].PointPosi);
+                    Point p = new Point(this.noteMessages[i].X, this.noteMessages[i].Y);
+                    pc.Add(p);
                 }
             }
             SetXZTextBoxValue();
@@ -635,7 +625,6 @@ namespace MonitorSystem.Other
             ShowCurve(noteNow);
         }
 
-
         /// <summary>
         /// 处理曲线，X轴显示坐标
         /// </summary>
@@ -646,18 +635,8 @@ namespace MonitorSystem.Other
             for (int i = this.noteNow - 2; i >= 0; i--)
             {
                 this.noteMessages[i].X = noteMessages[i+1].X - curveRemove;
-                //if (this.noteMessages[i].X < 0)
-                //    break;
             }
-
-            //for (int i = 0; i < noteNow; i++)
-            //{
-            //    noteMessages[i].X = GetXValue(noteMessages[i].time);
-            //}
-        }
-
-
-       
+        }       
         #endregion
     }
 }
