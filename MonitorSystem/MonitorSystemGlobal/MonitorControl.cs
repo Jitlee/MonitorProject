@@ -243,9 +243,9 @@ namespace MonitorSystem.MonitorSystemGlobal
                     if (null == ToolTipControl && null != _ScreenElement)
                     {
                         IsToolTipLoaded = true;
-                        var screenID = _ScreenElement.ElementID * -1;
+                        var parentID = _ScreenElement.ElementID;
                         //LoadScreen._DataContext.Load<t_Element>(LoadScreen._DataContext.GetT_ElementsByScreenIDQuery(screenID), LoadToolTipCallback, null);
-                        var toolTipControlElement = LoadScreen._DataContext.t_Elements.FirstOrDefault(t => t.ControlID == -9999 && t.ScreenID == screenID && t.ElementType == "ToolTip");
+                        var toolTipControlElement = LoadScreen._DataContext.t_Elements.FirstOrDefault(t => t.ControlID == -9999 && t.ParentID == parentID && t.ElementType == "ToolTip");
                         if (null != toolTipControlElement
                             && Parent is Canvas)
                         {
@@ -263,7 +263,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                             parent.Children.Add(ToolTipControl);
                             SetToolTipPosition();
 
-                            var childElements = LoadScreen._DataContext.t_Elements.Where(t => t.ScreenID == screenID && t.ControlID != -9999 && t.ElementType == "ToolTip");
+                            var childElements = LoadScreen._DataContext.t_Elements.Where(t => t.ParentID == parentID && t.ControlID != -9999 && t.ElementType == "ToolTip");
                             foreach (var childElement in childElements)
                             {
                                 var poperties = LoadScreen._DataContext.t_ElementProperties.Where(p => p.ElementID == childElement.ElementID).ToList();

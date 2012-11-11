@@ -499,9 +499,9 @@ namespace MonitorSystem
                 if (null == toolTipControl)
                 {
                     Debug.Assert(null != target.ScreenElement, "MonitorControl 的 ScreenElement 属性不能为null.");
-                    var screenID = target.ScreenElement.ElementID * -1;
+                    var parentID = target.ScreenElement.ElementID;
                     //LoadScreen._DataContext.Load<t_Element>(LoadScreen._DataContext.GetT_ElementsByScreenIDQuery(screenID), LoadToolTipCallback, null);
-                    LoadToolTip(LoadScreen._DataContext.t_Elements.Where(el => el.ScreenID == screenID && el.ElementType == "ToolTip").ToList());
+                    LoadToolTip(LoadScreen._DataContext.t_Elements.Where(el => el.ParentID == parentID && el.ElementType == "ToolTip").ToList());
                 }
                 else if (toolTipControl.Visibility == Visibility.Collapsed)
                 {
