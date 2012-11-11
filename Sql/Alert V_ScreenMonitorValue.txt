@@ -1,0 +1,12 @@
+alter view [dbo].[V_ScreenMonitorValue]
+as
+select vc.*,tv.StationID,tv.ChanenlSubNo,tv.MonitorValue,tv.flag  from (
+select distinct tel.ElementID,tel.ScreenID,tel.DeviceID,tel.ChannelNo,tel.ComputeStr
+from t_element tel
+union
+select line.ElementID,line.ScreenID,line.DeviceID,line.ChannelNo,line.ComputeStr
+from t_Element_RealTimeLine line
+) as vc
+inner join t_Screen ts  on vc.ScreenID=ts.ScreenID
+inner join MonitorDemo2.dbo.t_TmpValue tv  on ts.StationID=tv.StationID and vc.deviceid=tv.deviceid
+and vc.channelNO=tv.channelNo
