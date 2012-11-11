@@ -780,7 +780,7 @@ namespace MonitorSystem
                 MessageBox.Show(result.Error.Message);
                 return;
             }
-            List<t_Element> lsitElement = _DataContext.t_Elements.Where(a => a.ScreenID == Convert.ToInt32(result.UserState)).ToList();
+            List<t_Element> lsitElement = _DataContext.t_Elements.Where(a => a.ScreenID == Convert.ToInt32(result.UserState) && null == a.ParentID).ToList();
             ShowElements(lsitElement, csScreen);
             //如果不是组态，打开定时器
             //if (CBIsztControl.IsChecked == false)
@@ -822,189 +822,196 @@ namespace MonitorSystem
         /// <returns></returns>
         public MonitorControl ShowElement(Canvas canvas, t_Element obj, ElementSate eleStae, List<t_ElementProperty> listObj)
         {
-            if (obj.ImageURL != null && obj.ImageURL.IndexOf("MonitorSystem") == 0)
+            try
             {
-                MonitorControl instance = (MonitorControl)Activator.CreateInstance(Type.GetType(obj.ImageURL));
-                //var instance = Activator.CreateInstance(Type.GetType(t.ImageURL));
-                SetEletemt(canvas, instance, obj, eleStae, listObj);
-                return instance;
-            }
-            else
-            {
-                switch (obj.ElementName)
+                if (obj.ImageURL != null && obj.ImageURL.IndexOf("MonitorSystem") == 0)
                 {
-                    case "MyButton":
-                        TP_Button mtpButtom = new TP_Button();
-                        SetEletemt(canvas, mtpButtom, obj, eleStae, listObj);
-                        return mtpButtom;
-                    //break;
-                    case "MonitorLine":
-                        MonitorLine mPubLine = new MonitorLine();
-                        SetEletemt(canvas, mPubLine, obj, eleStae, listObj);
-                        return mPubLine;
-                    //break;
-                    case "MonitorText":
-                        MonitorText mPubText = new MonitorText();
-                        mPubText.MyText = obj.TxtInfo;
-                        SetEletemt(canvas, mPubText, obj, eleStae, listObj);
-                        return mPubText;
-                    //break;
-                    case "ColorText":
-                        ColorText mColorText = new ColorText();
-                        SetEletemt(canvas, mColorText, obj, eleStae, listObj);
-                        return mColorText;
-                    //break;
-                    case "InputTextBox":
-                        InputTextBox mInputTextBox = new InputTextBox();
-                        mInputTextBox.MyText = obj.TxtInfo;
-                        SetEletemt(canvas, mInputTextBox, obj, eleStae, listObj);
-                        return mInputTextBox;
-                    //break;
-                    case "ButtonCtrl":
-                        ButtonCtrl mButtonCtrl = new ButtonCtrl();
-                        mButtonCtrl.MyText = obj.TxtInfo;
-                        SetEletemt(canvas, mButtonCtrl, obj, eleStae, listObj);
-                        return mButtonCtrl;
-                    //break;
-                    case "MonitorCur":
-                        MonitorCur mPubCur = new MonitorCur();
-                        SetEletemt(canvas, mPubCur, obj, eleStae, listObj);
-                        return mPubCur;
-                    //break;
-                    case "MonitorRectangle":
-                        MonitorRectangle mPubRec = new MonitorRectangle();
-                        SetEletemt(canvas, mPubRec, obj, eleStae, listObj);
-                        return mPubRec;
-                    //break;
-                    case "MonitorGrid":
-                        MonitorGrid mPubGrid = new MonitorGrid();
-                        SetEletemt(canvas, mPubGrid, obj, eleStae, listObj);
-                        return mPubGrid;
-                    //break;
-                    case "FoldLine":
-                        MonitorFoldLine mPubFoldLine = new MonitorFoldLine();
-                        SetEletemt(canvas, mPubFoldLine, obj, eleStae, listObj);
-                        return mPubFoldLine;
-                    //break;
-                    case "Temprary":
-                        Temprary mTemprary = new Temprary();
-                        SetEletemt(canvas, mTemprary, obj, eleStae, listObj);
-                        return mTemprary;
-                    case "DLBiaoPan":
-                        DLBiaoPan mDLBiaoPan = new DLBiaoPan();
-                        obj.Width = 2 * obj.Height.Value;
-                        SetEletemt(canvas, mDLBiaoPan, obj, eleStae, listObj);
-                        return mDLBiaoPan;
-                    case "DigitalBiaoPan":
-                        DigitalBiaoPan mDigitalBiaoPan = new DigitalBiaoPan();
-                        SetEletemt(canvas, mDigitalBiaoPan, obj, eleStae, listObj);
-                        return mDigitalBiaoPan;
-                    case "Switch":
-                        Switch mSwitch = new Switch();
-                        SetEletemt(canvas, mSwitch, obj, eleStae, listObj);
-                        return mSwitch;
-                    case "SignalSwitch":
-                        SignalSwitch mSignalSwitch = new SignalSwitch();
-                        obj.Width = obj.Height;
-                        SetEletemt(canvas, mSignalSwitch, obj, eleStae, listObj);
-                        return mSignalSwitch;
-                    case "DetailSwitch":
-                        DetailSwitch mDetailSwitch = new DetailSwitch();
-                        SetEletemt(canvas, mDetailSwitch, obj, eleStae, listObj);
-                        return mDetailSwitch;
-                    case "RealTimeCurve":
-                        RealTimeCurve mRealTime = new RealTimeCurve();
-                        SetEletemt(canvas, mRealTime, obj, eleStae, listObj);
-                        return mRealTime;
-                    case "TableCtrl":
-                        TableCtrl mTableCtrl = new TableCtrl();
-                        SetEletemt(canvas, mTableCtrl, obj, eleStae, listObj);
-                        return mTableCtrl;
-                    case "zedGraphCtrl":
-                        zedGraphCtrl mzedGraphCtrl = new zedGraphCtrl();
-                        SetEletemt(canvas, mzedGraphCtrl, obj, eleStae, listObj);
-                        return mzedGraphCtrl;
-                    case "zedGraphLineCtrl":
-                        zedGraphLineCtrl mzedGraphLineCtrl = new zedGraphLineCtrl();
-                        SetEletemt(canvas, mzedGraphLineCtrl, obj, eleStae, listObj);
-                        return mzedGraphLineCtrl;
-                    case "zedGraphPieCtrl":
-                        zedGraphPieCtrl mzedGraphPieCtrl = new zedGraphPieCtrl();
-                        SetEletemt(canvas, mzedGraphPieCtrl, obj, eleStae, listObj);
-                        return mzedGraphPieCtrl;
-                    case "MyLine"://曲线
-                        MyLine mMyLine = new MyLine();
-                        SetEletemt(canvas, mMyLine, obj, eleStae, listObj);
-                        return mMyLine;
-                    case "BackgroundRect"://背景
-                        BackgroundRect mBackgroundRect = new BackgroundRect();
-                        SetEletemt(canvas, mBackgroundRect, obj, eleStae, listObj);
-                        return mBackgroundRect;
-                    case "PicBox"://窗口式背景控件
-                        PicBox mPicBox = new PicBox();
-                        SetEletemt(canvas, mPicBox, obj, eleStae, listObj);
-                        return mPicBox;
-                    case "DrawLine"://窗口式背景控件
-                        DrawLine mDrawLine = new DrawLine();
-                        SetEletemt(canvas, mDrawLine, obj, eleStae, listObj);
-                        return mDrawLine;
-                    case "ExtProControl"://窗口式背景控件
-                        ExtProControl mExtProControl = new ExtProControl();
-                        SetEletemt(canvas, mExtProControl, obj, eleStae, listObj);
-                        return mExtProControl;
-                    case "DimorphismGraphCtrl"://窗口式背景控件
-                        DimorphismGraphCtrl mDimorphismGraphCtrl = new DimorphismGraphCtrl();
-                        SetEletemt(canvas, mDimorphismGraphCtrl, obj, eleStae, listObj);
-                        return mDimorphismGraphCtrl;
-                    case "BackgroundControl":
-                        BackgroundControl backgroundControl = new BackgroundControl();
-                        SetEletemt(canvas, backgroundControl, obj, eleStae, listObj);
-                        var childElements = _DataContext.t_Elements.Where(e => e.ScreenID == obj.ElementID * -1 && e.ElementType == "Background").ToList();
-                        ShowElements(childElements, backgroundControl.BackgroundCanvas, backgroundControl);
-                        return backgroundControl;
-                    //case "dlfh01"://电力符号
-                    //    Dlfh01 dlfh01Ctrl = new Dlfh01();
-                    //    SetEletemt(dlfh01Ctrl, obj, eleStae, listObj);
-                    //    return dlfh01Ctrl;
-                    //case "dlfh02"://电力符号
-                    //    Dlfh02 dlfh02Ctrl = new Dlfh02();
-                    //    SetEletemt(dlfh02Ctrl, obj, eleStae, listObj);
-                    //    return dlfh02Ctrl;
-
-                    //case "Dldz01"://电力电子
-                    //    Dldz01 Dldz01Ctrl = new Dldz01();
-                    //    SetEletemt(Dldz01Ctrl, obj, eleStae, listObj);
-                    //    return Dldz01Ctrl;
-                    //case "Dldz02"://电力电子
-                    //    Dldz02 Dldz02Ctrl = new Dldz02();
-                    //    SetEletemt(Dldz02Ctrl, obj, eleStae, listObj);
-                    //    return Dldz02Ctrl;
-
-                    //case "Dqfh01"://电气符号
-                    //    Dqfh01 Dqfh01Ctrl = new Dqfh01();
-                    //    SetEletemt(Dqfh01Ctrl, obj, eleStae, listObj);
-                    //    return Dqfh01Ctrl;
-                    //case "Dqfh02"://电气符号
-                    //    Dqfh02 Dqfh02Ctrl = new Dqfh02();
-                    //    SetEletemt(Dqfh02Ctrl, obj, eleStae, listObj);
-                    //    return Dqfh02Ctrl;
-
-                    //case "Meter1":  // 仪表1
-                    //    var meter1 = new Meter1();
-                    //    SetEletemt(meter1, obj, eleStae, listObj);
-                    //    return meter1;
-                    default:
-                        string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
-                        BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
-                        ImageSource mm = bitmap;
-                        TP mtp = new TP();
-                        mtp.Source = mm;
-                        SetEletemt(canvas, mtp, obj, eleStae, listObj);
-                        return mtp;
-
-
-                    //break;
+                    MonitorControl instance = (MonitorControl)Activator.CreateInstance(Type.GetType(obj.ImageURL));
+                    //var instance = Activator.CreateInstance(Type.GetType(t.ImageURL));
+                    SetEletemt(canvas, instance, obj, eleStae, listObj);
+                    return instance;
                 }
+                else
+                {
+                    switch (obj.ElementName)
+                    {
+                        case "MyButton":
+                            TP_Button mtpButtom = new TP_Button();
+                            SetEletemt(canvas, mtpButtom, obj, eleStae, listObj);
+                            return mtpButtom;
+                        //break;
+                        case "MonitorLine":
+                            MonitorLine mPubLine = new MonitorLine();
+                            SetEletemt(canvas, mPubLine, obj, eleStae, listObj);
+                            return mPubLine;
+                        //break;
+                        case "MonitorText":
+                            MonitorText mPubText = new MonitorText();
+                            mPubText.MyText = obj.TxtInfo;
+                            SetEletemt(canvas, mPubText, obj, eleStae, listObj);
+                            return mPubText;
+                        //break;
+                        case "ColorText":
+                            ColorText mColorText = new ColorText();
+                            SetEletemt(canvas, mColorText, obj, eleStae, listObj);
+                            return mColorText;
+                        //break;
+                        case "InputTextBox":
+                            InputTextBox mInputTextBox = new InputTextBox();
+                            mInputTextBox.MyText = obj.TxtInfo;
+                            SetEletemt(canvas, mInputTextBox, obj, eleStae, listObj);
+                            return mInputTextBox;
+                        //break;
+                        case "ButtonCtrl":
+                            ButtonCtrl mButtonCtrl = new ButtonCtrl();
+                            mButtonCtrl.MyText = obj.TxtInfo;
+                            SetEletemt(canvas, mButtonCtrl, obj, eleStae, listObj);
+                            return mButtonCtrl;
+                        //break;
+                        case "MonitorCur":
+                            MonitorCur mPubCur = new MonitorCur();
+                            SetEletemt(canvas, mPubCur, obj, eleStae, listObj);
+                            return mPubCur;
+                        //break;
+                        case "MonitorRectangle":
+                            MonitorRectangle mPubRec = new MonitorRectangle();
+                            SetEletemt(canvas, mPubRec, obj, eleStae, listObj);
+                            return mPubRec;
+                        //break;
+                        case "MonitorGrid":
+                            MonitorGrid mPubGrid = new MonitorGrid();
+                            SetEletemt(canvas, mPubGrid, obj, eleStae, listObj);
+                            return mPubGrid;
+                        //break;
+                        case "FoldLine":
+                            MonitorFoldLine mPubFoldLine = new MonitorFoldLine();
+                            SetEletemt(canvas, mPubFoldLine, obj, eleStae, listObj);
+                            return mPubFoldLine;
+                        //break;
+                        case "Temprary":
+                            Temprary mTemprary = new Temprary();
+                            SetEletemt(canvas, mTemprary, obj, eleStae, listObj);
+                            return mTemprary;
+                        case "DLBiaoPan":
+                            DLBiaoPan mDLBiaoPan = new DLBiaoPan();
+                            obj.Width = 2 * obj.Height.Value;
+                            SetEletemt(canvas, mDLBiaoPan, obj, eleStae, listObj);
+                            return mDLBiaoPan;
+                        case "DigitalBiaoPan":
+                            DigitalBiaoPan mDigitalBiaoPan = new DigitalBiaoPan();
+                            SetEletemt(canvas, mDigitalBiaoPan, obj, eleStae, listObj);
+                            return mDigitalBiaoPan;
+                        case "Switch":
+                            Switch mSwitch = new Switch();
+                            SetEletemt(canvas, mSwitch, obj, eleStae, listObj);
+                            return mSwitch;
+                        case "SignalSwitch":
+                            SignalSwitch mSignalSwitch = new SignalSwitch();
+                            obj.Width = obj.Height;
+                            SetEletemt(canvas, mSignalSwitch, obj, eleStae, listObj);
+                            return mSignalSwitch;
+                        case "DetailSwitch":
+                            DetailSwitch mDetailSwitch = new DetailSwitch();
+                            SetEletemt(canvas, mDetailSwitch, obj, eleStae, listObj);
+                            return mDetailSwitch;
+                        case "RealTimeCurve":
+                            RealTimeCurve mRealTime = new RealTimeCurve();
+                            SetEletemt(canvas, mRealTime, obj, eleStae, listObj);
+                            return mRealTime;
+                        case "TableCtrl":
+                            TableCtrl mTableCtrl = new TableCtrl();
+                            SetEletemt(canvas, mTableCtrl, obj, eleStae, listObj);
+                            return mTableCtrl;
+                        case "zedGraphCtrl":
+                            zedGraphCtrl mzedGraphCtrl = new zedGraphCtrl();
+                            SetEletemt(canvas, mzedGraphCtrl, obj, eleStae, listObj);
+                            return mzedGraphCtrl;
+                        case "zedGraphLineCtrl":
+                            zedGraphLineCtrl mzedGraphLineCtrl = new zedGraphLineCtrl();
+                            SetEletemt(canvas, mzedGraphLineCtrl, obj, eleStae, listObj);
+                            return mzedGraphLineCtrl;
+                        case "zedGraphPieCtrl":
+                            zedGraphPieCtrl mzedGraphPieCtrl = new zedGraphPieCtrl();
+                            SetEletemt(canvas, mzedGraphPieCtrl, obj, eleStae, listObj);
+                            return mzedGraphPieCtrl;
+                        case "MyLine"://曲线
+                            MyLine mMyLine = new MyLine();
+                            SetEletemt(canvas, mMyLine, obj, eleStae, listObj);
+                            return mMyLine;
+                        case "BackgroundRect"://背景
+                            BackgroundRect mBackgroundRect = new BackgroundRect();
+                            SetEletemt(canvas, mBackgroundRect, obj, eleStae, listObj);
+                            return mBackgroundRect;
+                        case "PicBox"://窗口式背景控件
+                            PicBox mPicBox = new PicBox();
+                            SetEletemt(canvas, mPicBox, obj, eleStae, listObj);
+                            return mPicBox;
+                        case "DrawLine"://窗口式背景控件
+                            DrawLine mDrawLine = new DrawLine();
+                            SetEletemt(canvas, mDrawLine, obj, eleStae, listObj);
+                            return mDrawLine;
+                        case "ExtProControl"://窗口式背景控件
+                            ExtProControl mExtProControl = new ExtProControl();
+                            SetEletemt(canvas, mExtProControl, obj, eleStae, listObj);
+                            return mExtProControl;
+                        case "DimorphismGraphCtrl"://窗口式背景控件
+                            DimorphismGraphCtrl mDimorphismGraphCtrl = new DimorphismGraphCtrl();
+                            SetEletemt(canvas, mDimorphismGraphCtrl, obj, eleStae, listObj);
+                            return mDimorphismGraphCtrl;
+                        case "BackgroundControl":
+                            BackgroundControl backgroundControl = new BackgroundControl();
+                            SetEletemt(canvas, backgroundControl, obj, eleStae, listObj);
+                            var childElements = _DataContext.t_Elements.Where(e => e.ParentID == obj.ElementID && e.ElementType == "Background").ToList();
+                            ShowElements(childElements, backgroundControl.BackgroundCanvas, backgroundControl);
+                            return backgroundControl;
+                        //case "dlfh01"://电力符号
+                        //    Dlfh01 dlfh01Ctrl = new Dlfh01();
+                        //    SetEletemt(dlfh01Ctrl, obj, eleStae, listObj);
+                        //    return dlfh01Ctrl;
+                        //case "dlfh02"://电力符号
+                        //    Dlfh02 dlfh02Ctrl = new Dlfh02();
+                        //    SetEletemt(dlfh02Ctrl, obj, eleStae, listObj);
+                        //    return dlfh02Ctrl;
+
+                        //case "Dldz01"://电力电子
+                        //    Dldz01 Dldz01Ctrl = new Dldz01();
+                        //    SetEletemt(Dldz01Ctrl, obj, eleStae, listObj);
+                        //    return Dldz01Ctrl;
+                        //case "Dldz02"://电力电子
+                        //    Dldz02 Dldz02Ctrl = new Dldz02();
+                        //    SetEletemt(Dldz02Ctrl, obj, eleStae, listObj);
+                        //    return Dldz02Ctrl;
+
+                        //case "Dqfh01"://电气符号
+                        //    Dqfh01 Dqfh01Ctrl = new Dqfh01();
+                        //    SetEletemt(Dqfh01Ctrl, obj, eleStae, listObj);
+                        //    return Dqfh01Ctrl;
+                        //case "Dqfh02"://电气符号
+                        //    Dqfh02 Dqfh02Ctrl = new Dqfh02();
+                        //    SetEletemt(Dqfh02Ctrl, obj, eleStae, listObj);
+                        //    return Dqfh02Ctrl;
+
+                        //case "Meter1":  // 仪表1
+                        //    var meter1 = new Meter1();
+                        //    SetEletemt(meter1, obj, eleStae, listObj);
+                        //    return meter1;
+                        default:
+                            string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
+                            BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
+                            ImageSource mm = bitmap;
+                            TP mtp = new TP();
+                            mtp.Source = mm;
+                            SetEletemt(canvas, mtp, obj, eleStae, listObj);
+                            return mtp;
+
+
+                        //break;
+                    }
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
 
@@ -1315,11 +1322,13 @@ namespace MonitorSystem
                         if (el != ElementSate.New)
                         {
                             RemoveOldProperties(meleObj, "ToolTip");
-                            toolTipElement.ScreenID = meleObj.ElementID * -1;
+                            toolTipElement.ParentID = meleObj.ElementID;
+                            toolTipElement.ScreenID = meleObj.ScreenID;
                         }
                         else
                         {
                             toolTipElement.ScreenID = null;
+                            toolTipElement.ParentID = meleObj.ElementID;
                         }
 
                         _DataContext.t_Elements.Add(toolTipElement.Clone());// 2个必须同步添加
@@ -1384,7 +1393,7 @@ namespace MonitorSystem
 
         private static void RemoveOldProperties(t_Element meleObj, string elementType)
         {
-            var removeElements = _DataContext.t_Elements.Where(t => t.ScreenID == meleObj.ElementID * -1 && t.ElementType == elementType).ToList();
+            var removeElements = _DataContext.t_Elements.Where(t => t.ParentID == meleObj.ElementID && t.ElementType == elementType).ToList();
             // 删除老的ToolTip\子控件，及他们的老属性
             foreach (var removeElement in removeElements)
             {
@@ -1414,7 +1423,8 @@ namespace MonitorSystem
                     childElement.ScreenY = (int)Canvas.GetTop(childMoinitor);
                     if (el != ElementSate.New)
                     {
-                        childElement.ScreenID = meleObj.ElementID * -1;
+                        childElement.ParentID = meleObj.ElementID;
+                        childElement.ScreenID = meleObj.ScreenID;
                     }
                     else
                     {
@@ -1453,7 +1463,8 @@ namespace MonitorSystem
                     return;
                 }
 
-                var elementID = 0;
+                var parentID = 0;
+                var screenID = 0;
                 // 新增
                 if (obj.AddedEntities.Count == listMonitorAddElement.Count)
                 {
@@ -1467,14 +1478,16 @@ namespace MonitorSystem
                             && addElement.ControlID.Value != -9999
                             && addElement.ScreenID.HasValue)
                         {
-                            elementID = addElement.ElementID * -1;
+                            parentID = addElement.ElementID;
+                            screenID = addElement.ScreenID.Value;
                         }
                         else if (!addElement.ScreenID.HasValue)
                         {
                             var editElment = _DataContext.t_Elements.FirstOrDefault(t => t.ElementID == addElement.ElementID);
                             if (null != editElment)
                             {
-                                editElment.ScreenID = elementID;
+                                editElment.ParentID = parentID;
+                                editElment.ScreenID = screenID;
                             }
                         }
 
@@ -1668,7 +1681,8 @@ namespace MonitorSystem
                             && null != copyMonitor.ParentControl.ScreenElement)
                         {
                             monitor.ScreenElement.ElementType = copyMonitor.ScreenElement.ElementType;
-                            monitor.ScreenElement.ScreenID = copyMonitor.ParentControl.ScreenElement.ElementID * -1;
+                            monitor.ScreenElement.ParentID = copyMonitor.ParentControl.ScreenElement.ElementID;
+                            monitor.ScreenElement.ScreenID = copyMonitor.ParentControl.ScreenElement.ScreenID;
                         }
                     }
                 }              

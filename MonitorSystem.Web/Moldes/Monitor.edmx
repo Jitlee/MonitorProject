@@ -96,6 +96,7 @@
           <Property Name="LevelNo" Type="int" />
           <Property Name="ComputeStr" Type="varchar" MaxLength="100" />
           <Property Name="ElementType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ParentID" Type="int" />
         </EntityType>
         <EntityType Name="t_Element_Library">
           <Key>
@@ -284,10 +285,10 @@
           <EntitySet Name="GalleryClassification" EntityType="MonitorDemo2Model.t_GalleryClassification" />
           <EntitySet Name="t_Element_RealTimeLine" EntityType="MonitorDemo2Model.t_Element_RealTimeLine" />
           <FunctionImport Name="P_GetElementsByScreenID" EntitySet="t_Element" ReturnType="Collection(MonitorDemo2Model.t_Element)">
-            <Parameter Name="ScreenID" Mode="In" Type="Int32" />
+          <Parameter Name="ScreenID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="P_GetElementPropertiesByScreenID" EntitySet="t_ElementProperty" ReturnType="Collection(MonitorDemo2Model.t_ElementProperty)">
-            <Parameter Name="ScreenID" Mode="In" Type="Int32" />
+          <Parameter Name="ScreenID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="t_Control">
@@ -343,6 +344,7 @@
           <Property Type="Int32" Name="LevelNo" />
           <Property Type="String" Name="ComputeStr" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ElementType" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ParentID" />
         </EntityType>
         <EntityType Name="t_Element_Library">
           <Key>
@@ -531,6 +533,7 @@
           <EntitySetMapping Name="t_Element">
             <EntityTypeMapping TypeName="MonitorDemo2Model.t_Element">
               <MappingFragment StoreEntitySet="t_Element">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="ElementType" ColumnName="ElementType" />
                 <ScalarProperty Name="ComputeStr" ColumnName="ComputeStr" />
                 <ScalarProperty Name="LevelNo" ColumnName="LevelNo" />

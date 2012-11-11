@@ -124,7 +124,12 @@ namespace MonitorSystem.Controls
 
         public t_Control GetSelected()
         {
-            return (GalleryListBox.SelectedItem as ListBoxItem).DataContext as t_Control;
+            if (null != GalleryListBox
+                && GalleryListBox.SelectedItem is ListBoxItem)
+            {
+                return (GalleryListBox.SelectedItem as ListBoxItem).DataContext as t_Control;
+            }
+            return null;
         }
 
         public void ResetSelected()
