@@ -72,7 +72,6 @@ namespace MonitorSystem.Other
             tbY.Foreground = colorB;
             tbMaxValue.Foreground = colorB;
             tbMinValue.Foreground = colorB;
-
         }
 
         public void SetDataValue(double Value)

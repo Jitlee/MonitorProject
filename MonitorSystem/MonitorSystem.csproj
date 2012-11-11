@@ -229,6 +229,7 @@
     <Compile Include="MonitorSystemGlobal\MonitorRectangle.cs" />
     <Compile Include="Controls\PropertyGrid\ColorValueEditor.cs" />
     <Compile Include="MonitorSystemGlobal\BackgroundControl.cs" />
+    <Compile Include="Other\CurveControl.cs" />
     <Compile Include="Other\InputDilog.xaml.cs">
       <DependentUpon>InputDilog.xaml</DependentUpon>
     </Compile>
@@ -243,6 +244,9 @@
       <DependentUpon>RealTimeT.xaml</DependentUpon>
     </Compile>
     <Compile Include="Other\RealTimeLineOR.cs" />
+    <Compile Include="Other\RealTimeTest.xaml.cs">
+      <DependentUpon>RealTimeTest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Property\ScreenCopy.xaml.cs">
       <DependentUpon>ScreenCopy.xaml</DependentUpon>
     </Compile>
@@ -414,6 +418,10 @@
     <Page Include="Other\RealTimeT.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Other\RealTimeTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Property\ScreenCopy.xaml">
       <SubType>Designer</SubType>
