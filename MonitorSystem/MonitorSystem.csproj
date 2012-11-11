@@ -230,11 +230,18 @@
     <Compile Include="Controls\PropertyGrid\ColorValueEditor.cs" />
     <Compile Include="MonitorSystemGlobal\BackgroundControl.cs" />
     <Compile Include="Other\CurveControl.cs" />
+    <Compile Include="Other\CWLineProperty.xaml.cs">
+      <DependentUpon>CWLineProperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Other\InputDilog.xaml.cs">
       <DependentUpon>InputDilog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Other\InputObj.xaml.cs">
       <DependentUpon>InputObj.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Other\JTControl.cs" />
+    <Compile Include="Other\LineProperty.xaml.cs">
+      <DependentUpon>LineProperty.xaml</DependentUpon>
     </Compile>
     <Compile Include="Other\RealLineShow.cs" />
     <Compile Include="Other\RealtimeProperty.xaml.cs">
@@ -403,11 +410,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Other\CWLineProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Other\InputDilog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Other\InputObj.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Other\LineProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

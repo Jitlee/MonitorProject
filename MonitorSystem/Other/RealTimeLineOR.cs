@@ -46,8 +46,17 @@ namespace MonitorSystem.Other
                 GetTimeShowELen();
             }
         }
+
+        RealTimeT _RealtimeObj;
+
+        public RealTimeT RealtimeObj
+        {
+            get { return _RealtimeObj; }
+            set { _RealtimeObj = value; }
+        }
+
         DispatcherTimer timerSetValue = new DispatcherTimer();
-        DispatcherTimer timerLoadValue = new DispatcherTimer();
+        
         public RealTimeLineOR(t_Element_RealTimeLine mLine)
         {
             _LineInfo = mLine;
@@ -60,7 +69,7 @@ namespace MonitorSystem.Other
             _PolyLine.Points = pc;
             _PolyLine.SetValue(Canvas.ZIndexProperty, 999);
             _PolyLine.Name = _LineInfo.ID;
-
+            SetPolyLine();
             //曲线点
             noteMessages = new CoordinatesValue[maxNote];
             timerSetValue.Interval = new TimeSpan(0, 0, GetCYTimeLen());
@@ -68,20 +77,62 @@ namespace MonitorSystem.Other
             {
                 AddNewValue(_YValue);
                 //if (_ISShowValue)
-                    ShowCurve(noteNow);
+                    ShowCurve();
             }; 
             timerSetValue.Start();
 
 
-            timerLoadValue.Interval = new TimeSpan(0, 0, GetCYTimeLen());
-            timerLoadValue.Tick += (sender, obj) =>
-            {
-               
-                _YValue = rd.NextDouble() * int.Parse( _LineInfo.MaxValue);
-            };
-            timerLoadValue.Start();
+            
         }
+
+        public void Stop()
+        {
+            RemovePoint();
+        }
+
         Random rd = new Random();
+        public void SetPolyLine()
+        {
+            //LineStyle 样式
+            DoubleCollection dc = new DoubleCollection();
+            double _LienWidth = 0.5;
+            switch (_LineInfo.LineStyle.Value)
+            {
+                case 0:
+                    break;
+                case 1:
+                    dc = new DoubleCollection() { 20, 5 };
+                    break;
+                case 2:
+                    dc = new DoubleCollection() { 10, 4, 3, 4 };
+                    break;
+                case 3:
+                    dc = new DoubleCollection() { 10, 4, 3, 4, 3, 4 };
+                    break;
+                case 4:
+                    dc = new DoubleCollection() { 4, 3 };
+                    break;
+                case 5:
+                    _LienWidth = 1;
+                    break;
+                case 6:
+                    _LienWidth = 2;
+                    break;
+                case 7:
+                    _LienWidth = 3;
+                    break;
+                case 8:
+                    _LienWidth = 0;
+                    break;
+
+            }
+            //new DoubleCollection { 2.0, 2.0 };
+            _PolyLine.StrokeThickness = _LienWidth;
+
+            _PolyLine.StrokeDashArray = dc;
+            _PolyLine.Stroke = new SolidColorBrush(Common.StringToColor(_LineInfo.LineColor));
+            //_LineInfo.LineStyle
+        }
 
         /// <summary>
         /// X轴最大时间
@@ -477,12 +528,9 @@ namespace MonitorSystem.Other
         public void SetYZValue()
         {
             for (int i = 0; i <= this.noteNow - 1; i++)
-            {   
-                //if (noteMessages[i].SFPer != _YZSFPer)
-                //{
+            { 
                     noteMessages[i].SFPer = _YZSFPer;
                     noteMessages[i].Y = GetYValue(noteMessages[i].Value);
-               // }
             }
         }
         #endregion
@@ -523,7 +571,8 @@ namespace MonitorSystem.Other
         {
             double per = X / _PicCurveWidth;
             int TimeLen = (int)(_TimeShowELen * (1 - per));
-            return DateTime.Now.AddSeconds(-TimeLen).ToString("HH:mm:ss");
+
+            return XZMaxTime.AddSeconds(-TimeLen).ToString("HH:mm:ss");
         }
                
         /// <summary>
@@ -556,13 +605,9 @@ namespace MonitorSystem.Other
                 MoveYValue += MoveNumber;
                 SetYZValue();
             }
-            //处理X轴移动
-            //if (XLen > _MinMoveWidth)
-            //{
-                HeadXZMoveTime(XLen, XIsAdd);
-                HeadXPosition();
-                //ShowCurve();//_MoveNote);
-            //}
+            //处理X轴移动           
+            HeadXZMoveTime(XLen, XIsAdd);
+            HeadXPosition();
         }
 
         public void HeadXZMoveTime(double xlen, bool XIsAdd)
@@ -595,18 +640,90 @@ namespace MonitorSystem.Other
         /// <summary>
         /// 刷新背景网格线，显示曲线
         /// </summary>
-        public void ShowCurve(int ShowNote)
+        public void ShowCurve()
         {
             if (this.noteNow > 1)
             {
+                
                 pc.Clear();
-                for (int i = 0; i <= ShowNote - 1; i++)
+                if (_LineInfo.LineStyle.Value == 8)
                 {
-                    Point p = new Point(this.noteMessages[i].X, this.noteMessages[i].Y);
-                    pc.Add(p);
+                    return;
+                }
+                else
+                {
+                    for (int i = 0; i <= noteNow - 1; i++)
+                    {
+
+                        if (noteMessages[i].X > (PicCurveWidth + 50))
+                            break;
+
+
+                        if (this.noteMessages[i].X > 0 || ((i + 1) <= noteNow && this.noteMessages[i + 1].X > 0))
+                        {
+                            Point p = new Point(this.noteMessages[i].X, this.noteMessages[i].Y);
+                            pc.Add(p);
+                        }
+                    }
+                    //显示点
+                    if (_LineInfo.LinePointBJ != 0)
+                    {
+                        RemovePoint();
+
+                        for (int i = 0; i <= noteNow - 1; i++)
+                        {
+                            if (noteMessages[i].X > (PicCurveWidth + 50))
+                                break;
+                            if (this.noteMessages[i].X > 0 || ((i + 1) <= noteNow && this.noteMessages[i + 1].X > 0))
+                            {
+                                //画点
+                                Rectangle ell = new Rectangle();
+                                ell.Width = 3;
+                                ell.Height = 3;
+                                ell.Name = _LineInfo.ID + i.ToString();
+                                ell.Fill = new SolidColorBrush(Colors.Red);
+                                if (_LineInfo.LinePointBJ == 2)
+                                {
+                                    ell.RadiusX = ell.RadiusY = 3;
+                                }
+
+                                ell.SetValue(Canvas.LeftProperty, this.noteMessages[i].X - 1.5);
+                                ell.SetValue(Canvas.TopProperty, this.noteMessages[i].Y - 1.5);
+                                try
+                                {
+                                    RealtimeObj._CanvasPoint.Children.Add(ell);
+                                }
+                                catch (Exception) { }
+                            }
+                        }
+                    }
                 }
             }
-            SetXZTextBoxValue();
+            if (_ISShowValue)
+                SetXZTextBoxValue();
+        }
+
+        public void RemovePoint()
+        {
+            //移出当前线，已添加的点
+            int Count = _RealtimeObj._CanvasPoint.Children.Count;
+            List<Rectangle> removeEll = new List<Rectangle>();
+            for (int c = 0; c < _RealtimeObj._CanvasPoint.Children.Count; c++)
+            {
+                if (_RealtimeObj._CanvasPoint.Children[c] is Rectangle)
+                {
+                    Rectangle ee = _RealtimeObj._CanvasPoint.Children[c] as Rectangle;
+                    if (ee.Name.IndexOf(_LineInfo.ID) == 0)
+                    {
+                        removeEll.Add(ee);
+                    }
+                }
+            }
+
+            foreach (Rectangle ee in removeEll)
+            {
+                _RealtimeObj._CanvasPoint.Children.Remove(ee);
+            }
         }
 
         public string GetXValueList()
@@ -620,10 +737,10 @@ namespace MonitorSystem.Other
         }
 
 
-        public void ShowCurve()
-        {
-            ShowCurve(noteNow);
-        }
+        //public void ShowCurve()
+        //{
+        //    ShowCurve(noteNow);
+        //}
 
         /// <summary>
         /// 处理曲线，X轴显示坐标
@@ -636,7 +753,7 @@ namespace MonitorSystem.Other
             {
                 this.noteMessages[i].X = noteMessages[i+1].X - curveRemove;
             }
-        }       
+        }
         #endregion
     }
 }

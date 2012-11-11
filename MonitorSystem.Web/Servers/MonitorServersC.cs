@@ -66,6 +66,43 @@ namespace MonitorSystem.Web.Servers
 
             return eValue;
         }
+        /// <summary>
+        /// 查询时实曲线值
+        /// 
+        /// </summary>
+        /// <param name="Element"></param>
+        /// <returns></returns>
+        //public List<V_ScreenMonitorValue> GetRealTimeLineValue(int Element)
+        //{
+        //    var v = from f in ObjectContext.V_ScreenMonitorValue where f.ScreenID == mScreenID select f;
+        //    List<V_ScreenMonitorValue> eValue = v.ToList();
+
+        //    foreach (V_ScreenMonitorValue obj in eValue)
+        //    {
+        //        if (!string.IsNullOrEmpty(obj.ComputeStr))
+        //        {
+        //            Paser p = new Paser();
+        //            string s = p.Execute("", obj.ComputeStr.Trim());
+        //            if (!string.IsNullOrEmpty(s))
+        //            {
+        //                float fValue;
+        //                if (float.TryParse(s, out fValue))
+        //                {
+        //                    obj.MonitorValue = fValue;
+        //                }
+        //                else
+        //                {
+        //                    obj.MonitorValue = -1.0f;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                obj.MonitorValue = -1.0f;
+        //            }
+        //        }
+        //    }
+        //    return eValue;
+        //}
        
 
         /// <summary>

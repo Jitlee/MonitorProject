@@ -147,7 +147,6 @@ namespace MonitorSystem.ZTControls
             //cbChanncel.Items.Clear();
             t_Device d=(t_Device)cbDeviceID.Items[cbDeviceID.SelectedIndex];
             LoadChanncel(d.DeviceID);
-
         }
 
         private void LoadChanncel(int deviceid)

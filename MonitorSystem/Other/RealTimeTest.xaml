@@ -59,11 +59,20 @@
         </Grid>
 
         <!--滚动条-->
-        <StackPanel  Grid.Row="0"  Grid.Column="1" >
-            <TextBlock  Text="gdt">
-            </TextBlock>
-        </StackPanel>
-
+            <Grid Grid.Row="0"   Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                </Grid.RowDefinitions>
+                <my:JTControl Grid.Row="0" x:Name="jTControl1" />
+                <my:JTControl Grid.Row="1" x:Name="jTControl2" />
+                <my:JTControl Grid.Row="2" x:Name="jtCenter" />
+                <my:JTControl Grid.Row="3" x:Name="jTControl3" />
+                <my:JTControl Grid.Row="4" x:Name="jTControl4" />
+            </Grid>
         <!--最左边设置-->
         <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="3">
             <Grid.RowDefinitions>
