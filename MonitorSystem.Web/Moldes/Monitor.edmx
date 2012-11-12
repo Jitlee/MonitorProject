@@ -28,6 +28,7 @@
           <EntitySet Name="t_Sys_MainRealTimeSet" EntityType="MonitorDemo2Model.Store.t_Sys_MainRealTimeSet" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="V_ScreenMonitorValue" EntityType="MonitorDemo2Model.Store.V_ScreenMonitorValue" store:Type="Views" store:Schema="dbo" store:Name="V_ScreenMonitorValue">
             <DefiningQuery>SELECT 
+      [V_ScreenMonitorValue].[id] AS [id], 
       [V_ScreenMonitorValue].[ElementID] AS [ElementID], 
       [V_ScreenMonitorValue].[ScreenID] AS [ScreenID], 
       [V_ScreenMonitorValue].[DeviceID] AS [DeviceID], 
@@ -152,6 +153,7 @@
           <Property Name="DeviceID" Type="int" />
           <Property Name="ChannelNo" Type="int" />
           <Property Name="ComputeStr" Type="varchar" MaxLength="100" />
+          <Property Name="StartTime" Type="datetime" />
         </EntityType>
         <EntityType Name="t_ElementProperty">
           <Key>
@@ -239,9 +241,9 @@
       -->
         <EntityType Name="V_ScreenMonitorValue">
           <Key>
-            <PropertyRef Name="ElementID" />
-            <PropertyRef Name="StationID" />
+            <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ElementID" Type="int" Nullable="false" />
           <Property Name="ScreenID" Type="int" />
           <Property Name="DeviceID" Type="int" />
@@ -449,8 +451,7 @@
         </EntityType>
         <EntityType Name="V_ScreenMonitorValue">
           <Key>
-            <PropertyRef Name="ElementID" />
-            <PropertyRef Name="StationID" />
+            <PropertyRef Name="id" />
           </Key>
           <Property Type="Int32" Name="ElementID" Nullable="false" />
           <Property Type="Int32" Name="ScreenID" />
@@ -461,6 +462,7 @@
           <Property Type="Int32" Name="ChanenlSubNo" />
           <Property Type="Double" Name="MonitorValue" />
           <Property Type="Int32" Name="flag" />
+          <Property Type="Guid" Name="id" Nullable="false" />
         </EntityType>
         <EntityType Name="t_GalleryClassification">
           <Documentation>
@@ -500,6 +502,7 @@
           <Property Type="Int32" Name="DeviceID" />
           <Property Type="Int32" Name="ChannelNo" />
           <Property Type="String" Name="ComputeStr" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="StartTime" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -673,6 +676,7 @@
           <EntitySetMapping Name="V_ScreenMonitorValue">
             <EntityTypeMapping TypeName="MonitorDemo2Model.V_ScreenMonitorValue">
               <MappingFragment StoreEntitySet="V_ScreenMonitorValue">
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="flag" ColumnName="flag" />
                 <ScalarProperty Name="MonitorValue" ColumnName="MonitorValue" />
                 <ScalarProperty Name="ChanenlSubNo" ColumnName="ChanenlSubNo" />
@@ -699,6 +703,7 @@
           <EntitySetMapping Name="t_Element_RealTimeLine">
             <EntityTypeMapping TypeName="MonitorDemo2Model.t_Element_RealTimeLine">
               <MappingFragment StoreEntitySet="t_Element_RealTimeLine">
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="ComputeStr" ColumnName="ComputeStr" />
                 <ScalarProperty Name="ChannelNo" ColumnName="ChannelNo" />
                 <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />

@@ -628,6 +628,12 @@ namespace MonitorSystem
                 var vobj = (MonitorControl)this.csScreen.FindName(obj.ElementID.ToString());
                 if (vobj == null)
                     continue;
+                if (vobj is RealTimeT)
+                {
+                    (vobj as RealTimeT).SetLineValue(obj);
+                    continue;
+                }
+
                 if (vobj.ScreenElement.DeviceID.Value != -1 && vobj.ScreenElement.ChannelNo.Value != -1)
                 {
                     float fValue = float.Parse(obj.MonitorValue.ToString());
@@ -1140,6 +1146,11 @@ namespace MonitorSystem
             mElem.MaxFloat = 0;
             //mElem.SerialNum = "";
             //mElem.TotalLength = "";
+            if (tCon.ImageURL == "MonitorSystem.Other.RealTimeT")
+            {
+                mElem.BackColor = "#FFEBE8D9";
+                mElem.ForeColor = "#FFD5D5FF";
+            }
             mElem.LevelNo = 1;
             mElem.ComputeStr = "";
             return mElem;

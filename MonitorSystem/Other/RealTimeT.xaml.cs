@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Windows.Threading;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
+using System.Windows.Media.Imaging;
 
 
 namespace MonitorSystem.Other
@@ -39,62 +40,31 @@ namespace MonitorSystem.Other
             set { _listRealTimeLine = value; }
         }
 
-        #region 加载值
-
-        DispatcherTimer timerLoadValue = new DispatcherTimer();
-
-        #endregion
-
-
         #region 初使化
         public RealTimeT()
         {
             InitializeComponent();
+
+            this.BackColor = Common.StringToColor("#FFD5D5FF");
             ForeColor = Common.StringToColor("#FFD5D5FF");
-
-            this.Width = 400;
-            this.Height = 400;
-
-            timerLoadValue.Interval = new TimeSpan(0, 0, 1);
-            timerLoadValue.Tick += (sender, obj) =>
-            {
-
-                EntityQuery<V_ScreenMonitorValue> v = LoadScreen._DataContext.GetScreenMonitorValueQuery(ScreenElement.ElementID);
-
-                LoadScreen._DataContext.Load(v, ValueLoadComplete, null);
-               // _YValue = rd.NextDouble() * int.Parse(_LineInfo.MaxValue);
-            };
-            timerLoadValue.Start();
+            InitBG();
+            //this.Width = 400;
+            //this.Height = 400;
         }
-        public void ValueLoadComplete(LoadOperation<V_ScreenMonitorValue> result)
+     
+        public void SetLineValue(V_ScreenMonitorValue obj)
         {
-            if (result.HasError)
-                return;
-            float digitalValue = 0f;
-            foreach (V_ScreenMonitorValue obj in result.Entities)
+            foreach (RealTimeLineOR line in this._listRealTimeLine)
             {
-                //var vobj = (MonitorControl)this.csScreen.FindName(obj.ElementID.ToString());
-                //if (vobj == null)
-                //    continue;
-                //if (vobj.ScreenElement.DeviceID.Value != -1 && vobj.ScreenElement.ChannelNo.Value != -1)
-                //{
-                //    float fValue = float.Parse(obj.MonitorValue.ToString());
-                //    if (vobj.ScreenElement.ElementName == "DigitalBiaoPan")
-                //    {
-                //        digitalValue = fValue;
-                //        vobj.SetChannelValue(fValue);
-                //    }
-                //    else if (vobj.ScreenElement.ElementName == "DrawLine")
-                //    {
-                //        vobj.SetChannelValue(fValue, digitalValue);
-                //    }
-                //    else
-                //    {
-                //        vobj.SetChannelValue(fValue);
-                //    }
-                //}
+                if (line.LineInfo.DeviceID != null && line.LineInfo.ChannelNo != null)
+                {
+                    if (line.LineInfo.DeviceID.Value == obj.DeviceID && line.LineInfo.ChannelNo == obj.ChannelNo
+                        && line.LineInfo.ComputeStr == obj.ComputeStr)
+                    {
+                        line.SetYValue(obj.MonitorValue.Value);
+                    }
+                }
             }
-            //_DataContext.V_ScreenMonitorValues.Clear();
         }
         private void InitBasicinfo()
         {
@@ -110,8 +80,6 @@ namespace MonitorSystem.Other
             this.SizeChanged += new SizeChangedEventHandler(RealTime_SizeChanged);
             _Canvas.SizeChanged += new SizeChangedEventHandler(Canvas_SizeChanged);
             gdMain.MouseLeftButtonUp += new MouseButtonEventHandler(RealTimeT_MouseLeftButtonUp);
-
-            //_CanvasPoint.Background = new SolidColorBrush(Colors.Red);
         }
 
 
@@ -139,6 +107,17 @@ namespace MonitorSystem.Other
                 Number = 0;
             }
         }
+
+        private void InitBG()
+        {
+            //ImageBrush imageBrush = new ImageBrush();
+            //imageBrush.ImageSource = new BitmapImage(new Uri("../Images/RealtimeBG.jpg", UriKind.Relative));
+            //imageBrush.Stretch = Stretch.Uniform;
+            //Canvas _v = new Canvas();
+            //_v.Background = imageBrush;
+            //this.Content = _v;
+        }
+
         private void RealTime_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (!(e.NewSize.Width > 0 && e.NewSize.Height > 0))
@@ -147,13 +126,38 @@ namespace MonitorSystem.Other
             this.Width = e.NewSize.Width;
             this.Height = e.NewSize.Height;
 
-            gdMain.Width = e.NewSize.Width - 90;
+            //if (this.Width < 300 || this.Height < 300)
+            //{
+            //    InitBG();
+            //    return;
+            //}
+
+
+            if (double.IsNaN(_Canvas.Width))
+                return;
+
+            double mwidth = e.NewSize.Width - (95 + 80 + 20 + 70 + 4);
+            double mheight = e.NewSize.Height - (23 + 60 + 65);
+            if (mwidth > 0 && mheight > 0)
+            {
+                _Canvas.Width = mwidth;
+                _Canvas.Height = mheight;
+
+                _CanvasZ.Width = mwidth;
+                _CanvasZ.Height = mheight;
+
+                PaintBasicInfo();
+                Paint();
+            }
         }
 
         private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (!(e.NewSize.Width > 0 && e.NewSize.Height > 0))
-                return;
+            //if (this.Width < 300 || this.Height < 300)
+            //{
+            //    InitBG();
+            //    return;
+            //}
 
             _Canvas.Width = e.NewSize.Width;
             _Canvas.Height = e.NewSize.Height;
@@ -418,7 +422,6 @@ namespace MonitorSystem.Other
             //属性实例化完，加载直线
             //把这个放在这里，因为，在图库里，双击也会弹出属性框来
             InitBasicinfo();
-
             InitLine();
             PaintBasicInfo();
         }
@@ -448,7 +451,8 @@ namespace MonitorSystem.Other
 
         private static readonly DependencyProperty BackColorProperty =
            DependencyProperty.Register("BackColor",
-           typeof(Color), typeof(RealTimeT), new PropertyMetadata(Colors.White));
+           typeof(Color), typeof(RealTimeT), new PropertyMetadata(Common.StringToColor("#FFEBE8D9")
+               ));
         [DefaultValue(""), Description("背景色"), Category("外观")]
         public Color BackColor
         {
@@ -469,7 +473,7 @@ namespace MonitorSystem.Other
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(RealTimeT), new PropertyMetadata(Colors.Black));
+            typeof(Color), typeof(RealTimeT), new PropertyMetadata(Common.StringToColor("#FFD5D5FF")));
         [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {
@@ -482,7 +486,6 @@ namespace MonitorSystem.Other
                     ScreenElement.ForeColor = value.ToString();
                     Paint();
                 }
-
             }
         }
 
@@ -870,6 +873,9 @@ namespace MonitorSystem.Other
         /// </summary>
         public void PaintBasicInfo()
         {
+            if (LineCanversHeight < 0 || LineCanversWidth < 0)
+                return;
+
             if (double.IsNaN(_Canvas.Width))
                 return;
             _Canvas.Children.Clear();
@@ -893,7 +899,6 @@ namespace MonitorSystem.Other
                 _Cursor.LineColor = _CursorColor;
                 _Cursor.Width = LineCanversWidth;
                 _Cursor.Height = LineCanversHeight - _YZStartPosition;
-
 
                 // _CanvasGrid 换成  _CanvasLine
                 _CanvasGrid.MouseMove += new MouseEventHandler(_CanvasGrid_MouseMove);
@@ -1149,7 +1154,7 @@ namespace MonitorSystem.Other
 
                 RealTimeLineOR obj = new RealTimeLineOR(objLine);
                 _listRealTimeLine.Add(obj);
-            }
+            }           
         }
         /// <summary>
         /// 显示曲线
@@ -1265,6 +1270,8 @@ namespace MonitorSystem.Other
             LineCanversWidth = _Canvas.Width - _XStart;
             LineCanversHeight = _Canvas.Height - _YStart;
 
+            if (LineCanversHeight < 0 || LineCanversWidth < 0)
+                return;
 
             Rect rect = new Rect();
             rect.Width = LineCanversWidth;
@@ -1973,7 +1980,10 @@ namespace MonitorSystem.Other
         }
 
         #endregion
-        
-        
+
+        private void btnSD_Click(object sender, RoutedEventArgs e)
+        {
+           // HeadTimeLen(24, "hh");
+        }
     }
 }

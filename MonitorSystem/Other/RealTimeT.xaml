@@ -50,7 +50,7 @@
                 <Grid x:Name="gdMain" Grid.Row="0"  Grid.Column="0" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition    />
-                        <ColumnDefinition Width="95" />
+                        <ColumnDefinition Width="75" />
                     </Grid.ColumnDefinitions>
                     <!--用于装X轴和Y轴-->
                     <Canvas x:Name="_CanvasZ" Grid.Row="0"  Grid.Column="0"  Canvas.ZIndex="2" Canvas.Top="5"></Canvas>
@@ -66,7 +66,7 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <!--放所有线列表-->
-                        <Grid x:Name="gdLineDefine" Grid.Column="1" Margin="5">
+                        <Grid x:Name="gdLineDefine" Grid.Column="1">
                             <Grid.RowDefinitions>
                             </Grid.RowDefinitions>
                         </Grid>
@@ -236,27 +236,27 @@
                             </Grid.RowDefinitions>
                             <!--第一行-->
                             <TextBlock Text="起始时间" Grid.Column="0"></TextBlock>
-                            <my:InputObj Grid.Column="1" MaxValue="2050"   DataValue="0"   DataType="int"/>
+                            <my:InputObj Grid.Column="1" x:Name="inputYear" MaxValue="2050"   DataValue="0"   DataType="int"/>
                             <TextBlock Text="年" Grid.Column="2"></TextBlock>
-                            <my:InputObj Grid.Column="3"  MaxValue="12"  DataValue="0"   DataType="int"/>
+                            <my:InputObj Grid.Column="3" x:Name="inputMonth"  MaxValue="12"  DataValue="0"   DataType="int"/>
                             <TextBlock Text="月" Grid.Column="4"></TextBlock>
-                            <my:InputObj Grid.Column="5" MaxValue="31"   DataValue="0"   DataType="int"/>
+                            <my:InputObj Grid.Column="5" x:Name="inputDay" MaxValue="31"   DataValue="0"   DataType="int"/>
                             <TextBlock Text="日" Grid.Column="6"></TextBlock>
-                            <my:InputObj Grid.Column="7" MaxValue="23"   DataValue="0"   DataType="int"/>
+                            <my:InputObj Grid.Column="7" x:Name="inputHour" MaxValue="23"   DataValue="0"   DataType="int"/>
                             <TextBlock Text="时" Grid.Column="8"></TextBlock>
-                            <my:InputObj Grid.Column="9"  MaxValue="59"  DataValue="0"   DataType="int"/>
+                            <my:InputObj Grid.Column="9" x:Name="inputMi" MaxValue="59"  DataValue="0"   DataType="int"/>
                             <TextBlock Text="分" Grid.Column="10"></TextBlock>
-                            <my:InputObj Grid.Column="11"  MaxValue="59"  DataValue="0"   DataType="int"/>
+                            <my:InputObj Grid.Column="11" x:Name="inputSec" MaxValue="59"  DataValue="0"   DataType="int"/>
                             <TextBlock Text="秒" Grid.Column="12"></TextBlock>
                             <!--第二行-->
                             <TextBlock Text="时间范围" Grid.Column="0" Grid.Row="1"></TextBlock>
-                            <my:InputObj Grid.Column="1" Grid.Row="1" MaxValue="23"    DataValue="0"   DataType="int"/>
+                            <my:InputObj Grid.Column="1" x:Name="inputEHour" Grid.Row="1" MaxValue="23"    DataValue="0"   DataType="int"/>
                             <TextBlock Text="时" Grid.Column="2" Grid.Row="1"></TextBlock>
-                            <my:InputObj Grid.Column="3" Grid.Row="1"  MaxValue="59" DataValue="0"   DataType="int"/>
+                            <my:InputObj Grid.Column="3" x:Name="inputEMi" Grid.Row="1"  MaxValue="59" DataValue="0"   DataType="int"/>
                             <TextBlock Text="分" Grid.Column="4" Grid.Row="1"></TextBlock>
-                            <my:InputObj Grid.Column="5"  Grid.Row="1"  MaxValue="59"  DataValue="0"   DataType="int"/>
+                            <my:InputObj Grid.Column="5" x:Name="inputESec"  Grid.Row="1"  MaxValue="59"  DataValue="0"   DataType="int"/>
                             <TextBlock Text="秒" Grid.Column="6" Grid.Row="1"></TextBlock>
-                            <Button x:Name="btnSD" Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Content="设定"></Button>
+                            <Button x:Name="btnSD" Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3"  Click="btnSD_Click" Content="设定"></Button>
                         </Grid>
                     </Border>
                     <!--右边设置-->
@@ -290,7 +290,6 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="5"/>
-
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" Content="百分比" x:Name="btnBFB"></Button>
                                 <Button Grid.Column="1" Content="曲线时间" x:Name="btnQXSJ"  Click="btnQXSJ_Click"></Button>

@@ -2692,6 +2692,30 @@ namespace MonitorSystem.Web.Moldes
         private global::System.String _ComputeStr;
         partial void OnComputeStrChanging(global::System.String value);
         partial void OnComputeStrChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> StartTime
+        {
+            get
+            {
+                return _StartTime;
+            }
+            set
+            {
+                OnStartTimeChanging(value);
+                ReportPropertyChanging("StartTime");
+                _StartTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StartTime");
+                OnStartTimeChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _StartTime;
+        partial void OnStartTimeChanging(Nullable<global::System.DateTime> value);
+        partial void OnStartTimeChanged();
 
         #endregion
     
@@ -4022,11 +4046,13 @@ namespace MonitorSystem.Web.Moldes
         /// </summary>
         /// <param name="elementID">ElementID 属性的初始值。</param>
         /// <param name="stationID">StationID 属性的初始值。</param>
-        public static V_ScreenMonitorValue CreateV_ScreenMonitorValue(global::System.Int32 elementID, global::System.Int32 stationID)
+        /// <param name="id">id 属性的初始值。</param>
+        public static V_ScreenMonitorValue CreateV_ScreenMonitorValue(global::System.Int32 elementID, global::System.Int32 stationID, global::System.Guid id)
         {
             V_ScreenMonitorValue v_ScreenMonitorValue = new V_ScreenMonitorValue();
             v_ScreenMonitorValue.ElementID = elementID;
             v_ScreenMonitorValue.StationID = stationID;
+            v_ScreenMonitorValue.id = id;
             return v_ScreenMonitorValue;
         }
 
@@ -4036,7 +4062,7 @@ namespace MonitorSystem.Web.Moldes
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 ElementID
         {
@@ -4046,14 +4072,11 @@ namespace MonitorSystem.Web.Moldes
             }
             set
             {
-                if (_ElementID != value)
-                {
-                    OnElementIDChanging(value);
-                    ReportPropertyChanging("ElementID");
-                    _ElementID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("ElementID");
-                    OnElementIDChanged();
-                }
+                OnElementIDChanging(value);
+                ReportPropertyChanging("ElementID");
+                _ElementID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ElementID");
+                OnElementIDChanged();
             }
         }
         private global::System.Int32 _ElementID;
@@ -4159,7 +4182,7 @@ namespace MonitorSystem.Web.Moldes
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 StationID
         {
@@ -4169,14 +4192,11 @@ namespace MonitorSystem.Web.Moldes
             }
             set
             {
-                if (_StationID != value)
-                {
-                    OnStationIDChanging(value);
-                    ReportPropertyChanging("StationID");
-                    _StationID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("StationID");
-                    OnStationIDChanged();
-                }
+                OnStationIDChanging(value);
+                ReportPropertyChanging("StationID");
+                _StationID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StationID");
+                OnStationIDChanged();
             }
         }
         private global::System.Int32 _StationID;
@@ -4254,6 +4274,33 @@ namespace MonitorSystem.Web.Moldes
         private Nullable<global::System.Int32> _flag;
         partial void OnflagChanging(Nullable<global::System.Int32> value);
         partial void OnflagChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Guid _id;
+        partial void OnidChanging(global::System.Guid value);
+        partial void OnidChanged();
 
         #endregion
     

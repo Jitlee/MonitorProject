@@ -6,6 +6,8 @@ using MonitorSystem.Controls.ImagesManager;
 using MonitorSystem.Gallery;
 using MonitorSystem.MonitorSystemGlobal;
 using MonitorSystem.Web.Moldes;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace MonitorSystem.Controls
 {
@@ -70,7 +72,22 @@ namespace MonitorSystem.Controls
                     item.DataContext = t;
                     try
                     {
-                        if (!string.IsNullOrEmpty(t.ImageURL))
+                        if (!string.IsNullOrEmpty(t.ImageURL) && t.ImageURL == "MonitorSystem.Other.RealTimeT")
+                        {
+                            ImageBrush imageBrush = new ImageBrush();
+                            imageBrush.ImageSource = new BitmapImage(new Uri("../Images/RealtimeBG.jpg", UriKind.Relative));
+                            imageBrush.Stretch = Stretch.Uniform;
+                            Canvas instance = new Canvas();
+                            instance.Background = imageBrush;
+                          var  control = instance as FrameworkElement;
+                            if (null != control)
+                            {
+                                control.Height = 93d;
+                                control.Width = 93d;
+                                item.Content = control;
+                            }
+                        }
+                        else if (!string.IsNullOrEmpty(t.ImageURL))
                         {
                             var instance = Activator.CreateInstance(Type.GetType(t.ImageURL));
                             var control = instance as FrameworkElement;

@@ -76,13 +76,17 @@ namespace MonitorSystem.Other
             timerSetValue.Tick += (sender, obj) =>
             {
                 AddNewValue(_YValue);
-                //if (_ISShowValue)
-                    ShowCurve();
+                ShowCurve();
             }; 
             timerSetValue.Start();
 
 
             
+        }
+
+        public void SetYValue(double mYValue)
+        {
+            _YValue = mYValue;
         }
 
         public void Stop()

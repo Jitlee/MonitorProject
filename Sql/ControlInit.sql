@@ -1699,11 +1699,11 @@ begin
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 2,'XMainNumber','3','X主分度数');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 3,'XMainColor','#FFFF0000','X主分度颜色');
+			 VALUES(@ControlID, 3,'XMainColor','#FF8E8EC1','X主分度颜色');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 4,'XPriNumber','3','X次分度数');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 5,'XPriColor','#FFFF0000','X度次分颜色');
+			 VALUES(@ControlID, 5,'XPriColor','#FF12C0D5','X度次分颜色');
 		
 		--Y轴
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
@@ -1711,29 +1711,29 @@ begin
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 7,'YMainNumber','3','Y主分度数');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 8,'YMainColor','#FFFF0000','Y主分度颜色');
+			 VALUES(@ControlID, 8,'YMainColor','#FFC8A4A4','Y主分度颜色');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 9,'YPriNumber','3','Y次分度数');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 10,'YPriColor','#FFFF0000','Y度次分颜色');
+			 VALUES(@ControlID, 10,'YPriColor','#FF58DB1B','Y度次分颜色');
 		--其它颜色
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 11,'ISShowBorder','True','显示边框');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 29,'BorderColor','#FFFF0000','边框');
+			 VALUES(@ControlID, 29,'BorderColor','#FFE1BFBF','边框');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 12,'ISShowGridBack','True','显示背景');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 30,'GridBackColor','#FFFF0000','背景颜色');
+			 VALUES(@ControlID, 30,'GridBackColor','#FFFFFFFF','背景颜色');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 13,'ISShowCursor','True','显示游标');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 31,'CursorColor','#FFFF0000','游标颜色');
+			 VALUES(@ControlID, 31,'CursorColor','#FF3C433B','游标颜色');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 14,'ISShowTime','True','显示时间');
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
-			 VALUES(@ControlID, 32,'TimeColor','#FFFF0000','时间颜色');
+			 VALUES(@ControlID, 32,'TimeColor','#FFE8DCDC','时间颜色');
 		
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
