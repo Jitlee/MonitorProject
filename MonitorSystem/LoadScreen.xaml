@@ -17,6 +17,42 @@
                 <RowDefinition Height="35"  />
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+                
+            <Grid
+                Name="GridScreen"
+                Background="Transparent"
+                Grid.Row="2">
+                <Canvas
+                    x:Name="csScreen"
+                    Height="2304"
+                    Width="3072">
+                    <Canvas.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform x:Name="CanvasScaleTransform"/>
+                            <TranslateTransform x:Name="CanvasTranslateTransform"/>
+                        </TransformGroup>
+                    </Canvas.RenderTransform>
+                </Canvas>
+                <Canvas
+                    x:Name="AddElementCanvas"
+                    Visibility="Collapsed">
+                    <Rectangle x:Name="AddElementRectangle" Stroke="Black" StrokeThickness="1" StrokeDashArray="5,5" Visibility="Collapsed"/>
+                </Canvas>
+                <Border
+                    Visibility="Collapsed"
+                    BorderBrush="Silver"
+                    BorderThickness="1"
+                    Background="Beige"
+                    Height="150"
+                    Width="200"
+                    Margin="5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom">
+                    <Canvas>
+                        <Rectangle />
+                    </Canvas>
+                </Border>
+            </Grid>
             <Border MouseLeftButtonDown="Top_Click" MouseRightButtonDown="Top_Click">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -54,23 +90,12 @@
                            Stretch="None" MouseLeftButtonUp="Image_MouseLeftButtonUp" />
                 </StackPanel>
             </Grid>
-            <Viewbox Grid.Row="2"    Stretch="Uniform"  x:Name="SceenViewBox">
-                <!--<Viewbox Grid.Row="2"    Stretch="Fill"  x:Name="SceenViewBox">-->
-                <Grid Name="GridScreen">
-                    <Canvas x:Name="csScreen" Background="Transparent"/>
-                    <Canvas
-                        x:Name="AddElementCanvas"
-                        Background="Transparent"
-                        ctrls:CustomCursor.Custom="False"
-                        ctrls:CustomCursor.CursorTemplate="{StaticResource Target}"
-                        Visibility="Collapsed">
-                        <Rectangle x:Name="AddElementRectangle" Stroke="Black" StrokeThickness="1" StrokeDashArray="5,5" Visibility="Collapsed"/>
-                    </Canvas>
-                </Grid>
-            </Viewbox>
             <TextBox Opacity="0" Height="0" Width="0" x:Name="HideFocusElement"/>
+
+
+
         </Grid>
-        
+
         <!-- 图库面板 -->
         <ctrls:FloatPanel
             x:Name="GalleryFloatPanel"

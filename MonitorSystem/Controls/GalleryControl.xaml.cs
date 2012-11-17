@@ -130,12 +130,12 @@ namespace MonitorSystem.Controls
         {
             if (GalleryListBox.SelectedIndex < 1)
             {
-                LoadScreen.UnAddElementModel();
+                LoadScreen._instance.UnAddElementModel();
             }
             else
             {
                 PropertyMain.Instance.ResetSelected();
-                LoadScreen.AddElementModel();
+                LoadScreen._instance.AddElementModel();
             }
         }
 

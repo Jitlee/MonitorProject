@@ -333,12 +333,12 @@ namespace MonitorSystem
         {
             if ((sender as ListBox).SelectedIndex < 1)
             {
-                LoadScreen.UnAddElementModel();
+                LoadScreen._instance.UnAddElementModel();
             }
             else
             {
                 GalleryControl.Instance.ResetSelected();
-                LoadScreen.AddElementModel();
+                LoadScreen._instance.AddElementModel();
             }
         }
     }

@@ -98,11 +98,14 @@ namespace MonitorSystem
             _SenceCommand = new DelegateCommand<t_Screen>(LoadSence);
             _instance = this;
             //SceenViewBox.Stretch = Stretch.;
-            AddElementCanvas.MouseLeftButtonDown += AddElementCanvas_MouseLeftButtonDown;
-            AddElementCanvas.MouseLeftButtonUp += AddElementCanvas_MouseLeftButtonUp;
+            //AddElementCanvas.MouseLeftButtonDown += AddElementCanvas_MouseLeftButtonDown;
+            //AddElementCanvas.MouseLeftButtonUp += AddElementCanvas_MouseLeftButtonUp;
             csScreen.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(CsScreen_MouseLeftButtonDown), false);
             csScreen.VerticalAlignment = VerticalAlignment.Top;
             csScreen.HorizontalAlignment = HorizontalAlignment.Left;
+            GridScreen.AddHandler(Grid.MouseWheelEvent, new MouseWheelEventHandler(GridScreen_MouseWheel), false);
+
+            GridScreen.MouseLeftButtonDown += GridScreen_MouseLeftButtonDown;
         }
 
         public static void Load(t_Screen screen)
@@ -127,7 +130,7 @@ namespace MonitorSystem
             bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
             ImageBrush imgB = new ImageBrush();
             imgB.ImageSource = bitmap;
-            csScreen.Background = imgB;
+            //csScreen.Background = imgB;
           
         }
 
@@ -140,7 +143,7 @@ namespace MonitorSystem
             ImageBrush imgB = new ImageBrush();
             imgB.ImageSource = bitmap;
 
-            csScreen.Background = imgB;
+            //csScreen.Background = imgB;
         }
 
         private string _BgImagePath;
@@ -179,24 +182,33 @@ namespace MonitorSystem
         /// <summary>
         /// 表示添加新控件模式
         /// </summary>
-        public static void AddElementModel()
+        public void AddElementModel()
         {
-            if (null != _instance && _instance.AddElementCanvas.Visibility != Visibility.Visible)
+            if (AddElementCanvas.Visibility != Visibility.Visible)
             {
-                _instance.AddElementCanvas.SetValue(CustomCursor.CustomProperty, true);
-                _instance.AddElementCanvas.Visibility = Visibility.Visible;
+                AddElementCanvas.SetValue(CustomCursor.CustomProperty, true);
+                AddElementCanvas.Visibility = Visibility.Visible;
+                GridScreen.MouseLeftButtonDown -= GridScreen_MouseLeftButtonDown;
+                GridScreen.MouseLeftButtonDown -= AddElementCanvas_MouseLeftButtonDown;
+                GridScreen.MouseLeftButtonDown += AddElementCanvas_MouseLeftButtonDown;
+                GridScreen.MouseLeftButtonUp -= AddElementCanvas_MouseLeftButtonUp;
+                GridScreen.MouseLeftButtonUp += AddElementCanvas_MouseLeftButtonUp;
             }
         }
 
         /// <summary>
         /// 表示添加新控件模式
         /// </summary>
-        public static void UnAddElementModel()
+        public void UnAddElementModel()
         {
-            if (null != _instance && _instance.AddElementCanvas.Visibility != Visibility.Collapsed)
+            if (AddElementCanvas.Visibility != Visibility.Collapsed)
             {
-                _instance.AddElementCanvas.Visibility = Visibility.Collapsed;
-                _instance.AddElementCanvas.SetValue(CustomCursor.CustomProperty, false);
+                AddElementCanvas.Visibility = Visibility.Collapsed;
+                AddElementCanvas.SetValue(CustomCursor.CustomProperty, false);
+                GridScreen.MouseLeftButtonDown -= GridScreen_MouseLeftButtonDown;
+                GridScreen.MouseLeftButtonDown += GridScreen_MouseLeftButtonDown;
+                GridScreen.MouseLeftButtonDown -= AddElementCanvas_MouseLeftButtonDown;
+                GridScreen.MouseLeftButtonUp -= AddElementCanvas_MouseLeftButtonUp;
             }
         }
 
@@ -292,11 +304,12 @@ namespace MonitorSystem
 
         private void AddElementCanvas_MouseMove(object sender, MouseEventArgs e)
         {
+            var transform = csScreen.TransformToVisual(GridScreen).Transform(new Point());
             var point = e.GetPosition(csScreen);
             var offsetX = point.X - _originPoint.X;
             var offsetY = point.Y - _originPoint.Y;
-            AddElementRectangle.SetValue(Canvas.LeftProperty, offsetX < 0 ? point.X : _originPoint.X);
-            AddElementRectangle.SetValue(Canvas.TopProperty, offsetY < 0 ? point.Y : _originPoint.Y);
+            AddElementRectangle.SetValue(Canvas.LeftProperty, (offsetX < 0 ? point.X : _originPoint.X));
+            AddElementRectangle.SetValue(Canvas.TopProperty, (offsetY < 0 ? point.Y : _originPoint.Y));
             AddElementRectangle.SetValue(WidthProperty, Math.Abs(offsetX));
             AddElementRectangle.SetValue(HeightProperty, Math.Abs(offsetY));
         }
@@ -368,6 +381,13 @@ namespace MonitorSystem
             DesignFloatPanel.Height = height;
             DesignFloatPanel.Left = left;
             DesignFloatPanel.Top = top;
+
+            UpdateThumbnail(e.NewSize);
+        }
+
+        private void UpdateThumbnail(Size size)
+        {
+            
         }
 
         #region 实例化其它参数
@@ -702,15 +722,15 @@ namespace MonitorSystem
 
            // BackgroundPanel.BgImagePath = _Screen.ImageURL;
             
-            AddElementCanvas.Width = csScreen.Width = 1000;
-            AddElementCanvas.Height = csScreen.Height =600;
+            //AddElementCanvas.Width = csScreen.Width = 1000;
+            //AddElementCanvas.Height = csScreen.Height =600;
 
             string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
             BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
             bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
             ImageBrush imgB = new ImageBrush();
             imgB.ImageSource = bitmap;
-            csScreen.Background = imgB;
+            //csScreen.Background = imgB;
 
             
             //设置当前
@@ -721,6 +741,12 @@ namespace MonitorSystem
             //加载元素
             _DataContext.Load(_DataContext.GetT_ElementsByScreenIDQuery(_Screen.ScreenID),
                 LoadElementCompleted, _Screen.ScreenID);
+
+            _sacleIndex = 5;
+            CanvasScaleTransform.ScaleX = 1d;
+            CanvasScaleTransform.ScaleY = 1d;
+            CanvasTranslateTransform.X = 0d;
+            CanvasTranslateTransform.Y = 0d;
         }
 
         private void bitmap_ImageOpened<TEventArgs>(object sender, TEventArgs e)
@@ -745,8 +771,11 @@ namespace MonitorSystem
                     }
                 }
 
-                AddElementCanvas.Width = csScreen.Width = width;
-                AddElementCanvas.Height = csScreen.Height = height;
+                //AddElementCanvas.Width = csScreen.Width = width;
+                //AddElementCanvas.Height = csScreen.Height = height;
+
+                //csScreen.Width = width;
+                //csScreen.Height = height;
             }
             //double h = bi.PixelHeight;
             //double w = bi.PixelWidth;
@@ -1855,6 +1884,64 @@ namespace MonitorSystem
         private void DesignButton_Click(object sender, RoutedEventArgs e)
         {
             DesignFloatPanel.IsOpened = !DesignFloatPanel.IsOpened;
+        }
+
+        private readonly double[] ScaleArray = new[] { 0.1d, 0.15d, 0.25d, 0.5d, 0.75d, 1.0d, 1.25d, 1.50d, 2.0d, 3.0d, 5.0d };
+        private int _sacleIndex = 5;
+        private void GridScreen_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var point = e.GetPosition(GridScreen);
+            if (e.Delta > 0 && _sacleIndex < ScaleArray.Length - 1)
+            {
+                ++_sacleIndex;
+                ScaleCanvas(point);
+            }
+            else if(e.Delta < 0 && _sacleIndex > 1)
+            {
+                --_sacleIndex;
+                ScaleCanvas(point);
+            }
+        }
+
+        private void ScaleCanvas(Point point)
+        {
+            CanvasScaleTransform.ScaleX = CanvasScaleTransform.ScaleY = ScaleArray[_sacleIndex];
+            CanvasScaleTransform.CenterX = point.X - CanvasTranslateTransform.X;
+            CanvasScaleTransform.CenterY = point.Y - CanvasTranslateTransform.Y;
+
+            AddElementCanvas.RenderTransform = csScreen.RenderTransform;
+        }
+
+
+        private void GridScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            GridScreen.CaptureMouse();
+
+            _originPoint = e.GetPosition(GridScreen);
+
+            _originPoint.X -= CanvasTranslateTransform.X;
+            _originPoint.Y -= CanvasTranslateTransform.Y;
+
+            GridScreen.MouseMove -= GridScreen_MouseMove;
+            GridScreen.MouseMove += GridScreen_MouseMove;
+            GridScreen.MouseLeftButtonUp -= GridScreen_MouseLeftButtonUp;
+            GridScreen.MouseLeftButtonUp += GridScreen_MouseLeftButtonUp;
+        }
+
+        private void GridScreen_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            GridScreen.MouseMove -= GridScreen_MouseMove;
+            GridScreen.MouseLeftButtonUp -= GridScreen_MouseLeftButtonUp;
+            GridScreen.ReleaseMouseCapture();
+        }
+
+        private void GridScreen_MouseMove(object sender, MouseEventArgs e)
+        {
+            var point = e.GetPosition(GridScreen);
+            CanvasTranslateTransform.X = point.X - _originPoint.X;
+            CanvasTranslateTransform.Y = point.Y - _originPoint.Y;
+
+            AddElementCanvas.RenderTransform = csScreen.RenderTransform;
         }
     }
 }
