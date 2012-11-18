@@ -210,6 +210,9 @@
           <Property Name="ParentScreenID" Type="int" />
           <Property Name="StationID" Type="int" />
           <Property Name="Flag" Type="int" />
+          <Property Name="Width" Type="int" />
+          <Property Name="Height" Type="int" />
+          <Property Name="BackColor" Type="nchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="t_Screen_Library">
           <Key>
@@ -240,6 +243,7 @@
       警告 6002: 表/视图“GDK_BCM.dbo.V_ScreenMonitorValue”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
       -->
         <EntityType Name="V_ScreenMonitorValue">
+          
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -423,6 +427,9 @@
           <Property Type="Int32" Name="ParentScreenID" />
           <Property Type="Int32" Name="StationID" />
           <Property Type="Int32" Name="Flag" />
+          <Property Type="Int32" Name="Width" />
+          <Property Type="Int32" Name="Height" />
+          <Property Type="String" Name="BackColor" MaxLength="20" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="t_Screen_Library">
           <Key>
@@ -637,6 +644,9 @@
           <EntitySetMapping Name="t_Screen">
             <EntityTypeMapping TypeName="MonitorDemo2Model.t_Screen">
               <MappingFragment StoreEntitySet="t_Screen">
+                <ScalarProperty Name="BackColor" ColumnName="BackColor" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
                 <ScalarProperty Name="Flag" ColumnName="Flag" />
                 <ScalarProperty Name="StationID" ColumnName="StationID" />
                 <ScalarProperty Name="ParentScreenID" ColumnName="ParentScreenID" />

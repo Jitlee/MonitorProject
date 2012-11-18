@@ -29,7 +29,7 @@ namespace MonitorSystem
             return strTopUrl;
         }
 
-        public static Color StringToColor(string htmlColr)
+        public static Color StringToColor(string htmlColr, Color defualtColor)
         {
             try
             {
@@ -44,9 +44,9 @@ namespace MonitorSystem
                     string[] rgb = htmlColr.ToUpper().Replace("RGB(", "").Replace(")", "").Split(',');
                     if (rgb.Length == 3)//RGB(177,255,255)
                     {
-                        r=Convert.ToByte(int.Parse(rgb[0]));
-                        g=Convert.ToByte(int.Parse(rgb[1]));
-                        b=Convert.ToByte(int.Parse(rgb[2]));
+                        r = Convert.ToByte(int.Parse(rgb[0]));
+                        g = Convert.ToByte(int.Parse(rgb[1]));
+                        b = Convert.ToByte(int.Parse(rgb[2]));
                     }
                 }
                 else
@@ -61,8 +61,13 @@ namespace MonitorSystem
             }
             catch
             {
-                return Colors.White;
+                return defualtColor;
             }
+        }
+
+        public static Color StringToColor(string htmlColr)
+        {
+            return StringToColor(htmlColr, Colors.White);
         }
 
         public static bool ConvertToBool(string strValue)

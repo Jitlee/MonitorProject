@@ -262,6 +262,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\BooleanToVisibilityConverter.cs" />
     <Compile Include="ZTControls\BackgroundRect.cs" />
     <Compile Include="ZTControls\BeautyFont.cs" />
     <Compile Include="ZTControls\ButtonCtrl.cs" />

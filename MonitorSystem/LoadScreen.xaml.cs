@@ -28,6 +28,7 @@ using MonitorSystem.Dldz;
 using MonitorSystem.Gallery.Meter;
 using System.Diagnostics;
 using MonitorSystem.Other;
+using System.ComponentModel;
 
 namespace MonitorSystem
 {
@@ -125,41 +126,90 @@ namespace MonitorSystem
                 return;
 
 
-            string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), screen.ImageURL);
-            BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
-            bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
-            ImageBrush imgB = new ImageBrush();
-            imgB.ImageSource = bitmap;
-            //csScreen.Background = imgB;
-          
+            SetScreenImg(screen.ImageURL);
         }
 
-        public void SetScreenImg(string strImg)
+        public void SetScreenImg(string strImg, bool resize = false)
         {
-            string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), strImg);
-            BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
-            bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
-            
-            ImageBrush imgB = new ImageBrush();
-            imgB.ImageSource = bitmap;
+            var gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), strImg);
+            var bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
+            if (resize)
+            {
+                bitmap.ImageOpened += Screen_ImageOpened;
+            }
+            bitmap.ImageFailed += Screen_ImageFailed;
 
-            //csScreen.Background = imgB;
+            var imgB = new ImageBrush() { Stretch = Stretch.UniformToFill };
+            imgB.ImageSource = bitmap;
+            csScreen.Background = imgB;
+            ThumbnailCanvas.Background = imgB;
         }
 
-        private string _BgImagePath;
+        private void Screen_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            var image = (BitmapImage)sender;
+            if (MessageBox.Show(
+                    string.Format("当前背景图片的大小(像素)为：{0}×{1}, 是否同时修改场景的大小",
+                        image.PixelWidth, image.PixelHeight),
+                    "询问",
+                    MessageBoxButton.OKCancel)
+                == MessageBoxResult.OK)
+            {
+                CanvasWidth = image.PixelWidth;
+                CanvasHeight = image.PixelHeight;
+            }
+        }
+
+        private void Screen_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            ThumbnailCanvas.Background = csScreen.Background = new SolidColorBrush(Common.StringToColor(_CurrentScreen.BackColor, Color.FromArgb(0xff, 0xF5, 0xF5, 0xDC)));
+        }
+
+        private string _bgImagePath;
         private const string PATH = "ImageMap";
         [Image(PATH, OnlyImage = true)]
+        [DefaultValue(""), Description("设置场景背景图片"), Category("杂项"), DisplayName("背景图片")]
         public string BgImagePath
         {
             set
             {
-                _BgImagePath = value;
+                _bgImagePath = value;
                 _CurrentScreen.ImageURL = value;
-                SetScreenImg(value);
+                SetScreenImg(value, true);
             }
             get
             {
-                return _BgImagePath;
+                return _bgImagePath;
+            }
+        }
+
+        [DefaultValue(""), Description("设置场景宽度"), Category("杂项"), DisplayName("宽度")]
+        public int CanvasWidth
+        {
+            set
+            {
+                _CurrentScreen.Width = value;
+                csScreen.Width = AddElementCanvas.Width = value;
+                UpdateThumbnail();
+            }
+            get
+            {
+                return (_CurrentScreen.Width.HasValue && _CurrentScreen.Width > 100d) ? _CurrentScreen.Width.Value : 1920;
+            }
+        }
+
+        [DefaultValue(""), Description("设置场景高度"), Category("杂项"), DisplayName("高度")]
+        public int CanvasHeight
+        {
+            set
+            {
+                _CurrentScreen.Height = (int)value;
+                csScreen.Height = AddElementCanvas.Height = value;
+                UpdateThumbnail();
+            }
+            get
+            {
+                return (_CurrentScreen.Height.HasValue && _CurrentScreen.Height > 100d) ? _CurrentScreen.Height.Value : 1024;
             }
         }
         
@@ -170,8 +220,8 @@ namespace MonitorSystem
             HideFocusElement.Focus();
 
             PropertyMain.Instance.ControlPropertyGrid.SelectedObject = null;
-            PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = new []{"BgImagePath"};
-            _BgImagePath = _CurrentScreen.ImageURL;
+            PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = new []{"BgImagePath", "CanvasWidth", "CanvasHeight" };
+            _bgImagePath = _CurrentScreen.ImageURL;
             PropertyMain.Instance.ControlPropertyGrid.SelectedObject =this; 
 
         }
@@ -725,14 +775,12 @@ namespace MonitorSystem
             //AddElementCanvas.Width = csScreen.Width = 1000;
             //AddElementCanvas.Height = csScreen.Height =600;
 
-            string gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), _Screen.ImageURL);
-            BitmapImage bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
-            bitmap.ImageOpened += new EventHandler<RoutedEventArgs>(bitmap_ImageOpened);
-            ImageBrush imgB = new ImageBrush();
-            imgB.ImageSource = bitmap;
-            //csScreen.Background = imgB;
+            SetScreenImg(_Screen.ImageURL);
 
-            
+            AddElementCanvas.Width = csScreen.Width = (_Screen.Width.HasValue && _Screen.Width > 100d) ? _Screen.Width.Value : 1920;
+            AddElementCanvas.Height = csScreen.Height = (_Screen.Height.HasValue && _Screen.Height > 100d) ? _Screen.Height.Value : 1024;
+            UpdateThumbnail();
+
             //设置当前
             _CurrentScreen = _Screen;
             
@@ -749,37 +797,6 @@ namespace MonitorSystem
             CanvasTranslateTransform.Y = 0d;
         }
 
-        private void bitmap_ImageOpened<TEventArgs>(object sender, TEventArgs e)
-        {
-            BitmapImage bi = (BitmapImage)sender;
-            if (bi.PixelWidth > 500 && bi.PixelHeight > 500)
-            {
-                var width = (double)bi.PixelWidth;
-                var height = (double)bi.PixelHeight;
-                if (width > 1024d || height > 768d)
-                {
-                    var scale = height / width;
-                    if (scale > 0.75d)
-                    {
-                        height = 768d;
-                        width = 768d / scale;
-                    }
-                    else
-                    {
-                        width = 1024d;
-                        height = 1024d * scale;
-                    }
-                }
-
-                //AddElementCanvas.Width = csScreen.Width = width;
-                //AddElementCanvas.Height = csScreen.Height = height;
-
-                //csScreen.Width = width;
-                //csScreen.Height = height;
-            }
-            //double h = bi.PixelHeight;
-            //double w = bi.PixelWidth;
-        }
         /// <summary>
         /// 加载元素
         /// </summary>
@@ -1905,11 +1922,13 @@ namespace MonitorSystem
 
         private void ScaleCanvas(Point point)
         {
+            ScaleTextBlock.Text = string.Format("{0}%", ScaleArray[_sacleIndex] * 100);
             CanvasScaleTransform.ScaleX = CanvasScaleTransform.ScaleY = ScaleArray[_sacleIndex];
             CanvasScaleTransform.CenterX = point.X - CanvasTranslateTransform.X;
             CanvasScaleTransform.CenterY = point.Y - CanvasTranslateTransform.Y;
 
             AddElementCanvas.RenderTransform = csScreen.RenderTransform;
+            UpdateThumbnail();
         }
 
 
@@ -1942,6 +1961,105 @@ namespace MonitorSystem
             CanvasTranslateTransform.Y = point.Y - _originPoint.Y;
 
             AddElementCanvas.RenderTransform = csScreen.RenderTransform;
+            UpdateThumbnail();
+        }
+
+        private void UpdateThumbnail()
+        {
+            var borderWidth = ThumbnailBorder.Width - 2d;
+            var borderHeight = ThumbnailBorder.Height - 2d;
+            var canvasWidth = csScreen.Width * CanvasScaleTransform.ScaleX;
+            var canvasHeight = csScreen.Height * CanvasScaleTransform.ScaleY;
+            var viewWidth = GridScreen.ActualWidth;
+            var viewHeight = GridScreen.ActualHeight;
+            var thumbnailViewWidth = 0d;
+            var thumbnailViewHeight = 0d;
+            var thumbnailWidth = 0d;
+            var thumbnailHeight = 0d;
+            var left = 0d;
+            var top = 0d;
+            if (canvasHeight / canvasWidth > borderHeight / borderWidth)
+            {
+                thumbnailViewHeight = borderHeight;
+                thumbnailViewWidth = borderHeight * canvasWidth / canvasHeight;
+            }
+            else
+            {
+                thumbnailViewWidth = borderWidth;
+                thumbnailViewHeight = borderWidth * canvasHeight / canvasWidth;
+            }
+            thumbnailWidth = viewWidth * thumbnailViewWidth / canvasWidth;
+            thumbnailHeight = viewHeight * thumbnailViewHeight / canvasHeight;
+
+            if (thumbnailWidth > thumbnailViewWidth)
+            {
+                thumbnailWidth = thumbnailViewWidth;
+            }
+
+            if (thumbnailHeight > thumbnailViewHeight)
+            {
+                thumbnailHeight = thumbnailViewHeight;
+            }
+
+            left = -(CanvasTranslateTransform.X + (1d - CanvasScaleTransform.ScaleX) * CanvasScaleTransform.CenterX) * thumbnailViewWidth / canvasWidth;
+            top = -(CanvasTranslateTransform.Y + (1d - CanvasScaleTransform.ScaleY) * CanvasScaleTransform.CenterY) * thumbnailViewHeight / canvasHeight;
+
+            ThumbnailCanvas.Width = thumbnailViewWidth;
+            ThumbnailCanvas.Height = thumbnailViewHeight;
+            ThumbnailRectangle.Width = thumbnailWidth;
+            ThumbnailRectangle.Height = thumbnailHeight;
+            ThumbnailRectangle.SetValue(Canvas.LeftProperty, left);
+            ThumbnailRectangle.SetValue(Canvas.TopProperty, top);
+        }
+
+        private void ThumbnailBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ThumbnailBorder.CaptureMouse();
+
+            var point = e.GetPosition(ThumbnailCanvas);
+
+            SetThumbnailToCenter(point);
+
+            ThumbnailBorder.MouseMove -= ThumbnailBorder_MouseMove;
+            ThumbnailBorder.MouseMove += ThumbnailBorder_MouseMove;
+            ThumbnailBorder.MouseLeftButtonUp -= ThumbnailBorder_MouseLeftButtonUp;
+            ThumbnailBorder.MouseLeftButtonUp += ThumbnailBorder_MouseLeftButtonUp;
+            e.Handled = true;
+        }
+
+        private void ThumbnailBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ThumbnailBorder.MouseMove -= ThumbnailBorder_MouseMove;
+            ThumbnailBorder.MouseLeftButtonUp -= ThumbnailBorder_MouseLeftButtonUp;
+            ThumbnailBorder.ReleaseMouseCapture();
+            e.Handled = true;
+        }
+
+        private void ThumbnailBorder_MouseMove(object sender, MouseEventArgs e)
+        {
+            var point = e.GetPosition(ThumbnailCanvas);
+            SetThumbnailToCenter(point);
+        }
+
+        private void SetThumbnailToCenter(Point point)
+        {
+            var canvasWidth = csScreen.Width * CanvasScaleTransform.ScaleX;
+            var canvasHeight = csScreen.Height * CanvasScaleTransform.ScaleY;
+            var thumbnailViewWidth = ThumbnailCanvas.Width;
+            var thumbnailViewHeight = ThumbnailCanvas.Height;
+            var thumbnailWidth = ThumbnailRectangle.Width;
+            var thumbnailHeight = ThumbnailRectangle.Height;
+
+            var left = point.X - thumbnailWidth / 2d;
+            var top = point.Y - thumbnailHeight / 2d;
+            ThumbnailRectangle.SetValue(Canvas.LeftProperty, left);
+            ThumbnailRectangle.SetValue(Canvas.TopProperty, top);
+
+
+            CanvasScaleTransform.CenterX = 0d;
+            CanvasScaleTransform.CenterY = 0d;
+            CanvasTranslateTransform.X  = - left * canvasWidth / thumbnailViewWidth;
+            CanvasTranslateTransform.Y = -top* canvasHeight / thumbnailViewHeight;
         }
     }
 }

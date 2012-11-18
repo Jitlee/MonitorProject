@@ -7,7 +7,11 @@
              xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
              xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
              xmlns:ctrls="clr-namespace:MonitorSystem.Controls"
-             xmlns:local="clr-namespace:MonitorSystem">
+             xmlns:local="clr-namespace:MonitorSystem"
+             xmlns:utilities="clr-namespace:MonitorSystem.Utilities">
+    <UserControl.Resources>
+        <utilities:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <!--xmlns:menu="clr-namespace:SL4PopupMenu"-->
     <Grid x:Name="LayoutRoot">
         
@@ -20,12 +24,13 @@
                 
             <Grid
                 Name="GridScreen"
-                Background="Transparent"
+                Background="Silver"
                 Grid.Row="2">
                 <Canvas
+                    Background="Beige"
                     x:Name="csScreen"
-                    Height="2304"
-                    Width="3072">
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left">
                     <Canvas.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform x:Name="CanvasScaleTransform"/>
@@ -35,24 +40,114 @@
                 </Canvas>
                 <Canvas
                     x:Name="AddElementCanvas"
-                    Visibility="Collapsed">
+                    Visibility="Collapsed"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left">
                     <Rectangle x:Name="AddElementRectangle" Stroke="Black" StrokeThickness="1" StrokeDashArray="5,5" Visibility="Collapsed"/>
                 </Canvas>
                 <Border
-                    Visibility="Collapsed"
-                    BorderBrush="Silver"
+                    BorderBrush="Black"
                     BorderThickness="1"
-                    Background="Beige"
+                    Background="Silver"
                     Height="150"
                     Width="200"
-                    Margin="5"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom">
-                    <Canvas>
-                        <Rectangle />
-                    </Canvas>
+                    VerticalAlignment="Bottom"
+                    x:Name="ThumbnailBorder"
+                    MouseLeftButtonDown="ThumbnailBorder_MouseLeftButtonDown"
+                    Visibility="{Binding ElementName=ThumbnailToggleButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Border.Clip>
+                        <RectangleGeometry Rect="0,0,200,150"/>
+                    </Border.Clip>
+                    <Grid>
+                        <Canvas
+                            x:Name="ThumbnailCanvas"
+                            Background="Beige"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                            <Rectangle
+                                Fill="#85000000"
+                                Stroke="Blue"
+                                StrokeThickness="1"
+                                x:Name="ThumbnailRectangle"/>
+                        </Canvas>
+                        <TextBlock
+                            x:Name="ScaleTextBlock"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Right"
+                            Text="100%"
+                            IsHitTestVisible="False"/>
+                    </Grid>
                 </Border>
             </Grid>
+            <ToggleButton
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                x:Name="ThumbnailToggleButton"
+                Grid.Row="2">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Background" Value="#FF1F3B53"/>
+                        <Setter Property="Foreground" Value="#FF000000"/>
+                        <Setter Property="Padding" Value="3"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="BorderBrush">
+                            <Setter.Value>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFA3AEB9" Offset="0"/>
+                                    <GradientStop Color="#FF8399A9" Offset="0.375"/>
+                                    <GradientStop Color="#FF718597" Offset="0.375"/>
+                                    <GradientStop Color="#FF617584" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton">
+                                        <Grid>
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal"/>
+                                                    <VisualState x:Name="MouseOver"/>
+                                                    <VisualState x:Name="Pressed"/>
+                                                    <VisualState x:Name="Disabled"/>
+                                                </VisualStateGroup>
+                                                <VisualStateGroup x:Name="CheckStates">
+                                                    <VisualState x:Name="Checked">
+                                                        <Storyboard>
+                                                            <DoubleAnimation Duration="0" To="180" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="path"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Unchecked"/>
+                                                </VisualStateGroup>
+                                                <VisualStateGroup x:Name="FocusStates">
+                                                    <VisualState x:Name="Focused"/>
+                                                    <VisualState x:Name="Unfocused"/>
+                                                </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Border
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Path x:Name="path"
+                                                  Margin="3"
+                                                  Data="M0.45235771,0.74170661 L19.917377,19.711002 M0.45768556,0.28899786 L0.43631038,12.921068 M0.082622245,0.74776787 L12.565722,0.78140163"
+                                                  Fill="#FFF4F4F5"
+                                                  Stroke="Black"
+                                                  UseLayoutRounding="False"
+                                                  Width="10" Height="10" RenderTransformOrigin="0.5,0.5">
+                                                <Path.RenderTransform>
+                                                    <CompositeTransform/>
+                                                </Path.RenderTransform>
+                                            </Path>
+                                        </Border>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
             <Border MouseLeftButtonDown="Top_Click" MouseRightButtonDown="Top_Click">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">

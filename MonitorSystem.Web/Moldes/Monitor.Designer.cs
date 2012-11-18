@@ -3586,6 +3586,78 @@ namespace MonitorSystem.Web.Moldes
         private Nullable<global::System.Int32> _Flag;
         partial void OnFlagChanging(Nullable<global::System.Int32> value);
         partial void OnFlagChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Width
+        {
+            get
+            {
+                return _Width;
+            }
+            set
+            {
+                OnWidthChanging(value);
+                ReportPropertyChanging("Width");
+                _Width = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Width");
+                OnWidthChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Width;
+        partial void OnWidthChanging(Nullable<global::System.Int32> value);
+        partial void OnWidthChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Height
+        {
+            get
+            {
+                return _Height;
+            }
+            set
+            {
+                OnHeightChanging(value);
+                ReportPropertyChanging("Height");
+                _Height = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Height");
+                OnHeightChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Height;
+        partial void OnHeightChanging(Nullable<global::System.Int32> value);
+        partial void OnHeightChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BackColor
+        {
+            get
+            {
+                return _BackColor;
+            }
+            set
+            {
+                OnBackColorChanging(value);
+                ReportPropertyChanging("BackColor");
+                _BackColor = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BackColor");
+                OnBackColorChanged();
+            }
+        }
+        private global::System.String _BackColor;
+        partial void OnBackColorChanging(global::System.String value);
+        partial void OnBackColorChanged();
 
         #endregion
     
