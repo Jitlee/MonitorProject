@@ -696,20 +696,21 @@ namespace MonitorSystem
             foreach (V_ScreenMonitorValue obj in result.Entities)
             {
                 var vobj = (MonitorControl)this.csScreen.FindName(obj.ElementID.ToString());
-                SetChannelValue(digitalValue, obj, vobj);
-
-                if (vobj.ToolTipControl != null)
+                if (null != vobj)
                 {
-                    var child = (MonitorControl)vobj.ToolTipControl.ToolTipCanvas.FindName(obj.ElementID.ToString());
-                    SetChannelValue(digitalValue, obj, child);
+                    SetChannelValue(digitalValue, obj, vobj);
+                    if (vobj.ToolTipControl != null)
+                    {
+                        var child = (MonitorControl)vobj.ToolTipControl.ToolTipCanvas.FindName(obj.ElementID.ToString());
+                        SetChannelValue(digitalValue, obj, child);
+                    }
+                    if (vobj is BackgroundControl)
+                    {
+                        var backgroundControl = vobj as BackgroundControl;
+                        var child = (MonitorControl)backgroundControl.BackgroundCanvas.FindName(obj.ElementID.ToString());
+                        SetChannelValue(digitalValue, obj, child);
+                    }
                 }
-                if (vobj is BackgroundControl)
-                {
-                    var backgroundControl = vobj as BackgroundControl;
-                    var child = (MonitorControl)backgroundControl.BackgroundCanvas.FindName(obj.ElementID.ToString());
-                    SetChannelValue(digitalValue, obj, child);
-                }
-
             }
             _DataContext.V_ScreenMonitorValues.Clear();
         }
@@ -729,19 +730,22 @@ namespace MonitorSystem
 
             if (vobj.ScreenElement.DeviceID.Value != -1 && vobj.ScreenElement.ChannelNo.Value != -1)
             {
-                float fValue = float.Parse(obj.MonitorValue.ToString());
-                if (vobj.ScreenElement.ElementName == "DigitalBiaoPan")
+                float fValue;
+                if (float.TryParse(obj.MonitorValue.ToString(), out fValue))
                 {
-                    digitalValue = fValue;
-                    vobj.SetChannelValue(fValue);
-                }
-                else if (vobj.ScreenElement.ElementName == "DrawLine")
-                {
-                    vobj.SetChannelValue(fValue, digitalValue);
-                }
-                else
-                {
-                    vobj.SetChannelValue(fValue);
+                    if (vobj.ScreenElement.ElementName == "DigitalBiaoPan")
+                    {
+                        digitalValue = fValue;
+                        vobj.SetChannelValue(fValue);
+                    }
+                    else if (vobj.ScreenElement.ElementName == "DrawLine")
+                    {
+                        vobj.SetChannelValue(fValue, digitalValue);
+                    }
+                    else
+                    {
+                        vobj.SetChannelValue(fValue);
+                    }
                 }
             }
         }
