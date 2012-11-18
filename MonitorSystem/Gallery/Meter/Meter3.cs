@@ -23,6 +23,11 @@ namespace MonitorSystem.Gallery.Meter
 
         #region 重载
 
+        public override void SetChannelValue(float fValue)
+        {
+            Value = (double)fValue;
+        }
+
         public override void DesignMode()
         {
             if (!IsDesignMode)

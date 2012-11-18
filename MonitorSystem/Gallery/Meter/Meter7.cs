@@ -20,8 +20,13 @@ namespace MonitorSystem.Gallery.Meter
     /// </summary>
     public class Meter7 : MonitorControl
     {
-        
+
         #region 重载
+
+        public override void SetChannelValue(float fValue)
+        {
+            Value = (double)fValue;
+        }
 
         public override void DesignMode()
         {

@@ -42,7 +42,8 @@
                     x:Name="AddElementCanvas"
                     Visibility="Collapsed"
                     VerticalAlignment="Top"
-                    HorizontalAlignment="Left">
+                    HorizontalAlignment="Left"
+                    Background="Transparent">
                     <Rectangle x:Name="AddElementRectangle" Stroke="Black" StrokeThickness="1" StrokeDashArray="5,5" Visibility="Collapsed"/>
                 </Canvas>
                 <Border
