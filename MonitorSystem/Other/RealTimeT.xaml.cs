@@ -873,8 +873,7 @@ namespace MonitorSystem.Other
         /// </summary>
         public void PaintBasicInfo()
         {
-            if (LineCanversHeight < 0 || LineCanversWidth < 0)
-                return;
+            
 
             if (double.IsNaN(_Canvas.Width))
                 return;
@@ -886,6 +885,8 @@ namespace MonitorSystem.Other
             //实时线网格
             SetXYStartPosition();
             PainGrid();
+            if (LineCanversHeight < 0 || LineCanversWidth < 0)
+                return;
             DrawLine();
             //ShowValue();
             PainXYZ();
