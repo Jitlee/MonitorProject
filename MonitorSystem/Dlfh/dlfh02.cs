@@ -93,7 +93,7 @@ namespace MonitorSystem.Dlfh
         }
 
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }

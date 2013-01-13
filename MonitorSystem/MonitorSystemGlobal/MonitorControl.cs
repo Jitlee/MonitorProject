@@ -36,7 +36,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         public Adorner AdornerLayer { get; protected set; }
         public abstract void DesignMode();
         public abstract void UnDesignMode();
-        public abstract object GetRootControl();
+        public abstract FrameworkElement GetRootControl();
         public virtual void SetChildScreen(ObservableCollection<ScreenAddShowName> litobj)
         {
             throw new NotImplementedException();

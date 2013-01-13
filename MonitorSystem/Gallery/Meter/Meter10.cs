@@ -87,7 +87,7 @@ namespace MonitorSystem.Gallery.Meter
             }
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }
@@ -160,12 +160,6 @@ namespace MonitorSystem.Gallery.Meter
         {
             get { return _browsableProperties; }
             set { _browsableProperties = value; }
-        }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            Paint(availableSize);
-            return base.MeasureOverride(availableSize);
         }
 
         #endregion

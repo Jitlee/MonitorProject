@@ -686,10 +686,11 @@ namespace MonitorSystem
         {
             try
             {
+                var root = (_associatedElement as MonitorControl).GetRootControl();
                 //var beginPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(0.0, 0.0));
                 var beginX = Canvas.GetLeft(_associatedElement);
                 var beginY = Canvas.GetTop(_associatedElement);
-                var endPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(_associatedElement.ActualWidth, this._associatedElement.ActualHeight));
+                var endPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(root.ActualWidth, root.ActualHeight));
                 this._contentAdorner.SetValue(FrameworkElement.WidthProperty, endPoint.X - beginX);
                 this._contentAdorner.SetValue(FrameworkElement.HeightProperty, endPoint.Y - beginY);
                 var margin = (Thickness)_contentAdorner.GetValue(FrameworkElement.MarginProperty);
@@ -788,22 +789,23 @@ namespace MonitorSystem
 
         private void TopLeftAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offset = mousePoint.X - _initialPoint.X + mousePoint.Y - _initialPoint.Y;
-            var widthRatio = _associatedElement.ActualWidth / (_associatedElement.ActualWidth + _associatedElement.ActualHeight);
+            var widthRatio = root.ActualWidth / (root.ActualWidth + root.ActualHeight);
             var heightRatio = 1 - widthRatio;
             var offsetX = widthRatio * offset;
             var offsetY = heightRatio * offset;
-            var targetWidth = _associatedElement.ActualWidth - offsetX;
-            var targetHeight = _associatedElement.ActualHeight - offsetY;
+            var targetWidth = root.ActualWidth - offsetX;
+            var targetHeight = root.ActualHeight - offsetY;
             var targetLeft = _initialLeft + offsetX;
             var targetTop = _initialTop + offsetY;
             if (targetWidth < MIN_SIZE || targetHeight < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
                 targetHeight = MIN_SIZE;
-                targetLeft = _initialLeft + _associatedElement.ActualWidth - MIN_SIZE;
-                targetTop = _initialTop + _associatedElement.ActualHeight - MIN_SIZE;
+                targetLeft = _initialLeft + root.ActualWidth - MIN_SIZE;
+                targetTop = _initialTop + root.ActualHeight - MIN_SIZE;
             }
 
             this._contentAdorner.SetValue(FrameworkElement.WidthProperty, targetWidth);
@@ -836,17 +838,18 @@ namespace MonitorSystem
 
         private void TopCenterAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetY = mousePoint.Y - _initialPoint.Y;
-            var targetHeight = _associatedElement.ActualHeight - offsetY;
+            var targetHeight = root.ActualHeight - offsetY;
             var targetTop = _initialTop + offsetY;
             if (targetHeight < MIN_SIZE)
             {
                 targetHeight = MIN_SIZE;
-                targetTop = _initialTop + _associatedElement.ActualHeight - MIN_SIZE;
+                targetTop = _initialTop + root.ActualHeight - MIN_SIZE;
             }
-            else if (targetHeight < MIN_SIZE || targetHeight < _associatedElement.MinHeight
-                || targetHeight > _associatedElement.MaxHeight)
+            else if (targetHeight < MIN_SIZE || targetHeight < root.MinHeight
+                || targetHeight > root.MaxHeight)
             {
                 return;
             }
@@ -878,14 +881,15 @@ namespace MonitorSystem
 
         private void TopRightAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetX = mousePoint.X - _initialPoint.X;
             var offsetY = mousePoint.Y - _initialPoint.Y;
-            var widthRatio = _associatedElement.ActualWidth / (_associatedElement.ActualWidth + _associatedElement.ActualHeight);
+            var widthRatio = root.ActualWidth / (root.ActualWidth + root.ActualHeight);
             var heightRatio = 1 - widthRatio;
             var offset = offsetX - offsetY;
-            var targetWidth = _associatedElement.ActualWidth + offset * widthRatio;
-            var targetHeight = _associatedElement.ActualHeight + offset * heightRatio;
+            var targetWidth = root.ActualWidth + offset * widthRatio;
+            var targetHeight = root.ActualHeight + offset * heightRatio;
             var targetTop = _initialTop - offset * heightRatio;
             if (targetWidth < MIN_SIZE || targetHeight < MIN_SIZE)
             {
@@ -922,17 +926,18 @@ namespace MonitorSystem
 
         private void CenterLeftAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetX = mousePoint.X - _initialPoint.X;
-            var targetWidth = _associatedElement.ActualWidth - offsetX;
+            var targetWidth = root.ActualWidth - offsetX;
             var targetLeft = _initialLeft + offsetX;
             if (targetWidth < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
-                targetLeft = _initialLeft + _associatedElement.ActualWidth - MIN_SIZE;
+                targetLeft = _initialLeft + root.ActualWidth - MIN_SIZE;
             }
-            else if (targetWidth < MIN_SIZE || targetWidth < _associatedElement.MinWidth
-                || targetWidth > _associatedElement.MaxWidth)
+            else if (targetWidth < MIN_SIZE || targetWidth < root.MinWidth
+                || targetWidth > root.MaxWidth)
             {
                 return;
             }
@@ -964,15 +969,16 @@ namespace MonitorSystem
 
         private void CenterRightAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetX = mousePoint.X - _initialPoint.X;
-            var targetWidth = _associatedElement.ActualWidth + offsetX;
+            var targetWidth = root.ActualWidth + offsetX;
             if (targetWidth < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
             }
-            else if (targetWidth < MIN_SIZE || targetWidth < _associatedElement.MinWidth
-                || targetWidth > _associatedElement.MaxWidth)
+            else if (targetWidth < MIN_SIZE || targetWidth < root.MinWidth
+                || targetWidth > root.MaxWidth)
             {
                 return;
             }
@@ -1003,20 +1009,21 @@ namespace MonitorSystem
 
         private void BottomLeftAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetX = mousePoint.X - _initialPoint.X;
             var offsetY = mousePoint.Y - _initialPoint.Y;
-            var widthRatio = _associatedElement.ActualWidth / (_associatedElement.ActualWidth + _associatedElement.ActualHeight);
+            var widthRatio = root.ActualWidth / (root.ActualWidth + root.ActualHeight);
             var heightRatio = 1 - widthRatio;
             var offset = offsetY - offsetX;
-            var targetWidth = _associatedElement.ActualWidth + offset * widthRatio;
-            var targetHeight = _associatedElement.ActualHeight + offset * heightRatio;
+            var targetWidth = root.ActualWidth + offset * widthRatio;
+            var targetHeight = root.ActualHeight + offset * heightRatio;
             var targetLeft = _initialLeft - offset * widthRatio;
             if (targetWidth < MIN_SIZE || targetHeight < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
                 targetHeight = MIN_SIZE;
-                targetLeft = _initialLeft + _associatedElement.ActualWidth - MIN_SIZE;
+                targetLeft = _initialLeft + root.ActualWidth - MIN_SIZE;
             }
 
             this._contentAdorner.SetValue(FrameworkElement.WidthProperty, targetWidth);
@@ -1047,15 +1054,16 @@ namespace MonitorSystem
 
         private void BottomCenterAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetY = mousePoint.Y - _initialPoint.Y;
-            var targetHeight = this._associatedElement.ActualHeight + offsetY;
+            var targetHeight = root.ActualHeight + offsetY;
             if (targetHeight < MIN_SIZE)
             {
                 targetHeight = MIN_SIZE;
             }
-            else if (targetHeight < MIN_SIZE || targetHeight < _associatedElement.MinHeight
-                || targetHeight > _associatedElement.MaxHeight)
+            else if (targetHeight < MIN_SIZE || targetHeight < root.MinHeight
+                || targetHeight > root.MaxHeight)
             {
                 return;
             }
@@ -1087,14 +1095,15 @@ namespace MonitorSystem
 
         private void BottomRightAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offset = mousePoint.X - _initialPoint.X + mousePoint.Y - _initialPoint.Y;
-            var widthRatio = _associatedElement.ActualWidth / (_associatedElement.ActualWidth + _associatedElement.ActualHeight);
+            var widthRatio = root.ActualWidth / (root.ActualWidth + root.ActualHeight);
             var heightRatio = 1 - widthRatio;
             var offsetX = widthRatio * offset;
             var offsetY = heightRatio * offset;
-            var targetWidth = _associatedElement.ActualWidth + offsetX;
-            var targetHeight = _associatedElement.ActualHeight + offsetY;
+            var targetWidth = root.ActualWidth + offsetX;
+            var targetHeight = root.ActualHeight + offsetY;
             if (targetWidth < MIN_SIZE || targetHeight < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
@@ -1122,6 +1131,7 @@ namespace MonitorSystem
             this._associatedElement.SetValue(FrameworkElement.HeightProperty, this._contentAdorner.ActualHeight);
             this._associatedElement.SetValue(Canvas.LeftProperty, (double)this.GetValue(Canvas.LeftProperty) + _offsetLeft);
             this._associatedElement.SetValue(Canvas.TopProperty, (double)this.GetValue(Canvas.TopProperty) + _offsetTop);
+
             OnSelected();
         }
 

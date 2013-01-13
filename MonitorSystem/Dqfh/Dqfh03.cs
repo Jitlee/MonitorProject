@@ -100,7 +100,7 @@ namespace MonitorSystem.Dqfh
         }
 
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }

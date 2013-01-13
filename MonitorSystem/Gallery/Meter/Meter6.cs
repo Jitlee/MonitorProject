@@ -87,7 +87,7 @@ namespace MonitorSystem.Gallery.Meter
             }
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }
@@ -160,12 +160,6 @@ namespace MonitorSystem.Gallery.Meter
         {
             get { return _browsableProperties; }
             set { _browsableProperties = value; }
-        }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            Paint(availableSize);
-            return base.MeasureOverride(availableSize);
         }
 
         #endregion
@@ -424,14 +418,14 @@ namespace MonitorSystem.Gallery.Meter
             _label.Text = Text;
             _label.Foreground = new SolidColorBrush(Colors.Blue);
 
-            this.SizeChanged += Meter2_SizeChanged;
+            this.SizeChanged += Meter_SizeChanged;
         }
 
         #endregion
 
         #region 私有方法
 
-        private void Meter2_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Meter_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.Width = e.NewSize.Width;
             this.Height = e.NewSize.Width * 636d / 944d;

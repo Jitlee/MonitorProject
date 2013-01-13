@@ -33,7 +33,7 @@ namespace MonitorSystem.Gallery
         {
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }

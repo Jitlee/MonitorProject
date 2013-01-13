@@ -1099,7 +1099,7 @@ namespace MonitorSystem
             {
                 PropertyMain.Instance.ControlPropertyGrid.SelectedObject = null;
                 PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = mControl.BrowsableProperties;
-                PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl.GetRootControl(); 
+                PropertyMain.Instance.ControlPropertyGrid.SelectedObject = mControl; 
             };
             if (eleStae == ElementSate.Save)
             {

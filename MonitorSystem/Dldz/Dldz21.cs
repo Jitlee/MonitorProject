@@ -107,7 +107,7 @@ namespace MonitorSystem.Dldz
         }
 
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }

@@ -139,7 +139,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             return ListElementProp;
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }

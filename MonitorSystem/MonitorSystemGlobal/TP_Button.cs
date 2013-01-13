@@ -285,7 +285,7 @@ namespace MonitorSystem.MonitorSystemGlobal
             this.Height = (double)ScreenElement.Height;
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }

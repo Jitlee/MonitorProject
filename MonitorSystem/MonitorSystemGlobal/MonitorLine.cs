@@ -214,7 +214,7 @@ namespace MonitorSystem.MonitorSystemGlobal
              Transparent = ScreenElement.Transparent.Value;
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }

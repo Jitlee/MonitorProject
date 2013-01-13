@@ -212,7 +212,7 @@ namespace MonitorSystem.ZTControls
                 Selected(this, RoutedEventArgs.Empty);
             }
         }
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }
