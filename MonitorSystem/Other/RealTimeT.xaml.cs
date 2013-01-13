@@ -50,6 +50,13 @@ namespace MonitorSystem.Other
             InitBG();
             //this.Width = 400;
             //this.Height = 400;
+
+             this.inputYear.DataValue=DateTime.Now.Year;
+             this.inputMonth.DataValue = DateTime.Now.Month;
+            this.inputDay.DataValue=DateTime.Now.Day;
+
+            this.inputHour.DataValue = DateTime.Now.Hour;
+            this.inputEHour.DataValue = DateTime.Now.Hour;
         }
      
         public void SetLineValue(V_ScreenMonitorValue obj)
@@ -1090,10 +1097,12 @@ namespace MonitorSystem.Other
                 {
                     isAdd = true;
                 }
-
-                if (mWidth > FirstLineOR.MinMoveWidth)
+                if (FirstLineOR != null)
                 {
-                    isMove = true;
+                    if (mWidth > FirstLineOR.MinMoveWidth)
+                    {
+                        isMove = true;
+                    }
                 }
                 if (mHeight > 1 || (mHeight * -1) > 1)
                 {
@@ -1984,7 +1993,55 @@ namespace MonitorSystem.Other
 
         private void btnSD_Click(object sender, RoutedEventArgs e)
         {
-           // HeadTimeLen(24, "hh");
+            string strStart = string.Format("{0}-{1}-{2} {3}:{4}:{5}",
+
+            Convert.ToInt32(this.inputYear.DataValue),
+            Convert.ToInt32(this.inputMonth.DataValue),
+            Convert.ToInt32(this.inputDay.DataValue),
+
+            Convert.ToInt32(this.inputHour.DataValue),
+            Convert.ToInt32(this.inputMi.DataValue),
+            Convert.ToInt32(this.inputSec.DataValue));
+
+            string strendTime = string.Format("{0}-{1}-{2} {3}:{4}:{5}",
+            Convert.ToInt32(this.inputYear.DataValue),
+            Convert.ToInt32(this.inputMonth.DataValue),
+            Convert.ToInt32(this.inputDay.DataValue),
+            Convert.ToInt32(this.inputEHour.DataValue),
+            Convert.ToInt32(this.inputEMi.DataValue),
+            Convert.ToInt32(this.inputESec.DataValue));
+
+            DateTime StartTime = Convert.ToDateTime(strStart);
+            DateTime EndTime = Convert.ToDateTime(strendTime);
+            if (StartTime > EndTime)
+            {
+                ShowMsg("开始时间不能大于，结束时间");
+                return;
+            }
+
+            TimeSpan t = DateTime.Now - StartTime;
+            if (t.Days > 1)
+            {
+                ShowMsg("请设置正确的时间区间，不能超过24小时！");
+            }
+
+            foreach (RealTimeLineOR obj in _listRealTimeLine)
+            {
+                obj.ISShowValue = false;
+                obj.XZMaxTime = EndTime;
+                obj.LineInfo.TimeLen = (t.Hours * 60 + t.Minutes) * 60 + t.Seconds;
+                obj.LineInfo.TimeLenType = "s";
+                obj.HeadXPosition();
+                obj.ShowCurve();
+            }
+            
+        }
+
+        private void ShowMsg(string str)
+        {
+            MessageBox.Show(str);
+
+           
         }
     }
 }

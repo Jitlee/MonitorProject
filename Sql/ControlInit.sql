@@ -1840,6 +1840,35 @@ begin
 	end
 end
 
+
+set @AddControl='CalloutControl'
+select @ControlNum=count(*) from t_control where controlname=@AddControl
+if @ControlNum = 0
+begin
+	print '添加控件'
+	print @AddControl
+
+	insert into t_control (controlname,controltype,imageUrl,controltypeName,controlCaption)
+	values(@AddControl,'8','MonitorSystem.Other.CalloutControl','其它','云');
+
+	set @ControlID=0;
+	select @ControlID=max(controlid)  from t_control
+	if @ControlID > 0
+	begin
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 1,'CStroke','#FF000000','边线颜色');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 2,'CStrokeThickness','1','边线粗细');
+		
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'CFillColor','#FF929A81','填充颜色');
+		
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 3,'CText','','标题');
+	end
+end
+
+
 end
 
 
