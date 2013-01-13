@@ -1097,10 +1097,12 @@ namespace MonitorSystem.Other
                 {
                     isAdd = true;
                 }
-
-                if (mWidth > FirstLineOR.MinMoveWidth)
+                if (FirstLineOR != null)
                 {
-                    isMove = true;
+                    if (mWidth > FirstLineOR.MinMoveWidth)
+                    {
+                        isMove = true;
+                    }
                 }
                 if (mHeight > 1 || (mHeight * -1) > 1)
                 {
