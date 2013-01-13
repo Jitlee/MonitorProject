@@ -141,7 +141,15 @@ namespace MonitorSystem.Other
         /// <summary>
         /// X轴最大时间
         /// </summary>
-        private DateTime XZMaxTime = DateTime.Now;
+        private DateTime _XZMaxTime = DateTime.Now;
+        /// <summary>
+        /// 显示最大时间
+        /// </summary>
+        public DateTime XZMaxTime
+        {
+            get { return _XZMaxTime; }
+            set { _XZMaxTime = value; }
+        }
        
 
         private bool _ISShowValue = true;
@@ -327,7 +335,7 @@ namespace MonitorSystem.Other
 
             int timeLenPer = _TimeShowELen / (_TextList.Count - 1);
             int txtCount = _TextList.Count;
-           // DateTime dt=DateTime.Now;
+           
             for (int i = 0; i < _TextList.Count; i++)
             {
                 DateTime dt = XZMaxTime.AddSeconds(-(timeLenPer * (txtCount - i - 1)));

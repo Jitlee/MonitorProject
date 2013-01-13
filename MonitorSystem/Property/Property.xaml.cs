@@ -277,9 +277,10 @@ namespace MonitorSystem
                     _DataContext.SubmitChanges(SubmitCompleted, TreeItemRightItem);
                     break;
                 case "miOpen":
-                    ScreenArgs args=new ScreenArgs();
-                    args.Screen=m_obj;
-                    OnChangeScreen(args);
+                    LoadScreen.Load(m_obj);
+                    //ScreenArgs args=new ScreenArgs();
+                    //args.Screen=m_obj;
+                    //OnChangeScreen(args);
                     break;
                 case "miCopy":
                     ScreenCopy m_Copy = new ScreenCopy();

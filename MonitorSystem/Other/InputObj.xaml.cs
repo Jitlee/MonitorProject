@@ -68,6 +68,7 @@ namespace MonitorSystem.Other
 
         protected void InputObj_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            e.Handled = true;
             InputDilog obj = new InputDilog();
             if (_DataType == "int")
             {
@@ -98,6 +99,7 @@ namespace MonitorSystem.Other
             obj.MaxValue = _MaxValue;
             obj.DataType = _DataType;
             obj.InputValueObj = this;
+
             obj.Show();
         }
     }
