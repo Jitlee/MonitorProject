@@ -86,7 +86,7 @@ namespace MonitorSystem.Gallery.Meter
             }
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }
@@ -190,12 +190,6 @@ namespace MonitorSystem.Gallery.Meter
         {
             get { return _browsableProperties; }
             set { _browsableProperties = value; }
-        }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            Paint(availableSize);
-            return base.MeasureOverride(availableSize);
         }
 
         #endregion
@@ -661,11 +655,19 @@ namespace MonitorSystem.Gallery.Meter
             _dialPlateBorder.Fill = new SolidColorBrush(DialPlateBorlderColor);
             _dialPlateBorder.Stroke = new SolidColorBrush(Colors.Black);
             _dialPlateBorder.StrokeThickness = 1d;
+            this.SizeChanged += Meter_SizeChanged;
         }
 
         #endregion
 
         #region 私有方法
+
+        private void Meter_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.Width = e.NewSize.Width;
+            this.Height = e.NewSize.Width;
+            Paint(new Size(this.ActualWidth, this.ActualHeight));
+        }
 
         private void Paint(Size size)
         {

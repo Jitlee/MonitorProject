@@ -83,7 +83,7 @@ namespace MonitorSystem.ZTControls
 
         #endregion
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }

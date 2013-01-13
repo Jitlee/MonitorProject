@@ -111,7 +111,7 @@ namespace MonitorSystem.ZTControls
             return ListElementProp;
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }

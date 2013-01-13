@@ -18,6 +18,7 @@ using MonitorSystem.MonitorSystemGlobal;
 using MonitorSystem.Web.Moldes;
 
 namespace MonitorSystem
+
 {
     [TemplatePart(Name = "BackgroundAdorner", Type = typeof(FrameworkElement))]
     [TemplatePart(Name = "ContentAdorner", Type = typeof(FrameworkElement))]
@@ -32,7 +33,7 @@ namespace MonitorSystem
     [TemplatePart(Name = "ToolTipButton", Type = typeof(Button))]
     public class Adorner : ButtonBase, IDisposable
     {
-        private static Adorner _lastFocusObject = null;
+        private static readonly List<Adorner> _selectedAdorners = new List<Adorner>();
         public event EventHandler Selected;
         public event EventHandler Unselected;
 
@@ -40,6 +41,7 @@ namespace MonitorSystem
 
         private Canvas _parent;
         Point _initialPoint;
+        IEnumerable<Point> _originPoints; // 多选移动时  控件的原始坐标数组
         double _initialTop;
         double _initialLeft;
         double _offsetLeft;
@@ -60,6 +62,8 @@ namespace MonitorSystem
 
         private Button _toolTipButton;
         public static ToolTipControl CurrenttoolTipControl { get; private set; }
+
+        private bool _isSelected = false;
         #endregion
 
         #region Properties
@@ -259,7 +263,8 @@ namespace MonitorSystem
 
         public void OnIsSelectedChanged(bool oldValue, bool newValue)
         {
-            if (IsSelected)
+            _isSelected = newValue;
+            if (newValue)
             {
                 SetSelect();
             }
@@ -306,10 +311,30 @@ namespace MonitorSystem
             SynchroHost();
         }
 
-        protected override void OnGotFocus(RoutedEventArgs e)
+        //protected override void OnGotFocus(RoutedEventArgs e)
+        //{
+        //    base.OnGotFocus(e);
+        //    SetSelect();
+        //}
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            base.OnGotFocus(e);
-            SetSelect();
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                if (_isSelected)
+                {
+                    RemoveMutiSelected(this);
+                }
+                else
+                {
+                    AddMutiSelected(this);
+                }
+            }
+            else
+            {
+                SetSelect();
+            }
+            base.OnMouseLeftButtonDown(e);
         }
 
         //protected override void OnLostFocus(RoutedEventArgs e)
@@ -319,11 +344,49 @@ namespace MonitorSystem
 
         private void SetSelect()
         {
-            if (!IsSelected)
+            if (!_isSelected)
             {
-                IsSelected = true;
-                return;
+                if (null != _contentAdorner
+                       && null != _topLeftAdorner
+                       && null != _topRightAdorner
+                       && null != _bottomLeftAdorner
+                       && null != _bottomLeftAdorner
+                       && null != _bottomRightAdorner
+                       && null != _topLeftAdorner
+                       && null != _topCenterAdorner
+                       && null != _centerLeftAdorner
+                       && null != _centerRightAdorner
+                       && null != _bottomCenterAdorner
+                    && null != _toolTipButton)
+                {
+                    _contentAdorner.Opacity = 1;
+                    _topLeftAdorner.Visibility = Visibility.Visible;
+                    _topRightAdorner.Visibility = Visibility.Visible;
+                    _bottomLeftAdorner.Visibility = Visibility.Visible;
+                    _bottomRightAdorner.Visibility = Visibility.Visible;
+                    _toolTipButton.Visibility = AllToolTip ? Visibility.Visible : Visibility.Collapsed;
+                    if (!IsLockScale)
+                    {
+                        _topCenterAdorner.Visibility = Visibility.Visible;
+                        _centerLeftAdorner.Visibility = Visibility.Visible;
+                        _centerRightAdorner.Visibility = Visibility.Visible;
+                        _bottomCenterAdorner.Visibility = Visibility.Visible;
+                    }
+
+                    if (!_selectedAdorners.Contains(this))
+                    {
+                        CancelSelected();
+                        _selectedAdorners.Add(this);
+                    }
+                }
             }
+            _isSelected = true;
+        }
+
+        private void SetMutiSelect()
+        {
+            _isSelected = true;
+            IsSelected = true;
             if (null != _contentAdorner
                    && null != _topLeftAdorner
                    && null != _topRightAdorner
@@ -350,27 +413,47 @@ namespace MonitorSystem
                     _centerRightAdorner.Visibility = Visibility.Visible;
                     _bottomCenterAdorner.Visibility = Visibility.Visible;
                 }
-
-                if (_lastFocusObject != this && null != _lastFocusObject)
-                {
-                    _lastFocusObject.SetUnselect();
-
-                    if (null != _lastFocusObject.Unselected)
-                    {
-                        _lastFocusObject.Unselected(this, EventArgs.Empty);
-                    }
-                }
-                _lastFocusObject = this;
             }
         }
 
         private void SetUnselect()
         {
-            if (IsSelected)
+            if (_isSelected)
             {
-                IsSelected = false;
-                return;
+                if (null != _contentAdorner
+                    && null != _topLeftAdorner
+                    && null != _topRightAdorner
+                    && null != _bottomLeftAdorner
+                    && null != _bottomLeftAdorner
+                    && null != _bottomRightAdorner
+                    && null != _topLeftAdorner
+                    && null != _topCenterAdorner
+                    && null != _centerLeftAdorner
+                    && null != _centerRightAdorner
+                    && null != _bottomCenterAdorner
+                    && null != _toolTipButton)
+                {
+                    _contentAdorner.Opacity = 0;
+                    _topLeftAdorner.Visibility = Visibility.Collapsed;
+                    _topRightAdorner.Visibility = Visibility.Collapsed;
+                    _bottomLeftAdorner.Visibility = Visibility.Collapsed;
+                    _bottomRightAdorner.Visibility = Visibility.Collapsed;
+                    _toolTipButton.Visibility = Visibility.Collapsed;
+                    if (!IsLockScale)
+                    {
+                        _topCenterAdorner.Visibility = Visibility.Collapsed;
+                        _centerLeftAdorner.Visibility = Visibility.Collapsed;
+                        _centerRightAdorner.Visibility = Visibility.Collapsed;
+                        _bottomCenterAdorner.Visibility = Visibility.Collapsed;
+                    }
+                }
             }
+            _isSelected = false;
+        }
+
+        private void SetMutiUnselect()
+        {
+            _isSelected = false;
             if (null != _contentAdorner
                 && null != _topLeftAdorner
                 && null != _topRightAdorner
@@ -398,10 +481,21 @@ namespace MonitorSystem
                     _bottomCenterAdorner.Visibility = Visibility.Collapsed;
                 }
             }
+            IsSelected = false;
         }
 
         public void Dispose()
         {
+            if (_associatedElement is MonitorControl)
+            {
+                var monitorControl = _associatedElement as MonitorControl;
+                if (null != monitorControl.ToolTipControl)
+                {
+                    monitorControl.ToolTipControl.AdornerLayer._backgroundAdorner.Visibility = Visibility.Collapsed;
+                    monitorControl.ToolTipControl.AdornerLayer._parent.Children.Remove(monitorControl.ToolTipControl);
+                    monitorControl.ToolTipControl.AdornerLayer._parent.Children.Remove(monitorControl.ToolTipControl.AdornerLayer);
+                }
+            }
             //_backgroundAdorner.SetValue(CustomCursor.CustomProperty, false);
             if (_associatedElement is ButtonBase)
             {
@@ -508,6 +602,7 @@ namespace MonitorSystem
                     if (null != CurrenttoolTipControl)
                     {
                         CurrenttoolTipControl.IsOpen = false;
+                        Adorner.RemoveMutiSelected(CurrenttoolTipControl.AdornerLayer);
                     }
                     CurrenttoolTipControl = toolTipControl;
 
@@ -607,6 +702,7 @@ namespace MonitorSystem
                     if (null != CurrenttoolTipControl)
                     {
                         CurrenttoolTipControl.IsOpen = false;
+                        Adorner.RemoveMutiSelected(CurrenttoolTipControl.AdornerLayer);
                     }
                     CurrenttoolTipControl = toolTipControl;
                     toolTipControl.IsOpen = true;
@@ -643,6 +739,7 @@ namespace MonitorSystem
                     if (null != CurrenttoolTipControl)
                     {
                         CurrenttoolTipControl.IsOpen = false;
+                        Adorner.RemoveMutiSelected(CurrenttoolTipControl.AdornerLayer);
                     }
                     CurrenttoolTipControl = toolTipControl;
                     toolTipControl.IsOpen = true;
@@ -686,10 +783,11 @@ namespace MonitorSystem
         {
             try
             {
+                var root = (_associatedElement as MonitorControl).GetRootControl();
                 //var beginPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(0.0, 0.0));
                 var beginX = Canvas.GetLeft(_associatedElement);
                 var beginY = Canvas.GetTop(_associatedElement);
-                var endPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(_associatedElement.ActualWidth, this._associatedElement.ActualHeight));
+                var endPoint = _associatedElement.TransformToVisual(_parent).Transform(new Point(root.ActualWidth, root.ActualHeight));
                 this._contentAdorner.SetValue(FrameworkElement.WidthProperty, endPoint.X - beginX);
                 this._contentAdorner.SetValue(FrameworkElement.HeightProperty, endPoint.Y - beginY);
                 var margin = (Thickness)_contentAdorner.GetValue(FrameworkElement.MarginProperty);
@@ -706,30 +804,33 @@ namespace MonitorSystem
             }
         }
 
-        protected override void OnKeyUp(KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete)
-            {
-                _backgroundAdorner.Visibility = Visibility.Collapsed;
-                _parent.Children.Remove(_associatedElement);
-                _parent.Children.Remove(this);
-                this.Dispose();
-            }            
-            base.OnKeyUp(e);
-        }
+        //protected override void OnKeyUp(KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Delete)
+        //    {
+        //        _selectedAdorners.ForEach(a =>
+        //            {
+        //                a._backgroundAdorner.Visibility = Visibility.Collapsed;
+        //                a._parent.Children.Remove(a._associatedElement);
+        //                a._parent.Children.Remove(a);
+        //                this.Dispose();
+        //            });
+        //        _selectedAdorners.Clear();
+        //    }            
+        //    base.OnKeyUp(e);
+        //}
 
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            ModifierKeys keys = ModifierKeys.Control;
-            if (keys== ModifierKeys.Control && e.Key == Key.C)
-            {
-                if((_associatedElement != null) && (_associatedElement is MonitorControl))
-                {
-                    LoadScreen.CoptyObj = (MonitorControl)_associatedElement;
-                }
-            }
-            base.OnKeyDown(e);
-        }
+        //protected override void OnKeyDown(KeyEventArgs e)
+        //{
+        //    ModifierKeys keys = ModifierKeys.Control;
+        //    if (keys== ModifierKeys.Control && e.Key == Key.C)
+        //    {
+        //        LoadScreen.CopyArray = _selectedAdorners
+        //            .Where(a => null != a._associatedElement && a._associatedElement is MonitorControl)
+        //            .Select(a => a._associatedElement as MonitorControl);
+        //    }
+        //    base.OnKeyDown(e);
+        //}
 
         #endregion
 
@@ -741,7 +842,8 @@ namespace MonitorSystem
             source.CaptureMouse();
             source.MouseMove -= BackgroundAdorner_MouseMove;
             source.MouseMove += BackgroundAdorner_MouseMove;
-            _initialPoint = e.GetPosition(_contentAdorner);
+            _initialPoint = e.GetPosition(_parent);
+            _originPoints = _selectedAdorners.Select(a => new Point((double)a.GetValue(Canvas.LeftProperty) + _offsetLeft, (double)a.GetValue(Canvas.TopProperty) + _offsetTop));
         }
 
         private void BackgroundAdorner_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -755,12 +857,19 @@ namespace MonitorSystem
         private void BackgroundAdorner_MouseMove(object sender, MouseEventArgs e)
         {
             var mousePoint = e.GetPosition(_parent);
+            var i = 0;
             var offsetX = mousePoint.X - _initialPoint.X;
             var offsetY = mousePoint.Y - _initialPoint.Y;
-            _associatedElement.SetValue(Canvas.LeftProperty, offsetX);
-            _associatedElement.SetValue(Canvas.TopProperty, offsetY);
-            this.SetValue(Canvas.LeftProperty, offsetX - _offsetLeft);
-            this.SetValue(Canvas.TopProperty, offsetY - _offsetTop);
+            _selectedAdorners.ForEach(a =>
+            {
+                var point = _originPoints.ElementAt(i);
+                a._associatedElement.SetValue(Canvas.LeftProperty, point.X + offsetX);
+                a._associatedElement.SetValue(Canvas.TopProperty, point.Y + offsetY);
+                a.SetValue(Canvas.LeftProperty, point.X + offsetX - _offsetLeft);
+                a.SetValue(Canvas.TopProperty, point.Y + offsetY - _offsetTop);
+                i++;
+            });
+            _initialPoint = mousePoint;
         }
 
         #endregion
@@ -788,22 +897,23 @@ namespace MonitorSystem
 
         private void TopLeftAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offset = mousePoint.X - _initialPoint.X + mousePoint.Y - _initialPoint.Y;
-            var widthRatio = _associatedElement.ActualWidth / (_associatedElement.ActualWidth + _associatedElement.ActualHeight);
+            var widthRatio = root.ActualWidth / (root.ActualWidth + root.ActualHeight);
             var heightRatio = 1 - widthRatio;
             var offsetX = widthRatio * offset;
             var offsetY = heightRatio * offset;
-            var targetWidth = _associatedElement.ActualWidth - offsetX;
-            var targetHeight = _associatedElement.ActualHeight - offsetY;
+            var targetWidth = root.ActualWidth - offsetX;
+            var targetHeight = root.ActualHeight - offsetY;
             var targetLeft = _initialLeft + offsetX;
             var targetTop = _initialTop + offsetY;
             if (targetWidth < MIN_SIZE || targetHeight < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
                 targetHeight = MIN_SIZE;
-                targetLeft = _initialLeft + _associatedElement.ActualWidth - MIN_SIZE;
-                targetTop = _initialTop + _associatedElement.ActualHeight - MIN_SIZE;
+                targetLeft = _initialLeft + root.ActualWidth - MIN_SIZE;
+                targetTop = _initialTop + root.ActualHeight - MIN_SIZE;
             }
 
             this._contentAdorner.SetValue(FrameworkElement.WidthProperty, targetWidth);
@@ -836,17 +946,18 @@ namespace MonitorSystem
 
         private void TopCenterAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetY = mousePoint.Y - _initialPoint.Y;
-            var targetHeight = _associatedElement.ActualHeight - offsetY;
+            var targetHeight = root.ActualHeight - offsetY;
             var targetTop = _initialTop + offsetY;
             if (targetHeight < MIN_SIZE)
             {
                 targetHeight = MIN_SIZE;
-                targetTop = _initialTop + _associatedElement.ActualHeight - MIN_SIZE;
+                targetTop = _initialTop + root.ActualHeight - MIN_SIZE;
             }
-            else if (targetHeight < MIN_SIZE || targetHeight < _associatedElement.MinHeight
-                || targetHeight > _associatedElement.MaxHeight)
+            else if (targetHeight < MIN_SIZE || targetHeight < root.MinHeight
+                || targetHeight > root.MaxHeight)
             {
                 return;
             }
@@ -878,14 +989,15 @@ namespace MonitorSystem
 
         private void TopRightAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetX = mousePoint.X - _initialPoint.X;
             var offsetY = mousePoint.Y - _initialPoint.Y;
-            var widthRatio = _associatedElement.ActualWidth / (_associatedElement.ActualWidth + _associatedElement.ActualHeight);
+            var widthRatio = root.ActualWidth / (root.ActualWidth + root.ActualHeight);
             var heightRatio = 1 - widthRatio;
             var offset = offsetX - offsetY;
-            var targetWidth = _associatedElement.ActualWidth + offset * widthRatio;
-            var targetHeight = _associatedElement.ActualHeight + offset * heightRatio;
+            var targetWidth = root.ActualWidth + offset * widthRatio;
+            var targetHeight = root.ActualHeight + offset * heightRatio;
             var targetTop = _initialTop - offset * heightRatio;
             if (targetWidth < MIN_SIZE || targetHeight < MIN_SIZE)
             {
@@ -922,17 +1034,18 @@ namespace MonitorSystem
 
         private void CenterLeftAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetX = mousePoint.X - _initialPoint.X;
-            var targetWidth = _associatedElement.ActualWidth - offsetX;
+            var targetWidth = root.ActualWidth - offsetX;
             var targetLeft = _initialLeft + offsetX;
             if (targetWidth < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
-                targetLeft = _initialLeft + _associatedElement.ActualWidth - MIN_SIZE;
+                targetLeft = _initialLeft + root.ActualWidth - MIN_SIZE;
             }
-            else if (targetWidth < MIN_SIZE || targetWidth < _associatedElement.MinWidth
-                || targetWidth > _associatedElement.MaxWidth)
+            else if (targetWidth < MIN_SIZE || targetWidth < root.MinWidth
+                || targetWidth > root.MaxWidth)
             {
                 return;
             }
@@ -964,15 +1077,16 @@ namespace MonitorSystem
 
         private void CenterRightAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetX = mousePoint.X - _initialPoint.X;
-            var targetWidth = _associatedElement.ActualWidth + offsetX;
+            var targetWidth = root.ActualWidth + offsetX;
             if (targetWidth < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
             }
-            else if (targetWidth < MIN_SIZE || targetWidth < _associatedElement.MinWidth
-                || targetWidth > _associatedElement.MaxWidth)
+            else if (targetWidth < MIN_SIZE || targetWidth < root.MinWidth
+                || targetWidth > root.MaxWidth)
             {
                 return;
             }
@@ -1003,20 +1117,21 @@ namespace MonitorSystem
 
         private void BottomLeftAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetX = mousePoint.X - _initialPoint.X;
             var offsetY = mousePoint.Y - _initialPoint.Y;
-            var widthRatio = _associatedElement.ActualWidth / (_associatedElement.ActualWidth + _associatedElement.ActualHeight);
+            var widthRatio = root.ActualWidth / (root.ActualWidth + root.ActualHeight);
             var heightRatio = 1 - widthRatio;
             var offset = offsetY - offsetX;
-            var targetWidth = _associatedElement.ActualWidth + offset * widthRatio;
-            var targetHeight = _associatedElement.ActualHeight + offset * heightRatio;
+            var targetWidth = root.ActualWidth + offset * widthRatio;
+            var targetHeight = root.ActualHeight + offset * heightRatio;
             var targetLeft = _initialLeft - offset * widthRatio;
             if (targetWidth < MIN_SIZE || targetHeight < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
                 targetHeight = MIN_SIZE;
-                targetLeft = _initialLeft + _associatedElement.ActualWidth - MIN_SIZE;
+                targetLeft = _initialLeft + root.ActualWidth - MIN_SIZE;
             }
 
             this._contentAdorner.SetValue(FrameworkElement.WidthProperty, targetWidth);
@@ -1047,15 +1162,16 @@ namespace MonitorSystem
 
         private void BottomCenterAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offsetY = mousePoint.Y - _initialPoint.Y;
-            var targetHeight = this._associatedElement.ActualHeight + offsetY;
+            var targetHeight = root.ActualHeight + offsetY;
             if (targetHeight < MIN_SIZE)
             {
                 targetHeight = MIN_SIZE;
             }
-            else if (targetHeight < MIN_SIZE || targetHeight < _associatedElement.MinHeight
-                || targetHeight > _associatedElement.MaxHeight)
+            else if (targetHeight < MIN_SIZE || targetHeight < root.MinHeight
+                || targetHeight > root.MaxHeight)
             {
                 return;
             }
@@ -1087,14 +1203,15 @@ namespace MonitorSystem
 
         private void BottomRightAdorner_MouseMove(object sender, MouseEventArgs e)
         {
+            var root = (_associatedElement as MonitorControl).GetRootControl();
             var mousePoint = e.GetPosition(_parent);
             var offset = mousePoint.X - _initialPoint.X + mousePoint.Y - _initialPoint.Y;
-            var widthRatio = _associatedElement.ActualWidth / (_associatedElement.ActualWidth + _associatedElement.ActualHeight);
+            var widthRatio = root.ActualWidth / (root.ActualWidth + root.ActualHeight);
             var heightRatio = 1 - widthRatio;
             var offsetX = widthRatio * offset;
             var offsetY = heightRatio * offset;
-            var targetWidth = _associatedElement.ActualWidth + offsetX;
-            var targetHeight = _associatedElement.ActualHeight + offsetY;
+            var targetWidth = root.ActualWidth + offsetX;
+            var targetHeight = root.ActualHeight + offsetY;
             if (targetWidth < MIN_SIZE || targetHeight < MIN_SIZE)
             {
                 targetWidth = MIN_SIZE;
@@ -1122,6 +1239,7 @@ namespace MonitorSystem
             this._associatedElement.SetValue(FrameworkElement.HeightProperty, this._contentAdorner.ActualHeight);
             this._associatedElement.SetValue(Canvas.LeftProperty, (double)this.GetValue(Canvas.LeftProperty) + _offsetLeft);
             this._associatedElement.SetValue(Canvas.TopProperty, (double)this.GetValue(Canvas.TopProperty) + _offsetTop);
+
             OnSelected();
         }
 
@@ -1144,10 +1262,67 @@ namespace MonitorSystem
 
         public static void CancelSelected()
         {
-            if (null != _lastFocusObject)
+            var array = new Adorner[_selectedAdorners.Count];
+            _selectedAdorners.CopyTo(array);
+            foreach (var a in array)
             {
-                _lastFocusObject.SetUnselect();
-                _lastFocusObject = null;
+                a.SetMutiUnselect();
+                if (null != a.Unselected)
+                {
+                    a.Unselected(a, EventArgs.Empty);
+                }
+                _selectedAdorners.Remove(a);
+            }
+            array = null;
+        }
+
+        public static void AddMutiSelected(Adorner adorner)
+        {
+            if(!_selectedAdorners.Contains(adorner))
+            {
+                _selectedAdorners.Add(adorner);
+                adorner.SetMutiSelect();
+            }
+        }
+
+        public static void RemoveMutiSelected(Adorner adorner)
+        {
+            if (_selectedAdorners.Contains(adorner))
+            {
+                _selectedAdorners.Remove(adorner);
+                adorner.SetMutiUnselect();
+            }
+        }
+
+        public static void DeleteAll()
+        {
+             _selectedAdorners.ForEach(a =>
+                    {
+                        a._backgroundAdorner.Visibility = Visibility.Collapsed;
+                        a._parent.Children.Remove(a._associatedElement);
+                        a._parent.Children.Remove(a);
+                        a.Dispose();
+                    });
+             _selectedAdorners.Clear();
+        }
+
+        public static void CopyAll()
+        {
+            LoadScreen.CopyArray = _selectedAdorners
+                    .Where(a => null != a._associatedElement && a._associatedElement is MonitorControl)
+                    .Select(a => {
+                        var monitorControl = a._associatedElement as MonitorControl;
+                        var obj = new ScreenElementObj();
+                        obj.ElementClone(monitorControl, (int)monitorControl.ActualWidth, (int)monitorControl.ActualHeight);
+                        return obj;
+                    }).ToList();
+        }
+
+        internal static void SelectAll()
+        {
+            foreach (var monitorControl in LoadScreen._instance.csScreen.Children.OfType<MonitorControl>())
+            {
+                AddMutiSelected(monitorControl.AdornerLayer);
             }
         }
     }

@@ -87,9 +87,9 @@ namespace MonitorSystem.Gallery.Meter
             }
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
-            return this;
+            return this._canvas;
         }
 
         public override event EventHandler Selected;
@@ -160,12 +160,6 @@ namespace MonitorSystem.Gallery.Meter
         {
             get { return _browsableProperties; }
             set { _browsableProperties = value; }
-        }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            Paint(availableSize);
-            return base.MeasureOverride(availableSize);
         }
 
         #endregion
@@ -415,7 +409,6 @@ namespace MonitorSystem.Gallery.Meter
 
         public Meter1()
         {
-
             var borderBrush = new LinearGradientBrush();
             borderBrush.StartPoint = new Point();
             borderBrush.EndPoint = new Point(1d, 1d);
@@ -446,11 +439,19 @@ namespace MonitorSystem.Gallery.Meter
             _pointPath.Fill = new SolidColorBrush(Colors.Red);
             _pointPath.Stroke = new SolidColorBrush(Colors.Black);
             _pointPath.StrokeThickness = 1d;
+            this.SizeChanged += Meter_SizeChanged;
         }
 
         #endregion
 
         #region 私有方法
+
+        private void Meter_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.Width = e.NewSize.Width;
+            this.Height = e.NewSize.Width;
+            Paint(new Size(this.ActualWidth, this.ActualHeight));
+        }
 
         private void Paint(Size size)
         {
@@ -532,7 +533,8 @@ namespace MonitorSystem.Gallery.Meter
             try
             {
                 var width = size.Width;
-
+                _canvas.Height = width;
+                _canvas.Width = width;
                 var maximum = Maximum;
                 var minimum = Minimum;
                 var mainScale = MainScale;

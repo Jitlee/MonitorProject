@@ -36,7 +36,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         public Adorner AdornerLayer { get; protected set; }
         public abstract void DesignMode();
         public abstract void UnDesignMode();
-        public abstract object GetRootControl();
+        public abstract FrameworkElement GetRootControl();
         public virtual void SetChildScreen(ObservableCollection<ScreenAddShowName> litobj)
         {
             throw new NotImplementedException();
@@ -111,7 +111,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                             fontSize = (double)(Convert.ToDouble(keyVal[1]));
                     }
                 }
-                this.FontSize =fontSize;
+                this.FontSize = fontSize;
                 this.FontFamily = new FontFamily(Common.GetFontEn(Name));
             }
         }
@@ -119,7 +119,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// <summary>
         /// 控件自定义属性列表,控件值
         /// </summary>
-        public List<t_ElementProperty> ListElementProp{ get; set; }
+        public List<t_ElementProperty> ListElementProp { get; set; }
         /// <summary>
         /// 设置控件自定义属性值
         /// </summary>
@@ -134,7 +134,7 @@ namespace MonitorSystem.MonitorSystemGlobal
 
         public void SetAttrByName(string name, object value)
         {
-            if(null == ScreenElement
+            if (null == ScreenElement
                 || !ScreenElement.ControlID.HasValue)
             {
                 return;
@@ -181,10 +181,10 @@ namespace MonitorSystem.MonitorSystemGlobal
             //}
         }
 
-        private  string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Translate", "Foreground" };
+        private string[] m_BrowsableProperties = new string[] { "Left", "Top", "Width", "Height", "FontFamily", "FontSize", "Translate", "Foreground" };
 
         public abstract string[] BrowsableProperties { set; get; }
-     
+
         public double Translate
         {
             get { return (double)GetValue(OpacityProperty) * 100d; }
@@ -192,7 +192,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         }
 
 
-         [DefaultValue(""), Description("距左边位置")]
+        [DefaultValue(""), Description("距左边位置")]
         public double Left
         {
             get { return (double)GetValue(Canvas.LeftProperty); }
@@ -274,7 +274,7 @@ namespace MonitorSystem.MonitorSystemGlobal
                 }
                 else
                 {
-                     SetToolTipPosition();
+                    SetToolTipPosition();
                 }
             }
             base.OnMouseEnter(e);
@@ -297,6 +297,19 @@ namespace MonitorSystem.MonitorSystemGlobal
                 ToolTipControl.Visibility = Visibility.Collapsed;
             }
             base.OnMouseLeave(e);
+        }
+
+        public bool Contains(Rect rect)
+        {
+            var margin = (Thickness)GetValue(MarginProperty);
+            var x = Canvas.GetLeft(this) + margin.Left;
+            var y = Canvas.GetTop(this) + margin.Top;
+            var w = this.Width - margin.Left - margin.Right;
+            var h = this.Height - margin.Top - margin.Bottom;
+            return rect.Contains(new Point(x, y)) ||
+                rect.Contains(new Point(x + w, y)) ||
+                rect.Contains(new Point(x + w, y + h)) ||
+                rect.Contains(new Point(x, y + h));
         }
     }
 
@@ -328,6 +341,8 @@ namespace MonitorSystem.MonitorSystemGlobal
             set { m_Element = value; }
         }
 
+        public MonitorControl ParentControl { get; set; }
+
         List<t_ElementProperty> m_ListElementProperty;
         /// <summary>
         /// 元素属性列表
@@ -345,6 +360,7 @@ namespace MonitorSystem.MonitorSystemGlobal
         /// <param name="obj"></param>
         public void ElementClone(MonitorControl obj, int mWidth, int mHeight)
         {
+            this.ParentControl = obj.ParentControl;
              m_Element = new t_Element();
            t_Element m_Older= obj.ScreenElement;
             //ElementID

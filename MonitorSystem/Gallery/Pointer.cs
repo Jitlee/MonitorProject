@@ -33,7 +33,7 @@ namespace MonitorSystem.Gallery
         {
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }
@@ -51,5 +51,21 @@ namespace MonitorSystem.Gallery
         }
 
         public override string[] BrowsableProperties { get; set; }
+
+        private void OnSelected()
+        {
+            if (null != Selected)
+            {
+                Selected(this, EventArgs.Empty);
+            }
+        }
+
+        private void OnUnselected()
+        {
+            if (null != Unselected)
+            {
+                Unselected(this, EventArgs.Empty);
+            }
+        }
     }
 }

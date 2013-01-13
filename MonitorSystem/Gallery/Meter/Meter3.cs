@@ -87,7 +87,7 @@ namespace MonitorSystem.Gallery.Meter
             }
         }
 
-        public override object GetRootControl()
+        public override FrameworkElement GetRootControl()
         {
             return this;
         }
@@ -464,11 +464,19 @@ namespace MonitorSystem.Gallery.Meter
             _label.Foreground = new SolidColorBrush(Colors.Blue);
 
             _valueRect.Fill = new SolidColorBrush(Colors.Red);
+            this.SizeChanged += Meter_SizeChanged;
         }
 
         #endregion
 
         #region 私有方法
+
+        private void Meter_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.Width = e.NewSize.Width;
+            this.Height = e.NewSize.Width;
+            Paint(new Size(this.ActualWidth, this.ActualHeight));
+        }
 
         private void Paint(Size size)
         {
