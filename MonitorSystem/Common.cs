@@ -228,6 +228,7 @@ namespace MonitorSystem
                 Transparent = source.Transparent,
                 TxtInfo = source.TxtInfo,
                 ElementType = source.ElementType,
+                ParentID = source.ParentID,
             };
         }
 
