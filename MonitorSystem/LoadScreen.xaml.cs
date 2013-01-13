@@ -44,7 +44,8 @@ namespace MonitorSystem
         public static MonitorServers _DataContext = new MonitorServers();
         public static CV _DataCV = new CV();
 
-        public static MonitorControl CoptyObj=null;
+        //public static MonitorControl CoptyObj=null;
+        public static IEnumerable<ScreenElementObj> CopyArray;
         /// <summary>
         /// 场景列表
         /// </summary>
@@ -105,10 +106,8 @@ namespace MonitorSystem
             csScreen.VerticalAlignment = VerticalAlignment.Top;
             csScreen.HorizontalAlignment = HorizontalAlignment.Left;
             GridScreen.AddHandler(Grid.MouseWheelEvent, new MouseWheelEventHandler(GridScreen_MouseWheel), false);
-
             GridScreen.MouseLeftButtonDown += GridScreen_MouseLeftButtonDown;
         }
-
         public static void Load(t_Screen screen)
         {
             if (screen == null)
@@ -227,6 +226,82 @@ namespace MonitorSystem
         }
         #endregion
 
+
+
+        #region 右键框选
+
+        private void GridScreen_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            GridScreen.CaptureMouse();
+            _originPoint = e.GetPosition(csScreen);
+            AddElementRectangle.SetValue(Canvas.LeftProperty, _originPoint.X);
+            AddElementRectangle.SetValue(Canvas.TopProperty, _originPoint.Y);
+            AddElementRectangle.SetValue(HeightProperty, 0d);
+            AddElementRectangle.SetValue(WidthProperty, 0d);
+            AddElementCanvas.Visibility = Visibility.Visible;
+            AddElementRectangle.Visibility = Visibility.Visible;
+            GridScreen.MouseMove -= GridScreen_MouseRightMove;
+            GridScreen.MouseMove += GridScreen_MouseRightMove;
+            GridScreen.MouseLeave -= GridScreen_MouseRightLeave;
+            GridScreen.MouseLeave += GridScreen_MouseRightLeave;
+            GridScreen.MouseRightButtonUp -= GridScreen_MouseRightButtonUp;
+            GridScreen.MouseRightButtonUp += GridScreen_MouseRightButtonUp;
+
+            e.Handled = true;
+        }
+
+        private void GridScreen_MouseRightLeave(object sender, MouseEventArgs e)
+        {
+            GridScreen.ReleaseMouseCapture();
+            GridScreen.MouseMove -= GridScreen_MouseRightMove;
+            GridScreen.MouseRightButtonUp -= GridScreen_MouseRightButtonUp;
+            AddElementCanvas.Visibility = Visibility.Collapsed;
+            AddElementRectangle.Visibility = Visibility.Collapsed;
+        }
+
+        private void GridScreen_MouseRightMove(object sender, MouseEventArgs e)
+        {
+            var transform = csScreen.TransformToVisual(GridScreen).Transform(new Point());
+            var point = e.GetPosition(csScreen);
+            var offsetX = point.X - _originPoint.X;
+            var offsetY = point.Y - _originPoint.Y;
+            AddElementRectangle.SetValue(Canvas.LeftProperty, (offsetX < 0 ? point.X : _originPoint.X));
+            AddElementRectangle.SetValue(Canvas.TopProperty, (offsetY < 0 ? point.Y : _originPoint.Y));
+            AddElementRectangle.SetValue(WidthProperty, Math.Abs(offsetX));
+            AddElementRectangle.SetValue(HeightProperty, Math.Abs(offsetY));
+        }
+
+        private void GridScreen_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            GridScreen.ReleaseMouseCapture();
+            GridScreen.MouseMove -= GridScreen_MouseRightMove;
+            GridScreen.MouseLeave -= GridScreen_MouseRightLeave;
+            GridScreen.MouseRightButtonUp -= GridScreen_MouseRightButtonUp;
+            AddElementCanvas.Visibility = Visibility.Collapsed;
+            AddElementRectangle.Visibility = Visibility.Collapsed;
+
+            var point = e.GetPosition(csScreen);
+            var offsetX = point.X - _originPoint.X;
+            var offsetY = point.Y - _originPoint.Y;
+            var left = offsetX < 0 ? point.X : _originPoint.X;
+            var top = offsetY < 0 ? point.Y : _originPoint.Y;
+            var width = Math.Abs(offsetX);
+            var height = Math.Abs(offsetY);
+
+            Adorner.CancelSelected();
+
+            var rect = new Rect(left, top, width, height);
+            foreach (var control in csScreen.Children.OfType<MonitorControl>())
+            {
+                if (control.Visibility == Visibility.Visible &&
+                    control.Contains(rect))
+                {
+                    Adorner.AddMutiSelected(control.AdornerLayer);
+                }
+            }
+        }
+        #endregion
+
         #region 绘制控件
 
         /// <summary>
@@ -243,6 +318,7 @@ namespace MonitorSystem
                 GridScreen.MouseLeftButtonDown += AddElementCanvas_MouseLeftButtonDown;
                 GridScreen.MouseLeftButtonUp -= AddElementCanvas_MouseLeftButtonUp;
                 GridScreen.MouseLeftButtonUp += AddElementCanvas_MouseLeftButtonUp;
+                GridScreen.MouseRightButtonDown -= GridScreen_MouseRightButtonDown;
             }
         }
 
@@ -259,6 +335,7 @@ namespace MonitorSystem
                 GridScreen.MouseLeftButtonDown += GridScreen_MouseLeftButtonDown;
                 GridScreen.MouseLeftButtonDown -= AddElementCanvas_MouseLeftButtonDown;
                 GridScreen.MouseLeftButtonUp -= AddElementCanvas_MouseLeftButtonUp;
+                GridScreen.MouseRightButtonDown += GridScreen_MouseRightButtonDown;
             }
         }
 
@@ -1331,145 +1408,152 @@ namespace MonitorSystem
         //int AddElementNumber = 0;
         private void SaveElement()
         {
-            //保存背景图片
-            //var vScreen = _DataContext.t_Screens.Where(a => a.ScreenID == _CurrentScreen.ScreenID);
-            //if (vScreen.Count() > 0)
-            //{
-            //    t_Screen m_screen = vScreen.First();
-            //    m_screen.ImageURL = BackgroundPanel.BgImagePath;
-            //}
-
-            //循环所有存在元素
-            listMonitorAddElement.Clear();
-            listMonitorModifiedElement.Clear();
-            tbWait.IsBusy = true;
-            for (int i = 0; i < csScreen.Children.Count; i++)
+            try
             {
-                var m = csScreen.Children[i] as MonitorControl;
+                //保存背景图片
+                //var vScreen = _DataContext.t_Screens.Where(a => a.ScreenID == _CurrentScreen.ScreenID);
+                //if (vScreen.Count() > 0)
+                //{
+                //    t_Screen m_screen = vScreen.First();
+                //    m_screen.ImageURL = BackgroundPanel.BgImagePath;
+                //}
 
-                if (null != m && !m.IsToolTip)
+                //循环所有存在元素
+                listMonitorAddElement.Clear();
+                listMonitorModifiedElement.Clear();
+                tbWait.IsBusy = true;
+                for (int i = 0; i < csScreen.Children.Count; i++)
                 {
-                    var el = m.ElementState;
-                    var meleObj = m.ScreenElement;
-                    meleObj.Width = Convert.ToInt32(m.Width);
-                    meleObj.Height = Convert.ToInt32(m.Height);
-                    meleObj.ScreenX = Convert.ToInt32(m.GetValue(Canvas.LeftProperty));
-                    meleObj.ScreenY = Convert.ToInt32(m.GetValue(Canvas.TopProperty));
+                    var m = csScreen.Children[i] as MonitorControl;
 
-                    if (el == ElementSate.New)
+                    if (null != m && !m.IsToolTip)
                     {
+                        var el = m.ElementState;
+                        var meleObj = m.ScreenElement;
+                        meleObj.Width = Convert.ToInt32(m.Width);
+                        meleObj.Height = Convert.ToInt32(m.Height);
+                        meleObj.ScreenX = Convert.ToInt32(m.GetValue(Canvas.LeftProperty));
+                        meleObj.ScreenY = Convert.ToInt32(m.GetValue(Canvas.TopProperty));
+
+                        if (el == ElementSate.New)
+                        {
                             m.ScreenElement = meleObj;
                             _DataContext.t_Elements.Add(meleObj); // 2个必须同步添加
                             listMonitorAddElement.Add(m);// 2个必须同步添加
                             m.ElementState = ElementSate.Save;
                         }
-                    else
-                    {
-                        CheckElementChange(meleObj);
-
-                        var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == meleObj.ElementID).ToList();
-                        foreach (var removeProperty in removeProperties)
+                        else
                         {
-                            _DataContext.t_ElementProperties.Remove(removeProperty);
+                            CheckElementChange(meleObj);
+
+                            var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == meleObj.ElementID).ToList();
+                            foreach (var removeProperty in removeProperties)
+                            {
+                                _DataContext.t_ElementProperties.Remove(removeProperty);
+                            }
+
+                            // 删除子属性
+                            if (m is RealTimeT)
+                            {
+                                var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == meleObj.ElementID).ToList();
+
+                                foreach (var removeElement in removeElements)
+                                {
+                                    _DataContext.t_Element_RealTimeLines.Remove(removeElement);
+                                }
+                            }
+
+                            listMonitorModifiedElement.Add(m); // 同修改同步
                         }
 
-                        // 删除子属性
-                        if (m is RealTimeT)
+                        #region ToolTip
+
+                        var toolTipControl = m.ToolTipControl;
+
+                        if (null != toolTipControl && toolTipControl.ToolTipCanvas.Children.Count > 0)
                         {
-                            var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == meleObj.ElementID).ToList();
+                            Debug.Assert(null != toolTipControl.Target, "ToolTipControl 的 Target 属性不能为null.");
+                            Debug.Assert(null != toolTipControl.Target.ScreenElement, "ToolTipControl 的 Target.ScreenElement 属性不能为null.");
+
+                            var toolTipElement = toolTipControl.ScreenElement.Clone();
+
+                            toolTipElement.Width = Convert.ToInt32(toolTipControl.Width);
+                            toolTipElement.Height = Convert.ToInt32(toolTipControl.Height);
+
+                            if (el != ElementSate.New)
+                            {
+                                RemoveOldProperties(meleObj, "ToolTip");
+                                toolTipElement.ParentID = meleObj.ElementID;
+                                toolTipElement.ScreenID = meleObj.ScreenID;
+                            }
+                            else
+                            {
+                                toolTipElement.ScreenID = null;
+                                toolTipElement.ParentID = meleObj.ElementID;
+                            }
+
+                            _DataContext.t_Elements.Add(toolTipElement.Clone());// 2个必须同步添加
+
+                            listMonitorAddElement.Add(toolTipControl);// 2个必须同步添加
+                            AddChildControl(toolTipControl.ToolTipCanvas, el, meleObj);
+                        }
+
+                        #endregion
+
+                        #region 背景框
+                        if (m is BackgroundControl)
+                        {
+                            var backgroundControl = m as BackgroundControl;
+                            if (el == ElementSate.Save)
+                            {
+                                RemoveOldProperties(meleObj, "Background");
+                            }
+
+                            AddChildControl(backgroundControl.BackgroundCanvas, el, meleObj);
+                        }
+                        #endregion
+                    }
+                }
+
+                //循环已添加的属性
+                foreach (t_Element mEle in ScreenAllElement)
+                {
+                    var v = csScreen.FindName(mEle.ElementID.ToString());
+                    if (v == null)
+                    {
+                        if (_DataContext.t_Elements.Contains(mEle))
+                        {
+                            _DataContext.t_Elements.Remove(mEle);
+
+                            var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == mEle.ElementID).ToList();
+                            foreach (var removeProperty in removeProperties)
+                            {
+                                _DataContext.t_ElementProperties.Remove(removeProperty);
+                            }
+
+                            // 删除子 RealTimeT 属性
+                            var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == mEle.ElementID);
 
                             foreach (var removeElement in removeElements)
                             {
                                 _DataContext.t_Element_RealTimeLines.Remove(removeElement);
                             }
-                        }
 
-                        listMonitorModifiedElement.Add(m); // 同修改同步
+                            RemoveOldProperties(mEle, "ToolTip"); // 删除ToolTip子元素及其子元素的属性
+                            RemoveOldProperties(mEle, "Background"); // 删除Background子元素及其子元素的属性
+                        }
                     }
-
-                    #region ToolTip
-
-                    var toolTipControl = m.ToolTipControl;
-
-                    if (null != toolTipControl && toolTipControl.ToolTipCanvas.Children.Count > 0)
-                    {
-                        Debug.Assert(null != toolTipControl.Target, "ToolTipControl 的 Target 属性不能为null.");
-                        Debug.Assert(null != toolTipControl.Target.ScreenElement, "ToolTipControl 的 Target.ScreenElement 属性不能为null.");
-
-                        var toolTipElement = toolTipControl.ScreenElement.Clone();
-
-                        toolTipElement.Width = Convert.ToInt32(toolTipControl.Width);
-                        toolTipElement.Height = Convert.ToInt32(toolTipControl.Height);
-
-                        if (el != ElementSate.New)
-                        {
-                            RemoveOldProperties(meleObj, "ToolTip");
-                            toolTipElement.ParentID = meleObj.ElementID;
-                            toolTipElement.ScreenID = meleObj.ScreenID;
-                        }
-                        else
-                        {
-                            toolTipElement.ScreenID = null;
-                            toolTipElement.ParentID = meleObj.ElementID;
-                        }
-
-                        _DataContext.t_Elements.Add(toolTipElement.Clone());// 2个必须同步添加
-
-                        listMonitorAddElement.Add(toolTipControl);// 2个必须同步添加
-                        AddChildControl(toolTipControl.ToolTipCanvas, el, meleObj);
-                    }
-
-                    #endregion
-
-                    #region 背景框
-                    if (m is BackgroundControl)
-                    {
-                        var backgroundControl = m as BackgroundControl;
-                        if (el == ElementSate.Save)
-                        {
-                            RemoveOldProperties(meleObj, "Background");
-                        }
-
-                        AddChildControl(backgroundControl.BackgroundCanvas, el, meleObj);
-                    }
-                    #endregion
                 }
-            }
 
-            //循环已添加的属性
-            foreach (t_Element mEle in ScreenAllElement)
-            {
-                var v = csScreen.FindName(mEle.ElementID.ToString());
-                if (v == null)
+                if (_DataContext.HasChanges)
                 {
-                    if (_DataContext.t_Elements.Contains(mEle))
-                    {
-                        _DataContext.t_Elements.Remove(mEle);
-
-                        var removeProperties = _DataContext.t_ElementProperties.Where(p => p.ElementID == mEle.ElementID).ToList();
-                        foreach (var removeProperty in removeProperties)
-                        {
-                            _DataContext.t_ElementProperties.Remove(removeProperty);
-                        }
-
-                        // 删除子 RealTimeT 属性
-                        var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == mEle.ElementID);
-
-                        foreach (var removeElement in removeElements)
-                        {
-                            _DataContext.t_Element_RealTimeLines.Remove(removeElement);
-                        }
-
-                        RemoveOldProperties(mEle, "ToolTip"); // 删除ToolTip子元素及其子元素的属性
-                        RemoveOldProperties(mEle, "Background"); // 删除Background子元素及其子元素的属性
-                    }
+                    _DataContext.SubmitChanges(SubmitCompleted, null);
                 }
             }
-
-
-            if (_DataContext.HasChanges)
+            catch (Exception ex)
             {
-                _DataContext.SubmitChanges(SubmitCompleted, null);
+                MessageBox.Show(string.Format("保存场景失败，错误信息：{0}", ex.Message));
+                tbWait.IsBusy = false;
             }
         }
 
@@ -1728,48 +1812,76 @@ namespace MonitorSystem
 
         protected void Screen_KeyDown(object sender, KeyEventArgs e)
         {
-            ModifierKeys keys = ModifierKeys.Control;
-            if (keys == ModifierKeys.Control && e.Key == Key.V)
+            if (e.Key == Key.V)
             {
-                var copyMonitor = CoptyObj as MonitorControl;
-                if (copyMonitor != null && !(copyMonitor is ToolTipControl))
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    ScreenElementObj mobj = new MonitorSystemGlobal.ScreenElementObj();
-                    int mWidth = Convert.ToInt16(copyMonitor.Width);
-                    int mHeight = Convert.ToInt16(copyMonitor.Height);
-                    mobj.ElementClone(copyMonitor, mWidth, mHeight);
-                    var canvas = csScreen;
-                    if (copyMonitor.ParentControl is BackgroundControl)
+                    //var copyMonitor = CoptyObj as MonitorControl;
+                    if (null != CopyArray)
                     {
-                        canvas = (copyMonitor.ParentControl as BackgroundControl).BackgroundCanvas;
-                    }
-                    else if (copyMonitor.ParentControl is ToolTipControl)
-                    {
-                        canvas = (copyMonitor.ParentControl as ToolTipControl).ToolTipCanvas;
-                    }
-                    var monitor = ShowElement(canvas, mobj.Element, ElementSate.New, mobj.ListElementProperty);
-                    if (null != copyMonitor.ParentControl)
-                    {
-                        monitor.ParentControl = copyMonitor.ParentControl;
-                        monitor.DesignMode();
-                        monitor.AllowToolTip = false;
-                        monitor.ClearValue(Canvas.ZIndexProperty);
-                        if (null != monitor.AdornerLayer)
+                        foreach (var obj in CopyArray)
                         {
-                            monitor.AdornerLayer.AllToolTip = false;
-                        }
+                            var canvas = csScreen;
+                            if (obj.ParentControl is BackgroundControl)
+                            {
+                                canvas = (obj.ParentControl as BackgroundControl).BackgroundCanvas;
+                            }
+                            else if (obj.ParentControl is ToolTipControl)
+                            {
+                                canvas = (obj.ParentControl as ToolTipControl).ToolTipCanvas;
+                            }
+                            var monitor = ShowElement(canvas, obj.Element, ElementSate.New, obj.ListElementProperty);
+                            if (null != obj.ParentControl)
+                            {
+                                monitor.ParentControl = obj.ParentControl;
+                                monitor.DesignMode();
+                                monitor.AllowToolTip = false;
+                                monitor.ClearValue(Canvas.ZIndexProperty);
+                                if (null != monitor.AdornerLayer)
+                                {
+                                    monitor.AdornerLayer.AllToolTip = false;
+                                }
 
-                        if (null != monitor.ScreenElement
-                            && null != copyMonitor.ParentControl.ScreenElement)
-                        {
-                            monitor.ScreenElement.ElementType = copyMonitor.ScreenElement.ElementType;
-                            monitor.ScreenElement.ParentID = copyMonitor.ParentControl.ScreenElement.ElementID;
-                            monitor.ScreenElement.ScreenID = copyMonitor.ParentControl.ScreenElement.ScreenID;
+                                if (null != monitor.ScreenElement
+                                    && null != obj.ParentControl.ScreenElement)
+                                {
+                                    monitor.ScreenElement.ElementType = obj.Element.ElementType;
+                                    monitor.ScreenElement.ParentID = obj.ParentControl.ScreenElement.ElementID;
+                                    monitor.ScreenElement.ScreenID = obj.ParentControl.ScreenElement.ScreenID;
+                                }
+                            }
                         }
                     }
-                }              
+                }
+            }
+            else if (e.Key == Key.C)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.CopyAll();
+                }
+            }
+            else if (e.Key == Key.X)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.CopyAll();
+                    Adorner.DeleteAll();
+                }
+            }
+            else if (e.Key == Key.A)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.SelectAll();
+                }
+            }
+            else if (e.Key == Key.Delete)
+            {
+                Adorner.DeleteAll();
             }
         }
+            
 
         #region 菜单事件
         private void TP_Click(object sender, RoutedEventArgs e)
@@ -1782,6 +1894,9 @@ namespace MonitorSystem
             DesignButton.Visibility = Visibility.Visible;
             DesignFloatPanel.IsOpened = true;
             IsZT = true;
+
+            GridScreen.MouseRightButtonDown -= GridScreen_MouseRightButtonDown;
+            GridScreen.MouseRightButtonDown += GridScreen_MouseRightButtonDown;
                        
             //加截属性窗口
             //fwProperty.SizeChanged += new SizeChangedEventHandler(f_SizeChanged);
@@ -1835,6 +1950,8 @@ namespace MonitorSystem
             DesignFloatPanel.IsOpened = false;
             GalleryFloatPanel.IsOpened = false;
             IsZT = false;
+
+            GridScreen.MouseRightButtonDown -= GridScreen_MouseRightButtonDown;
 
             this.KeyDown -= new KeyEventHandler(Screen_KeyDown);
 
