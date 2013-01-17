@@ -256,6 +256,9 @@
     <Compile Include="Other\RealTimeTest.xaml.cs">
       <DependentUpon>RealTimeTest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Other\ScreenView.xaml.cs">
+      <DependentUpon>ScreenView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Property\ScreenCopy.xaml.cs">
       <DependentUpon>ScreenCopy.xaml</DependentUpon>
     </Compile>
@@ -438,6 +441,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Other\RealTimeTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Other\ScreenView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

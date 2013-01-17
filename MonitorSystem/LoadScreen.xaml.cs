@@ -124,8 +124,7 @@ namespace MonitorSystem
             if (_CurrentScreen.ScreenID != screen.ScreenID)
                 return;
 
-
-            SetScreenImg(screen.ImageURL);
+            SetScreenImg(screen.ImageURL);           
         }
 
         public void SetScreenImg(string strImg, bool resize = false)
@@ -141,7 +140,10 @@ namespace MonitorSystem
             var imgB = new ImageBrush() { Stretch = Stretch.UniformToFill };
             imgB.ImageSource = bitmap;
             csScreen.Background = imgB;
-            ThumbnailCanvas.Background = imgB;
+
+            //_ScreenView.SetScreenImg(strImg);
+            
+          
         }
 
         private void Screen_ImageOpened(object sender, RoutedEventArgs e)
@@ -828,6 +830,7 @@ namespace MonitorSystem
         }
         #endregion
 
+        //ScreenView _ScreenView = new ScreenView();
         /// <summary>
         /// 加载场景
         /// </summary>
@@ -846,7 +849,7 @@ namespace MonitorSystem
                 MessageBox.Show("场景不存在！", "温馨提示", MessageBoxButton.OK);
                 return;
             }
-
+            
             if (ReturnScreen != null)
             {
                 if (_Screen.ScreenID != ReturnScreen.ScreenID)
@@ -862,6 +865,18 @@ namespace MonitorSystem
             {
                 ReturnScreen = _Screen;
             }
+
+            _ScreenView.ScreenInit(_Screen);
+            double sfPerw =200/ _ScreenView.Width;
+            double sfPerh = 150 / _ScreenView.Height;
+            if (sfPerh < sfPerw)
+                sfPerw = sfPerh;
+            ScaleTransform mainShowCanvasScaleTrans = new ScaleTransform();            
+            mainShowCanvasScaleTrans.CenterX = 0.0;
+            mainShowCanvasScaleTrans.CenterY = 0.0;
+            mainShowCanvasScaleTrans.ScaleX = sfPerw;
+            mainShowCanvasScaleTrans.ScaleY = sfPerw;
+            _ScreenView.RenderTransform = mainShowCanvasScaleTrans;
             
 
             tbWait.IsBusy = true;
@@ -935,6 +950,11 @@ namespace MonitorSystem
                 return;
             }
             List<t_Element> lsitElement = _DataContext.t_Elements.Where(a => a.ScreenID == Convert.ToInt32(result.UserState) && null == a.ParentID).ToList();
+
+            //_ScreenView.Width = 200;
+            //_ScreenView.Height = 200;
+            //csScreen.Children.Add(_ScreenView);
+
             ShowElements(lsitElement, csScreen);
             //如果不是组态，打开定时器
             //if (CBIsztControl.IsChecked == false)
@@ -951,6 +971,9 @@ namespace MonitorSystem
             {
                 var list = _DataContext.t_ElementProperties.Where(a => a.ElementID == el.ElementID);
                 var monitorControl = ShowElement(canvas, el, ElementSate.Save, list.ToList());
+
+                _ScreenView.ShowElement( el, ElementSate.Save, list.ToList());
+
                 if (null != monitorControl && null != parentContol)
                 {
                     monitorControl.ParentControl = parentContol;
@@ -961,6 +984,7 @@ namespace MonitorSystem
                         monitorControl.AdornerLayer.AllToolTip = false;
                     }
                 }
+                //_ScreenView.AddEletemt(monitorControl);
                 ScreenAllElement.Add(el);
             }
         }
@@ -1117,38 +1141,7 @@ namespace MonitorSystem
                             SetEletemt(canvas, backgroundControl, obj, eleStae, listObj);
                             var childElements = _DataContext.t_Elements.Where(e => e.ParentID == obj.ElementID && e.ElementType == "Background").ToList();
                             ShowElements(childElements, backgroundControl.BackgroundCanvas, backgroundControl);
-                            return backgroundControl;
-                        //case "dlfh01"://电力符号
-                        //    Dlfh01 dlfh01Ctrl = new Dlfh01();
-                        //    SetEletemt(dlfh01Ctrl, obj, eleStae, listObj);
-                        //    return dlfh01Ctrl;
-                        //case "dlfh02"://电力符号
-                        //    Dlfh02 dlfh02Ctrl = new Dlfh02();
-                        //    SetEletemt(dlfh02Ctrl, obj, eleStae, listObj);
-                        //    return dlfh02Ctrl;
-
-                        //case "Dldz01"://电力电子
-                        //    Dldz01 Dldz01Ctrl = new Dldz01();
-                        //    SetEletemt(Dldz01Ctrl, obj, eleStae, listObj);
-                        //    return Dldz01Ctrl;
-                        //case "Dldz02"://电力电子
-                        //    Dldz02 Dldz02Ctrl = new Dldz02();
-                        //    SetEletemt(Dldz02Ctrl, obj, eleStae, listObj);
-                        //    return Dldz02Ctrl;
-
-                        //case "Dqfh01"://电气符号
-                        //    Dqfh01 Dqfh01Ctrl = new Dqfh01();
-                        //    SetEletemt(Dqfh01Ctrl, obj, eleStae, listObj);
-                        //    return Dqfh01Ctrl;
-                        //case "Dqfh02"://电气符号
-                        //    Dqfh02 Dqfh02Ctrl = new Dqfh02();
-                        //    SetEletemt(Dqfh02Ctrl, obj, eleStae, listObj);
-                        //    return Dqfh02Ctrl;
-
-                        //case "Meter1":  // 仪表1
-                        //    var meter1 = new Meter1();
-                        //    SetEletemt(meter1, obj, eleStae, listObj);
-                        //    return meter1;
+                            return backgroundControl;                       
                         default:
                             string url = string.Format("/MonitorSystem;component/Images/ControlsImg/{0}", obj.ImageURL);
                             BitmapImage bitmap = new BitmapImage(new Uri(url, UriKind.Relative));
