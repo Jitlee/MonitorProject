@@ -184,7 +184,7 @@ namespace MonitorSystem.Gallery.Meter
             "DialPlateBackColor",
             "DialPlateBorlderColor",
             "CalibrationColor",
-            "CalibrationStroke","FontFamily"};
+            "CalibrationStroke","FontFamily", "ForeColor"};
 
         public override string[] BrowsableProperties
         {
@@ -291,6 +291,7 @@ namespace MonitorSystem.Gallery.Meter
         private void Maximum_Changed(double oldValue, double newValue)
         {
             PaintCalibration(new Size(this.ActualWidth, this.ActualHeight));
+            PaintPoint(new Size(this.ActualWidth, this.ActualHeight));
         }
 
         #endregion
@@ -324,6 +325,7 @@ namespace MonitorSystem.Gallery.Meter
         private void Minimum_Changed(double oldValue, double newValue)
         {
             PaintCalibration(new Size(this.ActualWidth, this.ActualHeight));
+            PaintPoint(new Size(this.ActualWidth, this.ActualHeight));
         }
 
         #endregion
@@ -956,6 +958,15 @@ namespace MonitorSystem.Gallery.Meter
                 var value = Value;
                 var maximum = Maximum;
                 var minimum = Minimum;
+                if (value < minimum)
+                {
+                    value = minimum;
+                }
+                if (value > maximum)
+                {
+                    value = maximum;
+                }
+                value -= minimum;
                 var mainScale = MainScale;
                 var viceScale = ViceScale;
                 var decimalDigits = DecimalDigits;  // 小数点位

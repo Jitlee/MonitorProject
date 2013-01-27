@@ -148,7 +148,7 @@ namespace MonitorSystem.Gallery.Meter
         }
 
         private string[] _browsableProperties = new string[] { "Value", "Maximum", "Minimum", "DecimalDigits",
-            "MainScale", "FontFamily" };
+            "MainScale", "FontFamily", "ForeColor" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -222,6 +222,7 @@ namespace MonitorSystem.Gallery.Meter
         private void Maximum_Changed(double oldValue, double newValue)
         {
             PaintCalibration(new Size(this.ActualWidth, this.ActualHeight));
+            PaintPoint(new Size(this.ActualWidth, this.ActualHeight));
         }
 
         #endregion
@@ -255,6 +256,7 @@ namespace MonitorSystem.Gallery.Meter
         private void Minimum_Changed(double oldValue, double newValue)
         {
             PaintCalibration(new Size(this.ActualWidth, this.ActualHeight));
+            PaintPoint(new Size(this.ActualWidth, this.ActualHeight));
         }
 
         #endregion
@@ -571,6 +573,15 @@ namespace MonitorSystem.Gallery.Meter
                 var value = Value;
                 var maximum = Maximum;
                 var minimum = Minimum;
+                if (value < minimum)
+                {
+                    value = minimum;
+                }
+                if (value > maximum)
+                {
+                    value = maximum;
+                }
+                value -= minimum;
                 var mainScale = MainScale;
                 var decimalDigits = DecimalDigits;  // 小数点位
                 var beginAngle = 1.75d * Math.PI;

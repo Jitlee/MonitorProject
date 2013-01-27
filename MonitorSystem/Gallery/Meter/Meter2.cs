@@ -142,12 +142,12 @@ namespace MonitorSystem.Gallery.Meter
             this.Height = (double)ScreenElement.Height;
 
             //BackColor = Common.StringToColor(ScreenElement.BackColor);
-            //ForeColor = Common.StringToColor(ScreenElement.ForeColor);
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor);
             //Transparent = ScreenElement.Transparent.Value;
         }
 
         private string[] _browsableProperties = new string[] { "Text", "Value", "Maximum", "Minimum", "Scale", 
-            "FontFamily" };
+            "FontFamily", "ForeColor" };
 
         public override string[] BrowsableProperties
         {
@@ -158,6 +158,27 @@ namespace MonitorSystem.Gallery.Meter
         #endregion
 
         #region 属性
+
+        #region 颜色
+
+        private static readonly DependencyProperty ForeColorProperty =
+            DependencyProperty.Register("ForeColor",
+            typeof(Color), typeof(Meter2), new PropertyMetadata(Colors.Blue));
+        [DefaultValue(""), Description("前景色"), Category("外观")]
+        public Color ForeColor
+        {
+            get { return (Color)this.GetValue(ForeColorProperty); }
+            set
+            {
+                this.SetValue(ForeColorProperty, value);
+                if (ScreenElement != null)
+                    ScreenElement.ForeColor = value.ToString();
+
+                _label.Foreground = new SolidColorBrush(value);
+            }
+        }
+
+        #endregion
 
         #region 标签
 
@@ -374,7 +395,7 @@ namespace MonitorSystem.Gallery.Meter
             this.Content = _root;
 
             _label.Text = Text;
-            _label.Foreground = new SolidColorBrush(Colors.Blue);
+            _label.Foreground = new SolidColorBrush(ForeColor);
 
             _pointPath.Fill = new SolidColorBrush(Colors.Red);
             _pointPath.Stroke = new SolidColorBrush(Colors.Black);
@@ -465,10 +486,20 @@ namespace MonitorSystem.Gallery.Meter
                 var width = size.Width; // _canvas 有margin 所以要减去
                 var height = size.Height;
 
+                var value = Value;
                 var maximum = Maximum;
                 var minimum = Minimum;
+                if (value < minimum)
+                {
+                    value = minimum;
+                }
+                if (value > maximum)
+                {
+                    value = maximum;
+                }
+                value -= minimum;
+
                 var scale = Scale;
-                var value = Value;
 
                 if (scale < 1)
                 {
@@ -519,7 +550,7 @@ namespace MonitorSystem.Gallery.Meter
                     _calibrationCanvas.Children.Add(line4);
                 }
 
-                var valueScale = (int)Math.Ceiling(Value * scale / (maximum - minimum));
+                var valueScale = (int)Math.Ceiling(value * scale / (maximum - minimum));
 
                 for (int i = 0; i < valueScale; i++)
                 {
