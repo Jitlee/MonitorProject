@@ -156,7 +156,7 @@ namespace MonitorSystem.Gallery.Meter
         }
 
         private string[] _browsableProperties = new string[] { "Text", "Value", "Maximum", 
-            "Minimum", "DecimalDigits", "MainScale", "ViceScale" ,"FontFamily", "FontSize"};
+            "Minimum", "DecimalDigits", "MainScale", "ViceScale" ,"FontFamily"};
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }

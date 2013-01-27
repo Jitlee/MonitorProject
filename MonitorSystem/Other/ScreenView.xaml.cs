@@ -244,7 +244,7 @@ namespace MonitorSystem.Other
             };
             if (eleStae == ElementSate.Save)
             {
-                mControl.Name = obj.ElementID.ToString();
+                mControl.Name ="slt"+ obj.ElementID.ToString();
             }
             mControl.ScreenElement = obj;
             mControl.ListElementProp = listObj;
