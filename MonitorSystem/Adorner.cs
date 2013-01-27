@@ -33,12 +33,12 @@ namespace MonitorSystem
     [TemplatePart(Name = "ToolTipButton", Type = typeof(Button))]
     public class Adorner : ButtonBase, IDisposable
     {
-        private static readonly List<Adorner> _selectedAdorners = new List<Adorner>();
-        public event EventHandler Selected;
-        public event EventHandler Unselected;
 
         #region Fields
 
+        private static readonly List<Adorner> _selectedAdorners = new List<Adorner>();
+        public event EventHandler Selected;
+        public event EventHandler Unselected;
         private Canvas _parent;
         Point _initialPoint;
         IEnumerable<Point> _originPoints; // 多选移动时  控件的原始坐标数组
@@ -1324,6 +1324,37 @@ namespace MonitorSystem
             {
                 AddMutiSelected(monitorControl.AdornerLayer);
             }
+        }
+
+        public static void MoveLeft(double offset)
+        {
+            Move(Canvas.LeftProperty, -offset);
+        }
+
+        public static void MoveRight(double offset)
+        {
+            Move(Canvas.LeftProperty, offset);
+        }
+
+        public static void MoveUp(double offset)
+        {
+            Move(Canvas.TopProperty, -offset);
+        }
+
+        public static void MoveDown(double offset)
+        {
+            Move(Canvas.TopProperty, offset);
+        }
+
+        private static void Move(DependencyProperty property, double offset)
+        {
+            _selectedAdorners.ForEach(a =>
+            {
+                var origin = (double)a.GetValue(property);
+                a.SetValue(property, origin + offset);
+                origin = (double)a._associatedElement.GetValue(property);
+                a._associatedElement.SetValue(property, origin + offset);
+            });
         }
     }
 }

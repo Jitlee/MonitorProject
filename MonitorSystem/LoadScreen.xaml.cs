@@ -228,7 +228,143 @@ namespace MonitorSystem
         }
         #endregion
 
+        #region 键盘事件
 
+        const double FAST_MOVE = 15d;
+
+        private void CsScreen_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.V)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    //var copyMonitor = CoptyObj as MonitorControl;
+                    if (null != CopyArray)
+                    {
+                        foreach (var obj in CopyArray)
+                        {
+                            var canvas = csScreen;
+                            if (obj.ParentControl is BackgroundControl)
+                            {
+                                canvas = (obj.ParentControl as BackgroundControl).BackgroundCanvas;
+                            }
+                            else if (obj.ParentControl is ToolTipControl)
+                            {
+                                canvas = (obj.ParentControl as ToolTipControl).ToolTipCanvas;
+                            }
+                            var monitor = ShowElement(canvas, obj.Element, ElementSate.New, obj.ListElementProperty);
+                            if (null != obj.ParentControl)
+                            {
+                                monitor.ParentControl = obj.ParentControl;
+                                monitor.DesignMode();
+                                monitor.AllowToolTip = false;
+                                monitor.ClearValue(Canvas.ZIndexProperty);
+                                if (null != monitor.AdornerLayer)
+                                {
+                                    monitor.AdornerLayer.AllToolTip = false;
+                                }
+
+                                if (null != monitor.ScreenElement
+                                    && null != obj.ParentControl.ScreenElement)
+                                {
+                                    monitor.ScreenElement.ElementType = obj.Element.ElementType;
+                                    monitor.ScreenElement.ParentID = obj.ParentControl.ScreenElement.ElementID;
+                                    monitor.ScreenElement.ScreenID = obj.ParentControl.ScreenElement.ScreenID;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (e.Key == Key.C)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.CopyAll();
+                }
+            }
+            else if (e.Key == Key.X)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.CopyAll();
+                    Adorner.DeleteAll();
+                }
+            }
+            else if (e.Key == Key.A)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.SelectAll();
+                }
+            }
+            else if (e.Key == Key.Delete)
+            {
+                Adorner.DeleteAll();
+            }
+            else if (e.Key == Key.Left)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.MoveLeft(1d);
+                }
+                else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    Adorner.MoveLeft(10d);
+                }
+                else
+                {
+                    Adorner.MoveLeft(5d);
+                }
+            }
+            else if (e.Key == Key.Right)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.MoveRight(1d);
+                }
+                else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    Adorner.MoveRight(10d);
+                }
+                else
+                {
+                    Adorner.MoveRight(5d);
+                }
+            }
+            else if (e.Key == Key.Up)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.MoveUp(1d);
+                }
+                else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    Adorner.MoveUp(10d);
+                }
+                else
+                {
+                    Adorner.MoveUp(5d);
+                }
+            }
+            else if (e.Key == Key.Down)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    Adorner.MoveDown(1d);
+                }
+                else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    Adorner.MoveDown(10d);
+                }
+                else
+                {
+                    Adorner.MoveDown(5d);
+                }
+            }
+        }
+
+        #endregion
 
         #region 右键框选
 
@@ -1786,7 +1922,6 @@ namespace MonitorSystem
         }
         #endregion
      
-
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             try
@@ -1802,79 +1937,6 @@ namespace MonitorSystem
                 MessageBox.Show(ie.Message);
             }
         }
-
-        protected void Screen_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.V)
-            {
-                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-                {
-                    //var copyMonitor = CoptyObj as MonitorControl;
-                    if (null != CopyArray)
-                    {
-                        foreach (var obj in CopyArray)
-                        {
-                            var canvas = csScreen;
-                            if (obj.ParentControl is BackgroundControl)
-                            {
-                                canvas = (obj.ParentControl as BackgroundControl).BackgroundCanvas;
-                            }
-                            else if (obj.ParentControl is ToolTipControl)
-                            {
-                                canvas = (obj.ParentControl as ToolTipControl).ToolTipCanvas;
-                            }
-                            var monitor = ShowElement(canvas, obj.Element, ElementSate.New, obj.ListElementProperty);
-                            if (null != obj.ParentControl)
-                            {
-                                monitor.ParentControl = obj.ParentControl;
-                                monitor.DesignMode();
-                                monitor.AllowToolTip = false;
-                                monitor.ClearValue(Canvas.ZIndexProperty);
-                                if (null != monitor.AdornerLayer)
-                                {
-                                    monitor.AdornerLayer.AllToolTip = false;
-                                }
-
-                                if (null != monitor.ScreenElement
-                                    && null != obj.ParentControl.ScreenElement)
-                                {
-                                    monitor.ScreenElement.ElementType = obj.Element.ElementType;
-                                    monitor.ScreenElement.ParentID = obj.ParentControl.ScreenElement.ElementID;
-                                    monitor.ScreenElement.ScreenID = obj.ParentControl.ScreenElement.ScreenID;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else if (e.Key == Key.C)
-            {
-                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-                {
-                    Adorner.CopyAll();
-                }
-            }
-            else if (e.Key == Key.X)
-            {
-                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-                {
-                    Adorner.CopyAll();
-                    Adorner.DeleteAll();
-                }
-            }
-            else if (e.Key == Key.A)
-            {
-                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-                {
-                    Adorner.SelectAll();
-                }
-            }
-            else if (e.Key == Key.Delete)
-            {
-                Adorner.DeleteAll();
-            }
-        }
-            
 
         #region 菜单事件
         private void TP_Click(object sender, RoutedEventArgs e)
@@ -1896,7 +1958,7 @@ namespace MonitorSystem
             //prop.ChangeScreen += new EventHandler(prop_ChangeScreen);
             //fwProperty.Show();
             //鼠标事件
-            this.KeyDown += new KeyEventHandler(Screen_KeyDown);
+            this.AddHandler(Control.KeyDownEvent, new KeyEventHandler(CsScreen_KeyDown), false);
 
             var children = csScreen.Children.ToArray();
             foreach (var child in children)
@@ -1946,7 +2008,7 @@ namespace MonitorSystem
 
             GridScreen.MouseRightButtonDown -= GridScreen_MouseRightButtonDown;
 
-            this.KeyDown -= new KeyEventHandler(Screen_KeyDown);
+            this.RemoveHandler(Control.KeyDownEvent, new KeyEventHandler(CsScreen_KeyDown));
 
             if (MessageBox.Show("是否保存对场景的修改！\r\n确定：保存。\r\n取消：不保存，修改的内容将被取消。", "", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
@@ -2065,7 +2127,6 @@ namespace MonitorSystem
             AddElementCanvas.RenderTransform = csScreen.RenderTransform;
             UpdateThumbnail();
         }
-
 
         private void GridScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
