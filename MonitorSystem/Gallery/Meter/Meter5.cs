@@ -147,7 +147,8 @@ namespace MonitorSystem.Gallery.Meter
             //Transparent = ScreenElement.Transparent.Value;
         }
 
-        private string[] _browsableProperties = new string[] { "Value", "Maximum", "Minimum", "DecimalDigits", "MainScale" };
+        private string[] _browsableProperties = new string[] { "Value", "Maximum", "Minimum", "DecimalDigits",
+            "MainScale", "FontFamily" };
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }

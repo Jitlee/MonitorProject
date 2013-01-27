@@ -25,7 +25,7 @@ namespace MonitorSystem.Other
         public CalloutControl()
         {
             _canvas.CalloutStyle = Microsoft.Expression.Media.CalloutStyle.Cloud;
-            _canvas.AnchorPoint = new Point(0, -10);
+            _canvas.AnchorPoint = new Point(-100, -500);
             base.Content= _canvas;
             this.Width = 100;
             this.Height = 70;

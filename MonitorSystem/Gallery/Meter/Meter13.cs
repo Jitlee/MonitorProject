@@ -234,7 +234,7 @@ namespace MonitorSystem.Gallery.Meter
             "CalibrationColor",
             "NormalColor",
             "WarringColor",
-            "ExceptionColor", };
+            "ExceptionColor","FontFamily"};
 
         public override string[] BrowsableProperties
         {

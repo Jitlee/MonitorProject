@@ -184,7 +184,7 @@ namespace MonitorSystem.Gallery.Meter
             "DialPlateBackColor",
             "DialPlateBorlderColor",
             "CalibrationColor",
-            "CalibrationStroke",};
+            "CalibrationStroke","FontFamily"};
 
         public override string[] BrowsableProperties
         {

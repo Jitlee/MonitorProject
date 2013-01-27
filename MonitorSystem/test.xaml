@@ -10,7 +10,8 @@
     <Canvas Height="578" Width="856">
         <ed:Callout CalloutStyle="Cloud" Content="Callout"
                     Fill="{x:Null}" FontSize="24.666999816894531" Margin="150,116,290,0" 
-                    Stroke="Black" Height="400" VerticalAlignment="Top" BorderBrush="Red" Width="426" BorderThickness="9" AnchorPoint="0,-1" />
+                    Stroke="Black" Height="132" VerticalAlignment="Top" BorderBrush="Red" Width="195"
+                    BorderThickness="9" AnchorPoint="-100,-500" Canvas.Left="108" Canvas.Top="137" StrokeDashCap="Triangle" FontStretch="UltraExpanded" />
         
     </Canvas>
 </UserControl>
