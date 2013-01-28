@@ -169,7 +169,7 @@ namespace MonitorSystem.Gallery.Meter
 
         private static readonly DependencyProperty ForeColorProperty =
             DependencyProperty.Register("ForeColor",
-            typeof(Color), typeof(Meter1), new PropertyMetadata(Colors.Blue));
+            typeof(Color), typeof(Meter9), new PropertyMetadata(Colors.Blue));
         [DefaultValue(""), Description("前景色"), Category("外观")]
         public Color ForeColor
         {

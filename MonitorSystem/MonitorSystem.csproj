@@ -561,6 +561,7 @@
     <Resource Include="Images\design.png" />
     <Resource Include="Images\gallery.png" />
     <Resource Include="Images\RealtimeBG.jpg" />
+    <None Include="Properties\OutOfBrowserSettings.xml" />
     <Content Include="Ref\Microsoft.Expression.Interactions.xml" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\MyDataService\GetData.wsdl" />
