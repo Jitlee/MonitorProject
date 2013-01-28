@@ -54,7 +54,7 @@ namespace MonitorSystem
         /// <summary>
         /// 当前场景
         /// </summary>
-        t_Screen _CurrentScreen;
+        public t_Screen _CurrentScreen;
 
         public  static LoadScreen _instance = null;
 
@@ -83,7 +83,7 @@ namespace MonitorSystem
         /// <summary>
         /// 主页
         /// </summary>
-        t_Screen MainPage;
+        public t_Screen MainPage;
         /// <summary>
         /// 是否Pop列表
         /// </summary>
@@ -599,7 +599,7 @@ namespace MonitorSystem
         private void Init()
         {
             //加载场景
-            _DataContext.Load(_DataContext.GetT_ScreenQuery(), LoadScreenCompleted, null);
+            InitScreenList();
             //加载参数
             _DataContext.Load(_DataContext.GetT_MonitorSystemParamQuery(), LoadParmCompleted, null);
 
@@ -634,6 +634,14 @@ namespace MonitorSystem
             //fwProperty.Closed += (o, e) => { prop.ResetSelected(); };
 
             this.SizeChanged += LoadScreen_SizeChanged;
+        }
+
+        /// <summary>
+        /// 加载场景
+        /// </summary>
+        public void InitScreenList()
+        {
+            _DataContext.Load(_DataContext.GetT_ScreenQuery(), LoadScreenCompleted, null);
         }
 
         private void LoadScreen_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -794,6 +802,7 @@ namespace MonitorSystem
 
         private void InitMenuScript()
         {
+            AllSencesMenuScriptItem.Items.Clear();
             var roots = listScreen.Where(s => s.ParentScreenID == 0);
             foreach (var s in roots)
             {
@@ -832,7 +841,7 @@ namespace MonitorSystem
          /// <summary>
         /// 从listScreen中选择默认场景 
         /// </summary>
-        private void SetDefultScreen()
+        public void SetDefultScreen()
         {
             if (listScreen == null)
                 return;
