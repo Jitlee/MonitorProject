@@ -182,7 +182,7 @@ namespace MonitorSystem.Gallery.Meter
             {
                 this.SetValue(ScaleColorProperty, value);
                 SetAttrByName("ScaleColor", value.ToString());
-
+                Paint(new Size(this.ActualWidth, this.ActualHeight));
             }
         }
         #endregion
@@ -631,7 +631,8 @@ namespace MonitorSystem.Gallery.Meter
 
                     var text = new TextBlock();
                     text.FontSize = fontSize;
-                    text.Foreground = brush;
+                    //text.Foreground = brush;
+                    text.Foreground = new SolidColorBrush(ScaleColor);
                     text.Text = Math.Round(minimum + i * avg, decimalDigits).ToString();
                     text.SetValue(Canvas.LeftProperty, Math.Sin(mainAngle) * height * 546d / 636d - text.ActualWidth / 2d + width * 0.5d);
                     text.SetValue(Canvas.TopProperty, Math.Cos(mainAngle) * height * 546d / 636d - text.ActualHeight / 2d + height * 578d / 636d);

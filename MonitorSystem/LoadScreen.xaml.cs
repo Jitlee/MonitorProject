@@ -260,11 +260,12 @@ namespace MonitorSystem
 
         private void SetAutoSizeScale()
         {
-            var scaleX = this.ActualWidth / CanvasWidth;
+            //var scaleX = this.ActualWidth / CanvasWidth;
+            var scaleX = GridScreen.ActualWidth / CanvasWidth;
             var scaleY = GridScreen.ActualHeight / CanvasHeight;
-            var scale = Math.Min(scaleX, scaleY) * 1.185185185185185;
-            CanvasScaleTransform.ScaleY = scale;
-            CanvasScaleTransform.ScaleX = scale;
+           // var scale = Math.Min(scaleX, scaleY) * 1.185185185185185;
+            CanvasScaleTransform.ScaleY =scaleY ;
+            CanvasScaleTransform.ScaleX = scaleX;
         }
         
         //SceneBackgroundPanel b = new SceneBackgroundPanel();
