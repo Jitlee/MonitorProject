@@ -143,6 +143,10 @@ namespace MonitorSystem.Gallery.Meter
                 {
                     FontFamily = new FontFamily(Common.GetFontEn(value));
                 }
+                else if (name == "ScaleColor")
+                {
+                    ScaleColor = Common.StringToColor(value);
+                }
             }
         }
 
@@ -160,7 +164,7 @@ namespace MonitorSystem.Gallery.Meter
         }
 
         private string[] _browsableProperties = new string[] { "Text", "Value", "Maximum", 
-            "Minimum", "DecimalDigits", "MainScale", "ViceScale" ,"FontFamily", "ForeColor"};
+            "Minimum", "DecimalDigits", "MainScale", "ViceScale" ,"FontFamily", "ForeColor","ScaleColor"};
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -189,9 +193,25 @@ namespace MonitorSystem.Gallery.Meter
                 _label.Foreground = new SolidColorBrush(value);
             }
         }
-
+        
         #endregion
 
+        #region 刻度颜色
+        private static readonly DependencyProperty ScaleColorProperty =
+            DependencyProperty.Register("ScaleColor",
+            typeof(Color), typeof(Meter1), new PropertyMetadata(Colors.Blue));
+        [DefaultValue(""), Description("刻度颜色"), Category("外观")]
+        public Color ScaleColor
+        {
+            get { return (Color)this.GetValue(ScaleColorProperty); }
+            set
+            {
+                this.SetValue(ScaleColorProperty, value);
+                SetAttrByName("ScaleColor", value.ToString());
+                
+            }
+        }
+        #endregion
         #region 标签
 
         private static DependencyProperty TextProperty =
@@ -421,6 +441,8 @@ namespace MonitorSystem.Gallery.Meter
         }
 
         #endregion
+
+
 
         #endregion
 
