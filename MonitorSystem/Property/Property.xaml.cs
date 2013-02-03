@@ -246,6 +246,7 @@ namespace MonitorSystem
                     msadd.EditComplete += (eee,ee) => {
                         tvScreen.Items.Clear();
                         LoadScrent();
+                        LoadScreen._instance.InitScreenList();
                     };
                     msadd.Show();
                     break;
@@ -269,12 +270,20 @@ namespace MonitorSystem
                            m_screen.ScreenID = mobj.Screen.ScreenID;
                            m_screen.ScreenName = mobj.Screen.ScreenName;
                        }
+                       LoadScreen._instance.InitScreenList();
                     };
                     msadEdit.Show();
                     break;
                 case "miDelete":
-                    _DataContext.t_Screens.Remove(m_obj);
-                    _DataContext.SubmitChanges(SubmitCompleted, TreeItemRightItem);
+                    if (LoadScreen._instance.MainPage == LoadScreen._instance._CurrentScreen)
+                    {
+                        MessageBox.Show("不能删除默认场景，请先设置其他场景为默认场景后再来删除!");
+                    }
+                    else
+                    {
+                        _DataContext.t_Screens.Remove(m_obj);
+                        _DataContext.SubmitChanges(SubmitCompleted, TreeItemRightItem);
+                    }
                     break;
                 case "miOpen":
                     LoadScreen.Load(m_obj);
@@ -310,6 +319,11 @@ namespace MonitorSystem
                     TreeViewItem mobj = (TreeViewItem)DeleteItem.Parent;
                     mobj.Items.Remove(DeleteItem);
                 }
+
+                LoadScreen._instance.InitScreenList();
+
+                LoadScreen.Load(LoadScreen._instance.MainPage);
+                //LoadScreen._instance.AllSencesMenuScriptItem.Items.Remove(
             }
         }
 

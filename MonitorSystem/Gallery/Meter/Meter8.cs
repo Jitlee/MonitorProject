@@ -147,12 +147,12 @@ namespace MonitorSystem.Gallery.Meter
             this.Height = (double)ScreenElement.Height;
 
             //BackColor = Common.StringToColor(ScreenElement.BackColor);
-            //ForeColor = Common.StringToColor(ScreenElement.ForeColor);
+            ForeColor = Common.StringToColor(ScreenElement.ForeColor);
             //Transparent = ScreenElement.Transparent.Value;
         }
 
         private string[] _browsableProperties = new string[] { "Text", "Value", "Maximum", "Minimum",
-            "DecimalDigits", "MainScale", "ViceScale" ,"FontFamily"};
+            "DecimalDigits", "MainScale", "ViceScale" ,"FontFamily", "ForeColor"};
         public override string[] BrowsableProperties
         {
             get { return _browsableProperties; }
@@ -162,6 +162,27 @@ namespace MonitorSystem.Gallery.Meter
         #endregion
 
         #region 属性
+
+        #region 颜色
+
+        private static readonly DependencyProperty ForeColorProperty =
+            DependencyProperty.Register("ForeColor",
+            typeof(Color), typeof(Meter8), new PropertyMetadata(Colors.Blue));
+        [DefaultValue(""), Description("前景色"), Category("外观")]
+        public Color ForeColor
+        {
+            get { return (Color)this.GetValue(ForeColorProperty); }
+            set
+            {
+                this.SetValue(ForeColorProperty, value);
+                if (ScreenElement != null)
+                    ScreenElement.ForeColor = value.ToString();
+
+                _label.Foreground = new SolidColorBrush(value);
+            }
+        }
+
+        #endregion
 
         #region 当前值
 
@@ -226,6 +247,7 @@ namespace MonitorSystem.Gallery.Meter
         private void Maximum_Changed(double oldValue, double newValue)
         {
             PaintCalibration(new Size(this.ActualWidth, this.ActualHeight));
+            PaintPoint(new Size(this.ActualWidth, this.ActualHeight));
         }
 
         #endregion
@@ -259,6 +281,7 @@ namespace MonitorSystem.Gallery.Meter
         private void Minimum_Changed(double oldValue, double newValue)
         {
             PaintCalibration(new Size(this.ActualWidth, this.ActualHeight));
+            PaintPoint(new Size(this.ActualWidth, this.ActualHeight));
         }
 
         #endregion
@@ -400,7 +423,7 @@ namespace MonitorSystem.Gallery.Meter
             this.Content = grid;
 
             _label.Text = Value.ToString();
-            _label.Foreground = new SolidColorBrush(Colors.Blue);
+            _label.Foreground = new SolidColorBrush(ForeColor);
 
             _pointLine.Stroke = new SolidColorBrush(Colors.Red);
             _pointLine.StrokeThickness = 2d;
@@ -809,6 +832,15 @@ namespace MonitorSystem.Gallery.Meter
                 var value = Value;
                 var maximum = Maximum;
                 var minimum = Minimum;
+                if (value < minimum)
+                {
+                    value = minimum;
+                }
+                if (value > maximum)
+                {
+                    value = maximum;
+                }
+                value -= minimum;
                 var mainScale = MainScale;
                 var viceScale = ViceScale;
                 var decimalDigits = DecimalDigits;  // 小数点位
