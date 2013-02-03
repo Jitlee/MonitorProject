@@ -8,15 +8,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
-
 namespace MonitorSystem.Web.Moldes
 {
     #region 上下文
@@ -274,6 +274,7 @@ namespace MonitorSystem.Web.Moldes
         private ObjectSet<t_Element_RealTimeLine> _t_Element_RealTimeLine;
 
         #endregion
+
         #region AddTo 方法
     
         /// <summary>
@@ -381,6 +382,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 函数导入
     
         /// <summary>
@@ -490,11 +492,11 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region 实体
     
     /// <summary>
@@ -519,6 +521,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -669,6 +672,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnControlCaptionChanged();
 
         #endregion
+
     
     }
     
@@ -696,6 +700,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -825,6 +830,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnCaptionChanged();
 
         #endregion
+
     
     }
     
@@ -850,6 +856,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -1528,6 +1535,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnParentIDChanged();
 
         #endregion
+
     
     }
     
@@ -1555,6 +1563,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -2137,6 +2146,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnTotalLengthChanged();
 
         #endregion
+
     
     }
     
@@ -2184,6 +2194,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -2718,6 +2729,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnStartTimeChanged();
 
         #endregion
+
     
     }
     
@@ -2745,6 +2757,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -2874,6 +2887,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnPropertyNameChanged();
 
         #endregion
+
     
     }
     
@@ -2901,6 +2915,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -3030,6 +3045,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnPropertyNameChanged();
 
         #endregion
+
     
     }
     
@@ -3062,6 +3078,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -3164,6 +3181,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnSortChanged();
 
         #endregion
+
     
     }
     
@@ -3191,6 +3209,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -3413,6 +3432,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnIDChanged();
 
         #endregion
+
     
     }
     
@@ -3438,6 +3458,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -3658,8 +3679,33 @@ namespace MonitorSystem.Web.Moldes
         private global::System.String _BackColor;
         partial void OnBackColorChanging(global::System.String value);
         partial void OnBackColorChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> AutoSize
+        {
+            get
+            {
+                return _AutoSize;
+            }
+            set
+            {
+                OnAutoSizeChanging(value);
+                ReportPropertyChanging("AutoSize");
+                _AutoSize = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AutoSize");
+                OnAutoSizeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _AutoSize;
+        partial void OnAutoSizeChanging(Nullable<global::System.Boolean> value);
+        partial void OnAutoSizeChanged();
 
         #endregion
+
     
     }
     
@@ -3687,6 +3733,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -3813,6 +3860,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnStationIDChanged();
 
         #endregion
+
     
     }
     
@@ -3854,6 +3902,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -4100,6 +4149,7 @@ namespace MonitorSystem.Web.Moldes
         partial void OnGridHeightChanged();
 
         #endregion
+
     
     }
     
@@ -4129,6 +4179,7 @@ namespace MonitorSystem.Web.Moldes
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -4375,9 +4426,11 @@ namespace MonitorSystem.Web.Moldes
         partial void OnidChanged();
 
         #endregion
+
     
     }
 
     #endregion
+
     
 }

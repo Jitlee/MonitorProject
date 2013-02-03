@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MonitorDemo2Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="MonitorDemo2Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="MonitorDemo2ModelStoreContainer">
           <EntitySet Name="t_Control" EntityType="MonitorDemo2Model.Store.t_Control" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="t_ControlProperty" EntityType="MonitorDemo2Model.Store.t_ControlProperty" store:Type="Tables" store:Schema="dbo" store:Name="t_ControlProperty">
@@ -213,6 +213,7 @@
           <Property Name="Width" Type="int" />
           <Property Name="Height" Type="int" />
           <Property Name="BackColor" Type="nchar" MaxLength="20" />
+          <Property Name="AutoSize" Type="bit" />
         </EntityType>
         <EntityType Name="t_Screen_Library">
           <Key>
@@ -430,6 +431,7 @@
           <Property Type="Int32" Name="Width" />
           <Property Type="Int32" Name="Height" />
           <Property Type="String" Name="BackColor" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Type="Boolean" Name="AutoSize" />
         </EntityType>
         <EntityType Name="t_Screen_Library">
           <Key>
@@ -644,6 +646,7 @@
           <EntitySetMapping Name="t_Screen">
             <EntityTypeMapping TypeName="MonitorDemo2Model.t_Screen">
               <MappingFragment StoreEntitySet="t_Screen">
+                <ScalarProperty Name="AutoSize" ColumnName="AutoSize" />
                 <ScalarProperty Name="BackColor" ColumnName="BackColor" />
                 <ScalarProperty Name="Height" ColumnName="Height" />
                 <ScalarProperty Name="Width" ColumnName="Width" />

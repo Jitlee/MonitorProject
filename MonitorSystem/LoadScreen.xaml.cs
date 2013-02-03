@@ -105,7 +105,6 @@ namespace MonitorSystem
             csScreen.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(CsScreen_MouseLeftButtonDown), false);
             csScreen.VerticalAlignment = VerticalAlignment.Top;
             csScreen.HorizontalAlignment = HorizontalAlignment.Left;
-            GridScreen.AddHandler(Grid.MouseWheelEvent, new MouseWheelEventHandler(GridScreen_MouseWheel), false);
             GridScreen.MouseLeftButtonDown += GridScreen_MouseLeftButtonDown;
         }
         public static void Load(t_Screen screen)
@@ -131,13 +130,17 @@ namespace MonitorSystem
         {
             var gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), strImg);
             var bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
-            if (resize)
+            if (resize && (!_CurrentScreen.AutoSize.HasValue || !_CurrentScreen.AutoSize.Value))
             {
                 bitmap.ImageOpened += Screen_ImageOpened;
             }
+            else
+            {
+                AutoSize = true;   
+            }
             bitmap.ImageFailed += Screen_ImageFailed;
 
-            var imgB = new ImageBrush() { Stretch = Stretch.UniformToFill };
+            var imgB = new ImageBrush() { Stretch = Stretch.Uniform, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top };
             imgB.ImageSource = bitmap;
             csScreen.Background = imgB;
 
@@ -176,7 +179,7 @@ namespace MonitorSystem
             {
                 _bgImagePath = value;
                 _CurrentScreen.ImageURL = value;
-                SetScreenImg(value, true);
+                SetScreenImg(value, !(_CurrentScreen.AutoSize.HasValue && _CurrentScreen.AutoSize.Value));
             }
             get
             {
@@ -213,6 +216,56 @@ namespace MonitorSystem
                 return (_CurrentScreen.Height.HasValue && _CurrentScreen.Height > 100d) ? _CurrentScreen.Height.Value : 1024;
             }
         }
+
+        [DefaultValue(false), Description("背景是否自适应带到小，当为 true 时，场景的高度(Height)和宽度(Width)属性将无效"), Category("杂项"), DisplayName("是否自动大小")]
+        public bool AutoSize
+        {
+            get
+            {
+                return null != _CurrentScreen && (_CurrentScreen.AutoSize.HasValue ? _CurrentScreen.AutoSize.Value : false);
+            }
+            set
+            {
+                if (null == _CurrentScreen)
+                {
+                    return;
+                }
+
+                _CurrentScreen.AutoSize = value;
+                CanvasScaleTransform.CenterX = 0d;
+                CanvasScaleTransform.CenterY = 0d;
+                CanvasScaleTransform.ScaleX = 1d;
+                CanvasScaleTransform.ScaleY = 1d;
+                CanvasTranslateTransform.X = 0d;
+                CanvasTranslateTransform.X = 0d;
+
+                csScreen.Height = CanvasHeight;
+                csScreen.Width = CanvasWidth;
+                if (value)
+                {
+                    GridScreen.RemoveHandler(Grid.MouseWheelEvent, new MouseWheelEventHandler(GridScreen_MouseWheel));
+                    ThumbnailToggleButton.IsChecked = true;
+                    ThumbnailToggleButton.Visibility = Visibility.Collapsed;
+                    SetAutoSizeScale();
+                }
+                else
+                {
+                    _sacleIndex = 5;
+                    GridScreen.AddHandler(Grid.MouseWheelEvent, new MouseWheelEventHandler(GridScreen_MouseWheel), false);
+                    ThumbnailToggleButton.IsChecked = false;
+                    ThumbnailToggleButton.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        private void SetAutoSizeScale()
+        {
+            var scaleX = this.ActualWidth / CanvasWidth;
+            var scaleY = GridScreen.ActualHeight / CanvasHeight;
+            var scale = Math.Min(scaleX, scaleY) * 1.185185185185185;
+            CanvasScaleTransform.ScaleY = scale;
+            CanvasScaleTransform.ScaleX = scale;
+        }
         
         //SceneBackgroundPanel b = new SceneBackgroundPanel();
         private void CsScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -221,7 +274,7 @@ namespace MonitorSystem
             HideFocusElement.Focus();
 
             PropertyMain.Instance.ControlPropertyGrid.SelectedObject = null;
-            PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = new []{"BgImagePath", "CanvasWidth", "CanvasHeight" };
+            PropertyMain.Instance.ControlPropertyGrid.BrowsableProperties = new []{"BgImagePath", "CanvasWidth", "CanvasHeight", "AutoSize" };
             _bgImagePath = _CurrentScreen.ImageURL;
             PropertyMain.Instance.ControlPropertyGrid.SelectedObject =this; 
 
@@ -660,7 +713,10 @@ namespace MonitorSystem
 
         private void UpdateThumbnail(Size size)
         {
-            
+            if (AutoSize)
+            {
+                SetAutoSizeScale();
+            }
         }
 
         #region 实例化其它参数
@@ -1037,14 +1093,15 @@ namespace MonitorSystem
             //AddElementCanvas.Width = csScreen.Width = 1000;
             //AddElementCanvas.Height = csScreen.Height =600;
 
+
+            //设置当前
+            _CurrentScreen = _Screen;
+
             SetScreenImg(_Screen.ImageURL);
 
             AddElementCanvas.Width = csScreen.Width = (_Screen.Width.HasValue && _Screen.Width > 100d) ? _Screen.Width.Value : 1920;
             AddElementCanvas.Height = csScreen.Height = (_Screen.Height.HasValue && _Screen.Height > 100d) ? _Screen.Height.Value : 1024;
             UpdateThumbnail();
-
-            //设置当前
-            _CurrentScreen = _Screen;
             
             _DataContext.Load(_DataContext.GetT_Element_RealTimeLineQuery().Where(a => a.ScreenID == _Screen.ScreenID)
                 , LoadElementRealtimeLineCompleted, null);
@@ -1057,6 +1114,7 @@ namespace MonitorSystem
             CanvasScaleTransform.ScaleY = 1d;
             CanvasTranslateTransform.X = 0d;
             CanvasTranslateTransform.Y = 0d;
+            AutoSize = _Screen.AutoSize.HasValue && _Screen.AutoSize.Value;
         }
 
         /// <summary>
@@ -2139,17 +2197,20 @@ namespace MonitorSystem
 
         private void GridScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            GridScreen.CaptureMouse();
+            if (!AutoSize)
+            {
+                GridScreen.CaptureMouse();
 
-            _originPoint = e.GetPosition(GridScreen);
+                _originPoint = e.GetPosition(GridScreen);
 
-            _originPoint.X -= CanvasTranslateTransform.X;
-            _originPoint.Y -= CanvasTranslateTransform.Y;
+                _originPoint.X -= CanvasTranslateTransform.X;
+                _originPoint.Y -= CanvasTranslateTransform.Y;
 
-            GridScreen.MouseMove -= GridScreen_MouseMove;
-            GridScreen.MouseMove += GridScreen_MouseMove;
-            GridScreen.MouseLeftButtonUp -= GridScreen_MouseLeftButtonUp;
-            GridScreen.MouseLeftButtonUp += GridScreen_MouseLeftButtonUp;
+                GridScreen.MouseMove -= GridScreen_MouseMove;
+                GridScreen.MouseMove += GridScreen_MouseMove;
+                GridScreen.MouseLeftButtonUp -= GridScreen_MouseLeftButtonUp;
+                GridScreen.MouseLeftButtonUp += GridScreen_MouseLeftButtonUp;
+            }
         }
 
         private void GridScreen_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
