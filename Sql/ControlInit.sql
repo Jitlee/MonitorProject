@@ -1146,6 +1146,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 7,'ViceScale','4','副刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 8,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1177,6 +1180,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 6,'Scale','10','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1211,6 +1217,8 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 7,'ViceScale','3','副刻度');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 8,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1243,6 +1251,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 5,'MainScale','6','主刻度');
+		
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1275,6 +1286,8 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 5,'MainScale','6','主刻度');
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1312,6 +1325,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 7,'ViceScale','4','副刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 8,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1347,6 +1363,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 6,'ViceScale','4','副刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1382,6 +1401,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 6,'ViceScale','4','副刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 7,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1414,6 +1436,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 5,'MainScale','6','主刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 6,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1451,6 +1476,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 7,'ViceScale','4','副刻度');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 8,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1536,6 +1564,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 23,'ExceptionColor','#FFFF0000','异常区间颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 24,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1591,6 +1622,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 13,'CalibrationColor','#FF000000','刻度颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 14,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 
@@ -1676,6 +1710,9 @@ begin
 
 		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
 			 VALUES(@ControlID, 23,'ExceptionColor','#FFFF0000','异常区间颜色');
+
+		INSERT INTO [t_ControlProperty]([ControlID],[PropertyNo],[PropertyName],[DefaultValue],[Caption])
+			 VALUES(@ControlID, 24,'ScaleColor','#FF000000','刻度颜色');
 	end
 end
 

@@ -275,7 +275,7 @@ namespace MonitorSystem
                     msadEdit.Show();
                     break;
                 case "miDelete":
-                    if (LoadScreen._instance.MainPage == LoadScreen._instance._CurrentScreen)
+                    if (LoadScreen._instance.MainPage == m_obj)
                     {
                         MessageBox.Show("不能删除默认场景，请先设置其他场景为默认场景后再来删除!");
                     }

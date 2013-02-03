@@ -202,6 +202,10 @@ namespace MonitorSystem.Gallery.Meter
                 {
                     ExceptionColor = Common.StringToColor(value);
                 }
+                else if (name == "ScaleColor")
+                {
+                    ScaleColor = Common.StringToColor(value);
+                }
             }
         }
 
@@ -234,7 +238,7 @@ namespace MonitorSystem.Gallery.Meter
             "CalibrationColor",
             "NormalColor",
             "WarringColor",
-            "ExceptionColor","FontFamily", "ForeColor"};
+            "ExceptionColor","FontFamily", "ForeColor","ScaleColor"};
 
         public override string[] BrowsableProperties
         {
@@ -245,7 +249,22 @@ namespace MonitorSystem.Gallery.Meter
         #endregion
 
         #region 属性
+        #region 刻度颜色
+        private static readonly DependencyProperty ScaleColorProperty =
+            DependencyProperty.Register("ScaleColor",
+            typeof(Color), typeof(Meter13), new PropertyMetadata(Colors.Blue));
+        [DefaultValue(""), Description("刻度颜色"), Category("外观")]
+        public Color ScaleColor
+        {
+            get { return (Color)this.GetValue(ScaleColorProperty); }
+            set
+            {
+                this.SetValue(ScaleColorProperty, value);
+                SetAttrByName("ScaleColor", value.ToString());
 
+            }
+        }
+        #endregion
         #region 标签
 
         private static DependencyProperty TextProperty =
