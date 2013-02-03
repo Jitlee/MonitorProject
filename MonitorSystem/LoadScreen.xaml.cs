@@ -1673,6 +1673,8 @@ namespace MonitorSystem
                         }
                     }
                 }
+                if (ScreenAllElement.Count == 0 && csScreen.Children.Count == 0)
+                    tbWait.IsBusy = false;
 
                 if (_DataContext.HasChanges)
                 {
