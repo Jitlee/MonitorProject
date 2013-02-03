@@ -165,7 +165,7 @@ namespace MonitorSystem.Gallery.Meter
         #region 刻度颜色
         private static readonly DependencyProperty ScaleColorProperty =
             DependencyProperty.Register("ScaleColor",
-            typeof(Color), typeof(Meter1), new PropertyMetadata(Colors.Blue));
+            typeof(Color), typeof(Meter2), new PropertyMetadata(Colors.Blue));
         [DefaultValue(""), Description("刻度颜色"), Category("外观")]
         public Color ScaleColor
         {

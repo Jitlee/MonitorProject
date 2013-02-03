@@ -175,6 +175,23 @@ namespace MonitorSystem.Gallery.Meter
 
         #region 属性
 
+        #region 刻度颜色
+        private static readonly DependencyProperty ScaleColorProperty =
+            DependencyProperty.Register("ScaleColor",
+            typeof(Color), typeof(Meter1), new PropertyMetadata(Colors.Blue));
+        [DefaultValue(""), Description("刻度颜色"), Category("外观")]
+        public Color ScaleColor
+        {
+            get { return (Color)this.GetValue(ScaleColorProperty); }
+            set
+            {
+                this.SetValue(ScaleColorProperty, value);
+                SetAttrByName("ScaleColor", value.ToString());
+
+            }
+        }
+        #endregion
+
         #region 颜色
 
         private static readonly DependencyProperty ForeColorProperty =
@@ -195,23 +212,7 @@ namespace MonitorSystem.Gallery.Meter
         }
         
         #endregion
-
-        #region 刻度颜色
-        private static readonly DependencyProperty ScaleColorProperty =
-            DependencyProperty.Register("ScaleColor",
-            typeof(Color), typeof(Meter1), new PropertyMetadata(Colors.Blue));
-        [DefaultValue(""), Description("刻度颜色"), Category("外观")]
-        public Color ScaleColor
-        {
-            get { return (Color)this.GetValue(ScaleColorProperty); }
-            set
-            {
-                this.SetValue(ScaleColorProperty, value);
-                SetAttrByName("ScaleColor", value.ToString());
-                
-            }
-        }
-        #endregion
+       
         #region 标签
 
         private static DependencyProperty TextProperty =
