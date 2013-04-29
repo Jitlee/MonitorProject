@@ -203,14 +203,14 @@
             </ctrls:FloatPanel.Child>
         </ctrls:FloatPanel>
 
-        <!-- 图库面板 -->
+        <!-- 设计面板 -->
         <ctrls:FloatPanel
             x:Name="DesignFloatPanel"
             Height="450"
             Width="280"
             Left="50"
             Top="80"
-            Title="图库">
+            Title="设计">
             <ctrls:FloatPanel.Child>
                 <local:PropertyMain/>
             </ctrls:FloatPanel.Child>

@@ -65,6 +65,18 @@ namespace MonitorSystem
             }
         }
 
+        /// <summary>
+        /// 获取毫秒
+        /// </summary>
+        /// <param name="_start"></param>
+        /// <param name="_End"></param>
+        /// <returns></returns>
+        public static long GetTimeMilliLen(DateTime _start, DateTime _End)
+        {
+            TimeSpan t = _End - _start;
+            return t.Hours * 3600 * 1000 + t.Minutes * 60 * 1000 + t.Seconds * 1000 + t.Milliseconds;
+        }
+
         public static Color StringToColor(string htmlColr)
         {
             return StringToColor(htmlColr, Colors.White);

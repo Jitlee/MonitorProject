@@ -152,7 +152,7 @@ namespace MonitorSystem.ZTControls
             this.SetValue(Canvas.TopProperty, (double)ScreenElement.ScreenY);
             this.Width = (double)ScreenElement.Width;
             this.Height = (double)ScreenElement.Height;
-            _Transparent = ScreenElement.Transparent.Value;
+            Transparent = ScreenElement.Transparent.Value;
         }
 
         private string[] _browsableProperties = new[] {"Width", "Height", "Left", "Top", "FontFamily", "FontSize",
@@ -423,36 +423,11 @@ namespace MonitorSystem.ZTControls
 
         private void Paint(Size finalSize)
         {
-            //Graphics g = e.Graphics;
-            //SolidColorBrush myLineBrush = null;
-            //Rectangle rec = new Rectangle(0, 0, this.Width, this.Height);
-            //if (IsFlash && FlashLogic == OpenOrNot)
-            //{
-
-                //if (m_bFlashTimers)
-                //    myLineBrush = new SolidColorBrush(FalseColor);
-                //else
-                //    myLineBrush = new SolidColorBrush(TrueColor);
-
-
                 if (style == 0)
-                    //g.FillEllipse(myLineBrush, 0, 0, this.Width, this.Height);
                     _path.Data = new EllipseGeometry() { Center = new Point(finalSize.Width / 2d, finalSize.Height / 2d), RadiusX = finalSize.Width / 2d, RadiusY = finalSize.Height / 2d };
                 else
-                    //g.FillRectangle(myLineBrush, 0, 0, this.Width, this.Height);
                     _path.Data = new RectangleGeometry() { Rect = new Rect(0d,0d, finalSize.Width, finalSize.Height) };
-                //return;
-            //}
 
-            //if (penOrNot)
-            //    myLineBrush = new SolidBrush(trueColor);
-            //else
-            //    myLineBrush = new SolidBrush(falseColor);
-
-            //if (Style == 0)
-            //    g.FillEllipse(myLineBrush, 0, 0, this.Width, this.Height);
-            //else
-            //    g.FillRectangle(myLineBrush, 0, 0, this.Width, this.Height);
         }
 
         protected override Size MeasureOverride(Size availableSize)

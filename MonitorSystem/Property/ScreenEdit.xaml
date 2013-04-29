@@ -12,12 +12,15 @@
 
         <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,8,0,4" Grid.Row="1" />
         <Button x:Name="OKButton" Content="确定" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,8,79,4" Grid.Row="1" />
+        
         <sdk:Label Height="19" HorizontalAlignment="Left" Margin="26,20,0,0" Name="label1" VerticalAlignment="Top" Width="63" Content="场景名称：" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="95,16,0,0" Name="txtName" VerticalAlignment="Top" Width="155" />
         <sdk:Label Content="场景背影图片：" Height="19" HorizontalAlignment="Left" Margin="1,55,0,0" Name="label2" VerticalAlignment="Top" Width="75" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="95,51,0,0" Name="txtImage" VerticalAlignment="Top" Width="155" />
-        <Button Content="..." HorizontalAlignment="Right" Margin="0,51,32,0" VerticalAlignment="Top" Width="23" Click="BrowseImage_Click"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="95,51,0,0" Name="txtImage" VerticalAlignment="Top" Width="155" IsReadOnly="True" />
+        <Button Content="..." HorizontalAlignment="Right" Margin="0,51,9,0" VerticalAlignment="Top" Width="23" Click="BrowseImage_Click"/>
         <sdk:Label Content="站点名称：" Height="19" HorizontalAlignment="Left" Margin="24,91,0,0" Name="label3" VerticalAlignment="Top" Width="75" />
         <ComboBox Height="23" HorizontalAlignment="Left" Margin="95,87,0,0" Name="cbScreen" VerticalAlignment="Top" Width="155" />
+        
+        <Canvas x:Name="cvBg"  Visibility="Collapsed"></Canvas>
     </Grid>
 </controls:ChildWindow>

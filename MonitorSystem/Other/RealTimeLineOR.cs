@@ -62,7 +62,7 @@ namespace MonitorSystem.Other
             _LineInfo = mLine;
             GetTimeShowELen();
 
-            _YValue = GetLineMinValue();
+            _YValue = GetLineMinValue()+10;
 
             _PolyLine.Stroke = new SolidColorBrush(Common.StringToColor(_LineInfo.LineColor));
             _PolyLine.StrokeThickness = 0.5;
@@ -163,7 +163,7 @@ namespace MonitorSystem.Other
         }
        
        
-        double _YValue = 0.0;
+        double _YValue = 10.0;
         /// <summary>
         /// 当前Y轴值
         /// </summary>

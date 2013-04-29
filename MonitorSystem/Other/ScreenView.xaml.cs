@@ -137,7 +137,7 @@ namespace MonitorSystem.Other
                             return mSwitch;
                         case "SignalSwitch":
                             SignalSwitch mSignalSwitch = new SignalSwitch();
-                            obj.Width = obj.Height;
+                            //obj.Width = obj.Height;
                             SetEletemt(canvas, mSignalSwitch, obj, eleStae, listObj);
                             return mSignalSwitch;
                         case "DetailSwitch":

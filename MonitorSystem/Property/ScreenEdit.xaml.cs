@@ -13,6 +13,7 @@ using MonitorSystem.Web.Moldes;
 using MonitorSystem.Web.Servers;
 using System.ServiceModel.DomainServices.Client;
 using MonitorSystem.Controls.ImagesManager;
+using System.Windows.Media.Imaging;
 
 namespace MonitorSystem.Property
 {
@@ -129,6 +130,9 @@ namespace MonitorSystem.Property
                 mobj.ImageURL = txtImage.Text;
                 mobj.StationID = int.Parse(((ComboBoxItem)cbScreen.SelectedItem).Tag.ToString());
                 mobj.ParentScreenID = Scree.ScreenID;
+                mobj.Width = (int)ImgWidth;
+                mobj.Height = (int)ImgHeight;
+                mobj.AutoSize = false;
 
                 _DataContext.t_Screens.Add(mobj);
                 _DataContext.SubmitChanges(SubmitCompleted, mobj);
@@ -187,7 +191,34 @@ namespace MonitorSystem.Property
         private void ImageSelection_Changed(FileModel file)
         {
             txtImage.Text = file.Name;
+            SetScreenImg(file.Name);
         }
+
+        #region 图片设置
+
+        double ImgWidth = 0.0;
+        double ImgHeight = 0.0;
+
+        public void SetScreenImg(string strImg)
+        {
+            var gbUrl = string.Format("{0}/Upload/ImageMap/{1}", Common.TopUrl(), strImg);
+            var bitmap = new BitmapImage(new Uri(gbUrl, UriKind.Absolute));
+            bitmap.ImageOpened += Screen_ImageOpened;
+
+            var imgB = new ImageBrush() { Stretch = Stretch.Uniform, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top };
+            imgB.ImageSource = bitmap;
+            cvBg.Background = imgB;
+        }
+
+        private void Screen_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            var image = (BitmapImage)sender;
+
+            ImgWidth = image.PixelWidth;
+            ImgHeight = image.PixelHeight;
+        }
+
+        #endregion
     }
 }
 

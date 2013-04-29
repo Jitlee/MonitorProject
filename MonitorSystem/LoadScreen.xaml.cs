@@ -134,10 +134,7 @@ namespace MonitorSystem
             {
                 bitmap.ImageOpened += Screen_ImageOpened;
             }
-            else
-            {
-                AutoSize = true;   
-            }
+           
             bitmap.ImageFailed += Screen_ImageFailed;
 
             var imgB = new ImageBrush() { Stretch = Stretch.Uniform, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top };
@@ -145,8 +142,6 @@ namespace MonitorSystem
             csScreen.Background = imgB;
 
             //_ScreenView.SetScreenImg(strImg);
-            
-          
         }
 
         private void Screen_ImageOpened(object sender, RoutedEventArgs e)
@@ -222,7 +217,9 @@ namespace MonitorSystem
         {
             get
             {
-                return null != _CurrentScreen && (_CurrentScreen.AutoSize.HasValue ? _CurrentScreen.AutoSize.Value : false);
+                if (_CurrentScreen == null)
+                    return false;
+                return _CurrentScreen.AutoSize.HasValue ? _CurrentScreen.AutoSize.Value : false;
             }
             set
             {
@@ -1051,7 +1048,7 @@ namespace MonitorSystem
                 MessageBox.Show("场景不存在！", "温馨提示", MessageBoxButton.OK);
                 return;
             }
-            
+           
             if (ReturnScreen != null)
             {
                 if (_Screen.ScreenID != ReturnScreen.ScreenID)
@@ -1067,6 +1064,7 @@ namespace MonitorSystem
             {
                 ReturnScreen = _Screen;
             }
+            
 
             _ScreenView.ScreenInit(_Screen);
             double sfPerw =200/ _ScreenView.Width;
@@ -1089,15 +1087,10 @@ namespace MonitorSystem
             csScreen.Children.Clear();
             lblShowMsg.Content = _Screen.ScreenName;
 
-           // BackgroundPanel.BgImagePath = _Screen.ImageURL;
-            
-            //AddElementCanvas.Width = csScreen.Width = 1000;
-            //AddElementCanvas.Height = csScreen.Height =600;
-
-
+           
             //设置当前
             _CurrentScreen = _Screen;
-
+            //AutoSize = _Screen.AutoSize.HasValue ? _Screen.AutoSize.Value : false;
             SetScreenImg(_Screen.ImageURL);
 
             AddElementCanvas.Width = csScreen.Width = (_Screen.Width.HasValue && _Screen.Width > 100d) ? _Screen.Width.Value : 1920;
@@ -1115,7 +1108,9 @@ namespace MonitorSystem
             CanvasScaleTransform.ScaleY = 1d;
             CanvasTranslateTransform.X = 0d;
             CanvasTranslateTransform.Y = 0d;
-            AutoSize = _Screen.AutoSize.HasValue && _Screen.AutoSize.Value;
+
+            AutoSize = _Screen.AutoSize.HasValue ? _Screen.AutoSize.Value : false;
+            
         }
 
         /// <summary>
@@ -1289,7 +1284,7 @@ namespace MonitorSystem
                             return mSwitch;
                         case "SignalSwitch":
                             SignalSwitch mSignalSwitch = new SignalSwitch();
-                            obj.Width = obj.Height;
+                            //obj.Width = obj.Height;
                             SetEletemt(canvas, mSignalSwitch, obj, eleStae, listObj);
                             return mSignalSwitch;
                         case "DetailSwitch":
@@ -1729,7 +1724,7 @@ namespace MonitorSystem
                             }
 
                             // 删除子 RealTimeT 属性
-                            var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == mEle.ElementID);
+                            var removeElements = _DataContext.t_Element_RealTimeLines.Where(r => r.ElementID == mEle.ElementID).ToList();
 
                             foreach (var removeElement in removeElements)
                             {
@@ -2172,8 +2167,14 @@ namespace MonitorSystem
 
         private readonly double[] ScaleArray = new[] { 0.1d, 0.15d, 0.25d, 0.5d, 0.75d, 1.0d, 1.25d, 1.50d, 2.0d, 3.0d, 5.0d };
         private int _sacleIndex = 5;
+        DateTime WheelTime = DateTime.Now;
         private void GridScreen_MouseWheel(object sender, MouseWheelEventArgs e)
         {
+            long len = Common.GetTimeMilliLen(WheelTime, DateTime.Now);
+            if (len < 500)
+                return;
+            WheelTime = DateTime.Now;
+
             var point = e.GetPosition(GridScreen);
             if (e.Delta > 0 && _sacleIndex < ScaleArray.Length - 1)
             {

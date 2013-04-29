@@ -117,12 +117,7 @@ namespace MonitorSystem.Other
 
         private void InitBG()
         {
-            //ImageBrush imageBrush = new ImageBrush();
-            //imageBrush.ImageSource = new BitmapImage(new Uri("../Images/RealtimeBG.jpg", UriKind.Relative));
-            //imageBrush.Stretch = Stretch.Uniform;
-            //Canvas _v = new Canvas();
-            //_v.Background = imageBrush;
-            //this.Content = _v;
+           
         }
 
         private void RealTime_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -133,13 +128,7 @@ namespace MonitorSystem.Other
             this.Width = e.NewSize.Width;
             this.Height = e.NewSize.Height;
 
-            //if (this.Width < 300 || this.Height < 300)
-            //{
-            //    InitBG();
-            //    return;
-            //}
-
-
+        
             if (double.IsNaN(_Canvas.Width))
                 return;
 
@@ -160,12 +149,6 @@ namespace MonitorSystem.Other
 
         private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //if (this.Width < 300 || this.Height < 300)
-            //{
-            //    InitBG();
-            //    return;
-            //}
-
             _Canvas.Width = e.NewSize.Width;
             _Canvas.Height = e.NewSize.Height;
 
@@ -1122,11 +1105,6 @@ namespace MonitorSystem.Other
                 }
             }
         }
-
-        //protected void _CanvasGrid_MouseLeave(object sender, MouseEventArgs e)
-        //{
-           
-        //}
         #endregion
 
         /// <summary>
@@ -2040,8 +2018,6 @@ namespace MonitorSystem.Other
         private void ShowMsg(string str)
         {
             MessageBox.Show(str);
-
-           
         }
     }
 }
