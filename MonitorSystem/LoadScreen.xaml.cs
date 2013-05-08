@@ -1271,7 +1271,7 @@ namespace MonitorSystem
                             return mTemprary;
                         case "DLBiaoPan":
                             DLBiaoPan mDLBiaoPan = new DLBiaoPan();
-                            obj.Width = 2 * obj.Height.Value;
+                            //obj.Width = 2 * obj.Height.Value;
                             SetEletemt(canvas, mDLBiaoPan, obj, eleStae, listObj);
                             return mDLBiaoPan;
                         case "DigitalBiaoPan":
